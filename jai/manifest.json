@@ -1,0 +1,2251 @@
+{
+ "voice": "JAI",
+ "voice_id": "zEJpwrgZZZKJbepGA6gK",
+ "model": "eleven_flash_v2_5",
+ "groups": {
+  "zahlen": [
+   {
+    "id": "num_001",
+    "text": "eins."
+   },
+   {
+    "id": "num_002",
+    "text": "zwei."
+   },
+   {
+    "id": "num_003",
+    "text": "drei."
+   },
+   {
+    "id": "num_004",
+    "text": "vier."
+   },
+   {
+    "id": "num_005",
+    "text": "fünf."
+   },
+   {
+    "id": "num_006",
+    "text": "sechs."
+   },
+   {
+    "id": "num_007",
+    "text": "sieben."
+   },
+   {
+    "id": "num_008",
+    "text": "acht."
+   },
+   {
+    "id": "num_009",
+    "text": "neun."
+   },
+   {
+    "id": "num_010",
+    "text": "zehn."
+   },
+   {
+    "id": "num_011",
+    "text": "elf."
+   },
+   {
+    "id": "num_012",
+    "text": "zwölf."
+   },
+   {
+    "id": "num_013",
+    "text": "dreizehn."
+   },
+   {
+    "id": "num_014",
+    "text": "vierzehn."
+   },
+   {
+    "id": "num_015",
+    "text": "fünfzehn."
+   },
+   {
+    "id": "num_016",
+    "text": "sechzehn."
+   },
+   {
+    "id": "num_017",
+    "text": "siebzehn."
+   },
+   {
+    "id": "num_018",
+    "text": "achtzehn."
+   },
+   {
+    "id": "num_019",
+    "text": "neunzehn."
+   },
+   {
+    "id": "num_020",
+    "text": "zwanzig."
+   },
+   {
+    "id": "num_021",
+    "text": "einundzwanzig."
+   },
+   {
+    "id": "num_022",
+    "text": "zweiundzwanzig."
+   },
+   {
+    "id": "num_023",
+    "text": "dreiundzwanzig."
+   },
+   {
+    "id": "num_024",
+    "text": "vierundzwanzig."
+   },
+   {
+    "id": "num_025",
+    "text": "fünfundzwanzig."
+   },
+   {
+    "id": "num_026",
+    "text": "sechsundzwanzig."
+   },
+   {
+    "id": "num_027",
+    "text": "siebenundzwanzig."
+   },
+   {
+    "id": "num_028",
+    "text": "achtundzwanzig."
+   },
+   {
+    "id": "num_029",
+    "text": "neunundzwanzig."
+   },
+   {
+    "id": "num_030",
+    "text": "dreißig."
+   },
+   {
+    "id": "num_031",
+    "text": "einunddreißig."
+   },
+   {
+    "id": "num_032",
+    "text": "zweiunddreißig."
+   },
+   {
+    "id": "num_033",
+    "text": "dreiunddreißig."
+   },
+   {
+    "id": "num_034",
+    "text": "vierunddreißig."
+   },
+   {
+    "id": "num_035",
+    "text": "fünfunddreißig."
+   },
+   {
+    "id": "num_036",
+    "text": "sechsunddreißig."
+   },
+   {
+    "id": "num_037",
+    "text": "siebenunddreißig."
+   },
+   {
+    "id": "num_038",
+    "text": "achtunddreißig."
+   },
+   {
+    "id": "num_039",
+    "text": "neununddreißig."
+   },
+   {
+    "id": "num_040",
+    "text": "vierzig."
+   },
+   {
+    "id": "num_041",
+    "text": "einundvierzig."
+   },
+   {
+    "id": "num_042",
+    "text": "zweiundvierzig."
+   },
+   {
+    "id": "num_043",
+    "text": "dreiundvierzig."
+   },
+   {
+    "id": "num_044",
+    "text": "vierundvierzig."
+   },
+   {
+    "id": "num_045",
+    "text": "fünfundvierzig."
+   },
+   {
+    "id": "num_046",
+    "text": "sechsundvierzig."
+   },
+   {
+    "id": "num_047",
+    "text": "siebenundvierzig."
+   },
+   {
+    "id": "num_048",
+    "text": "achtundvierzig."
+   },
+   {
+    "id": "num_049",
+    "text": "neunundvierzig."
+   },
+   {
+    "id": "num_050",
+    "text": "fünfzig."
+   },
+   {
+    "id": "num_051",
+    "text": "einundfünfzig."
+   },
+   {
+    "id": "num_052",
+    "text": "zweiundfünfzig."
+   },
+   {
+    "id": "num_053",
+    "text": "dreiundfünfzig."
+   },
+   {
+    "id": "num_054",
+    "text": "vierundfünfzig."
+   },
+   {
+    "id": "num_055",
+    "text": "fünfundfünfzig."
+   },
+   {
+    "id": "num_056",
+    "text": "sechsundfünfzig."
+   },
+   {
+    "id": "num_057",
+    "text": "siebenundfünfzig."
+   },
+   {
+    "id": "num_058",
+    "text": "achtundfünfzig."
+   },
+   {
+    "id": "num_059",
+    "text": "neunundfünfzig."
+   },
+   {
+    "id": "num_060",
+    "text": "sechzig."
+   },
+   {
+    "id": "num_061",
+    "text": "einundsechzig."
+   },
+   {
+    "id": "num_062",
+    "text": "zweiundsechzig."
+   },
+   {
+    "id": "num_063",
+    "text": "dreiundsechzig."
+   },
+   {
+    "id": "num_064",
+    "text": "vierundsechzig."
+   },
+   {
+    "id": "num_065",
+    "text": "fünfundsechzig."
+   },
+   {
+    "id": "num_066",
+    "text": "sechsundsechzig."
+   },
+   {
+    "id": "num_067",
+    "text": "siebenundsechzig."
+   },
+   {
+    "id": "num_068",
+    "text": "achtundsechzig."
+   },
+   {
+    "id": "num_069",
+    "text": "neunundsechzig."
+   },
+   {
+    "id": "num_070",
+    "text": "siebzig."
+   },
+   {
+    "id": "num_071",
+    "text": "einundsiebzig."
+   },
+   {
+    "id": "num_072",
+    "text": "zweiundsiebzig."
+   },
+   {
+    "id": "num_073",
+    "text": "dreiundsiebzig."
+   },
+   {
+    "id": "num_074",
+    "text": "vierundsiebzig."
+   },
+   {
+    "id": "num_075",
+    "text": "fünfundsiebzig."
+   },
+   {
+    "id": "num_076",
+    "text": "sechsundsiebzig."
+   },
+   {
+    "id": "num_077",
+    "text": "siebenundsiebzig."
+   },
+   {
+    "id": "num_078",
+    "text": "achtundsiebzig."
+   },
+   {
+    "id": "num_079",
+    "text": "neunundsiebzig."
+   },
+   {
+    "id": "num_080",
+    "text": "achtzig."
+   },
+   {
+    "id": "num_081",
+    "text": "einundachtzig."
+   },
+   {
+    "id": "num_082",
+    "text": "zweiundachtzig."
+   },
+   {
+    "id": "num_083",
+    "text": "dreiundachtzig."
+   },
+   {
+    "id": "num_084",
+    "text": "vierundachtzig."
+   },
+   {
+    "id": "num_085",
+    "text": "fünfundachtzig."
+   },
+   {
+    "id": "num_086",
+    "text": "sechsundachtzig."
+   },
+   {
+    "id": "num_087",
+    "text": "siebenundachtzig."
+   },
+   {
+    "id": "num_088",
+    "text": "achtundachtzig."
+   },
+   {
+    "id": "num_089",
+    "text": "neunundachtzig."
+   },
+   {
+    "id": "num_090",
+    "text": "neunzig."
+   },
+   {
+    "id": "num_091",
+    "text": "einundneunzig."
+   },
+   {
+    "id": "num_092",
+    "text": "zweiundneunzig."
+   },
+   {
+    "id": "num_093",
+    "text": "dreiundneunzig."
+   },
+   {
+    "id": "num_094",
+    "text": "vierundneunzig."
+   },
+   {
+    "id": "num_095",
+    "text": "fünfundneunzig."
+   },
+   {
+    "id": "num_096",
+    "text": "sechsundneunzig."
+   },
+   {
+    "id": "num_097",
+    "text": "siebenundneunzig."
+   },
+   {
+    "id": "num_098",
+    "text": "achtundneunzig."
+   },
+   {
+    "id": "num_099",
+    "text": "neunundneunzig."
+   },
+   {
+    "id": "num_100",
+    "text": "hundert."
+   }
+  ],
+  "einheiten": [
+   {
+    "id": "num_hundert_prefix",
+    "text": "hundert,",
+    "note": "Präfix-Clip für 101–199 (z. B. hundert + zwanzig); Komma für weiterführende Betonung und Pause"
+   },
+   {
+    "id": "num_200",
+    "text": "zweihundert."
+   },
+   {
+    "id": "u_komma_fuenf",
+    "text": "Komma fünf."
+   },
+   {
+    "id": "u_kilo",
+    "text": "Kilo."
+   },
+   {
+    "id": "u_sekunden",
+    "text": "Sekunden."
+   },
+   {
+    "id": "u_wiederholungen",
+    "text": "Wiederholungen."
+   },
+   {
+    "id": "u_saetze",
+    "text": "Sätze."
+   },
+   {
+    "id": "u_satz",
+    "text": "Satz."
+   },
+   {
+    "id": "u_von",
+    "text": "von."
+   },
+   {
+    "id": "u_bis",
+    "text": "bis."
+   },
+   {
+    "id": "u_pro_seite",
+    "text": "pro Seite."
+   },
+   {
+    "id": "u_je_seite",
+    "text": "je Seite."
+   },
+   {
+    "id": "u_mal",
+    "text": "mal."
+   },
+   {
+    "id": "u_sekunden_halten",
+    "text": "Sekunden halten."
+   }
+  ],
+  "uebungen": [
+   {
+    "id": "ex_squat",
+    "text": "Kniebeuge.",
+    "app_name": "Kniebeuge"
+   },
+   {
+    "id": "ex_bench",
+    "text": "Bankdrücken.",
+    "app_name": "Bankdrücken"
+   },
+   {
+    "id": "ex_row",
+    "text": "Langhantel-Rudern.",
+    "app_name": "Langhantel-Rudern"
+   },
+   {
+    "id": "ex_rdl",
+    "text": "Rumänisches Kreuzheben.",
+    "app_name": "Rumänisches Kreuzheben"
+   },
+   {
+    "id": "ex_lateral",
+    "text": "Seitheben.",
+    "app_name": "Seitheben"
+   },
+   {
+    "id": "ex_plank",
+    "text": "Unterarmstütz.",
+    "app_name": "Unterarmstütz"
+   },
+   {
+    "id": "ex_deadlift",
+    "text": "Kreuzheben.",
+    "app_name": "Kreuzheben"
+   },
+   {
+    "id": "ex_ohp",
+    "text": "Schulterdrücken stehend.",
+    "app_name": "Schulterdrücken stehend"
+   },
+   {
+    "id": "ex_pullup",
+    "text": "Klimmzüge.",
+    "app_name": "Klimmzüge"
+   },
+   {
+    "id": "ex_bss",
+    "text": "Bulgarische Split Squats.",
+    "app_name": "Bulgarische Split Squats"
+   },
+   {
+    "id": "ex_incline",
+    "text": "Schrägbankdrücken.",
+    "app_name": "Schrägbankdrücken"
+   },
+   {
+    "id": "ex_curl",
+    "text": "Bizeps-Curls.",
+    "app_name": "Bizeps-Curls"
+   },
+   {
+    "id": "ex_hipthrust",
+    "text": "Hip Thrust.",
+    "app_name": "Hip Thrust"
+   },
+   {
+    "id": "ex_pushup",
+    "text": "Liegestütze.",
+    "app_name": "Liegestütze"
+   },
+   {
+    "id": "ex_dbrow",
+    "text": "Einarmiges Kurzhantel-Rudern.",
+    "app_name": "Einarmiges Kurzhantel-Rudern"
+   },
+   {
+    "id": "ex_lunge",
+    "text": "Ausfallschritte.",
+    "app_name": "Ausfallschritte"
+   },
+   {
+    "id": "ex_facepull",
+    "text": "Face Pulls.",
+    "app_name": "Face Pulls"
+   },
+   {
+    "id": "ex_pushdown",
+    "text": "Trizepsdrücken am Band.",
+    "app_name": "Trizepsdrücken am Band"
+   },
+   {
+    "id": "ex_kneeraise",
+    "text": "Hängendes Knieheben.",
+    "app_name": "Hängendes Knieheben"
+   },
+   {
+    "id": "ex_pausesquat",
+    "text": "Pausen-Kniebeuge.",
+    "app_name": "Pausen-Kniebeuge"
+   },
+   {
+    "id": "ex_frontsquat",
+    "text": "Frontkniebeuge.",
+    "app_name": "Frontkniebeuge"
+   },
+   {
+    "id": "ex_goblet",
+    "text": "Goblet Squat.",
+    "app_name": "Goblet Squat"
+   },
+   {
+    "id": "ex_goodmorning",
+    "text": "Good Morning.",
+    "app_name": "Good Morning"
+   },
+   {
+    "id": "ex_rdlbb",
+    "text": "Rumänisches Kreuzheben mit Langhantel.",
+    "app_name": "Rumänisches Kreuzheben (Langhantel)"
+   },
+   {
+    "id": "ex_dbbench",
+    "text": "Kurzhantel-Bankdrücken.",
+    "app_name": "Kurzhantel-Bankdrücken"
+   },
+   {
+    "id": "ex_closegrip",
+    "text": "Enges Bankdrücken.",
+    "app_name": "Enges Bankdrücken"
+   },
+   {
+    "id": "ex_feetpush",
+    "text": "Liegestütze mit erhöhten Füßen.",
+    "app_name": "Liegestütze, Füße erhöht"
+   },
+   {
+    "id": "ex_diamondpush",
+    "text": "Enge Liegestütze.",
+    "app_name": "Enge Liegestütze"
+   },
+   {
+    "id": "ex_pikepush",
+    "text": "Pike-Liegestütze.",
+    "app_name": "Pike-Liegestütze"
+   },
+   {
+    "id": "ex_ohpdb",
+    "text": "Kurzhantel-Schulterdrücken im Sitzen.",
+    "app_name": "Kurzhantel-Schulterdrücken sitzend"
+   },
+   {
+    "id": "ex_arnold",
+    "text": "Arnold Press.",
+    "app_name": "Arnold Press"
+   },
+   {
+    "id": "ex_frontraise",
+    "text": "Frontheben.",
+    "app_name": "Frontheben"
+   },
+   {
+    "id": "ex_chinup",
+    "text": "Chin-ups im Untergriff.",
+    "app_name": "Chin-ups (Untergriff)"
+   },
+   {
+    "id": "ex_negpull",
+    "text": "Negative Klimmzüge.",
+    "app_name": "Negative Klimmzüge"
+   },
+   {
+    "id": "ex_invrow",
+    "text": "Rudern im Rack.",
+    "app_name": "Rudern im Rack"
+   },
+   {
+    "id": "ex_chestrow",
+    "text": "Brustgestütztes Rudern.",
+    "app_name": "Brustgestütztes Rudern"
+   },
+   {
+    "id": "ex_stepup",
+    "text": "Step-ups auf die Bank.",
+    "app_name": "Step-ups auf die Bank"
+   },
+   {
+    "id": "ex_revlunge",
+    "text": "Ausfallschritte rückwärts.",
+    "app_name": "Ausfallschritte rückwärts"
+   },
+   {
+    "id": "ex_calf",
+    "text": "Wadenheben.",
+    "app_name": "Wadenheben"
+   },
+   {
+    "id": "ex_hammer",
+    "text": "Hammer-Curls.",
+    "app_name": "Hammer-Curls"
+   },
+   {
+    "id": "ex_bbcurl",
+    "text": "Langhantel-Curls.",
+    "app_name": "Langhantel-Curls"
+   },
+   {
+    "id": "ex_ohext",
+    "text": "Trizeps über Kopf.",
+    "app_name": "Trizeps über Kopf"
+   },
+   {
+    "id": "ex_skull",
+    "text": "Liegendes Trizepsstrecken.",
+    "app_name": "Liegendes Trizepsstrecken"
+   },
+   {
+    "id": "ex_deadbug",
+    "text": "Dead Bug.",
+    "app_name": "Dead Bug"
+   },
+   {
+    "id": "ex_crunch",
+    "text": "Crunches.",
+    "app_name": "Crunches"
+   },
+   {
+    "id": "ex_climber",
+    "text": "Mountain Climbers.",
+    "app_name": "Mountain Climbers"
+   },
+   {
+    "id": "ex_birddog",
+    "text": "Bird Dog.",
+    "app_name": "Bird Dog"
+   },
+   {
+    "id": "ex_legraise",
+    "text": "Hängendes Beinheben.",
+    "app_name": "Hängendes Beinheben"
+   },
+   {
+    "id": "ex_farmer",
+    "text": "Farmer's Walk.",
+    "app_name": "Farmer's Walk"
+   },
+   {
+    "id": "ex_boxing",
+    "text": "Boxsack-Runden.",
+    "app_name": "Boxsack-Runden"
+   },
+   {
+    "id": "ex_run",
+    "text": "Laufband-Intervalle.",
+    "app_name": "Laufband-Intervalle"
+   },
+   {
+    "id": "ex_bandrow",
+    "text": "Band-Rudern.",
+    "app_name": "Band-Rudern"
+   },
+   {
+    "id": "ex_bandcurl",
+    "text": "Band-Curls.",
+    "app_name": "Band-Curls"
+   },
+   {
+    "id": "ex_bandpress",
+    "text": "Band-Schulterdrücken.",
+    "app_name": "Band-Schulterdrücken"
+   },
+   {
+    "id": "ex_superman",
+    "text": "Superman.",
+    "app_name": "Superman"
+   },
+   {
+    "id": "ex_snowangel",
+    "text": "Reverse Snow Angels.",
+    "app_name": "Reverse Snow Angels"
+   },
+   {
+    "id": "ex_towelrow",
+    "text": "Rudern am Tisch.",
+    "app_name": "Rudern am Tisch"
+   },
+   {
+    "id": "ex_towelcurl",
+    "text": "Handtuch-Curls.",
+    "app_name": "Handtuch-Curls"
+   },
+   {
+    "id": "ex_widepush",
+    "text": "Breite Liegestütze.",
+    "app_name": "Breite Liegestütze"
+   },
+   {
+    "id": "ex_chairdip",
+    "text": "Dips am Stuhl.",
+    "app_name": "Dips am Stuhl"
+   },
+   {
+    "id": "ex_airsquatx",
+    "text": "Kniebeugen ohne Gewicht.",
+    "app_name": "Kniebeugen ohne Gewicht"
+   },
+   {
+    "id": "ex_lungebwx",
+    "text": "Ausfallschritte ohne Gewicht.",
+    "app_name": "Ausfallschritte ohne Gewicht"
+   },
+   {
+    "id": "ex_glutebridge",
+    "text": "Glute Bridge.",
+    "app_name": "Glute Bridge"
+   },
+   {
+    "id": "ex_wallsit",
+    "text": "Wandsitzen.",
+    "app_name": "Wandsitzen"
+   },
+   {
+    "id": "ex_calfbw",
+    "text": "Wadenheben ohne Gewicht.",
+    "app_name": "Wadenheben ohne Gewicht"
+   },
+   {
+    "id": "ex_doorrow",
+    "text": "Rudern am Türrahmen.",
+    "app_name": "Rudern am Türrahmen"
+   },
+   {
+    "id": "ex_jumpjack",
+    "text": "Hampelmann.",
+    "app_name": "Hampelmann"
+   },
+   {
+    "id": "ex_kbswing",
+    "text": "Kettlebell-Swing.",
+    "app_name": "Kettlebell-Swing"
+   },
+   {
+    "id": "ex_kbgoblet",
+    "text": "Kettlebell Goblet Squat.",
+    "app_name": "Kettlebell Goblet Squat"
+   },
+   {
+    "id": "ex_kbpress",
+    "text": "Kettlebell-Schulterdrücken.",
+    "app_name": "Kettlebell-Schulterdrücken"
+   },
+   {
+    "id": "ex_kbrow",
+    "text": "Kettlebell-Rudern.",
+    "app_name": "Kettlebell-Rudern"
+   },
+   {
+    "id": "ex_dips",
+    "text": "Dips am Barren.",
+    "app_name": "Dips am Barren"
+   },
+   {
+    "id": "ex_ringpush",
+    "text": "Ring-Liegestütze.",
+    "app_name": "Ring-Liegestütze"
+   },
+   {
+    "id": "ex_trxcurl",
+    "text": "Schlingentrainer-Curls.",
+    "app_name": "Schlingentrainer-Curls"
+   },
+   {
+    "id": "ex_ringrow",
+    "text": "Ring-Rudern.",
+    "app_name": "Ring-Rudern"
+   },
+   {
+    "id": "ex_latpull",
+    "text": "Latziehen am Kabel.",
+    "app_name": "Latziehen am Kabel"
+   },
+   {
+    "id": "ex_cablerow",
+    "text": "Rudern am Kabel.",
+    "app_name": "Rudern am Kabel"
+   },
+   {
+    "id": "ex_cablepush",
+    "text": "Trizepsdrücken am Kabel.",
+    "app_name": "Trizepsdrücken am Kabel"
+   },
+   {
+    "id": "ex_cablefly",
+    "text": "Fliegende am Kabel.",
+    "app_name": "Fliegende am Kabel"
+   },
+   {
+    "id": "ex_cableface",
+    "text": "Face Pulls am Kabel.",
+    "app_name": "Face Pulls am Kabel"
+   },
+   {
+    "id": "ex_ezcurl",
+    "text": "SZ-Curls.",
+    "app_name": "SZ-Curls"
+   },
+   {
+    "id": "ex_ezskull",
+    "text": "SZ-Trizepsstrecken im Liegen.",
+    "app_name": "SZ-Trizepsstrecken liegend"
+   },
+   {
+    "id": "ex_boxstep",
+    "text": "Box Step-ups.",
+    "app_name": "Box Step-ups"
+   },
+   {
+    "id": "ex_boxjump",
+    "text": "Box Jumps.",
+    "app_name": "Box Jumps"
+   },
+   {
+    "id": "ex_mbslam",
+    "text": "Medizinball-Slams.",
+    "app_name": "Medizinball-Slams"
+   },
+   {
+    "id": "ex_russtwist",
+    "text": "Russian Twists.",
+    "app_name": "Russian Twists"
+   },
+   {
+    "id": "ex_rollout",
+    "text": "Bauchroller.",
+    "app_name": "Bauchroller"
+   },
+   {
+    "id": "ex_ballcrunch",
+    "text": "Crunches auf dem Ball.",
+    "app_name": "Crunches auf dem Ball"
+   },
+   {
+    "id": "ex_ballcurl",
+    "text": "Beincurls auf dem Ball.",
+    "app_name": "Beincurls auf dem Ball"
+   },
+   {
+    "id": "ex_legext",
+    "text": "Beinstrecker.",
+    "app_name": "Beinstrecker"
+   },
+   {
+    "id": "ex_legcurl",
+    "text": "Beincurl.",
+    "app_name": "Beincurl"
+   },
+   {
+    "id": "ex_jumprope",
+    "text": "Seilspringen.",
+    "app_name": "Seilspringen"
+   },
+   {
+    "id": "ex_rowint",
+    "text": "Rudergerät-Intervalle.",
+    "app_name": "Rudergerät-Intervalle"
+   },
+   {
+    "id": "ex_bikeint",
+    "text": "Heimtrainer-Intervalle.",
+    "app_name": "Heimtrainer-Intervalle"
+   }
+  ],
+  "aufwaermen": [
+   {
+    "id": "warm_cross",
+    "text": "Crosstrainer locker."
+   },
+   {
+    "id": "warm_cross_kurz",
+    "text": "Crosstrainer kurz."
+   },
+   {
+    "id": "warm_rower",
+    "text": "Rudergerät locker."
+   },
+   {
+    "id": "warm_rower_kurz",
+    "text": "Rudergerät kurz."
+   },
+   {
+    "id": "warm_bike",
+    "text": "Heimtrainer locker."
+   },
+   {
+    "id": "warm_bike_kurz",
+    "text": "Heimtrainer kurz."
+   },
+   {
+    "id": "warm_tread",
+    "text": "Zügig gehen auf dem Laufband.",
+    "note": "umformuliert ohne Komma (Kommas erzeugten lange Pausen)"
+   },
+   {
+    "id": "warm_tread_kurz",
+    "text": "Kurz zügig gehen auf dem Laufband.",
+    "note": "umformuliert ohne Komma"
+   },
+   {
+    "id": "warm_rope",
+    "text": "Seilspringen locker."
+   },
+   {
+    "id": "warm_march",
+    "text": "Auf der Stelle marschieren."
+   },
+   {
+    "id": "warm_jj",
+    "same_as": "ex_jumpjack",
+    "text": "Hampelmann."
+   },
+   {
+    "id": "warm_armcircle",
+    "text": "Armkreisen."
+   },
+   {
+    "id": "warm_pullapart",
+    "text": "Band Pull-Aparts."
+   },
+   {
+    "id": "warm_armopen",
+    "text": "Arme öffnen ohne Band."
+   },
+   {
+    "id": "warm_airsquat",
+    "same_as": "ex_airsquatx",
+    "text": "Kniebeugen ohne Gewicht."
+   },
+   {
+    "id": "warm_lunge",
+    "same_as": "ex_lungebwx",
+    "text": "Ausfallschritte ohne Gewicht."
+   }
+  ],
+  "phrasen": [
+   {
+    "id": "greet_morning",
+    "text": "Guten Morgen, Joschy. Alle Systeme sind bereit."
+   },
+   {
+    "id": "greet_morning_neutral",
+    "text": "Guten Morgen. Alle Systeme sind bereit."
+   },
+   {
+    "id": "greet_noon",
+    "text": "Guten Tag, Joschy. Alle Systeme sind bereit."
+   },
+   {
+    "id": "greet_noon_neutral",
+    "text": "Guten Tag. Alle Systeme sind bereit."
+   },
+   {
+    "id": "greet_evening",
+    "text": "Guten Abend, Joschy. Alle Systeme sind bereit."
+   },
+   {
+    "id": "greet_evening_neutral",
+    "text": "Guten Abend. Alle Systeme sind bereit."
+   },
+   {
+    "id": "plan_a",
+    "text": "Training A wird geladen."
+   },
+   {
+    "id": "plan_b",
+    "text": "Training B wird geladen."
+   },
+   {
+    "id": "plan_c",
+    "text": "Training C wird geladen."
+   },
+   {
+    "id": "week_1",
+    "text": "Woche eins."
+   },
+   {
+    "id": "week_2",
+    "text": "Woche zwei."
+   },
+   {
+    "id": "week_3",
+    "text": "Woche drei."
+   },
+   {
+    "id": "week_4",
+    "text": "Woche vier."
+   },
+   {
+    "id": "warm_start",
+    "text": "Aufwärmen beginnt."
+   },
+   {
+    "id": "warm_done",
+    "text": "Aufwärmen abgeschlossen."
+   },
+   {
+    "id": "next_ex",
+    "text": "Nächste Übung."
+   },
+   {
+    "id": "rest",
+    "text": "Pause."
+   },
+   {
+    "id": "ten_left",
+    "text": "Noch zehn Sekunden."
+   },
+   {
+    "id": "cd_3",
+    "text": "Drei."
+   },
+   {
+    "id": "cd_2",
+    "text": "Zwei."
+   },
+   {
+    "id": "cd_1",
+    "text": "Eins."
+   },
+   {
+    "id": "go",
+    "text": "Los geht's."
+   },
+   {
+    "id": "next_set",
+    "text": "Nächster Satz."
+   },
+   {
+    "id": "hold",
+    "text": "Halten."
+   },
+   {
+    "id": "done_hold",
+    "text": "Geschafft."
+   },
+   {
+    "id": "last_set",
+    "text": "Letzter Satz. Volle Konzentration."
+   },
+   {
+    "id": "pr",
+    "text": "Neuer Bestwert. Beeindruckend."
+   },
+   {
+    "id": "inc_weight",
+    "text": "Gewicht erhöhen empfohlen."
+   },
+   {
+    "id": "same_weight",
+    "text": "Gewicht beibehalten."
+   },
+   {
+    "id": "session_done",
+    "text": "Training abgeschlossen. Hervorragende Arbeit, Joschy."
+   },
+   {
+    "id": "session_done_neutral",
+    "text": "Training abgeschlossen. Hervorragende Arbeit."
+   },
+   {
+    "id": "deload",
+    "text": "Entlastungswoche aktiv."
+   },
+   {
+    "id": "finisher",
+    "text": "Bonus-Finisher. Optional, aber empfehlenswert."
+   },
+   {
+    "id": "protein",
+    "text": "Zeit für Eiweiß."
+   },
+   {
+    "id": "water",
+    "text": "Trink einen Schluck Wasser."
+   },
+   {
+    "id": "breathe",
+    "text": "Ausatmen beim Drücken, einatmen beim Ablassen."
+   },
+   {
+    "id": "shoulders",
+    "text": "Schultern locker lassen."
+   },
+   {
+    "id": "tension",
+    "text": "Erst Spannung aufbauen, dann bewegen."
+   },
+   {
+    "id": "clean_reps",
+    "text": "Die letzten Wiederholungen dürfen schwer sein, aber sauber."
+   },
+   {
+    "id": "bar_only",
+    "text": "Nur die Stange."
+   },
+   {
+    "id": "per_side",
+    "text": "Gewicht pro Seite."
+   },
+   {
+    "id": "warmup_sets",
+    "text": "Zuerst Aufwärmsätze."
+   },
+   {
+    "id": "paused",
+    "text": "Timer pausiert."
+   },
+   {
+    "id": "resume",
+    "text": "Weiter geht's."
+   },
+   {
+    "id": "skip_warm",
+    "text": "Aufwärmen übersprungen."
+   },
+   {
+    "id": "quick",
+    "text": "Kurzes Training aktiv."
+   },
+   {
+    "id": "halfway",
+    "text": "Halbzeit erreicht."
+   },
+   {
+    "id": "last_ex",
+    "text": "Letzte Übung."
+   },
+   {
+    "id": "slow",
+    "text": "Langsam und kontrolliert."
+   },
+   {
+    "id": "good",
+    "text": "Sehr gut."
+   },
+   {
+    "id": "excellent",
+    "text": "Ausgezeichnet."
+   },
+   {
+    "id": "goal_protein",
+    "text": "Eiweißziel erreicht."
+   },
+   {
+    "id": "rest_day",
+    "text": "Heute ist Ruhetag. Erholung ist Teil des Plans."
+   },
+   {
+    "id": "welcome_back",
+    "text": "Willkommen zurück, Joschy."
+   },
+   {
+    "id": "welcome_back_neutral",
+    "text": "Willkommen zurück."
+   }
+  ],
+  "steuer": [
+   {
+    "id": "_lead",
+    "text": "Systemstart.",
+    "note": "Vorlaufwort, wird verworfen"
+   },
+   {
+    "id": "_tail",
+    "text": "Systemende.",
+    "note": "Nachlaufwort, wird verworfen"
+   }
+  ]
+ },
+ "batches": {
+  "batch_01": {
+   "chars": 991,
+   "order": [
+    "num_001",
+    "num_002",
+    "num_003",
+    "num_004",
+    "num_005",
+    "num_006",
+    "num_007",
+    "num_008",
+    "num_009",
+    "num_010",
+    "num_011",
+    "num_012",
+    "num_013",
+    "num_014",
+    "num_015",
+    "num_016",
+    "num_017",
+    "num_018",
+    "num_019",
+    "num_020",
+    "num_021",
+    "num_022",
+    "num_023",
+    "num_024",
+    "num_025",
+    "num_026",
+    "num_027",
+    "num_028",
+    "num_029",
+    "num_030",
+    "num_031",
+    "num_032",
+    "num_033",
+    "num_034",
+    "num_035",
+    "num_036",
+    "num_037",
+    "num_038",
+    "num_039",
+    "num_040",
+    "num_041",
+    "num_042",
+    "num_043",
+    "num_044",
+    "num_045",
+    "num_046",
+    "num_047",
+    "num_048",
+    "num_049",
+    "num_050",
+    "num_051",
+    "num_052",
+    "num_053",
+    "num_054",
+    "num_055",
+    "num_056",
+    "num_057",
+    "num_058",
+    "num_059",
+    "num_060",
+    "num_061",
+    "num_062",
+    "num_063",
+    "num_064",
+    "num_065",
+    "num_066",
+    "num_067",
+    "num_068",
+    "num_069",
+    "num_070",
+    "num_071",
+    "num_072",
+    "num_073",
+    "num_074"
+   ],
+   "generated": true,
+   "missing_in_audio": [
+    "num_001",
+    "num_074"
+   ],
+   "audio_order": [
+    "num_002",
+    "num_003",
+    "num_004",
+    "num_005",
+    "num_006",
+    "num_007",
+    "num_008",
+    "num_009",
+    "num_010",
+    "num_011",
+    "num_012",
+    "num_013",
+    "num_014",
+    "num_015",
+    "num_016",
+    "num_017",
+    "num_018",
+    "num_019",
+    "num_020",
+    "num_021",
+    "num_022",
+    "num_023",
+    "num_024",
+    "num_025",
+    "num_026",
+    "num_027",
+    "num_028",
+    "num_029",
+    "num_030",
+    "num_031",
+    "num_032",
+    "num_033",
+    "num_034",
+    "num_035",
+    "num_036",
+    "num_037",
+    "num_038",
+    "num_039",
+    "num_040",
+    "num_041",
+    "num_042",
+    "num_043",
+    "num_044",
+    "num_045",
+    "num_046",
+    "num_047",
+    "num_048",
+    "num_049",
+    "num_050",
+    "num_051",
+    "num_052",
+    "num_053",
+    "num_054",
+    "num_055",
+    "num_056",
+    "num_057",
+    "num_058",
+    "num_059",
+    "num_060",
+    "num_061",
+    "num_062",
+    "num_063",
+    "num_064",
+    "num_065",
+    "num_066",
+    "num_067",
+    "num_068",
+    "num_069",
+    "num_070",
+    "num_071",
+    "num_072",
+    "num_073"
+   ],
+   "discard_first": false,
+   "discard_last": false,
+   "flow_node": "y3RwSqTfmRo69gODKCHr",
+   "credits": 495.5,
+   "takes": 1,
+   "superseded": "Zahlen werden aus batch_07_zahlen geschnitten; Einheiten aus batch_02 sind nach batch_06 verschoben",
+   "label": "JAI_batch_01_alt"
+  },
+  "batch_02": {
+   "chars": 580,
+   "order": [
+    "num_001",
+    "num_074",
+    "num_075",
+    "num_076",
+    "num_077",
+    "num_078",
+    "num_079",
+    "num_080",
+    "num_081",
+    "num_082",
+    "num_083",
+    "num_084",
+    "num_085",
+    "num_086",
+    "num_087",
+    "num_088",
+    "num_089",
+    "num_090",
+    "num_091",
+    "num_092",
+    "num_093",
+    "num_094",
+    "num_095",
+    "num_096",
+    "num_097",
+    "num_098",
+    "num_099",
+    "num_100",
+    "num_hundert_prefix",
+    "num_200",
+    "u_komma_fuenf",
+    "u_kilo",
+    "u_sekunden",
+    "u_wiederholungen",
+    "u_saetze",
+    "u_satz",
+    "u_von",
+    "u_bis",
+    "u_pro_seite",
+    "u_je_seite",
+    "u_mal",
+    "u_sekunden_halten"
+   ],
+   "audio_order": [
+    "num_001",
+    "num_074",
+    "num_075",
+    "num_076",
+    "num_077",
+    "num_078",
+    "num_079",
+    "num_080",
+    "num_081",
+    "num_082",
+    "num_083",
+    "num_084",
+    "num_085",
+    "num_086",
+    "num_087",
+    "num_088",
+    "num_089",
+    "num_090",
+    "num_091",
+    "num_092",
+    "num_093",
+    "num_094",
+    "num_095",
+    "num_096",
+    "num_097",
+    "num_098",
+    "num_099",
+    "num_100",
+    "num_hundert_prefix",
+    "num_200",
+    "u_komma_fuenf",
+    "u_kilo",
+    "u_sekunden",
+    "u_wiederholungen",
+    "u_saetze",
+    "u_satz",
+    "u_von",
+    "u_bis",
+    "u_pro_seite",
+    "u_je_seite",
+    "u_mal",
+    "u_sekunden_halten"
+   ],
+   "discard_first": true,
+   "discard_last": true,
+   "generated": true,
+   "flow_node": "VLcSy27TpAqUZBRfkJId",
+   "session": "Eav0MovYxzlmB49cUwQQ",
+   "generation": "izk6ekBue4ghBfxrXN3D",
+   "credits": 290,
+   "takes": 1,
+   "duration_s": 60.7,
+   "superseded": "Zahlen werden aus batch_07_zahlen geschnitten; Einheiten aus batch_02 sind nach batch_06 verschoben",
+   "label": "JAI_batch_02_alt"
+  },
+  "batch_03": {
+   "chars": 1226,
+   "order": [
+    "ex_squat",
+    "ex_bench",
+    "ex_row",
+    "ex_rdl",
+    "ex_lateral",
+    "ex_plank",
+    "ex_deadlift",
+    "ex_ohp",
+    "ex_pullup",
+    "ex_bss",
+    "ex_incline",
+    "ex_curl",
+    "ex_hipthrust",
+    "ex_pushup",
+    "ex_dbrow",
+    "ex_lunge",
+    "ex_facepull",
+    "ex_pushdown",
+    "ex_kneeraise",
+    "ex_pausesquat",
+    "ex_frontsquat",
+    "ex_goblet",
+    "ex_goodmorning",
+    "ex_rdlbb",
+    "ex_dbbench",
+    "ex_closegrip",
+    "ex_feetpush",
+    "ex_diamondpush",
+    "ex_pikepush",
+    "ex_ohpdb",
+    "ex_arnold",
+    "ex_frontraise",
+    "ex_chinup",
+    "ex_negpull",
+    "ex_invrow",
+    "ex_chestrow",
+    "ex_stepup",
+    "ex_revlunge",
+    "ex_calf",
+    "ex_hammer",
+    "ex_bbcurl",
+    "ex_ohext",
+    "ex_skull",
+    "ex_deadbug",
+    "ex_crunch",
+    "ex_climber",
+    "ex_birddog",
+    "ex_legraise",
+    "ex_farmer",
+    "ex_boxing",
+    "ex_run",
+    "ex_bandrow",
+    "ex_bandcurl",
+    "ex_bandpress",
+    "ex_superman",
+    "ex_snowangel"
+   ],
+   "audio_order": [
+    "ex_squat",
+    "ex_bench",
+    "ex_row",
+    "ex_rdl",
+    "ex_lateral",
+    "ex_plank",
+    "ex_deadlift",
+    "ex_ohp",
+    "ex_pullup",
+    "ex_bss",
+    "ex_incline",
+    "ex_curl",
+    "ex_hipthrust",
+    "ex_pushup",
+    "ex_dbrow",
+    "ex_lunge",
+    "ex_facepull",
+    "ex_pushdown",
+    "ex_kneeraise",
+    "ex_pausesquat",
+    "ex_frontsquat",
+    "ex_goblet",
+    "ex_goodmorning",
+    "ex_rdlbb",
+    "ex_dbbench",
+    "ex_closegrip",
+    "ex_feetpush",
+    "ex_diamondpush",
+    "ex_pikepush",
+    "ex_ohpdb",
+    "ex_arnold",
+    "ex_frontraise",
+    "ex_chinup",
+    "ex_negpull",
+    "ex_invrow",
+    "ex_chestrow",
+    "ex_stepup",
+    "ex_revlunge",
+    "ex_calf",
+    "ex_hammer",
+    "ex_bbcurl",
+    "ex_ohext",
+    "ex_skull",
+    "ex_deadbug",
+    "ex_crunch",
+    "ex_climber",
+    "ex_birddog",
+    "ex_legraise",
+    "ex_farmer",
+    "ex_boxing",
+    "ex_run",
+    "ex_bandrow",
+    "ex_bandcurl",
+    "ex_bandpress",
+    "ex_superman",
+    "ex_snowangel"
+   ],
+   "discard_first": true,
+   "discard_last": true,
+   "generated": true,
+   "separator": "Eintrag + ' …' + Leerzeile",
+   "flow_node": "gh7ozgvObUzrK0fJYBAE",
+   "label": "JAI_batch_03",
+   "session": "G12WimaAJ0NsMzN08uSY",
+   "generation": "91mrsXHKdz3UETJXyQkC",
+   "credits": 613,
+   "takes": 1,
+   "duration_s": 104.4,
+   "split_check": "exakt: 57 Pausen >= 250 ms (stabil 200–350 ms), 58 Segmente = 56 + Vor-/Nachlauf, 56 Clips",
+   "clips_ok": 56
+  },
+  "batch_04": {
+   "chars": 1166,
+   "order": [
+    "ex_towelrow",
+    "ex_towelcurl",
+    "ex_widepush",
+    "ex_chairdip",
+    "ex_airsquatx",
+    "ex_lungebwx",
+    "ex_glutebridge",
+    "ex_wallsit",
+    "ex_calfbw",
+    "ex_doorrow",
+    "ex_jumpjack",
+    "ex_kbswing",
+    "ex_kbgoblet",
+    "ex_kbpress",
+    "ex_kbrow",
+    "ex_dips",
+    "ex_ringpush",
+    "ex_trxcurl",
+    "ex_ringrow",
+    "ex_latpull",
+    "ex_cablerow",
+    "ex_cablepush",
+    "ex_cablefly",
+    "ex_cableface",
+    "ex_ezcurl",
+    "ex_ezskull",
+    "ex_boxstep",
+    "ex_boxjump",
+    "ex_mbslam",
+    "ex_russtwist",
+    "ex_rollout",
+    "ex_ballcrunch",
+    "ex_ballcurl",
+    "ex_legext",
+    "ex_legcurl",
+    "ex_jumprope",
+    "ex_rowint",
+    "ex_bikeint",
+    "warm_cross",
+    "warm_cross_kurz",
+    "warm_rower",
+    "warm_rower_kurz",
+    "warm_bike",
+    "warm_bike_kurz",
+    "warm_tread",
+    "warm_tread_kurz",
+    "warm_rope",
+    "warm_march",
+    "warm_armcircle",
+    "warm_pullapart",
+    "warm_armopen"
+   ],
+   "audio_order": [
+    "ex_towelrow",
+    "ex_towelcurl",
+    "ex_widepush",
+    "ex_chairdip",
+    "ex_airsquatx",
+    "ex_lungebwx",
+    "ex_glutebridge",
+    "ex_wallsit",
+    "ex_calfbw",
+    "ex_doorrow",
+    "ex_jumpjack",
+    "ex_kbswing",
+    "ex_kbgoblet",
+    "ex_kbpress",
+    "ex_kbrow",
+    "ex_dips",
+    "ex_ringpush",
+    "ex_trxcurl",
+    "ex_ringrow",
+    "ex_latpull",
+    "ex_cablerow",
+    "ex_cablepush",
+    "ex_cablefly",
+    "ex_cableface",
+    "ex_ezcurl",
+    "ex_ezskull",
+    "ex_boxstep",
+    "ex_boxjump",
+    "ex_mbslam",
+    "ex_russtwist",
+    "ex_rollout",
+    "ex_ballcrunch",
+    "ex_ballcurl",
+    "ex_legext",
+    "ex_legcurl",
+    "ex_jumprope",
+    "ex_rowint",
+    "ex_bikeint",
+    "warm_cross",
+    "warm_cross_kurz",
+    "warm_rower",
+    "warm_rower_kurz",
+    "warm_bike",
+    "warm_bike_kurz",
+    "warm_tread",
+    "warm_tread_kurz",
+    "warm_rope",
+    "warm_march",
+    "warm_armcircle",
+    "warm_pullapart",
+    "warm_armopen"
+   ],
+   "discard_first": true,
+   "discard_last": true,
+   "generated": true,
+   "separator": "Eintrag + ' …' + Leerzeile",
+   "flow_node": "oJKYALWtcAur9ErEdlAS",
+   "label": "JAI_batch_04",
+   "credits": 583,
+   "takes": 1,
+   "duration_s": 152.5,
+   "pending": [
+    "warm_tread",
+    "warm_tread_kurz",
+    "warm_march",
+    "warm_armcircle",
+    "warm_pullapart",
+    "warm_armopen"
+   ],
+   "pending_reason": "ab 2:22 fehlerhaft (Joschy) bzw. Komma-Pausen im Eintrag; 2 Einträge davor sicherheitshalber",
+   "clips_ok": 45,
+   "raw": "raw/batch_04.mp3"
+  },
+  "batch_05": {
+   "chars": 816,
+   "order": [
+    "greet_morning",
+    "greet_morning_neutral",
+    "greet_noon",
+    "greet_noon_neutral",
+    "greet_evening",
+    "greet_evening_neutral",
+    "plan_a",
+    "plan_b",
+    "plan_c",
+    "week_1",
+    "week_2",
+    "week_3",
+    "week_4",
+    "warm_start",
+    "warm_done",
+    "next_ex",
+    "rest",
+    "ten_left",
+    "cd_3",
+    "cd_2",
+    "cd_1",
+    "go",
+    "next_set",
+    "hold",
+    "done_hold",
+    "last_set",
+    "pr",
+    "inc_weight",
+    "same_weight",
+    "session_done"
+   ],
+   "audio_order": [
+    "greet_morning",
+    "greet_morning_neutral",
+    "greet_noon",
+    "greet_noon_neutral",
+    "greet_evening",
+    "greet_evening_neutral",
+    "plan_a",
+    "plan_b",
+    "plan_c",
+    "week_1",
+    "week_2",
+    "week_3",
+    "week_4",
+    "warm_start",
+    "warm_done",
+    "next_ex",
+    "rest",
+    "ten_left",
+    "cd_3",
+    "cd_2",
+    "cd_1",
+    "go",
+    "next_set",
+    "hold",
+    "done_hold",
+    "last_set",
+    "pr",
+    "inc_weight",
+    "same_weight",
+    "session_done"
+   ],
+   "discard_first": true,
+   "discard_last": true,
+   "generated": true,
+   "separator": "Eintrag + ' …' + Leerzeile",
+   "flow_node": "XSDYx0f52EB0NK7uZiyU",
+   "label": "JAI_batch_05",
+   "credits": 408,
+   "takes": 1,
+   "duration_s": 74.1,
+   "pending": [
+    "plan_b",
+    "plan_c"
+   ],
+   "pending_reason": "Grenzpause B/C nur 60 ms, nicht sauber trennbar",
+   "clips_ok": 28,
+   "raw": "raw/batch_05.mp3"
+  },
+  "batch_06": {
+   "chars": 900,
+   "order": [
+    "u_kilo",
+    "u_sekunden",
+    "u_wiederholungen",
+    "u_saetze",
+    "u_satz",
+    "u_von",
+    "u_bis",
+    "u_pro_seite",
+    "u_je_seite",
+    "u_mal",
+    "u_sekunden_halten",
+    "session_done_neutral",
+    "deload",
+    "finisher",
+    "protein",
+    "water",
+    "breathe",
+    "shoulders",
+    "tension",
+    "clean_reps",
+    "bar_only",
+    "per_side",
+    "warmup_sets",
+    "paused",
+    "resume",
+    "skip_warm",
+    "quick",
+    "halfway",
+    "last_ex",
+    "slow",
+    "good",
+    "excellent",
+    "goal_protein",
+    "rest_day",
+    "welcome_back",
+    "welcome_back_neutral"
+   ],
+   "audio_order": [
+    "u_kilo",
+    "u_sekunden",
+    "u_wiederholungen",
+    "u_saetze",
+    "u_satz",
+    "u_von",
+    "u_bis",
+    "u_pro_seite",
+    "u_je_seite",
+    "u_mal",
+    "u_sekunden_halten",
+    "session_done_neutral",
+    "deload",
+    "finisher",
+    "protein",
+    "water",
+    "breathe",
+    "shoulders",
+    "tension",
+    "clean_reps",
+    "bar_only",
+    "per_side",
+    "warmup_sets",
+    "paused",
+    "resume",
+    "skip_warm",
+    "quick",
+    "halfway",
+    "last_ex",
+    "slow",
+    "good",
+    "excellent",
+    "goal_protein",
+    "rest_day",
+    "welcome_back",
+    "welcome_back_neutral"
+   ],
+   "discard_first": true,
+   "discard_last": true,
+   "generated": true,
+   "separator": "Eintrag + ' …' + Leerzeile",
+   "flow_node": "4jdKn4qDoe2byA3Gz12B",
+   "label": "JAI_batch_06",
+   "credits": 450,
+   "takes": 1,
+   "duration_s": 93.5,
+   "clips_ok": 36,
+   "raw": "raw/batch_06.mp3"
+  },
+  "batch_07_zahlen": {
+   "order": [
+    "num_001",
+    "num_002",
+    "num_003",
+    "num_004",
+    "num_005",
+    "num_006",
+    "num_007",
+    "num_008",
+    "num_009",
+    "num_010",
+    "num_011",
+    "num_012",
+    "num_013",
+    "num_014",
+    "num_015",
+    "num_016",
+    "num_017",
+    "num_018",
+    "num_019",
+    "num_020",
+    "num_021",
+    "num_022",
+    "num_023",
+    "num_024",
+    "num_025",
+    "num_026",
+    "num_027",
+    "num_028",
+    "num_029",
+    "num_030",
+    "num_031",
+    "num_032",
+    "num_033",
+    "num_034",
+    "num_035",
+    "num_036",
+    "num_037",
+    "num_038",
+    "num_039",
+    "num_040",
+    "num_041",
+    "num_042",
+    "num_043",
+    "num_044",
+    "num_045",
+    "num_046",
+    "num_047",
+    "num_048",
+    "num_049",
+    "num_050",
+    "num_051",
+    "num_052",
+    "num_053",
+    "num_054",
+    "num_055",
+    "num_056",
+    "num_057",
+    "num_058",
+    "num_059",
+    "num_060",
+    "num_061",
+    "num_062",
+    "num_063",
+    "num_064",
+    "num_065",
+    "num_066",
+    "num_067",
+    "num_068",
+    "num_069",
+    "num_070",
+    "num_071",
+    "num_072",
+    "num_073",
+    "num_074",
+    "num_075",
+    "num_076",
+    "num_077",
+    "num_078",
+    "num_079",
+    "num_080",
+    "num_081",
+    "num_082",
+    "num_083",
+    "num_084",
+    "num_085",
+    "num_086",
+    "num_087",
+    "num_088",
+    "num_089",
+    "num_090",
+    "num_091",
+    "num_092",
+    "num_093",
+    "num_094",
+    "num_095",
+    "num_096",
+    "num_097",
+    "num_098",
+    "num_099",
+    "num_100",
+    "num_200",
+    "num_hundert_prefix",
+    "u_komma_fuenf"
+   ],
+   "audio_order": [
+    "num_001",
+    "num_002",
+    "num_003",
+    "num_004",
+    "num_005",
+    "num_006",
+    "num_007",
+    "num_008",
+    "num_009",
+    "num_010",
+    "num_011",
+    "num_012",
+    "num_013",
+    "num_014",
+    "num_015",
+    "num_016",
+    "num_017",
+    "num_018",
+    "num_019",
+    "num_020",
+    "num_021",
+    "num_022",
+    "num_023",
+    "num_024",
+    "num_025",
+    "num_026",
+    "num_027",
+    "num_028",
+    "num_029",
+    "num_030",
+    "num_031",
+    "num_032",
+    "num_033",
+    "num_034",
+    "num_035",
+    "num_036",
+    "num_037",
+    "num_038",
+    "num_039",
+    "num_040",
+    "num_041",
+    "num_042",
+    "num_043",
+    "num_044",
+    "num_045",
+    "num_046",
+    "num_047",
+    "num_048",
+    "num_049",
+    "num_050",
+    "num_051",
+    "num_052",
+    "num_053",
+    "num_054",
+    "num_055",
+    "num_056",
+    "num_057",
+    "num_058",
+    "num_059",
+    "num_060",
+    "num_061",
+    "num_062",
+    "num_063",
+    "num_064",
+    "num_065",
+    "num_066",
+    "num_067",
+    "num_068",
+    "num_069",
+    "num_070",
+    "num_071",
+    "num_072",
+    "num_073",
+    "num_074",
+    "num_075",
+    "num_076",
+    "num_077",
+    "num_078",
+    "num_079",
+    "num_080",
+    "num_081",
+    "num_082",
+    "num_083",
+    "num_084",
+    "num_085",
+    "num_086",
+    "num_087",
+    "num_088",
+    "num_089",
+    "num_090",
+    "num_091",
+    "num_092",
+    "num_093",
+    "num_094",
+    "num_095",
+    "num_096",
+    "num_097",
+    "num_098",
+    "num_099",
+    "num_100",
+    "num_200",
+    "num_hundert_prefix",
+    "u_komma_fuenf"
+   ],
+   "discard_first": true,
+   "discard_last": true,
+   "chars": 1766,
+   "separator": "Eintrag + ' …' + Leerzeile",
+   "generated": true,
+   "flow_node": "m8dDA0ntfTdfRxrJijfR",
+   "label": "JAI_batch_07_zahlen",
+   "credits": 883,
+   "takes": 1,
+   "duration_s": 300.1,
+   "warning": "Dauer 300,1 s: möglicherweise bei 5 min abgeschnitten; Ende (Komma fünf, Systemende) prüfen",
+   "pending": [
+    "num_091",
+    "num_092",
+    "num_093",
+    "num_094",
+    "num_095",
+    "num_096",
+    "num_097",
+    "num_098",
+    "num_099",
+    "num_100",
+    "num_200",
+    "num_hundert_prefix",
+    "u_komma_fuenf"
+   ],
+   "pending_reason": "ab 4:10 fehlerhaft (Joschy); 2 Einträge davor sicherheitshalber",
+   "clips_ok": 90,
+   "raw": "raw/batch_07_zahlen.mp3"
+  },
+  "batch_08_nachholen": {
+   "order": [
+    "warm_tread",
+    "warm_tread_kurz",
+    "warm_march",
+    "warm_armcircle",
+    "warm_pullapart",
+    "warm_armopen",
+    "plan_b",
+    "plan_c",
+    "num_091",
+    "num_092",
+    "num_093",
+    "num_094",
+    "num_095",
+    "num_096",
+    "num_097",
+    "num_098",
+    "num_099",
+    "num_100",
+    "num_200",
+    "num_hundert_prefix",
+    "u_komma_fuenf"
+   ],
+   "audio_order": [
+    "warm_tread",
+    "warm_tread_kurz",
+    "warm_march",
+    "warm_armcircle",
+    "warm_pullapart",
+    "warm_armopen",
+    "plan_b",
+    "plan_c",
+    "num_091",
+    "num_092",
+    "num_093",
+    "num_094",
+    "num_095",
+    "num_096",
+    "num_097",
+    "num_098",
+    "num_099",
+    "num_100",
+    "num_200",
+    "num_hundert_prefix",
+    "u_komma_fuenf"
+   ],
+   "discard_first": true,
+   "discard_last": true,
+   "separator": "Eintrag + ' …' + Leerzeile",
+   "chars": 477,
+   "generated": true,
+   "flow_node": "tkuzMh3nGVxDHWKIrOP5",
+   "label": "JAI_batch_08_nachholen",
+   "credits": 238.5,
+   "takes": 1,
+   "duration_s": 45.0
+  }
+ },
+ "total_chars": 5042,
+ "note": "batch_03–07: jeder Eintrag 'Text …' getrennt durch Leerzeile; erste Zeile 'Systemstart. …', letzte 'Systemende. …' (verwerfen). batch_01/02 nur noch Referenz.",
+ "total_chars_open": 5874,
+ "credits_spent": 3961.0
+}

@@ -1,0 +1,12 @@
+*.apk
+build/
+dist/
+out/
+android/build/
+tools/.cache/
+jai/clips/
+jai/raw/
+__pycache__/
+*.pyc
+node_modules/
+*.tgz
