@@ -12,7 +12,7 @@ Android-App für Krafttraining zu Hause: geführte Trainings mit animierten Übu
 - Onboarding mit Name, Gewicht, Trainingstagen und Geräten.
 
 ## Installation
-APK aus den [Releases](../../releases) herunterladen, auf dem Handy öffnen und „Installation aus unbekannten Quellen“ erlauben. Updates einfach drüber installieren, die Daten bleiben erhalten. Beim ersten Training die Benachrichtigungen zulassen. Bei aggressiven Akkusparmodi: Apps → Homegym → Akku → „Nicht eingeschränkt“.
+Die aktuelle APK liegt im Ordner [`releases/`](releases/) (z. B. `releases/Homegym-2.0.apk`): herunterladen, auf dem Handy öffnen und „Installation aus unbekannten Quellen“ erlauben. Updates einfach drüber installieren, die Daten bleiben erhalten. Beim ersten Training die Benachrichtigungen zulassen. Bei aggressiven Akkusparmodi: Apps → Homegym → Akku → „Nicht eingeschränkt“.
 
 ## Projektstruktur
 | Ordner | Inhalt |
