@@ -1,18 +1,29 @@
-# Homegym
+# Homegym – dein persönlicher Trainingscoach
 
-Android-App für Krafttraining zu Hause: geführte Trainings mit animierten Übungen, Pausen-Timer, Fortschritt und dem Sprachassistenten **JAI**.
+Android-App für Krafttraining zu Hause: geführte Trainings mit animierten Übungen, Pausen-Timer und dem Sprachassistenten JAI, komplett offline.
+
+![Homegym: Startseite, Training, Pausen-Timer und Übungsbibliothek](docs/screenshots/banner.png)
 
 ## Was die App kann
-- **4-Wochen-Zyklus** mit 12 verschiedenen Einheiten als Push/Pull/Beine-Split (A Drücken · B Ziehen · C Beine), jede Muskelgruppe mit einer Woche Erholung. Komplett- oder Kurzversion, max. 60 Minuten inkl. Aufwärmen.
+- **4-Wochen-Trainingsplan** mit 12 Einheiten als Push/Pull/Beine-Split (A Drücken · B Ziehen · C Beine), jede Muskelgruppe mit einer Woche Erholung. Komplett- oder Kurzversion, max. 60 Minuten inkl. Aufwärmen.
 - **94 animierte Übungen** mit Technik-Hinweisen; Figuren abwechselnd Mann/Frau mit realistischen Bewegungsabläufen.
-- **Ausstattung wählbar** (25 Geräte, Presets inkl. „Joschys Homegym“): Trainings passen sich automatisch an; „Tauschen“ bietet nur machbare Übungen derselben Muskelfunktion.
+- **Anpassung an die eigenen Geräte** (25 Geräte, Presets inkl. „Joschys Homegym“): Trainings passen sich automatisch an, „Tauschen“ bietet nur machbare Übungen derselben Muskelfunktion.
 - **Pausen-Timer** mit Benachrichtigung und Bild-in-Bild-Mini-Fenster, auch wenn die App im Hintergrund ist.
-- **JAI-Sprachassistent**: sagt Übungen, Sätze, Gewichte, Countdown und Bestwerte an (offline).
-- Automatische Steigerung, Scheiben-Rechner, Verlauf mit Bestleistungen und Körpergewicht, Eiweiß-Zähler, Entlastungswoche, Datensicherung.
-- Onboarding mit Name, Gewicht, Trainingstagen und Geräten.
+- **Sprachassistent JAI**: sagt Übungen, Sätze, Gewichte, Countdown und Bestwerte an.
+- **Fortschritt**: automatische Steigerungsempfehlung, Scheiben-Rechner, Verlauf mit Bestleistungen, Körpergewicht, Eiweiß-Zähler, Entlastungswoche, Datensicherung.
+- **Offline, keine Anmeldung**: alle Daten bleiben auf dem Handy. Beim ersten Start fragt ein kurzes Onboarding Name, Gewicht, Trainingstage und Geräte ab.
+
+## Screenshots
+| Start | Training | Pause | Übungen |
+|---|---|---|---|
+| <img src="docs/screenshots/01_start.png" width="200" alt="Startseite"> | <img src="docs/screenshots/02_training.png" width="200" alt="Übung im Training"> | <img src="docs/screenshots/03_pause.png" width="200" alt="Pausen-Timer"> | <img src="docs/screenshots/04_uebungen.png" width="200" alt="Übungsbibliothek"> |
 
 ## Installation
-Die aktuelle APK liegt im Ordner [`releases/`](releases/) (z. B. `releases/Homegym-2.0.apk`): herunterladen, auf dem Handy öffnen und „Installation aus unbekannten Quellen“ erlauben. Updates einfach drüber installieren, die Daten bleiben erhalten. Beim ersten Training die Benachrichtigungen zulassen. Bei aggressiven Akkusparmodi: Apps → Homegym → Akku → „Nicht eingeschränkt“.
+1. Die aktuelle APK aus dem Ordner [`releases/`](releases/) laden (z. B. `releases/Homegym-2.0.apk`).
+2. Auf dem Handy öffnen und „Installation aus unbekannten Quellen“ erlauben.
+3. Beim ersten Training die Benachrichtigungen zulassen.
+
+Updates einfach drüber installieren, die Daten bleiben erhalten. Bei aggressiven Akkusparmodi: Apps → Homegym → Akku → „Nicht eingeschränkt“.
 
 ## Projektstruktur
 | Ordner | Inhalt |
@@ -52,3 +63,7 @@ JAI („Joschy's AI“) ist eine eigene, mit ElevenLabs entworfene Stimme (keine
 
 ## Versionen
 Siehe [CHANGELOG.md](CHANGELOG.md). Aktuell: **2.0**.
+
+---
+
+@ Joschy
