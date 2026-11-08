@@ -1,3 +1,4 @@
+/* Homegym 2.1 · @ Joschy */
 package de.joschy.homegym;
 
 import android.app.Notification;

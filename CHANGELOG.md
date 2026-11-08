@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.1
+- **Halte-Übungen** (17, z. B. Hochstütz halten, Hollow Hold, Klimmzüge mit Halt oben) mit eigenen Animationen; jede Einheit endet mit einem **Bonus-Finisher** als Halte-Übung, alle 12 Einheiten bleiben inkl. Bonus unter 60 Minuten. „Tauschen“ bietet passende Halte-Varianten an.
+- **Geräte-Editor** in den Einstellungen: Geräte an- und abwählen, **Gewichtslisten** je Gerät (Kurzhanteln, Kettlebells, Bänder); Gewichtsvorschläge nutzen nur vorhandene Gewichte. **Kettlebell-Rotation**: „In den Plan einmischen“ oder „Nur als Ersatz“.
+- **Backup / Wiederherstellen** als Datei (homegym-backup.json), auch direkt beim ersten Start im Onboarding. Fremde Dateien und Backups aus neueren Versionen werden mit Hinweis abgelehnt, ältere Backups (v4) bleiben lesbar.
+- **Yoga & Dehnen** als Zusatzbereich: 56 Haltungen mit Animation, Atem-Hinweisen und Seitenwechsel, **12-Wochen-Plan** in 3 Stufen, **Schnell-Dehnen** und Dehnen nach dem Training; Bibliothek mit Filter nach Stufe und Körperregion. Yoga zählt nicht in Verlauf, Wochenziel oder Erholung des Kraftplans.
+- Fixes: Gerät während eines laufenden Trainings abgewählt → offene Übungen werden ersetzt, erledigte Sätze bleiben; Backup mit defektem laufendem Training wird ohne Fehler eingelesen; unterbrochene Yoga-Einheit wird pausiert an derselben Haltung fortgesetzt.
+
 ## 2.0
 - Pausen-Timer läuft sichtbar weiter, wenn die App verlassen wird: Benachrichtigung mit Live-Countdown und „+15 s“, Vibration und JAI-Ansage am Pausenende im Hintergrund.
 - Bild-in-Bild: Beim Verlassen während des Trainings schrumpft die App zu einem Mini-Fenster mit Timer.

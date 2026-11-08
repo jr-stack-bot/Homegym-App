@@ -1,3 +1,4 @@
+/* Homegym 2.1 · @ Joschy */
 package de.joschy.homegym;
 
 import android.app.Activity;
@@ -73,4 +74,16 @@ public class Bridge {
     /** current rest end as seen by the service (changes with the +15 s action), "0" if none. */
     @JavascriptInterface
     public String restEnd() { return String.valueOf(TimerService.endTime); }
+
+    /** Backup: writes the JSON to Download/<name> (MediaStore on Android 10+, system "save as" dialog below). Result: window.hgBackupSaved(ok, where). */
+    @JavascriptInterface
+    public void saveBackup(String json, String name) {
+        if (a instanceof MainActivity) ((MainActivity) a).saveBackup(json, name);
+    }
+
+    /** Backup import: opens the system file picker; the text comes back via window.hgBackupLoaded(text|null). */
+    @JavascriptInterface
+    public void openBackup() {
+        if (a instanceof MainActivity) ((MainActivity) a).openBackup();
+    }
 }

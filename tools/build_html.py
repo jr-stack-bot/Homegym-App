@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Baut die eigenständige index.html aus src/app.html + src/program.js und bettet die Schriften ein.
+"""Baut die eigenständige index.html aus src/app.html + src/program.js + src/yoga.js und bettet die Schriften ein.
 
 Aufruf: python3 tools/build_html.py <ausgabe.html>
 Schriften: Ordner mit den entpackten npm-Paketen @fontsource/rajdhani, @fontsource/orbitron,
@@ -27,8 +27,11 @@ src = open(os.path.join(REPO, 'src', 'app.html'), encoding='utf-8').read().repla
 prog = open(os.path.join(REPO, 'src', 'program.js'), encoding='utf-8').read()
 assert src.count('/*PROGRAM*/') == 1, 'Marker /*PROGRAM*/ fehlt in app.html'
 src = src.replace('/*PROGRAM*/', prog)
+yoga = open(os.path.join(REPO, 'src', 'yoga.js'), encoding='utf-8').read()
+assert src.count('/*YOGA*/') == 1, 'Marker /*YOGA*/ fehlt in app.html'
+src = src.replace('/*YOGA*/', yoga)
 page = ('<!doctype html><html lang="de"><head><meta charset="utf-8">'
-        '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">'
+        '<title>Homegym @ Joschy</title><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">'
         '<meta name="theme-color" content="#03060b"></head><body>' + src + '</body></html>')
 open(sys.argv[1], 'w', encoding='utf-8').write(page)
 print('geschrieben', sys.argv[1], len(page), 'Zeichen')
