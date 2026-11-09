@@ -24,10 +24,13 @@ function solveFrontY(p,g){const G=BODY[g||"m"].fr;const o={front:1};const shY=15
   o.kneeR=p.kR?p.kR.slice():kneeDef(o.hipR,o.ankR,1);o.kneeL=p.kL?p.kL.slice():p.kR?[-p.kR[0],p.kR[1]]:kneeDef(o.hipL,o.ankL,-1);
   return o}
 /* bare foot (side view) */
-function drawFootBare(x,kit,a,t,kn,s,mini){const K=kit.K;const f=norm2([t[0]-a[0],t[1]-a[1]]);let n=[-f[1],f[0]];const kv=[kn[0]-a[0],kn[1]-a[1]];if(n[0]*kv[0]+n[1]*kv[1]>0)n=[-n[0],-n[1]];
-  const Lp=(p,u,v)=>[p[0]+f[0]*u*s+n[0]*v*s,p[1]+f[1]*u*s+n[1]*v*s];
-  const pts=[Lp(a,-3.1,1.8),Lp(a,-2.6,-1.9),Lp(a,1.2,-2.4),Lp(t,-4,-1.5),Lp(t,-.6,-.9),Lp(t,.9,.1),Lp(t,.5,1.5),Lp(t,-2,2),Lp(a,-2.6,2.5)];
-  kit.blob(pts,K.skin,Lp(a,-3,0),Lp(t,1,0),2.5*s)}
+function drawFootBare(x,kit,a,t,kn,s,mini,fy){const K=kit.K;const F=footFrame(a,t,kn,s,fy);/* 2.2: rolls over the ball, heel + toes hinted */
+  const Lp=(p,u,v)=>p===a?F.La(u,v):F.Lt(u,v);
+  const pts=[Lp(a,-3.1,1.8),Lp(a,-2.6,-1.9),Lp(a,1.2,-2.4),F.Lb(.3,-1.9),Lp(t,-4,-1.5),Lp(t,-.6,-.9),Lp(t,.9,.1),Lp(t,.5,1.5),Lp(t,-2,2),F.Lb(0,2.1),Lp(a,-2.6,2.5)];
+  kit.blob(pts,K.skin,Lp(a,-3,0),Lp(t,1,0),2.5*s);if(mini)return;
+  x.strokeStyle="rgba(40,20,10,.3)";x.lineWidth=Math.max(.5,s*.32);x.lineCap="round";x.beginPath();
+  for(const v of[-.5,.25]){const p0=Lp(t,-1.3,v),p1=Lp(t,.2,v+.15);x.moveTo(p0[0],p0[1]);x.lineTo(p1[0],p1[1])}
+  const h0=Lp(a,-2.4,-1.2),h1=Lp(a,-3.05,.3),h2=Lp(a,-2.3,1.9);x.moveTo(h0[0],h0[1]);x.quadraticCurveTo(h1[0],h1[1],h2[0],h2[1]);x.stroke()}
 /* yoga mat on the floor */
 function drawMat(ctx,def,o,P,R,fl,front,tr){const cx=def.matX!=null?def.matX:(tr.bx0+tr.bx1)/2;const hw=front?Math.max(52,(tr.bx1-tr.bx0)/2+8):Math.max(70,Math.min(104,(tr.bx1-tr.bx0)/2+16));
   const A=P([cx-hw,fl]),B=P([cx+hw,fl]);const d=R(front?16:5);const k=front?.35:.9;
@@ -35,7 +38,8 @@ function drawMat(ctx,def,o,P,R,fl,front,tr){const cx=def.matX!=null?def.matX:(tr
   const g=ctx.createLinearGradient(0,A[1]-d,0,A[1]);g.addColorStop(0,"#123540");g.addColorStop(1,"#1d5565");ctx.fillStyle=g;ctx.fill();
   ctx.fillStyle="#0b222b";ctx.fillRect(A[0],A[1],B[0]-A[0],Math.max(1.5,R(1.8)));
   ctx.strokeStyle="rgba(62,230,255,.4)";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(A[0],A[1]);ctx.lineTo(B[0],B[1]);ctx.stroke();ctx.restore()}
-/* strap (Gurt/Handtuch) from the hand to the foot */
+/* strap (Gurt/Handtuch) from the hand to the foot; the block stands beside the foot (drawn behind the body) */
+if(typeof EXTRA_EQ_LAYER!=="undefined")EXTRA_EQ_LAYER.yblock="back";
 const _yDrawExtra=drawExtraEq;
 drawExtraEq=function(ctx,e,o,P,R,fl,front){if(e.t==="ystrap"){if(!o.hand||!o.toe)return;const a=P(o.hand),b=P(lerpP(o.ankle,o.toe,.55));ctx.save();ctx.strokeStyle="#c9a227";ctx.lineCap="round";ctx.lineWidth=Math.max(1.2,R(1.6));ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.stroke();ctx.restore();return}
   if(e.t==="yblock"){const c=P([e.x,fl]);const w=R(e.w||16),h=R(e.h||9);ctx.save();ctx.fillStyle="#6b4fa0";ctx.fillRect(c[0]-w/2,c[1]-h,w,h);ctx.fillStyle="rgba(255,255,255,.12)";ctx.fillRect(c[0]-w/2,c[1]-h,w,R(1.5));ctx.restore();return}
@@ -82,7 +86,7 @@ const YP={
     an:{view:"front",A:{yf:1,hR:[13,100],hL:[-13,100],bR:1,bL:-1,s:10,hx:-7,lean:-6},B:{yf:1,hR:[13,100],hL:[-13,100],bR:1,bL:-1,s:10,hx:7,lean:6},tempo:[1.6,0,1.6,0],ph:["Kreisen","Kreisen"]}},
   katzekuh:{n:"Katze-Kuh",sa:"Marjaryasana-Bitilasana",lv:1,r:"ruecken",z:"Wirbelsäule · Rücken",sec:45,
     c:["Vierfüßlerstand: Hände unter den Schultern, Knie unter der Hüfte","Ausatmen: Rücken rund machen, Kinn zur Brust","Einatmen: Brust nach vorn, Blick leicht nach oben"],a:"Die Atmung führt die Bewegung.",
-    an:{anchor:"hip",at:[0,51],A:{torso:8,thigh:-90,shin:180,upper:-90,fore:-90,foot:180,neck:22,lum:7,tho:3},B:{torso:12,thigh:-90,shin:180,upper:-92,fore:-90,foot:180,neck:-42,lum:-6,tho:-9},tempo:[3,.6,3,.6],ph:["Ausatmen · Katze","Einatmen · Kuh"]}},
+    an:{anchor:"hip",at:[0,51],A:{torso:10.5,thigh:-90,shin:180,upper:-90,fore:-90,foot:180,neck:22,lum:7,tho:3},B:{torso:10.7,thigh:-90,shin:180,upper:-90.5,fore:-90,foot:180,neck:-42,lum:-6,tho:-9},tempo:[3,.6,3,.6],ph:["Ausatmen · Katze","Einatmen · Kuh"]}},
   kind:{n:"Kindshaltung",sa:"Balasana",lv:1,r:"ruecken",z:"Rücken · Hüfte · Schultern",sec:45,
     c:["Auf die Fersen setzen, Knie hüftbreit","Oberkörper auf die Oberschenkel sinken lassen","Arme lang nach vorn, Stirn ruht auf der Matte"],a:"In den unteren Rücken atmen, er hebt und senkt sich.",
     an:{anchor:"hip",at:[0,20],A:{torso:-4,thigh:-20.5,shin:180,foot:180,handAt:[113,5],bend:1,neck:-16,lum:-2,tho:-3},B:{torso:-2,thigh:-20.5,shin:180,foot:180,handAt:[113,5],bend:1,neck:-18,lum:-2,tho:-4}}},
@@ -100,10 +104,10 @@ const YP={
     an:{anchor:"hip",at:[0,10],flip:1,A:{torso:157,thigh:0,shin:0,foot:-12,handAt:[-88,7],bend:1,neck:-18},B:{torso:158.5,thigh:0,shin:0,foot:-12,handAt:[-88,7],bend:1,neck:-20}}},
   bruecke:{n:"Brücke",sa:"Setu Bandhasana",lv:1,r:"huefte",z:"Hüftbeuger · Gesäß · Brust",sec:30,
     c:["Rückenlage, Füße hüftbreit nah am Po","Becken langsam Wirbel für Wirbel heben","Knie zeigen nach vorn, Nacken bleibt lang"],a:"Oben ruhig weiteratmen, ausatmen beim Ablegen.",
-    an:{anchor:"shoulder",at:[0,9],fixFeet:1,A:{torso:203,thigh:6,shin:-53,hand:[40,-6],bend:1,neck:-23},B:{torso:206,thigh:3,shin:-51,hand:[40,-6],bend:1,neck:-26}}},
+    an:{anchor:"shoulder",at:[0,9],fixFeet:1,A:{torso:203,thigh:6,shin:-53,hand:[40,-6],bend:1,neck:-26},B:{torso:206,thigh:3,shin:-51,hand:[40,-6],bend:1,neck:-30}}},
   savasana:{n:"Endentspannung",sa:"Savasana",lv:1,r:"ganz",z:"Ganzkörper · Ruhe",sec:120,
     c:["Rückenlage, Beine und Arme locker ablegen","Handflächen nach oben, Augen schließen","Nichts mehr tun, einfach liegen"],a:"Natürlich atmen, nichts steuern.",
-    an:{anchor:"hip",at:[0,8],A:{torso:180,thigh:0,shin:-2,foot:62,upper:-4,fore:-2,neck:0},B:{torso:180.6,thigh:0,shin:-2,foot:62,upper:-4,fore:-2,neck:0},tempo:[4,1,5,1]}},
+    an:{anchor:"hip",at:[0,8],A:{torso:180,thigh:0,shin:-2,foot:62,upper:-4,fore:-2,neck:-9},B:{torso:180.6,thigh:0,shin:-2,foot:62,upper:-4,fore:-2,neck:-9},tempo:[4,1,5,1]}},
   sukhasana:{n:"Bequemer Sitz mit Atmung",sa:"Sukhasana",lv:1,r:"ganz",z:"Atmung · Ankommen",sec:60,
     c:["Im Schneidersitz aufrecht sitzen, ggf. auf einem Kissen","Hände ruhen auf den Knien","Schultern sinken, Scheitel zieht nach oben"],a:"4 Sekunden ein, 6 Sekunden aus.",
     an:{view:"front",A:{yf:1,hy:13,kR:[39,18],aR:[-13,8],aL:[13,7],hR:[33,100],hL:[-33,100],bR:-1,bL:1},B:{yf:1,hy:13,kR:[39,18],aR:[-13,8],aL:[13,7],hR:[33,100],hL:[-33,100],bR:-1,bL:1},tempo:[4,.5,5.5,.5]}},
@@ -112,7 +116,7 @@ const YP={
     an:{anchor:"hip",at:[0,35],A:{torso:91,thigh:14,shin:-88,foot:0,thigh2:-142,shin2:180,foot2:180,handAt:[30,50],bend:1,neck:0},B:{torso:94,thigh:14,shin:-88,foot:0,thigh2:-142,shin2:180,foot2:180,handAt:[31,49],bend:1,neck:3}}},
   streckung:{n:"Ganzkörperstreckung",lv:1,r:"ganz",z:"Ganzer Körper",sec:30,
     c:["Rückenlage, Arme über den Kopf ablegen","Fingerspitzen und Fersen ziehen auseinander","Unterer Rücken bleibt weich am Boden"],a:"Einatmen und lang machen, ausatmen und lösen.",
-    an:{anchor:"hip",at:[0,8],A:{torso:180,thigh:0,shin:-1,foot:58,upper:181,fore:180,neck:0},B:{torso:180,thigh:0,shin:-1,foot:14,upper:182,fore:182,neck:0}}},
+    an:{anchor:"hip",at:[0,8],A:{torso:180,thigh:0,shin:-1,foot:58,upper:181,fore:180,neck:-8},B:{torso:180,thigh:0,shin:-1,foot:14,upper:182,fore:182,neck:-8}}},
   sitzseitbeuge:{n:"Seitbeuge im Sitzen",lv:1,r:"ruecken",z:"Flanke · Rücken",sec:30,uni:1,
     c:["Im Schneidersitz eine Hand neben die Hüfte","Anderen Arm über den Kopf zur Seite strecken","Beide Sitzknochen bleiben am Boden"],a:"In die lange Seite atmen.",
     an:{view:"front",A:{yf:1,hy:13,kR:[39,18],aR:[-13,8],aL:[13,7],ua:-80,fa:-70,uaL:76,faL:38,lean:14},B:{yf:1,hy:13,kR:[39,18],aR:[-13,8],aL:[13,7],ua:-82,fa:-74,uaL:74,faL:30,lean:22}}},
@@ -127,7 +131,7 @@ const YP={
     an:{anchor:"hip",at:[0,20],A:{torso:92,thigh:-20.5,shin:180,foot:180,upper:-126,fore:-128,neck:4},B:{torso:94,thigh:-20.5,shin:180,foot:180,upper:-134,fore:-137,neck:8}}},
   beingurt:{n:"Beinrückseite mit Gurt",sa:"Supta Padangusthasana",lv:1,r:"beine",z:"Beinrückseite · Wade",sec:40,uni:1,
     c:["Rückenlage, Gurt oder Handtuch um den Fuß","Bein nach oben strecken, Knie darf leicht gebeugt sein","Anderes Bein liegt lang, Kopf bleibt am Boden"],a:"Ausatmen und das Bein ein kleines Stück heranziehen.",
-    an:{anchor:"hip",at:[0,8],A:{torso:180,thigh:76,shin:78,foot:4,thigh2:0,shin2:-1,foot2:62,handAt:[-24,50],bend:1,neck:0},B:{torso:180,thigh:82,shin:84,foot:10,thigh2:0,shin2:-1,foot2:62,handAt:[-24,52],bend:1,neck:0},eq:[{t:"ystrap"}]}},
+    an:{anchor:"hip",at:[0,8],A:{torso:180,thigh:76,shin:78,foot:4,thigh2:0,shin2:-1,foot2:62,handAt:[-24,50],bend:1,neck:-6},B:{torso:180,thigh:82,shin:84,foot:10,thigh2:0,shin2:-1,foot2:62,handAt:[-24,52],bend:1,neck:-6},eq:[{t:"ystrap"}]}},
   /* ---- Stufe 2 · Aufbau ---- */
   krieger1:{n:"Krieger I",sa:"Virabhadrasana I",lv:2,r:"huefte",z:"Hüftbeuger · Beine · Schultern",sec:30,uni:1,
     c:["Großer Schritt, vorderes Knie über dem Knöchel","Hinterer Fuß schräg, Ferse am Boden","Arme nach oben, Schultern bleiben weg von den Ohren"],a:"Gleichmäßig weiteratmen, Bauch leicht fest.",
@@ -164,7 +168,7 @@ const YP={
     an:{view:"front",A:{yf:1,hy:92,hx:-3,kL:[-12,46],aL:[-12,0],kR:[40,64],aR:[2,40],hR:[1.5,128],hL:[-1.5,128],bR:1,bL:-1},B:{yf:1,hy:92,hx:-3,kL:[-12,46],aL:[-12,0],kR:[41,63],aR:[2,40],hR:[1.5,129],hL:[-1.5,129],bR:1,bL:-1}}},
   tisch:{n:"Rückwärtiger Tisch",sa:"Ardha Purvottanasana",lv:2,r:"brust",z:"Brust · vordere Schulter · Hüfte",sec:20,
     c:["Sitzen, Hände hinter dem Po, Finger zeigen zu den Füßen","Hüfte heben, bis Oberkörper und Oberschenkel waagerecht sind","Knie über den Knöcheln, Kopf in Verlängerung"],a:"Oben ruhig weiteratmen.",
-    an:{anchor:"hand",A:{upper:-90,fore:-90,torso:180,thigh:-15,shin:-90,foot:0,neck:6},B:{upper:-90,fore:-90,torso:178,thigh:-13,shin:-90,foot:0,neck:8}}},
+    an:{anchor:"hand",A:{upper:-90,fore:-90,torso:180,thigh:-20,shin:-90,foot:0,neck:6},B:{upper:-90,fore:-90,torso:178,thigh:-18,shin:-90,foot:0,neck:8}}},
   heuschrecke:{n:"Heuschrecke",sa:"Salabhasana",lv:2,r:"ruecken",z:"Rücken · Gesäß · hintere Schulter",sec:20,
     c:["Bauchlage, Arme neben dem Körper","Brust, Arme und Beine leicht anheben","Nacken lang, Blick schräg zum Boden"],a:"Oben gleichmäßig weiteratmen.",
     an:{anchor:"hip",at:[0,10],flip:1,A:{torso:170,thigh:6,shin:6,foot:-8,upper:4,fore:6,neck:-4},B:{torso:167,thigh:9,shin:9,foot:-8,upper:8,fore:10,neck:-4}}},
@@ -182,7 +186,7 @@ const YP={
     an:{anchor:"hip",at:[0,9],A:{torso:180,thigh:148,shin:92,foot:4,handAt:[-40,56],bend:1,neck:0},B:{torso:180,thigh:152,shin:94,foot:4,handAt:[-42,56],bend:1,neck:0}}},
   faden:{n:"Faden einfädeln",lv:2,r:"schulter",z:"Hintere Schulter · oberer Rücken",sec:30,uni:1,
     c:["Vierfüßlerstand, einen Arm unter dem anderen durchschieben","Schulter und Schläfe sinken auf die Matte","Hüfte bleibt über den Knien"],a:"In die gedehnte Schulter atmen.",
-    an:{anchor:"hip",at:[0,51],A:{torso:-45,thigh:-90,shin:180,foot:180,handAt:[96,3],bend:1,hand2:[20,-6],bend2:1,neck:38},B:{torso:-47,thigh:-90,shin:180,foot:180,handAt:[97,3],bend:1,hand2:[20,-5],bend2:1,neck:40}}},
+    an:{anchor:"hip",at:[0,51],A:{torso:-37,thigh:-90,shin:180,foot:180,handAt:[96,3],bend:1,hand2:[22,-8],bend2:1,neck:21},B:{torso:-39,thigh:-90,shin:180,foot:180,handAt:[97,3],bend:1,hand2:[22,-7],bend2:1,neck:23}}},/* 2.2: shoulder and temple rest on the mat, the head stays above the floor */
   /* ---- Stufe 3 · Fortgeschritten (weiterhin sanft, keine Umkehrhaltungen) ---- */
   taube:{n:"Taube",sa:"Eka Pada Kapotasana (Vorstufe)",lv:3,r:"huefte",z:"Gesäß · äußere Hüfte · Hüftbeuger",sec:40,uni:1,
     c:["Vorderes Schienbein schräg vor dem Körper ablegen","Hinteres Bein lang nach hinten, Becken gerade","Bei Druck im Knie: Kissen unter die Hüfte oder Taube im Liegen"],a:"Ausatmen und den Oberkörper Stück für Stück sinken lassen.",
@@ -210,7 +214,7 @@ const YP={
     an:{view:"front",A:{yf:1,hy:66,hx:4,kR:[48,42],aR:[48,0],kL:[-31,37],aL:[-58,0],lean:52,hR:[-2,118],bR:1,uaL:118,faL:116},B:{yf:1,hy:65,hx:4,kR:[48.5,41],aR:[48,0],kL:[-31,37],aL:[-58,0],lean:56,hR:[-2,118],bR:1,uaL:116,faL:114}}},
   pyramide:{n:"Pyramide",sa:"Parsvottanasana",lv:3,r:"beine",z:"Beinrückseite · Hüfte",sec:30,uni:1,
     c:["Mittelgroßer Schritt, beide Füße flach, Hüfte zeigt nach vorn","Mit langem Rücken über das vordere Bein beugen","Hände auf Klötze oder das Schienbein, vorderes Knie weich"],a:"Ausatmen und etwas tiefer sinken.",
-    an:{anchor:"hip",at:[0,88],A:{torso:-20,thigh:-63,shin:-66,foot:0,thigh2:-118,shin2:-117,foot2:22,handAt:[36,14],bend:-1,neck:-8},B:{torso:-25,thigh:-63,shin:-66,foot:0,thigh2:-118,shin2:-117,foot2:22,handAt:[37,12],bend:-1,neck:-8},eq:[{t:"yblock",x:38}]}},
+    an:{anchor:"hip",at:[0,83],A:{torso:-20,thigh:-63,shin:-66,foot:0,thigh2:-118,shin2:-117,foot2:22,handAt:[36,14],bend:-1,neck:-8},B:{torso:-25,thigh:-63,shin:-66,foot:0,thigh2:-118,shin2:-117,foot2:22,handAt:[37,12],bend:-1,neck:-8},eq:[{t:"yblock",x:38}]}},
   sitzvorbeuge:{n:"Sitzende Vorbeuge",sa:"Paschimottanasana",lv:3,r:"beine",z:"Beinrückseite · Rücken",sec:40,
     c:["Langsitz, Beine gestreckt, Knie dürfen leicht gebeugt sein","Aus der Hüfte nach vorn neigen, Rücken lang","Hände an Schienbeine oder Füße, nicht ziehen"],a:"Ausatmen und den Oberkörper etwas sinken lassen.",
     an:{anchor:"hip",at:[0,9],A:{torso:38,thigh:4,shin:-4,foot:76,handAt:[76,11],bend:-1,neck:-14,tho:-3},B:{torso:33,thigh:4,shin:-4,foot:76,handAt:[78,11],bend:-1,neck:-16,tho:-4}}},
@@ -221,6 +225,206 @@ const YP={
 const YKEYS=Object.keys(YP);
 /* animation defaults: barefoot, on the mat, breathing tempo */
 for(const k of YKEYS){const d=YP[k].an;const def={floor:0,eq:[],tempo:[3.4,.8,4,.8],ph:YBR,mat:1,bare:1,lag:.04,...d};def.A={...d.A};def.B={...d.B};if(d.view==="front"&&def.floor===0)def.floor=0;AN["y_"+k]=def}
+
+/* ================= 2.2 · Yoga "ganzer Weg" (@ Joschy) =================
+   Every pose runs as an endless loop, independent of the hold countdown:
+   stand (relaxed, breathing) -> into the pose -> hold (the authored A/B breathing animation) -> back -> stand.
+   Generic transition system instead of 56 hand animations: intermediate keyframes (half kneel, kneel, heel sit,
+   all fours, squat, sit, supine, prone, wide stance, ...) in a canonical joint-angle form, monotone splines through
+   them, planted hands/feet (IK, steps with a small arc), knees/hips pinned while they rest on the floor, a floor
+   guard that never lets the body sink into the mat. Library minis stay still (end pose). */
+const YL={stand:1.6,hold:[4,6]};
+/* two-bone IK without the reach clamp of ik2 (a straight leg stays straight); the bend side is either a fixed sign
+   (cross product of root->end and root->mid) or the solution nearest to a reference point */
+const ylCross=(a,e,m)=>{const d=sub(e,a),w=sub(m,a);return d[0]*w[1]-d[1]*w[0]};
+function ylIK(a,t,l1,l2,ref,sg){const d=sub(t,a);let D=Math.hypot(d[0],d[1])||1e-6;const u=[d[0]/D,d[1]/D];D=Math.max(Math.abs(l1-l2)+1e-3,Math.min(l1+l2,D));
+  const x=(l1*l1-l2*l2+D*D)/(2*D),h=Math.sqrt(Math.max(0,l1*l1-x*x));const m1=[a[0]+u[0]*x-u[1]*h,a[1]+u[1]*x+u[0]*h],m2=[a[0]+u[0]*x+u[1]*h,a[1]+u[1]*x-u[0]*h];
+  let m;if(sg)m=ylCross(a,t,m1)*sg>=0?m1:m2;else m=Math.hypot(m1[0]-ref[0],m1[1]-ref[1])<=Math.hypot(m2[0]-ref[0],m2[1]-ref[1])?m1:m2;
+  const e=sub(t,m),l=Math.hypot(e[0],e[1])||1;return[m,add(m,[e[0]/l*l2,e[1]/l*l2])]}
+const ylAng=v=>Math.atan2(v[1],v[0])*180/Math.PI;
+const ylWrap=(a,lo)=>{a=((a-lo)%360+360)%360;return a+lo};
+const ylS=x=>x<=0?0:x>=1?1:x*x*(3-2*x);
+function ylPts(o,f){for(const k in o){const v=o[k];if(Array.isArray(v)&&v.length===2&&typeof v[0]==="number")o[k]=f(v,k)}return o}
+function ylMove(o,d){return ylPts(o,v=>[v[0]+d[0],v[1]+d[1]])}
+function ylMir(o){const q={...o};ylPts(q,v=>[-v[0],v[1]]);if(q._hA!=null)q._hA=180-q._hA;return q}
+/* ---------- side view ---------- */
+const YL_SEG=[["sh","hip"],["neck","sh"],["head","neck"],["knee","hip"],["ankle","knee"],["toe","ankle"],["knee2","hip"],["ankle2","knee2"],["toe2","ankle2"],["elbow","sh"],["hand","elbow"],["elbow2","sh"],["hand2","elbow2"]];
+const YL_PAR=[-1,0,1,0,3,4,0,6,7,0,9,0,11];
+/* anatomical windows of the relative joint angles (figure facing +x): interpolation never folds a joint the wrong way */
+const YL_WIN=[0,-180,-180,-300,-200,-90,-300,-200,-90,-280,-130,-280,-130];
+/* keyframe from world targets: hip, torso, neck; legs via ankle target (IK, knee ref) or angles; arms via hand target or angles */
+function ylKF(s){const o={};if(s.foot){const k=sub(s.foot,V(s.sn1,L.sh));s.hip=sub(k,V(s.th1,L.th))}o.hip=s.hip.slice();o.sh=add(o.hip,V(s.torso,L.to));const ha=s.torso+(s.neck||0);o.neck=add(o.sh,V(ha,L.ne));o.head=add(o.sh,V(ha,L.ne+L.hd));o._hA=ha;
+  for(const n of[1,2]){const K=n===1?"knee":"knee2",A=n===1?"ankle":"ankle2",T=n===1?"toe":"toe2";
+    if(s["a"+n]){[o[K],o[A]]=ylIK(o.hip,s["a"+n],L.th,L.sh,s["k"+n]||add(o.hip,[30,-20]))}else{o[K]=add(o.hip,V(s["th"+n],L.th));o[A]=add(o[K],V(s["sn"+n],L.sh))}
+    o[T]=add(o[A],V(s["f"+n]!=null?s["f"+n]:0,11))}
+  for(const n of[1,2]){const E=n===1?"elbow":"elbow2",H=n===1?"hand":"hand2";
+    if(s["h"+n]){[o[E],o[H]]=ylIK(o.sh,s["h"+n],L.ua,L.fa,s["e"+n]||add(o.sh,V(s.torso-150,20)))}else{o[E]=add(o.sh,V(s["u"+n],L.ua));o[H]=add(o[E],V(s["fo"+n],L.fa))}}
+  o._lum=s.lum!=null?s.lum:.6;o._tho=s.tho!=null?s.tho:-1;return o}
+/* intermediate keyframes, built facing +x (prone poses are mirrored afterwards) */
+const YLK={
+  st:()=>ylKF({hip:[0,92],torso:88,neck:0,th1:-90,sn1:-90,f1:0,th2:-91,sn2:-91,f2:0,u1:-91,fo1:-85,u2:-88,fo2:-83,lum:1,tho:-1.1}),
+  fold:()=>ylKF({foot:[0,0],sn1:-98,th1:-66,f1:0,th2:-67,sn2:-99,f2:0,torso:8,neck:-10,u1:-96,fo1:-92,u2:-94,fo2:-90,lum:-.5,tho:-2}),
+  hkn:()=>ylKF({hip:[0,35],torso:88,neck:0,a1:[46,0],k1:[45,47],f1:0,a2:[-82,6.5],k2:[-36,6],f2:180,h1:[36,50],e1:[30,70],h2:[34,49],e2:[28,70]}),
+  kn:()=>ylKF({hip:[0,52],torso:88,neck:0,a1:[-44,4.6],k1:[2,5],f1:180,a2:[-45,4.4],k2:[.5,4.8],f2:180,u1:-92,fo1:-84,u2:-89,fo2:-82,lum:.4}),
+  hs:()=>ylKF({hip:[-42,23.5],torso:90,neck:-2,a1:[-46,4.2],k1:[2,4.2],f1:180,a2:[-47,4],k2:[1,4],f2:180,h1:[-16,24],e1:[-34,40],h2:[-17,24],e2:[-35,40],lum:.2}),
+  af:()=>ylKF({hip:[0,53],torso:8,neck:-16,a1:[-45,5],k1:[1,5],f1:180,a2:[-46,4.8],k2:[-.5,5],f2:180,u1:-94,fo1:-84,u2:-95,fo2:-85,lum:.2,tho:-.6}),
+  prone:()=>ylKF({hip:[0,10],torso:3,neck:-8,th1:181,sn1:180,f1:192,th2:180,sn2:180,f2:190,h1:[50,2.5],e1:[36,30],h2:[49,2.4],e2:[35,30],lum:-.4}),
+  proneb:()=>ylKF({hip:[0,10],torso:3,neck:-6,th1:181,sn1:180,f1:192,th2:180,sn2:180,f2:190,h1:[6,3],e1:[34,16],h2:[5,3.2],e2:[33,16],lum:-.4}),
+  sq:()=>ylKF({hip:[-14,26],torso:64,neck:-8,a1:[0,0],k1:[28,40],f1:0,a2:[-1,.2],k2:[27,40],f2:0,h1:[26,40],e1:[8,40],h2:[25,39],e2:[7,40],lum:-1}),
+  sitk:()=>ylKF({hip:[-46,9],torso:98,neck:-2,a1:[0,0],k1:[-20,46],f1:0,a2:[-1,.2],k2:[-21,46],f2:0,h1:[-16,40],e1:[-44,44],h2:[-17,39],e2:[-45,44],lum:-.4}),
+  hook:(P,fd)=>ylKF({hip:[0,9],torso:180,neck:0,a1:[fd||46,0],k1:[(fd||46)/2,46],f1:0,a2:[(fd||46)-1,.2],k2:[(fd||46)/2-1,46],f2:0,u1:-3,fo1:-2,u2:-5,fo2:-3,lum:0,tho:0}),
+  lsit:()=>ylKF({hip:[0,9],torso:94,neck:-4,th1:0,sn1:-1,f1:76,th2:1,sn2:-1,f2:74,h1:[30,19],e1:[6,40],h2:[29,18],e2:[5,40],lum:-.3})
+};
+/* path per pose: [keyframe, contact used to line it up with the next keyframe]; the pose itself comes last */
+const YLP_S={stand:[["st","ankle"]],fold:[["st","ankle"],["fold","ankle"]],step:[["st","ankle"]],
+  kneel:[["st","ankle"],["hkn","knee2"],["kn","knee"]],four:[["st","ankle"],["hkn","knee2"],["kn","knee"],["af","knee"]],
+  dog:[["st","ankle"],["hkn","knee2"],["kn","knee"],["af","hand"]],prone:[["st","ankle"],["hkn","knee2"],["kn","knee"],["af","hand"],["prone","hip"]],proneb:[["st","ankle"],["hkn","knee2"],["kn","knee"],["af","hand"],["prone","hip"],["proneb","hip"]],
+  heel:[["st","ankle"],["hkn","knee2"],["kn","knee"],["hs","knee"]],lunge:[["st","ankle"],["lunge","ankle"]],sit:[["st","ankle"],["sq","ankle"],["sitk","hip"]],lsit:[["st","ankle"],["sq","ankle"],["sitk","hip"],["lsit","hip"]],
+  sup:[["st","ankle"],["sq","ankle"],["sitk","hip"],["hook","hip"]],tisch:[["st","ankle"],["sq","ankle"],["sitk","ankle"]],
+  bridge:[["st","ankle"],["sq","ankle"],["sitk","hip"],["hook","ankle",69]]};
+const YL_PATH={kinnbrust:"stand",brustoeffner:"stand",halbevorbeuge:"stand",vorbeuge:"fold",stuhl:"stand",malasana:"stand",krieger1:"step",pyramide:"step",
+  tiefausfall:"lunge",halbmond:"lunge",eidechse:"lunge",kamel:"kneel",fersensitz:"kneel",kind:"heel",katzekuh:"four",welpe:"four",faden:"four",
+  hund:"dog",hundpedal:"dog",delfin:"dog",taube:"dog",sphinx:"prone",kobra:"prone",heuschrecke:"proneb",bogen:"prone",
+  drehsitz:"sit",tisch:"tisch",sitzvorbeuge:"lsit",fisch:"lsit",kniebrust:"sup",figur4:"sup",happybaby:"sup",beingurt:"sup",savasana:"sup",streckung:"sup",bruecke:"bridge"};
+/* lunge with the back knee lifted, derived from the half-kneeling pose itself (toes tucked under) */
+YLK.lunge=P=>ylKF({hip:add(P.hip,[-6,22]),torso:80,neck:0,a1:P.ankle,k1:add(P.knee,[0,4]),f1:0,a2:[P.ankle2[0]+16,9],k2:[P.knee2[0]+6,34],f2:-38,
+  h1:add(lerpP(P.hip,P.knee,.75),[-2,26]),e1:add(P.hip,[20,70]),h2:add(lerpP(P.hip,P.knee,.75),[-3,25]),e2:add(P.hip,[18,70])});
+function ylCanS(o){const a=[],l=[];for(const[c,p]of YL_SEG){const d=sub(o[c],o[p]);a.push(ylAng(d));l.push(Math.hypot(d[0],d[1]))}return{hip:o.hip.slice(),a,l,lum:o._lum||0,tho:o._tho||0}}
+function ylVecS(c,mir,prev){const v=[c.hip[0],c.hip[1]];const rel=[];for(let i=0;i<13;i++){if(i===0){let t=c.a[0];if(prev!=null){while(t-prev>180)t-=360;while(t-prev<-180)t+=360}rel.push(t)}
+    else{const lo=mir?-YL_WIN[i]-360:YL_WIN[i];rel.push(rel[YL_PAR[i]]+ylWrap(c.a[i]-c.a[YL_PAR[i]],lo))}}return v.concat(rel,c.l,[c.lum,c.tho])}
+/* channels hold absolute angles, unwrapped so that every joint angle stays inside its anatomical window:
+   a limb that keeps its world direction while the body turns stays still in between, too */
+function ylFKS(v){const a=[];for(let i=0;i<13;i++)a.push(v[2+i]);const o={hip:[v[0],v[1]]};
+  YL_SEG.forEach(([c,p],i)=>{o[c]=add(o[p],V(a[i],v[15+i]))});o._hA=a[2];o._torso=a[0];o._lum=v[28];o._tho=v[29];return o}
+/* contact analysis of one segment between two keyframes */
+const YL_PIN=[["hip",12],["knee",9],["knee2",9],["ankle",9],["ankle2",9],["hand",7],["hand2",7]];
+const YL_EFF=[["ankle","knee","hip","toe",9],["ankle2","knee2","hip","toe2",9],["hand","elbow","sh",null,10],["hand2","elbow2","sh",null,10]];
+const YL_CLR=[["hip",7],["sh",6],["head",8.5],["neck",3],["knee",4],["knee2",4],["elbow",3],["elbow2",3],["toe",.3],["toe2",.3]];
+function ylSegInfo(A,B,mir,slide){const pin=YL_PIN.find(([k,t])=>A[k][1]<t&&B[k][1]<t&&Math.hypot(A[k][0]-B[k][0],A[k][1]-B[k][1])<3);
+  const eff=YL_EFF.map(([e,m,r,toe,t])=>{const on=A[e][1]<t&&B[e][1]<t;const d=Math.hypot(A[e][0]-B[e][0],A[e][1]-B[e][1]);
+    const ca=ylCross(A[r],A[e],A[m]),cb=ylCross(B[r],B[e],B[m]);const dflt=(e.startsWith('ankle')?1:-1)*(mir?-1:1);const sa=Math.abs(ca)>25?Math.sign(ca):0,sb=Math.abs(cb)>25?Math.sign(cb):0;
+    /* bend side per keyframe (a nearly straight limb takes the side of the other keyframe); if the sides differ the elbow/knee swings over (2D projection of a rotation) */
+    const sg=sa||sb||dflt,sg2=sb||sa||dflt;
+    /* knee (or elbow) resting on the floor in both keyframes: the shin lies on the mat, plain FK + pin keeps it there */
+    const midOn=e.startsWith("ankle")&&A[m][1]<9&&B[m][1]<9&&Math.hypot(A[m][0]-B[m][0],A[m][1]-B[m][1])<3;
+    return{e,m,r,toe,sg,sg2,d,a:A[e],b:B[e],mode:midOn?"free":on?(d<3?"fix":((slide&&slide.includes(e))||d<10)?"slide":"step"):"free",lift:Math.min(e.startsWith("hand")?70:12,3+d*.1+(e.startsWith("hand")?Math.max(0,d-50)*.6:0)),fa:A[e][1],fb:B[e][1]}});
+  const clr=YL_CLR.map(([k,r])=>[k,r,Math.min(0,A[k][1]-r),Math.min(0,B[k][1]-r)]);return{pin:pin&&pin[0],pa:pin&&A[pin[0]],pb:pin&&B[pin[0]],eff,clr}}
+function ylApplyS(o,I,t){if(I.pin){const tg=lerpP(I.pa,I.pb,t);ylMove(o,sub(tg,o[I.pin]))}
+  const ik=new Set();for(const E of I.eff)if(E.mode!=="free")ik.add(E.m),ik.add(E.toe);
+  const liftBy=all=>{let lift=0;for(const[k,r,ca,cb]of I.clr){if(all?(k==='toe'||k==='toe2'||k.startsWith('elbow')):ik.has(k))continue;const alw=lerp(ca,cb,t)-.2;const c=o[k][1]-r;if(c<alw)lift=Math.max(lift,alw-c)}return lift};
+  const LN=I.eff.map(E=>[Math.hypot(...sub(o[E.m],o[E.r])),Math.hypot(...sub(o[E.e],o[E.m])),E.toe?sub(o[E.toe],o[E.e]):null]);
+  const solve=()=>{I.eff.forEach((E,j)=>{const[ln1,ln2,ft]=LN[j];let tg=null;
+    if(E.mode==="fix")tg=lerpP(E.a,E.b,t);
+    else if(E.mode==="step"){const w=ylS((t-.06)/.88);tg=add(lerpP(E.a,E.b,w),[0,E.lift*Math.sin(Math.PI*w)])}
+    else if(E.mode==="slide")tg=lerpP(E.a,E.b,ylS(t));
+    else{const fl=Math.min(lerp(E.fa,E.fb,t),E.toe?3.5:1.5);if(o[E.e][1]<fl)tg=[o[E.e][0],fl]}
+    /* the foot rolls over the ball: if the toes would go into the floor, the ankle rises instead */
+    if(ft){const base=tg||o[E.e];const ty=base[1]+ft[1];if(ty<0)tg=[base[0],base[1]-ty]}
+    if(tg&&E.mode==="free"){/* free hand/foot below the floor: pushed up onto the floor (continuous, reads as foreshortening) */
+      o[E.e]=[o[E.e][0],tg[1]];if(o[E.m][1]<tg[1])o[E.m]=[o[E.m][0],tg[1]];if(ft)o[E.toe]=add(o[E.e],ft);tg=null}
+    const fm=o[E.m].slice(),fe=o[E.e].slice();
+    if(tg){
+      if(E.sg===E.sg2)[o[E.m],o[E.e]]=ylIK(o[E.r],tg,ln1,ln2,o[E.m],E.sg);
+      else{const p1=ylIK(o[E.r],tg,ln1,ln2,o[E.m],E.sg),p2=ylIK(o[E.r],tg,ln1,ln2,o[E.m],E.sg2);o[E.m]=lerpP(p1[0],p2[0],ylS(t));o[E.e]=tg.slice()}
+      /* a hand moving to a new spot follows an arc (IK); close to the shoulder it swings by joint angles instead */
+      if(E.mode==="step"&&!E.toe&&E.d>40){const w=ylS((t-.06)/.88),D=Math.hypot(...sub(tg,o[E.r]));const bl=1-ylS((D-10)/16);/* only where the target passes the shoulder (IK would flip) */o[E.m]=lerpP(o[E.m],fm,bl);o[E.e]=lerpP(o[E.e],fe,bl);
+        if(o[E.e][1]<1.5)o[E.e]=[o[E.e][0],1.5];if(o[E.m][1]<3)o[E.m]=[o[E.m][0],3]}if(ft)o[E.toe]=add(o[E.e],ft)}})};
+  let l=liftBy(false);if(l)ylMove(o,[0,l]);const keep={};for(const E of I.eff)keep[E.e]=o[E.e].slice();solve();
+  l=liftBy(true);if(l>.05){ylMove(o,[0,l]);for(const E of I.eff){o[E.e]=keep[E.e].slice()}solve()}
+  for(const[k,r,ca,cb]of I.clr)if(k.startsWith('elbow')){const fl=r+lerp(ca,cb,t);if(o[k][1]<fl)o[k]=[o[k][0],fl]}/* an elbow never digs into the mat */
+  return o}
+/* ---------- front view ---------- */
+function ylCanF(o,g){const T=o._T||{hx:0,hy:92,lean:0,tilt:0,rfirst:0};const Q=o.L;
+  const arm=(s,e,h)=>{const u=sub(Q[e],Q[s]),f=sub(Q[h],Q[e]);return[ylAng(u),Math.hypot(u[0],u[1]),ylAng(f)-ylAng(u),Math.hypot(f[0],f[1])]};
+  const kn=(h,k,a)=>{const d=sub(o[a],o[h]),w=sub(o[k],o[h]);const l2=d[0]*d[0]+d[1]*d[1]||1,l=Math.sqrt(l2);return[(w[0]*d[0]+w[1]*d[1])/l2,(d[0]*w[1]-d[1]*w[0])/l]};
+  return{g,T:{...T},shY:o.shY,us:o._us==null?1:o._us,L:{shL:Q.shL,shR:Q.shR,neck:Q.neck,head:Q.head},aR:arm("shR","elbR","handR"),aL:arm("shL","elbL","handL"),
+    ankR:o.ankR.slice(),ankL:o.ankL.slice(),kR:kn("hipR","kneeR","ankR"),kL:kn("hipL","kneeL","ankL")}}
+function ylVecF(c,w){w=w||[-120,-240];const T=c.T;const v=[T.hx,T.hy,T.lean||0,T.tilt||0,c.shY,c.us];for(const k of["shL","shR","neck","head"])v.push(c.L[k][0],c.L[k][1]);
+  v.push(ylWrap(c.aR[0],-200),c.aR[1],ylWrap(c.aR[2],w[0]),c.aR[3],ylWrap(c.aL[0],20),c.aL[1],ylWrap(c.aL[2],w[1]),c.aL[3]);
+  v.push(...c.ankR,...c.ankL,...c.kR,...c.kL);return v}
+function ylFKF(v,g,rf){const G=BODY[g].fr;const o={front:1,_T:{hx:v[0],hy:v[1],lean:v[2],tilt:v[3],rfirst:rf},shY:v[4],_us:v[5]};const L_={shL:[v[6],v[7]],shR:[v[8],v[9]],neck:[v[10],v[11]],head:[v[12],v[13]]};
+  L_.elbR=add(L_.shR,V(v[14],v[15]));L_.handR=add(L_.elbR,V(v[14]+v[16],v[17]));L_.elbL=add(L_.shL,V(v[18],v[19]));L_.handL=add(L_.elbL,V(v[18]+v[20],v[21]));o.L=L_;
+  const c=Math.cos(rad(-v[2])),sn=Math.sin(rad(-v[2]));const T=q=>{const d=[q[0],q[1]-92];return[v[0]+d[0]*c-d[1]*sn,v[1]+d[0]*sn+d[1]*c]};
+  for(const k in L_)o[k]=T(L_[k]);o.hipL=T([-G.hipJ,92]);o.hipR=T([G.hipJ,92]);o.ankR=[v[22],v[23]];o.ankL=[v[24],v[25]];
+  const kn=(h,a,p)=>{const d=sub(a,h);const l=Math.hypot(d[0],d[1])||1;return add(h,[d[0]*p[0]-d[1]/l*p[1],d[1]*p[0]+d[0]/l*p[1]])};
+  o.kneeR=kn(o.hipR,o.ankR,[v[26],v[27]]);o.kneeL=kn(o.hipL,o.ankL,[v[28],v[29]]);return o}
+const YLFR={st:{yf:1,ua:-85,fa:-87,s:5}};
+function ylFrontPath(k,P,g){const st=solveFrontY(YLFR.st,g);const out=[st];const G=BODY[g].fr;
+  const legH=(hx,aR,aL)=>{const dx=Math.max(Math.abs(aR[0]-(hx+G.hipJ)),Math.abs(aL[0]-(hx-G.hipJ)));return Math.min(92,Math.sqrt(Math.max(0,92*92-dx*dx)))-.4};
+  const wide=Math.abs(P.ankR[0]-st.ankR[0])>6&&P.ankR[1]<1&&P.ankL[1]<1;
+  if(k==="baum")out.push(solveFrontY({...YLFR.st,hx:-6,lean:-2,ua:-82,fa:-80},g));
+  else if(P._T&&P._T.hy<40){/* sitting on the floor: squat down, sit, then fold the legs */
+    out.push(solveFrontY({yf:1,hy:38,kR:[27,47],aR:[13,0],ua:-62,fa:-74},g));
+    out.push(solveFrontY({yf:1,hy:13,kR:[23,44],aR:[14,1],hR:[25,108],hL:[-25,108],bR:1,bL:-1},g))}
+  else if(wide){const aR=P.ankR,aL0=st.ankL;let hx=(aR[0]+aL0[0])/2*.7;out.push(solveFrontY({...YLFR.st,hx,hy:legH(hx,aR,aL0),aR:aR.slice(),aL:aL0.slice()},g));
+    hx=(aR[0]+P.ankL[0])/2;out.push(solveFrontY({...YLFR.st,hx,hy:legH(hx,aR,P.ankL),aR:aR.slice(),aL:P.ankL.slice()},g))}
+  return out}
+function ylFrontSeg(A,B){const st=[];for(const s of["ankR","ankL"]){const on=A[s][1]<3&&B[s][1]<3;const d=Math.hypot(A[s][0]-B[s][0],A[s][1]-B[s][1]);st.push({s,mode:on?(d<2?"fix":d<12?"slide":"step"):"free",a:A[s],b:B[s],lift:Math.min(12,4+d*.08)})}return st}
+function ylApplyF(v,I,t){const ix={ankR:22,ankL:24};let moved=null,fixed=null;
+  for(const E of I){const j=ix[E.s];if(E.mode==="fix"){const p=lerpP(E.a,E.b,t);v[j]=p[0];v[j+1]=p[1];fixed=p}
+    else if(E.mode==="step"){const w=ylS((t-.15)/.7);const p=add(lerpP(E.a,E.b,w),[0,E.lift*Math.sin(Math.PI*w)]);v[j]=p[0];v[j+1]=p[1];moved=E}
+    else if(E.mode==="slide"){const p=lerpP(E.a,E.b,ylS(t));v[j]=p[0];v[j+1]=p[1]}
+    else if(v[j+1]<0)v[j+1]=0}
+  if(moved&&fixed){const w=Math.sin(Math.PI*ylS(t));v[0]+=w*.45*(fixed[0]-v[0])}/* weight over the standing foot while the other one steps */
+  return v}
+/* ---------- the loop ---------- */
+function ylHoldInfo(def){const T=cycT(def);const n=Math.max(1,Math.round(5/T));const dur=Math.max(YL.hold[0],Math.min(YL.hold[1],n*T));return{n,T,dur,f:n*T/dur}}
+function ylBuild(def,g){const key=Object.keys(AN).find(k=>AN[k]===def)||"";const k=key.slice(2);const H=ylHoldInfo(def);
+  const P0=animPose(def,0,g).o,P1=animPose(def,H.dur*H.f,g).o;const front=def.view==="front";let keys,keysX,segE,segX;
+  if(front){const mids=ylFrontPath(k,P0,g);keys=[...mids,P0];keysX=[P1,...mids.slice().reverse()]}
+  else{const mir=!!def.flip;const typ=YL_PATH[k]||"stand";const spec=YLP_S[typ];const Pm=mir?ylMir(P0):P0;
+    const ks=spec.map(([n,,arg])=>YLK[n](Pm,arg));ks.push(Pm);
+    for(let i=ks.length-2;i>=0;i--){const c=spec[i][1];ks[i]=ylMove({...ks[i]},[ks[i+1][c][0]-ks[i][c][0],0])}
+    const mids=ks.slice(0,-1).map(o=>mir?ylMir(o):o);keys=[...mids,P0];keysX=[P1,...mids.slice().reverse()]}
+  const mk=(K,pi)=>{const n=K.length;const vec=[];let prev=null;const C=front?K.map(o=>ylCanF(o,g)):K.map(ylCanS);
+    /* front elbows fold towards the body: a lowered arm folds behind the back, a raised arm behind the head */
+    const W=front?[Math.sin(rad(C[pi].aR[0]))<-.2?-240:-120,Math.sin(rad(C[pi].aL[0]))<-.2?-120:-240]:null;
+    for(const c of C){const v=front?ylVecF(c,W):ylVecS(c,!!def.flip,prev);if(!front)prev=v[2];vec.push(v)}
+    const xs=[0];for(let i=1;i<n;i++){let d=0;for(const p of front?["hipR","shR","head","ankR","ankL","handR","handL"]:["hip","sh","head","knee","ankle","ankle2","hand","hand2"]){const a=K[i-1][p],b=K[i][p];if(a&&b)d=Math.max(d,Math.hypot(a[0]-b[0],a[1]-b[1]))}xs.push(xs[i-1]+Math.pow(Math.max(12,d),.8)+6)}
+    const tot=xs[n-1]||1;const xn=xs.map(x=>x/tot);const seg=[];for(let i=0;i<n-1;i++)seg.push(front?ylFrontSeg(K[i],K[i+1]):ylSegInfo(K[i],K[i+1],!!def.flip));
+    return{K,vec,xn,seg,rf:C.map(c=>front?(c.T.rfirst||0):0),n}};
+  const E=mk(keys,keys.length-1),X=mk(keysX,0);const ns=keys.length-1;const L0={front,g};ylWarp(L0,E,YL_SLOW[k],1);ylWarp(L0,X,YL_SLOW[k],0);
+  const entry=Math.max(3,Math.min(4.5,2.2+.8*ns)),exit=Math.max(3,Math.min(4,entry-.4));/* the way back is at most ~12 % quicker than the way in */const T=YL.stand+entry+H.dur+exit;
+  const L_={def,g,front,E,X,H,entry,exit,T,k};L_.b=ylBounds(L_);return L_}
+function ylPath(P,s){const n=P.n;let i=0;while(i<n-2&&s>P.xn[i+1])i++;const t=Math.max(0,Math.min(1,(s-P.xn[i])/((P.xn[i+1]-P.xn[i])||1)));
+  const v=P.vec[0].map((_,j)=>n===2?lerp(P.vec[0][j],P.vec[1][j],s):hermite(P.xn,P.vec.map(x=>x[j]),s));return{v,i,t}}
+/* time warp: the path is re-timed by how far the fastest joint travels (sampled), with a soft trapezoid velocity profile,
+   so no single stretch (a foot step when standing up, a leg unfolding) runs much faster than the rest */
+function ylTransRaw(L_,P,s){const{v,i,t}=ylPath(P,s);if(L_.front){ylApplyF(v,P.seg[i],t);return ylFKF(v,L_.g,t<.5?P.rf[i]:P.rf[i+1])}return ylApplyS(ylFKS(v),P.seg[i],t)}
+/* a few poses get extra time for one stretch of the way (half bow: the knee bends, the heel comes over to the buttock and the
+   hand reaches back calmly instead of the shin flicking up) */
+const YL_SLOW={bogen:{w:2.2,wx:1.4}};
+function ylWarp(L_,P,slow,isEntry){const N=360,pts=o=>{const m=[];for(const q in o){const v=o[q];if(Array.isArray(v)&&v.length===2&&typeof v[0]==="number")m.push(v)}return m};
+  let prev=pts(ylTransRaw(L_,P,0));const d=[0];for(let i=1;i<=N;i++){const m=pts(ylTransRaw(L_,P,i/N));let mx=0;for(let j=0;j<m.length;j++)mx=Math.max(mx,Math.hypot(m[j][0]-prev[j][0],m[j][1]-prev[j][1]));d.push(mx);prev=m}
+  if(slow){const b=isEntry?P.xn[P.n-2]:P.xn[1];for(let i=1;i<=N;i++){const x=i/N,r=ylS(((isEntry?x-b:b-x)+.04)/.08);d[i]*=1+((isEntry?slow.w:slow.wx)-1)*r}}
+  const sm=d.map((_,i)=>{if(!i)return 0;let a=0,n=0;for(let j=Math.max(1,i-4);j<=Math.min(N,i+4);j++){a+=d[j];n++}return a/n});
+  const tot=sm.reduce((a,b)=>a+b,0)||1;const c=[0];for(let i=1;i<=N;i++)c.push(c[i-1]+sm[i]+tot*.15/N);
+  const C=c[N];P.wc=c.map(x=>x/C)}
+const ylEase=u=>{const a=.3;/* smooth velocity ramps over the first and last 30 %, constant in between (peak 1.4x the mean) */
+  const r=x=>x<=0?0:x>=a?x-a/2:(x*x*x/(a*a)-x*x*x*x/(2*a*a*a));return r(u)/(1-a)-(u>1-a?r(u-(1-a))/(1-a):0)};
+/* a short time filter (about +-0.03 s, shrinking to zero at both ends) rounds off the kinks where one keyframe segment
+   hands over to the next; convex weights, so nothing that stays above the mat can dip into it */
+function ylTrans(L_,P,u){const D=Math.min(.007,u,1-u);if(D<1e-4)return ylTrans1(L_,P,u);const o=ylTrans1(L_,P,u),W=[.1,.2,.4,.2,.1];
+  const ss=[-2,-1,1,2].map(j=>ylTrans1(L_,P,u+j*D/2));ylPts(o,(v,k)=>{let x=v[0]*.4,y=v[1]*.4;for(let j=0;j<4;j++){const q=ss[j][k];const w=W[j<2?j:j+1];x+=q[0]*w;y+=q[1]*w}return[x,y]});return o}
+function ylTrans1(L_,P,u){let s;if(P.wc){const e=Math.max(0,Math.min(1,ylEase(u)));const c=P.wc,N=c.length-1;let lo=0,hi=N;while(hi-lo>1){const m=(lo+hi)>>1;if(c[m]<=e)lo=m;else hi=m}
+    s=(lo+(e-c[lo])/((c[hi]-c[lo])||1))/N}else s=ylS(u);const{v,i,t}=ylPath(P,s);
+  if(L_.front){ylApplyF(v,P.seg[i],t);return ylFKF(v,L_.g,t<.5?P.rf[i]:P.rf[i+1])}
+  return ylApplyS(ylFKS(v),P.seg[i],t)}
+function ylStandO(L_,p){const br=Math.sin(Math.PI*p);/* one calm breath while standing, zero at both ends (no jump into the transition) */if(L_.front){const o=solveFrontY({...YLFR.st,br:br*.6},L_.g);o._br=br;return o}
+  const o=ylFKS(L_.E.vec[0]);o._br=br;return o}
+function yLoopPose(L_,time){const def=L_.def;const T=L_.T;let t=((time%T)+T)%T;const noEq={...def,eq:def.eq.filter(e=>e.t!=="ystrap")};
+  if(reduce){const r=animPose(def,0,L_.g);return{o:r.o,ph:r.ph,dd:def}}
+  const s0=YL.stand/2;/* the relaxed stand is split: first and last frame of every loop are the stand */
+  if(t<s0||t>=T-s0)return{o:ylStandO(L_,t<s0?(t+s0)/(2*s0):(t-T+s0)/(2*s0)),lbl:"Ankommen · atmen",dd:noEq,ph:0,stage:"stand"};t-=s0;
+  if(t<L_.entry){const o=ylTrans(L_,L_.E,t/L_.entry);o._br=0;return{o,lbl:"Hineingehen",dd:noEq,ph:0,stage:"in"}}t-=L_.entry;
+  if(t<L_.H.dur){const r=animPose(def,t*L_.H.f,L_.g);return{o:r.o,ph:r.ph,dd:def,stage:"hold"}}t-=L_.H.dur;
+  const o=ylTrans(L_,L_.X,Math.min(1,t/L_.exit));o._br=0;return{o,lbl:"Lösen · zurück",dd:noEq,ph:1,stage:"out"}}
+function ylBounds(L_){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;const inc=(p,r)=>{x0=Math.min(x0,p[0]-r);x1=Math.max(x1,p[0]+r);y0=Math.min(y0,p[1]-r);y1=Math.max(y1,p[1]+r)};
+  const was=reduce;for(let i=0;i<=72;i++){const{o}=yLoopPose(L_,i/72*L_.T+.001);for(const k in o){const v=o[k];if(Array.isArray(v)&&v.length===2&&typeof v[0]==="number")inc(v,k==="head"?L.hd:4)}}
+  const b0=boundsOf(L_.def);x0=Math.min(x0,b0.x0);x1=Math.max(x1,b0.x1);y1=Math.max(y1,b0.y1);y0=Math.min(y0,0);return{x0,y0,x1,y1}}
+function yLoopOf(def,g){def._yl=def._yl||{};return def._yl[g]||(def._yl[g]=ylBuild(def,g))}
+{const _att=attachAnim;attachAnim=function(canvas,key,opts={}){_att(canvas,key,opts);const def=AN[key];
+  if(def&&def.mat&&!opts.still&&!opts.noLoop){canvas._loop=yLoopOf(def,canvas._g);canvas._b=canvas._loop.b}else canvas._loop=null}}
 
 /* ---------- 12-Wochen-Plan: 3 Stufen à 4 Wochen, 1 Einheit pro Woche ---------- */
 const YSTAGE=[null,{n:"Einstieg",cool:120,t:"Sanft ankommen: Schultern, Nacken und Hüfte mobilisieren."},{n:"Aufbau",cool:150,t:"Stehende Haltungen und Hund: mehr Weite, etwas mehr Kraft."},{n:"Fortgeschritten",cool:180,t:"Tiefere Hüft- und Schulteröffner, längere Haltezeiten. Weiterhin sanft."}];
@@ -347,7 +551,9 @@ function yRender(){const r=S.yrun;const el=$("#yogaInner");if(!r||!el)return;
    <div class="hint"><b>Atem:</b> ${esc(p.a)}</div>
    <ol class="cues">${p.c.map(c=>`<li>${esc(c)}</li>`).join("")}</ol>
    <div class="ybtns"><button class="btn ${r.paused?"primary":""}" id="yP">${r.paused?"Weiter":"Pause"}</button>${st.side===1?`<button class="btn" id="yS">Seite wechseln</button>`:""}<button class="btn ghost" id="yN">Überspringen</button></div>`;
-  attachAnim($("#ycv"),"y_"+st.k,{phaseEl:$("#yph")});
+  /* 2.2: the stand -> pose -> stand loop runs independently of the countdown; a re-render of the same step keeps its loop time */
+  const now_=performance.now();if(!yRender._a||yRender._a.i!==r.i||yRender._a.k!==st.k)yRender._a={i:r.i,k:st.k,t0:now_};
+  attachAnim($("#ycv"),"y_"+st.k,{phaseEl:$("#yph"),offset:now_-yRender._a.t0});
   $("#yX").onclick=yAskClose;$("#yInfo").onclick=()=>yPoseSheet(st.k);$("#yP").onclick=()=>{audio();yPauseToggle()};$("#yN").onclick=ySkip;const sb=$("#yS");if(sb)sb.onclick=ySideSwitch;
   yTick._s=null;yTick()}
 function yPoseSheet(k){const p=YP[k];const inW=[];for(let w=1;w<=12;w++)if(YW[w].w.includes(k)||YW[w].m.includes(k))inW.push(w);

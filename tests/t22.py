@@ -150,7 +150,7 @@ async def main():
         await pg.wait_for_timeout(500)
         y=await pg.evaluate("[Object.keys(S.yoga.done).sort(),S.yoga.log.length,S.yoga.start,yCur().week]");print('restored',y);assert y[0]==['1','2'] and y[1]==1 and y[2] and y[3]>=3
         # 10) version + footer
-        await pg.click('[data-tab=set]');await pg.wait_for_timeout(200);v=await pg.text_content('#verLine');assert 'Version 2.1' in v and '@ Joschy' in v
+        await pg.click('[data-tab=set]');await pg.wait_for_timeout(200);v=await pg.text_content('#verLine');assert 'Version 2.2' in v and '@ Joschy' in v
         print('errors',errs);assert not errs
         await b.close()
     srv.kill();print('ALL OK')

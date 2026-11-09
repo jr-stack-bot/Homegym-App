@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.2
+- **Menschlichere Bewegungen**: weiches Tempo (1 s hoch, 2 s runter) mit sanften Umkehrpunkten, sichtbare Atmung, Gewichtsverlagerung, natürlichere Wirbelsäule, Schultern und Knie; Hände mit Fingern, Füße rollen ab.
+- **Yoga als ganzer Weg**: jede Haltung läuft als Schleife Stehen → in die Pose → halten → zurück → Stehen.
+- Neue Einstellung **Animationstempo**.
+- Fixes: Drehsitz, Liegestütz-Stopp, Katze-Kuh, Scheibe beim Schulterdrücken.
+
 ## 2.1
 - **Halte-Übungen** (17, z. B. Hochstütz halten, Hollow Hold, Klimmzüge mit Halt oben) mit eigenen Animationen; jede Einheit endet mit einem **Bonus-Finisher** als Halte-Übung, alle 12 Einheiten bleiben inkl. Bonus unter 60 Minuten. „Tauschen“ bietet passende Halte-Varianten an.
 - **Geräte-Editor** in den Einstellungen: Geräte an- und abwählen, **Gewichtslisten** je Gerät (Kurzhanteln, Kettlebells, Bänder); Gewichtsvorschläge nutzen nur vorhandene Gewichte. **Kettlebell-Rotation**: „In den Plan einmischen“ oder „Nur als Ersatz“.
