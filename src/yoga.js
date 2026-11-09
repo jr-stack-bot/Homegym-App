@@ -37,7 +37,7 @@ function drawMat(ctx,def,o,P,R,fl,front,tr){const cx=def.matX!=null?def.matX:(tr
   ctx.save();ctx.beginPath();ctx.moveTo(A[0]+d*k,A[1]-d);ctx.lineTo(B[0]+(front?-d*k:d*k),B[1]-d);ctx.lineTo(B[0],B[1]);ctx.lineTo(A[0],A[1]);ctx.closePath();
   const g=ctx.createLinearGradient(0,A[1]-d,0,A[1]);g.addColorStop(0,"#123540");g.addColorStop(1,"#1d5565");ctx.fillStyle=g;ctx.fill();
   ctx.fillStyle="#0b222b";ctx.fillRect(A[0],A[1],B[0]-A[0],Math.max(1.5,R(1.8)));
-  ctx.strokeStyle="rgba(62,230,255,.4)";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(A[0],A[1]);ctx.lineTo(B[0],B[1]);ctx.stroke();ctx.restore()}
+  ctx.strokeStyle=ACol(.4);ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(A[0],A[1]);ctx.lineTo(B[0],B[1]);ctx.stroke();ctx.restore()}
 /* strap (Gurt/Handtuch) from the hand to the foot; the block stands beside the foot (drawn behind the body) */
 if(typeof EXTRA_EQ_LAYER!=="undefined")EXTRA_EQ_LAYER.yblock="back";
 const _yDrawExtra=drawExtraEq;
@@ -606,11 +606,11 @@ function renderYogaLib(){const ks=YKEYS.filter(k=>(!YLF.lv||YP[k].lv===YLF.lv)&&
 
 /* ---------- hooks into the app (wrapping, the strength code stays untouched) ---------- */
 {const st=document.createElement("style");st.textContent=`
-.ysafe{font-size:12.5px;color:#f5c26b;border:1px solid rgba(245,183,46,.35);background:rgba(245,183,46,.06);border-radius:4px;padding:6px 10px;text-align:center}
+.ysafe{font-size:12.5px;color:var(--warn-text);border:1px solid rgba(245,183,46,.35);background:rgba(245,183,46,.06);border-radius:4px;padding:6px 10px;text-align:center}
 .ystage canvas{height:min(42vh,290px)}
 .yring{position:relative;width:112px;height:112px;flex:none}
 .yring svg{width:100%;height:100%;transform:rotate(-90deg)}
-.yring circle{fill:none;stroke-width:7}.yring .yb{stroke:rgba(62,230,255,.13)}.yring .yf{stroke:var(--arc);filter:drop-shadow(0 0 5px var(--arc));transition:stroke-dashoffset .25s linear}.yring .yf.yp{stroke:var(--gold);filter:none}
+.yring circle{fill:none;stroke-width:7}.yring .yb{stroke:rgba(var(--ac),.13)}.yring .yf{stroke:var(--arc);filter:drop-shadow(0 0 5px var(--arc));transition:stroke-dashoffset .25s linear}.yring .yf.yp{stroke:var(--gold);filter:none}
 .yring .t{position:absolute;inset:0;display:grid;place-items:center;font-size:28px;font-weight:700}
 .ybtns{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:8px;margin-top:auto}
 .ycard .ytitle{font-family:var(--display);font-size:17px;letter-spacing:.04em;text-transform:uppercase}

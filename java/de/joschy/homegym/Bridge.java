@@ -1,4 +1,4 @@
-/* Homegym 2.1 · @ Joschy */
+/* Homegym 2.3 · @ Joschy */
 package de.joschy.homegym;
 
 import android.app.Activity;
@@ -74,6 +74,24 @@ public class Bridge {
     /** current rest end as seen by the service (changes with the +15 s action), "0" if none. */
     @JavascriptInterface
     public String restEnd() { return String.valueOf(TimerService.endTime); }
+
+    /** Design colours from the web app: "#rrggbb" for status and navigation bar, lightIcons = dark icons for a light design. */
+    @JavascriptInterface
+    public void setSystemBars(String statusHex, String navHex, boolean lightIcons) {
+        try {
+            int status = parseColor(statusHex);
+            int nav = navHex == null || navHex.length() == 0 ? status : parseColor(navHex);
+            if (a instanceof MainActivity) ((MainActivity) a).setSystemBars(status, nav, lightIcons);
+        } catch (Throwable t) { }
+    }
+
+    /** "#rrggbb" -> opaque ARGB int; throws on anything else. */
+    static int parseColor(String s) {
+        String h = s == null ? "" : s.trim();
+        if (h.startsWith("#")) h = h.substring(1);
+        if (h.length() != 6) throw new IllegalArgumentException("colour " + s);
+        return 0xFF000000 | Integer.parseInt(h, 16);
+    }
 
     /** Backup: writes the JSON to Download/<name> (MediaStore on Android 10+, system "save as" dialog below). Result: window.hgBackupSaved(ok, where). */
     @JavascriptInterface

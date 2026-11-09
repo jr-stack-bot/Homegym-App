@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.3
+- **Acht Designs zur Auswahl**: Arc Blau, Iron Man, Toxic, Cyber, Sunset, Eis, Stealth und Tag – jedes mit eigener Farbwelt, eigenem Hintergrund-Effekt, eigener Rahmenform und Schrift. Die Figuren in den Animationen übernehmen die Akzentfarbe des Designs.
+- Auswahl in den **Einstellungen** als Kachelauswahl mit Live-Vorschau; das gewählte Design wird gespeichert und ist im **Backup** enthalten.
+- **Status- und Navigationsleiste** passen sich dem Design an (beim hellen Design „Tag“ mit dunklen Symbolen).
+- Hintergrund-Effekte **pausieren im Training** und bei der System-Einstellung **„Bewegung reduzieren“**.
+
 ## 2.2
 - **Menschlichere Bewegungen**: weiches Tempo (1 s hoch, 2 s runter) mit sanften Umkehrpunkten, sichtbare Atmung, Gewichtsverlagerung, natürlichere Wirbelsäule, Schultern und Knie; Hände mit Fingern, Füße rollen ab.
 - **Yoga als ganzer Weg**: jede Haltung läuft als Schleife Stehen → in die Pose → halten → zurück → Stehen.

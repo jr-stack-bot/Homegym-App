@@ -1,4 +1,4 @@
-/* Homegym 2.1 · @ Joschy */
+/* Homegym 2.3 · @ Joschy */
 package de.joschy.homegym;
 
 import android.app.Activity;
@@ -22,6 +22,9 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Rational;
+import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
+import android.view.View;
 import android.view.Window;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -35,6 +38,8 @@ public class MainActivity extends Activity {
     static volatile boolean pipWanted;
 
     WebView web;
+    static final String PREFS = "homegym";
+    static final int DEF_BAR = 0xFF03060B;
     static final int REQ_SAVE = 41, REQ_OPEN = 42;
     /** JSON waiting for the "save as" dialog (Android 7-9). */
     private String pendingBackup;
@@ -48,10 +53,13 @@ public class MainActivity extends Activity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         Window w = getWindow();
         w.addFlags(0x80); // FLAG_KEEP_SCREEN_ON
-        w.setStatusBarColor(0xFF03060B);
-        w.setNavigationBarColor(0xFF03060B);
+        // last design colours (saved by setSystemBars) -> no dark flash when the light design "Tag" is active
+        SharedPreferences sp = getSharedPreferences(PREFS, MODE_PRIVATE);
+        int status = sp.getInt("barStatus", DEF_BAR), nav = sp.getInt("barNav", DEF_BAR);
+        boolean light = sp.getBoolean("barLight", false);
+        w.setBackgroundDrawable(new ColorDrawable(status));
         web = new WebView(this);
-        web.setBackgroundColor(0xFF03060B);
+        applyBars(status, nav, light);
         WebSettings s = web.getSettings();
         s.setJavaScriptEnabled(true);
         s.setDomStorageEnabled(true);
@@ -117,6 +125,39 @@ public class MainActivity extends Activity {
             public void run() {
                 try { w.evaluateJavascript(code, null); } catch (Throwable t) { }
             }
+        });
+    }
+
+    /** Status bar, navigation bar and WebView background in the colours of the active design. UI thread only. */
+    void applyBars(int status, int nav, boolean light) {
+        Window w = getWindow();
+        try {
+            w.setStatusBarColor(status);
+            w.setNavigationBarColor(nav);
+            w.setBackgroundDrawable(new ColorDrawable(status));
+        } catch (Throwable t) { }
+        if (web != null) web.setBackgroundColor(status);
+        if (Build.VERSION.SDK_INT >= 23) {
+            try {
+                View d = w.getDecorView();
+                int f = d.getSystemUiVisibility();
+                f = light ? (f | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) : (f & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                if (Build.VERSION.SDK_INT >= 26) {
+                    f = light ? (f | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR) : (f & ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                }
+                d.setSystemUiVisibility(f);
+            } catch (Throwable t) { }
+        }
+    }
+
+    /** Called from the web app (Bridge.setSystemBars): apply on the UI thread and remember for the next start. */
+    void setSystemBars(final int status, final int nav, final boolean light) {
+        try {
+            getSharedPreferences(PREFS, MODE_PRIVATE).edit()
+                    .putInt("barStatus", status).putInt("barNav", nav).putBoolean("barLight", light).apply();
+        } catch (Throwable t) { }
+        runOnUiThread(new Runnable() {
+            public void run() { applyBars(status, nav, light); }
         });
     }
 
