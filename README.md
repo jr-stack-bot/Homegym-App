@@ -5,7 +5,7 @@ Android-App für Krafttraining zu Hause: geführte Trainings mit animierten Übu
 ![Homegym: Startseite, Training, Pausen-Timer und Übungsbibliothek](docs/screenshots/banner.png)
 
 ## Was die App kann
-- **4-Wochen-Trainingsplan** mit 12 Einheiten als Push/Pull/Beine-Split (A Drücken · B Ziehen · C Beine), jede Muskelgruppe mit einer Woche Erholung. Komplett- oder Kurzversion, max. 60 Minuten inkl. Aufwärmen.
+- **4-Wochen-Trainingsplan** mit 12 Einheiten, der **nach erledigten Einheiten** weiterläuft (keine Einheit fällt aus, leichter Wiedereinstieg nach 14 Tagen Pause), als Push/Pull/Beine-Split (A Drücken · B Ziehen · C Beine), jede Muskelgruppe mit einer Woche Erholung. Komplett- oder Kurzversion, max. 60 Minuten inkl. Aufwärmen.
 - **111 animierte Kraft-Übungen** (davon 17 Halte-Übungen) mit Technik-Hinweisen; Figuren abwechselnd Mann/Frau mit menschlichen Bewegungsabläufen: weiches Tempo (1 s hoch, 2 s runter), Atmung, Gewichtsverlagerung, Hände mit Fingern und abrollende Füße.
 - **Halte-Übungen und Bonus-Finisher**: jede Einheit endet mit einer Halte-Übung als Bonus, weiterhin max. 60 Minuten.
 - **Anpassung an die eigenen Geräte** (25 Geräte, Presets inkl. „Joschys Homegym“): Trainings passen sich automatisch an, „Tauschen“ bietet nur machbare Übungen derselben Muskelfunktion.
@@ -15,8 +15,11 @@ Android-App für Krafttraining zu Hause: geführte Trainings mit animierten Übu
 - **8 Designs zur Auswahl** (Arc Blau, Iron Man, Toxic, Cyber, Sunset, Eis, Stealth, Tag): eigene Farbwelt, Hintergrund-Effekt, Rahmenform und Schrift, Figuren in der Akzentfarbe; Status- und Navigationsleiste passen sich an, Effekte pausieren im Training und bei „Bewegung reduzieren“.
 - **Pausen-Timer** mit Benachrichtigung und Bild-in-Bild-Mini-Fenster, auch wenn die App im Hintergrund ist.
 - **Sprachassistent JAI**: sagt Übungen, Sätze, Gewichte, Countdown und Bestwerte an.
-- **Fortschritt**: automatische Steigerungsempfehlung, Scheiben-Rechner, Verlauf mit Bestleistungen, Körpergewicht, Eiweiß-Zähler, Entlastungswoche.
-- **Backup / Wiederherstellen**: alle Daten als Datei sichern und zurückspielen, auch direkt beim ersten Start (z. B. auf einem neuen Handy).
+- **Klügere Steigerung**: nach dem letzten Satz kurz „leicht / passend / hart“ angeben, die nächsten Vorschläge kommen mit Begründung; nach 3 Einheiten ohne Fortschritt ein Plateau-Vorschlag (Gewicht −10 %, neues Ziel oder Variante).
+- **Aufwärmsätze** vor der ersten Hauptübung mit Scheibenanzeige pro Seite.
+- **Auswertung** mit fünf Bereichen: Kraft (geschätzte Maximalkraft mit Kurve), Muskeln (Sätze pro Muskelgruppe mit Plan-Soll), Kalender mit Serien, Körpermaße und Monatsbericht.
+- **Fortschritt**: Scheiben-Rechner, Verlauf mit Bestleistungen, Körpergewicht, Eiweiß-Zähler, Entlastungswoche.
+- **Backup / Wiederherstellen**: alle Daten (inkl. Plan-Stand, Anstrengung, Aufwärmsätze, Körpermaße) als Datei sichern und zurückspielen, ältere Backups bleiben lesbar, auch direkt beim ersten Start (z. B. auf einem neuen Handy).
 - **Offline, keine Anmeldung**: alle Daten bleiben auf dem Handy. Beim ersten Start fragt ein kurzes Onboarding Name, Gewicht, Trainingstage und Geräte ab.
 
 ## Screenshots
@@ -28,16 +31,20 @@ Android-App für Krafttraining zu Hause: geführte Trainings mit animierten Übu
 |---|---|---|
 | <img src="docs/screenshots/05_yoga.png" width="200" alt="Yoga-Ablauf mit Haltung, Atem-Hinweis und Timer"> | <img src="docs/screenshots/06_geraete.png" width="200" alt="Geräte-Editor mit Gewichtslisten und Kettlebell-Rotation"> | <img src="docs/screenshots/07_designs.png" width="200" alt="Einstellungen mit der Design-Auswahl"> |
 
+| Auswertung | Aufwärmsätze & Steigerung |
+|---|---|
+| <img src="docs/screenshots/09_auswertung.png" width="200" alt="Auswertung: geschätzte Maximalkraft mit Kurve"> | <img src="docs/screenshots/10_steigerung.png" width="200" alt="Training mit Aufwärmsätzen, Scheibenanzeige und Steigerungs-Hinweis"> |
+
 **Alle 8 Designs im Vergleich** (Startseite: Arc Blau, Iron Man, Toxic, Cyber, Sunset, Eis, Stealth, Tag):
 
 ![Startseite in allen 8 Designs nebeneinander](docs/screenshots/08_designs_vergleich.png)
 
 ## Installation
-1. Die aktuelle APK aus dem Ordner [`releases/`](releases/) laden (aktuell `releases/Homegym-2.3.apk`).
+1. Die aktuelle APK aus dem Ordner [`releases/`](releases/) laden (aktuell `releases/Homegym-3.0.apk`).
 2. Auf dem Handy öffnen und „Installation aus unbekannten Quellen“ erlauben.
 3. Beim ersten Training die Benachrichtigungen zulassen.
 
-Updates einfach drüber installieren, die Daten bleiben erhalten. Bei aggressiven Akkusparmodi: Apps → Homegym → Akku → „Nicht eingeschränkt“.
+Updates einfach drüber installieren, die Daten bleiben erhalten. **Vor dem Update ein Backup erstellen** (Einstellungen → Backup), damit nichts verloren gehen kann. Bei aggressiven Akkusparmodi: Apps → Homegym → Akku → „Nicht eingeschränkt“.
 
 ## Projektstruktur
 | Ordner | Inhalt |
@@ -74,6 +81,8 @@ python3 tests/t23.py     # Natürliche Bewegungen: Tempo, Atmung, Gelenke, Händ
 python3 tests/t24.py     # Yoga als Schleife: Stehen → Haltung → Stehen
 python3 tests/t25.py     # Weiche Stopps, Katze-Kuh, Halber Bogen, Kraftübungen
 python3 tests/t26.py     # Designs: 8 Themes, Live-Vorschau, Speichern, Backup, Kontrast, Effekte
+python3 tests/t27.py     # Plan nach Einheiten, Migration, Wiedereinstieg, Anstrengung, Plateau, Aufwärmsätze, Backup
+python3 tests/t28.py     # Auswertung: Kraft/1RM, Muskeln, Kalender/Serien, Körpermaße, Monatsbericht
 ```
 
 Screenshots landen in `/tmp/homegym-shots/` (änderbar über `HOMEGYM_SHOTS`).
@@ -82,10 +91,11 @@ Screenshots landen in `/tmp/homegym-shots/` (änderbar über `HOMEGYM_SHOTS`).
 JAI („Joschy's AI“) ist eine eigene, mit ElevenLabs entworfene Stimme (keine Nachbildung einer realen Person). Die 276 Ansagen wurden einmalig erzeugt, mit `jai/split.py` geschnitten, mit der Effekt-Kette „leicht“ aus `jai/fx.md` bearbeitet und liegen fertig in `android/assets/jai/`. Die App setzt sie zur Laufzeit zusammen, etwa Zahl + „Komma fünf“ + „Kilo“.
 
 ## Versionen
-Aktuell: **2.3**. Details in [CHANGELOG.md](CHANGELOG.md).
+Aktuell: **3.0**. Details in [CHANGELOG.md](CHANGELOG.md).
 
 | Version | Wichtigste Neuerungen |
 |---|---|
+| 3.0 | Klügere Steigerung (leicht/passend/hart, Plateau-Vorschlag), Plan nach erledigten Einheiten, Aufwärmsätze mit Scheibenanzeige, Auswertung mit fünf Bereichen |
 | 2.3 | Acht Designs zur Auswahl (eigene Farbwelt, Effekt, Rahmen, Schrift), Status-/Navigationsleiste passt sich an |
 | 2.2 | Menschlichere Bewegungen (Tempo, Atmung, Hände/Füße), Yoga als ganzer Weg Stehen → Pose → Stehen, Einstellung Animationstempo |
 | 2.1 | Halte-Übungen + Bonus-Finisher, Geräte-Editor mit Gewichtslisten, Backup/Wiederherstellen, Yoga & Dehnen |

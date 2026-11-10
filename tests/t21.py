@@ -54,7 +54,7 @@ async def main():
         assert not any(k in r['A:bench'] for k in ['highplank','plank']),'no pure hold for main lift'
         # 4) gear editor changes plan + kettlebell weights flow into suggestions
         await pg.click('[data-tab=set]');await pg.wait_for_timeout(300)
-        assert 'joschys geräte' in (await pg.inner_text('#gearCard')).lower() and 'Version 2.3' in await pg.inner_text('#verLine') and '@ Joschy' in await pg.inner_text('#verLine')
+        assert 'joschys geräte' in (await pg.inner_text('#gearCard')).lower() and 'Version 3.0' in await pg.inner_text('#verLine') and '@ Joschy' in await pg.inner_text('#verLine')
         await pg.click('[data-sgear=kb]');await pg.wait_for_timeout(100)
         chips=await pg.eval_on_selector_all('[data-wdel=kb]','e=>e.map(x=>+x.dataset.v)');assert chips==[8,12,16],chips
         await pg.fill('#wIn-kb','20');await pg.click('[data-wadd=kb]');await pg.click('[data-wdel=kb][data-v="8"]')

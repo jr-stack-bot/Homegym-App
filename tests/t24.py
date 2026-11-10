@@ -81,7 +81,7 @@ async def main():
           S.settings.animSpd=1;const b=mk();renderCanvas(b,4500);const B=px(b);const c2=mk();renderCanvas(c2,6000);const C=px(c2);let dAB=0,dAC=0;for(let i=0;i<A.length;i++){dAB+=Math.abs(A[i]-B[i]);dAC+=Math.abs(A[i]-C[i])}a.remove();b.remove();c2.remove();return{dAB,dAC}}""")
         print('speed',sp);assert sp['dAB']==0 and sp['dAC']>1000,sp
         # 6) version + footer
-        await pg.click('[data-tab=set]');await pg.wait_for_timeout(200);v=await pg.text_content('#verLine');assert 'Version 2.3' in v and '@ Joschy' in v,v
+        await pg.click('[data-tab=set]');await pg.wait_for_timeout(200);v=await pg.text_content('#verLine');assert 'Version 3.0' in v and '@ Joschy' in v,v
         print('errors',errs);assert not errs
         await b.close()
     print('ALL OK')

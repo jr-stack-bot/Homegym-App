@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.0
+- **Plan nach erledigten Einheiten** statt nach Kalenderwochen: Der 4-Wochen-Plan läuft Einheit für Einheit weiter (A → B → C, je drei Einheiten ein Block), es fällt keine Einheit mehr aus, wenn eine Woche ausfällt. Der bisherige Stand wird beim Update automatisch übernommen, ein laufendes Training bleibt erhalten. Nach mehr als **14 Tagen Pause** gibt es einen leichteren Wiedereinstieg.
+- **Klügere Steigerung**: Nach dem letzten Satz einer Übung fragt die App kurz „leicht / passend / hart“. Daraus und aus den geschafften Wiederholungen entstehen die Vorschläge für das nächste Mal, jeweils **mit Begründung** (z. B. +5 kg nach „leicht“, +2,5 kg nach „passend“, Gewicht halten nach „hart“, bei wiederholt verfehltem Ziel eine leichte Reduktion). Halte-Übungen steigern in Sekunden, Gewichtslisten in den vorhandenen Stufen.
+- **Plateau-Vorschlag**: Nach **3 Einheiten ohne Fortschritt** bei einer Übung schlägt eine Karte vor: Gewicht −10 %, neues Wiederholungsziel, eine Variante – oder „Später“.
+- **Aufwärmsätze** vor der ersten Hauptübung (z. B. 25 / 35 / 47,5 kg bei 60 kg Arbeitsgewicht) mit **Scheibenanzeige pro Seite** und kurzer Pause; das allgemeine Aufwärmen wird dafür kürzer. Aufwärmsätze zählen nicht in Volumen oder Bestwerte und lassen sich in den Einstellungen abschalten.
+- **Auswertung mit fünf Bereichen** im Verlauf:
+  - **Kraft**: geschätzte Maximalkraft (1RM, Epley) je Übung mit Kurve, Bestwert, letztem Wert und Veränderung über 4 Wochen.
+  - **Muskeln**: Sätze pro Muskelgruppe je Woche im Vergleich zum **Plan-Soll**.
+  - **Kalender** mit Trainingstagen, Yoga und **Serien** (Wochen in Folge mit mindestens zwei Trainings).
+  - **Körpermaße**: Gewicht und Umfänge (Brust, Arm, Taille, Bein) erfassen und verfolgen.
+  - **Monatsbericht**: Trainings, Zeit, Volumen, Bestleistungen, Muskelgruppen, Kraft- und Körperentwicklung im Vergleich zum Vormonat.
+- **Alles im Backup**: Plan-Stand, Anstrengungs-Angaben, Plateau-Entscheidungen, Aufwärmsätze und Körpermaße werden mitgesichert; **alte Backups** (auch aus 2.x) lassen sich weiterhin einspielen.
+
 ## 2.3
 - **Acht Designs zur Auswahl**: Arc Blau, Iron Man, Toxic, Cyber, Sunset, Eis, Stealth und Tag – jedes mit eigener Farbwelt, eigenem Hintergrund-Effekt, eigener Rahmenform und Schrift. Die Figuren in den Animationen übernehmen die Akzentfarbe des Designs.
 - Auswahl in den **Einstellungen** als Kachelauswahl mit Live-Vorschau; das gewählte Design wird gespeichert und ist im **Backup** enthalten.

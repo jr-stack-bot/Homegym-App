@@ -461,7 +461,7 @@ function ySteps(items){const out=[];for(const it of items){if(it.uni){out.push({
 
 /* ---------- state (S.yoga: start, done[week], log) ---------- */
 function yS(){if(!S.yoga||typeof S.yoga!=="object"||Array.isArray(S.yoga))S.yoga={start:null,done:{},log:[]};const y=S.yoga;
-  if(!y.done||typeof y.done!=="object"||Array.isArray(y.done))y.done={};if(!Array.isArray(y.log))y.log=[];if(typeof y.start!=="number")y.start=null;return y}
+  if(!y.done||typeof y.done!=="object"||Array.isArray(y.done))y.done={};if(!Array.isArray(y.log))y.log=[];else if(y.log.some(l=>!l||typeof l!=="object"))y.log=y.log.filter(l=>l&&typeof l==="object");if(typeof y.start!=="number")y.start=null;return y}
 function yCalWeek(){const y=yS();if(!y.start)return 1;return Math.max(1,Math.round((weekStart(new Date()).getTime()-y.start)/WEEKMS)+1)}
 function yFirstOpen(){const y=yS();for(let w=1;w<=12;w++)if(!y.done[w])return w;return 13}
 function yStageDone(st){const y=yS();for(let w=st*4-3;w<=st*4;w++)if(!y.done[w])return false;return true}
