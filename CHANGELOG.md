@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.1
+- **Figuren überarbeitet**:
+  - **Frau**: Kinnschatten entfernt (wirkte wie ein Bart), weiblicheres Gesicht, der Pferdeschwanz fällt natürlich, mehr Brust und Hüfte bei schmalerer Taille.
+  - **Mann**: athletischer mit breiteren Schultern, kräftigeren Armen und Oberschenkeln und Muskelzeichnung.
+  - Bewegungen und Griffpunkte bleiben unverändert.
+
 ## 3.0
 - **Plan nach erledigten Einheiten** statt nach Kalenderwochen: Der 4-Wochen-Plan läuft Einheit für Einheit weiter (A → B → C, je drei Einheiten ein Block), es fällt keine Einheit mehr aus, wenn eine Woche ausfällt. Der bisherige Stand wird beim Update automatisch übernommen, ein laufendes Training bleibt erhalten. Nach mehr als **14 Tagen Pause** gibt es einen leichteren Wiedereinstieg.
 - **Klügere Steigerung**: Nach dem letzten Satz einer Übung fragt die App kurz „leicht / passend / hart“. Daraus und aus den geschafften Wiederholungen entstehen die Vorschläge für das nächste Mal, jeweils **mit Begründung** (z. B. +5 kg nach „leicht“, +2,5 kg nach „passend“, Gewicht halten nach „hart“, bei wiederholt verfehltem Ziel eine leichte Reduktion). Halte-Übungen steigern in Sekunden, Gewichtslisten in den vorhandenen Stufen.

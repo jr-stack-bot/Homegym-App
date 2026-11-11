@@ -34,7 +34,7 @@ async def main():
         b=await p.chromium.launch();ctx=await b.new_context(viewport={'width':390,'height':844},accept_downloads=True);pg=await ctx.new_page()
         errs=[];pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:errs.append(m.text) if m.type=='error' else None)
         await pg.goto(U);await boot(pg)
-        r=await pg.evaluate("[APP_VER,BK_VER]");chk(r==['3.0',5],'version 3.0, backup format stays 5 '+str(r))
+        r=await pg.evaluate("[APP_VER,BK_VER]");chk(r==['3.1',5],'version 3.1, backup format stays 5 '+str(r))
 
         # ===== 1) MIGRATION from realistic 2.3 states =====
         # 1a fresh 2.3 state in the middle of week 2: last week A,B,C (week 1), this week A (week 2)
@@ -273,7 +273,7 @@ async def main():
         print('7 tolerant',r)
         chk(r['prog'] and not r['eff'] and not r['wu'] and r['rr']=={'bench':[6,8]} and r['plat']=={'lateral':{}} and not r['ws'] and r['ss'] and not r['swu'] and not r['seff'],'7 parseBackup validates new fields tolerantly, history kept')
 
-        await pg.click('[data-tab=set]');await pg.wait_for_timeout(150);v=await pg.text_content('#verLine');chk('Version 3.0 · @ Joschy' in v,v)
+        await pg.click('[data-tab=set]');await pg.wait_for_timeout(150);v=await pg.text_content('#verLine');chk('Version 3.1 · @ Joschy' in v,v)
         # ===== 8) Abnahme-Fixes 3.0 =====
         # 8a warm-up sets follow a swapped first main lift (swap sheet, plateau "Variante", gear change); bodyweight -> no card
         await put(pg,"()=>T.base()")

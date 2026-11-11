@@ -221,7 +221,7 @@ async def main():
         b=await p.chromium.launch();ctx=await b.new_context(viewport={'width':390,'height':844},timezone_id='Europe/Berlin',locale='de-DE');pg=await ctx.new_page()
         errs=[];pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:errs.append(m.text) if m.type=='error' else None)
         await pg.goto(U);await boot(pg)
-        r=await pg.evaluate("[APP_VER,BK_VER,document.querySelector('#verLine')?1:0]");chk(r[:2]==['3.0',5],'version 3.0 / backup format 5 '+str(r))
+        r=await pg.evaluate("[APP_VER,BK_VER,document.querySelector('#verLine')?1:0]");chk(r[:2]==['3.1',5],'version 3.1 / backup format 5 '+str(r))
 
         # ===== 0) empty state =====
         await put(pg,await pg.evaluate("T.base()"))
@@ -308,7 +308,7 @@ async def main():
         single=[k for k,v in O['cal'].items() if len(v)==1 and k not in O['ycal'] and k[:7]==now.strftime('%Y-%m')]
         if single:
             await pg.click(f'[data-cd="{single[-1]}"]');await pg.wait_for_timeout(150)
-            t=await txt(pg,'#sheet');chk(('Training '+O['cal'][single[-1]][0]) in t or 'Kurz' in t,'tap day -> shows the session '+t[:60].replace('\n',' '))
+            t=await txt(pg,'#sheet');chk(('training '+O['cal'][single[-1]][0].lower()) in t.lower() or 'Kurz' in t,'tap day -> shows the session '+t[:60].replace('\n',' '))
             await pg.evaluate("closeSheet()")
         if multi:
             k=multi[0];await pg.evaluate("k=>{const[y,m]=k.split('-').map(Number);calM=new Date(y,m-1,1).getTime();renderHsub()}",k);await pg.wait_for_timeout(100)

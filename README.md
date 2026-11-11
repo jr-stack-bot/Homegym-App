@@ -31,16 +31,16 @@ Android-App für Krafttraining zu Hause: geführte Trainings mit animierten Übu
 |---|---|---|
 | <img src="docs/screenshots/05_yoga.png" width="200" alt="Yoga-Ablauf mit Haltung, Atem-Hinweis und Timer"> | <img src="docs/screenshots/06_geraete.png" width="200" alt="Geräte-Editor mit Gewichtslisten und Kettlebell-Rotation"> | <img src="docs/screenshots/07_designs.png" width="200" alt="Einstellungen mit der Design-Auswahl"> |
 
-| Auswertung | Aufwärmsätze & Steigerung |
-|---|---|
-| <img src="docs/screenshots/09_auswertung.png" width="200" alt="Auswertung: geschätzte Maximalkraft mit Kurve"> | <img src="docs/screenshots/10_steigerung.png" width="200" alt="Training mit Aufwärmsätzen, Scheibenanzeige und Steigerungs-Hinweis"> |
+| Auswertung | Aufwärmsätze & Steigerung | Figuren |
+|---|---|---|
+| <img src="docs/screenshots/09_auswertung.png" width="200" alt="Auswertung: geschätzte Maximalkraft mit Kurve"> | <img src="docs/screenshots/10_steigerung.png" width="200" alt="Training mit Aufwärmsätzen, Scheibenanzeige und Steigerungs-Hinweis"> | <img src="docs/screenshots/11_figuren.png" width="200" alt="Mann und Frau in Front- und Seitenansicht"> |
 
 **Alle 8 Designs im Vergleich** (Startseite: Arc Blau, Iron Man, Toxic, Cyber, Sunset, Eis, Stealth, Tag):
 
 ![Startseite in allen 8 Designs nebeneinander](docs/screenshots/08_designs_vergleich.png)
 
 ## Installation
-1. Die aktuelle APK aus dem Ordner [`releases/`](releases/) laden (aktuell `releases/Homegym-3.0.apk`).
+1. Die aktuelle APK aus dem Ordner [`releases/`](releases/) laden (aktuell `releases/Homegym-3.1.apk`).
 2. Auf dem Handy öffnen und „Installation aus unbekannten Quellen“ erlauben.
 3. Beim ersten Training die Benachrichtigungen zulassen.
 
@@ -55,7 +55,7 @@ Updates einfach drüber installieren, die Daten bleiben erhalten. **Vor dem Upda
 | `tools/` | `build_html.py`, `build.sh` (kompletter Build) |
 | `jai/` | Ansage-Liste (`manifest.json`), Schnitt-Skripte, Effekt-Kette, Prüftabelle der Clips |
 | `tests/` | Playwright-Tests (Pläne/Geräte, UI, JAI, Hintergrund-Timer) |
-| `docs/` | Prüfberichte |
+| `docs/` | Prüfberichte, Screenshots |
 
 ## Build
 Voraussetzungen: JDK, python3, npm. Die Werkzeuge (apktool 2.9.3, uber-apk-signer 1.3.0, dex2jar 2.4, android.jar API 34) nach `tools/.cache/` legen oder per Umgebungsvariable angeben, Details im Kopf von `tools/build.sh`.
@@ -83,7 +83,10 @@ python3 tests/t25.py     # Weiche Stopps, Katze-Kuh, Halber Bogen, Kraftübungen
 python3 tests/t26.py     # Designs: 8 Themes, Live-Vorschau, Speichern, Backup, Kontrast, Effekte
 python3 tests/t27.py     # Plan nach Einheiten, Migration, Wiedereinstieg, Anstrengung, Plateau, Aufwärmsätze, Backup
 python3 tests/t28.py     # Auswertung: Kraft/1RM, Muskeln, Kalender/Serien, Körpermaße, Monatsbericht
+python3 tests/t29.py     # Figuren: Vergleich mit 3.0 (Gelenke/Griffpunkte gleich, Kinn, Proportionen, Tempo)
 ```
+
+`t29` vergleicht mit dem eingefrorenen 3.0-Stand in `tests/fixtures/v30/index.html` (Details in `tests/fixtures/README.txt`, anderer Ordner per `HOMEGYM_V30`).
 
 Screenshots landen in `/tmp/homegym-shots/` (änderbar über `HOMEGYM_SHOTS`).
 
@@ -91,10 +94,11 @@ Screenshots landen in `/tmp/homegym-shots/` (änderbar über `HOMEGYM_SHOTS`).
 JAI („Joschy's AI“) ist eine eigene, mit ElevenLabs entworfene Stimme (keine Nachbildung einer realen Person). Die 276 Ansagen wurden einmalig erzeugt, mit `jai/split.py` geschnitten, mit der Effekt-Kette „leicht“ aus `jai/fx.md` bearbeitet und liegen fertig in `android/assets/jai/`. Die App setzt sie zur Laufzeit zusammen, etwa Zahl + „Komma fünf“ + „Kilo“.
 
 ## Versionen
-Aktuell: **3.0**. Details in [CHANGELOG.md](CHANGELOG.md).
+Aktuell: **3.1**. Details in [CHANGELOG.md](CHANGELOG.md).
 
 | Version | Wichtigste Neuerungen |
 |---|---|
+| 3.1 | Figuren überarbeitet: Frau ohne Kinnschatten, weiblicheres Gesicht und Proportionen, natürlicher Pferdeschwanz; Mann athletischer mit Muskelzeichnung; Bewegungen unverändert |
 | 3.0 | Klügere Steigerung (leicht/passend/hart, Plateau-Vorschlag), Plan nach erledigten Einheiten, Aufwärmsätze mit Scheibenanzeige, Auswertung mit fünf Bereichen |
 | 2.3 | Acht Designs zur Auswahl (eigene Farbwelt, Effekt, Rahmen, Schrift), Status-/Navigationsleiste passt sich an |
 | 2.2 | Menschlichere Bewegungen (Tempo, Atmung, Hände/Füße), Yoga als ganzer Weg Stehen → Pose → Stehen, Einstellung Animationstempo |
