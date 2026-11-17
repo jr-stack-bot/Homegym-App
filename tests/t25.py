@@ -8,7 +8,8 @@ from playwright.async_api import async_playwright
 srv=subprocess.Popen([sys.executable,'-m','http.server','8782','-d',_OUTDIR],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL);time.sleep(1)
 U='http://127.0.0.1:8782/index.html'
 # explosive / cardio exercises (ballistic on purpose) are exempt from the smoothness limit
-EXPL={'mbslam','boxing','run','jumpjack','jj','climber','rowint','boxjump','kbswing','jumprope','bikeint','cross','march','walk'}
+EXPL={'jumpsquat','bearcrawl',  # 3.2: new explosive bodyweight moves
+'mbslam','boxing','run','jumpjack','jj','climber','rowint','boxjump','kbswing','jumprope','bikeint','cross','march','walk'}
 JERK=r"""(EXPL)=>{const out=[];const pts=o=>{const m={};for(const q in o){const v=o[q];if(Array.isArray(v)&&v.length===2&&typeof v[0]==='number')m[q]=v}return m};
   for(const ex of Object.keys(EX)){const k=animOf(ex);if(EXPL.includes(ex)||EXPL.includes(k))continue;const def=AN[k];for(const g of['m','f']){const T=cycT(def);let prev=null,pv=null,pa=null,jerk=0,at='';
     for(let t=0;t<T*4.7;t+=1/60){const m=pts(animPose(def,t,g).o);const A={};
@@ -45,7 +46,7 @@ async def main():
             const sh0=animPose(AN.ohp,0,'m').o.sh[1];let shM=-1e9;for(let t=0;t<1.2;t+=.02)shM=Math.max(shM,animPose(AN.ohp,t,'m').o.sh[1]-animPose(AN.ohp,t,'m').o.hip[1]);
             return{v:+v.toFixed(3),reps:L.length,prep,ef,nv:+nv.toFixed(2)}}""")
         print('human',hu);assert hu['reps']>=8 and .025<=hu['v']<=.09 and hu['prep']>.95 and hu['ef']>.95 and .5<hu['nv']<6,hu
-        await pg.click('[data-tab=set]');await pg.wait_for_timeout(200);v=await pg.text_content('#verLine');assert 'Version 3.1' in v and '@ Joschy' in v,v
+        await pg.click('[data-tab=set]');await pg.wait_for_timeout(200);v=await pg.text_content('#verLine');assert 'Version 3.2' in v and '@ Joschy' in v,v
         print('errors',errs);assert not errs
         await b.close()
     print('ALL OK')

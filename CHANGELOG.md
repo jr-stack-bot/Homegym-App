@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.2
+- **Mehr Yoga in drei Stufen**:
+  - Yoga wächst von **56 auf 96 Haltungen**, neu eingeteilt in die Stufen **Anfänger**, **Fortgeschritten** und **Profi**.
+  - **24-Wochen-Plan** mit **einer Einheit pro Woche** (je Stufe 8 Wochen); die nächste Stufe wird frei, wenn die vorherige geschafft ist.
+  - **Startstufe wählbar**: Anfänger ist voreingestellt, Fortgeschritten direkt wählbar, Profi erst nach einer **Sicherheitsabfrage**.
+  - Profi-Haltungen (Umkehrhaltungen, Armbalancen, tiefe Rückbeugen) zeigen **Sicherheits-Hinweise** und bieten eine **„Leichtere Variante“**, die die Haltung für diese Einheit austauscht.
+  - Der bisherige **Yoga-Fortschritt wird übernommen**, auch aus Backups der Version 3.1.
+- **Mehr Übungen ohne Geräte**:
+  - **41 neue Körpergewichtsübungen** für Drücken, Ziehen sowie Beine und Rumpf, teils mit Alltagsgegenständen (Wand, Stuhl, Tisch, Handtuch, Rucksack, Wasserflaschen).
+  - Jede neue Übung hat eine **Stufe** (leicht / mittel / schwer); ist das obere Wiederholungsziel in allen Sätzen geschafft, schlägt die Steigerung die **nächst schwerere Variante** vor.
+  - Das Preset **„Ohne Geräte“** verteilt die Übungen über die **12 Einheiten** des Plans abwechslungsreich, schwere Varianten gibt es über „Tauschen“ und die Steigerung.
+- **Pläne mit Geräten bleiben unverändert.**
+
 ## 3.1
 - **Figuren überarbeitet**:
   - **Frau**: Kinnschatten entfernt (wirkte wie ein Bart), weiblicheres Gesicht, der Pferdeschwanz fällt natürlich, mehr Brust und Hüfte bei schmalerer Taille.

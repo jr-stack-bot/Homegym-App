@@ -18,11 +18,13 @@ async def main():
         r=await pg.evaluate("""()=>{const bad=[];for(const k of YKEYS){const p=YP[k];if(!p.n||!(p.c.length>=2&&p.c.length<=3)||!p.a||!YREG.some(x=>x[0]===p.r)||![1,2,3].includes(p.lv)||!(p.sec>0)||!AN['y_'+k])bad.push(k)}
           const reg={};for(const k of YKEYS)reg[YP[k].r]=(reg[YP[k].r]||0)+1;const lv=[1,2,3].map(l=>YKEYS.filter(k=>YP[k].lv===l).length);
           const names=YKEYS.map(k=>YP[k].n.toLowerCase()).join('|');return{n:YKEYS.length,bad,reg,lv,uni:YKEYS.filter(k=>YP[k].uni).length,names}}""")
-        print('poses',r['n'],r['lv'],r['reg'],'uni',r['uni']);assert 50<=r['n']<=60 and not r['bad'] and all(x>=8 for x in r['lv']),r
+        print('poses',r['n'],r['lv'],r['reg'],'uni',r['uni']);assert 90<=r['n']<=100 and not r['bad'] and all(x>=8 for x in r['lv']),r  # 3.2: ~96 poses
         assert r['reg']['schulter']>=8 and r['reg']['huefte']>=10 and r['uni']>=15
         for need in ['schulterkreisen','wandengel','katze-kuh','kindshaltung','taube im liegen','schmetterling','hüftkreisen','brustöffner','nackendehnung','adlerarme','ausfallschritt','krieger i','dreieck','hund','kobra','brücke','drehsitz']:
             assert need in r['names'],need
-        for hard in ['kopfstand','krähe','rad','handstand','pflug','schulterstand']:assert hard not in r['names'].split('|'),hard
+        # 3.2: inversions / arm balances exist only in the Profi stage, with a safety note and an easier variant
+        hv=await pg.evaluate("()=>['kopfstand','kraehe','rad','pflug','schulterstand','unterarmvor'].map(k=>[k,YP[k].lv,!!YP[k].risk,!!(YP[k].alt&&YP[YP[k].alt].lv<3)])")
+        assert all(x[1]==3 and x[2] and x[3] for x in hv),hv
         # 2) every pose renders (m + f, two moments) without errors, joints stay above the floor, legs keep their length
         g=await pg.evaluate("""()=>{const bad=[];for(const k of YKEYS){const d=AN['y_'+k];for(const g of['m','f'])for(let t=0;t<9;t+=.9){const{o}=animPose(d,t,g);
             if(d.view==='front'){for(const[h,kn,a]of[['hipL','kneeL','ankL'],['hipR','kneeR','ankR']]){const l1=Math.hypot(o[kn][0]-o[h][0],o[kn][1]-o[h][1]),l2=Math.hypot(o[a][0]-o[kn][0],o[a][1]-o[kn][1]);if(l1<22||l1>56||l2<22||l2>56)bad.push([k,h,l1|0,l2|0])}}
@@ -36,35 +38,35 @@ async def main():
         assert len(drawn)==r['n'] and min(drawn)>30,drawn
         await pg.evaluate("document.getElementById('grid').remove()")
         # 3) plan: weeks 1/5/9 – duration 15 -> 25 min, structure, levels; strength plan untouched
-        pl=await pg.evaluate("""()=>{const o={};for(const w of[1,4,5,8,9,12]){const P=yPlan(w);const it=P.items;o[w]={min:P.secs/60,st:P.stage,first:it[0].part,last:it[it.length-1].k,lastPart:it[it.length-1].part,
+        pl=await pg.evaluate("""()=>{const o={};for(const w of[1,8,9,16,17,24]){const P=yPlan(w);const it=P.items;o[w]={min:P.secs/60,st:P.stage,first:it[0].part,last:it[it.length-1].k,lastPart:it[it.length-1].part,
             maxLv:Math.max(...it.map(x=>YP[x.k].lv)),lv:it.map(x=>YP[x.k].lv),regs:[...new Set(it.filter(x=>x.part==='main').map(x=>YP[x.k].r))],order:it.map(x=>x.part).join(','),secs:it.map(x=>x.sec)}}
             o.q=yQuick().secs/60;o.post=['A','B','C'].map(d=>yPost(d).secs/60);return o}""")
-        for w in ['1','4','5','8','9','12']:print('week',w,round(pl[w]['min'],1),'stage',pl[w]['st'],'maxLv',pl[w]['maxLv'])
-        assert 14<=pl['1']['min']<=16.5 and 17.5<=pl['5']['min']<=20 and 21<=pl['9']['min']<=23.5 and 24<=pl['12']['min']<=26.5
-        assert pl['1']['min']<pl['5']['min']<pl['9']['min']<pl['12']['min']
-        for w,st in [('1',1),('4',1),('5',2),('8',2),('9',3),('12',3)]:
+        for w in ['1','8','9','16','17','24']:print('week',w,round(pl[w]['min'],1),'stage',pl[w]['st'],'maxLv',pl[w]['maxLv'])
+        assert 14<=pl['1']['min']<=16.5 and 19.5<=pl['9']['min']<=21.5 and 24<=pl['17']['min']<=26.5 and 28.5<=pl['24']['min']<=31.5
+        assert pl['1']['min']<pl['9']['min']<pl['17']['min']<pl['24']['min']
+        for w,st in [('1',1),('8',1),('9',2),('16',2),('17',3),('24',3)]:
             P=pl[w];assert P['st']==st and P['maxLv']<=st and P['first']=='warm' and P['last']=='savasana' and P['lastPart']=='cool',P
             assert 'schulter' in P['regs'] and 'huefte' in P['regs'],P['regs']
             assert P['order'].index('main')>P['order'].rindex('warm') and all(15<=s<=180 for s in P['secs'])
-        assert pl['5']['maxLv']==2 and pl['9']['maxLv']==3
+        assert pl['9']['maxLv']==2 and pl['17']['maxLv']==3
         assert 4<=pl['q']<=6 and all(4<=x<=6 for x in pl['post']),pl
         # 4) progress by calendar weeks + stage lock
         lk=await pg.evaluate("""()=>{const ws=weekStart(new Date()).getTime();const o={};
           S.yoga={start:null,done:{},log:[]};o.fresh=yCur();
-          S.yoga={start:ws-6*WEEKMS,done:{1:'x',2:'x',3:'x'},log:[]};o.c1=yCur();o.u2=yUnlocked(2);o.try5=yStart('plan',{week:5});o.run5=!!S.yrun;
-          S.yoga.done[4]='x';o.c2=yCur();o.u2b=yUnlocked(2);o.u3=yUnlocked(3);
+          S.yoga={start:ws-6*WEEKMS,done:{1:'x',2:'x',3:'x'},log:[]};o.c1=yCur();o.u2=yUnlocked(2);o.try5=yStart('plan',{week:9});o.run5=!!S.yrun;
+          for(let w=4;w<=8;w++)S.yoga.done[w]='x';S.yoga.start=ws-9*WEEKMS;o.c2=yCur();o.u2b=yUnlocked(2);o.u3=yUnlocked(3);
           S.yoga={start:ws,done:{1:new Date().toISOString()},log:[{date:new Date().toISOString(),kind:'plan',week:1}]};o.c3=yCur();o.try2=yStart('plan',{week:2});
           S.yoga={start:ws-20*WEEKMS,done:{1:'x',2:'x',3:'x',4:'x',5:'x'},log:[]};o.c4=yCur();o.u3b=yUnlocked(3);
           S.yrun=null;S.yoga={start:null,done:{},log:[]};save();return o}""")
         print('lock',lk)
         assert lk['fresh']['week']==1 and not lk['fresh']['wait']
         assert lk['c1']['week']==4 and lk['u2']==False and lk['try5']==False and not lk['run5']
-        assert lk['c2']['week']==5 and lk['u2b'] and not lk['u3']
+        assert lk['c2']['week']==9 and lk['u2b'] and not lk['u3']
         assert lk['c3']['wait'] and lk['c3']['next']==2 and lk['try2']==False
         assert lk['c4']['week']==6 and not lk['u3b']
         await pg.evaluate("()=>{S.yoga={start:weekStart(new Date()).getTime()-6*WEEKMS,done:{1:'x',2:'x',3:'x'},log:[]};save();go('home')}")
         await pg.click('#yPlanBtn');await pg.wait_for_timeout(200)
-        sh=(await pg.text_content('#sheet')).lower();assert 'gesperrt' in sh and 'stufe 2 · aufbau' in sh and 'wird freigeschaltet, wenn stufe 1 abgeschlossen ist (3 von 4' in sh,sh
+        sh=(await pg.text_content('#sheet')).lower();assert 'gesperrt' in sh and 'stufe 2 · fortgeschritten' in sh and 'wird freigeschaltet, wenn stufe 1 abgeschlossen ist (3 von 8' in sh,sh
         assert await pg.locator('[data-yweek]').count()==1 and await pg.get_attribute('[data-yweek]','data-yweek')=='4'
         assert await pg.locator('[data-stage="2"] [data-yweek], [data-stage="3"] [data-yweek], [data-stage="2"] [data-yrep]').count()==0
         await pg.screenshot(path=D+'/plan_sheet.png');await pg.click('#sheet [data-close]')
@@ -74,7 +76,7 @@ async def main():
         home=await pg.evaluate("""()=>{const cards=[...document.querySelectorAll('#v-home > .card')];const y=document.getElementById('yCard');
           return{idx:cards.indexOf(y),n:cards.length,first:cards[0].textContent,ytxt:y.textContent,tabs:document.querySelectorAll('.tabs button').length,startH:document.getElementById('startBtn').offsetHeight,yH:y.offsetHeight,big:cards[0].offsetHeight}}""")
         print('home',home['idx'],home['n'],home['yH'],home['big']);assert home['idx']>=2 and 'Training starten' in home['first'] and 'Zusatz · Yoga & Dehnen' in home['ytxt'] and home['tabs']==5 and home['yH']<home['big']
-        assert 'Woche 1 von 12' in home['ytxt'] and 'Schnell-Dehnen' in home['ytxt'] and 'ohne Krafttraining' in home['ytxt']
+        assert 'Woche 1 von 24' in home['ytxt'] and 'Schnell-Dehnen' in home['ytxt'] and 'ohne Krafttraining' in home['ytxt']
         await pg.screenshot(path=D+'/home.png',full_page=True)
         # 6) mini session (week 1 of the plan), shortened holds; Android bridge mock for the background timer
         await pg.evaluate("()=>{window.__nat=[];window.Android={trainingState:j=>window.__nat.push(JSON.parse(j)),isVisible:()=>true,wasPlayed:()=>false,restEnd:()=>'0'}}")
@@ -140,7 +142,7 @@ async def main():
         # 9) backup roundtrip keeps the yoga progress
         await pg.evaluate("()=>{S.yoga.done={1:'2026-01-05T10:00:00.000Z',2:'2026-01-12T10:00:00.000Z'};S.yoga.start=weekStart(new Date('2026-01-05')).getTime();save()}")
         await pg.click('[data-tab=set]');await pg.wait_for_timeout(200);await pg.click('#bkBtn');await pg.wait_for_timeout(150)
-        assert 'Yoga-Einheiten (Plan: 2/12 Wochen)' in await pg.text_content('#sheet')
+        assert 'Yoga-Einheiten (Plan: 2/24 Wochen)' in await pg.text_content('#sheet')
         async with pg.expect_download() as dl:await pg.click('#bkExport')
         d=await dl.value;path=D+'/homegym-backup.json';await d.save_as(path);bk=json.load(open(path))
         assert bk['state']['yoga']['done']['2'] and len(bk['state']['yoga']['log'])==1
@@ -150,7 +152,7 @@ async def main():
         await pg.wait_for_timeout(500)
         y=await pg.evaluate("[Object.keys(S.yoga.done).sort(),S.yoga.log.length,S.yoga.start,yCur().week]");print('restored',y);assert y[0]==['1','2'] and y[1]==1 and y[2] and y[3]>=3
         # 10) version + footer
-        await pg.click('[data-tab=set]');await pg.wait_for_timeout(200);v=await pg.text_content('#verLine');assert 'Version 3.1' in v and '@ Joschy' in v
+        await pg.click('[data-tab=set]');await pg.wait_for_timeout(200);v=await pg.text_content('#verLine');assert 'Version 3.2' in v and '@ Joschy' in v
         print('errors',errs);assert not errs
         await b.close()
     srv.kill();print('ALL OK')

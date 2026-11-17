@@ -18,7 +18,8 @@ def chk(c,m):
     if not c:FAIL.append(m)
 # render one frame into a fresh canvas, capture pose/transform (no RAF)
 HELP=r"""window.__r=(key,g,f,W,H,still)=>{let host=document.getElementById('__h');if(!host){host=document.createElement('div');host.id='__h';host.style.cssText='position:fixed;left:0;top:0;z-index:99999';document.body.appendChild(host)}
-  host.innerHTML='';const c=document.createElement('canvas');c.style.cssText=`width:${W}px;height:${H}px;display:block`;host.appendChild(c);
+  /* 3.2: one canvas per size is reused (thousands of fresh canvases made headless Chromium stall in the PERF step) */
+  let c=host.firstChild;if(!c||c.dataset.wh!==W+'x'+H){host.innerHTML='';c=document.createElement('canvas');c.dataset.wh=W+'x'+H;c.style.cssText=`width:${W}px;height:${H}px;display:block`;host.appendChild(c)}
   attachAnim(c,key,still?{g,still:1}:{g});RUN.delete(c);c._t0=0;const T=c._loop?c._loop.T:cycT(c._def);let cap=null;const od=drawFig;drawFig=function(ctx,def,o,tr){cap={o,tr,def};return od.apply(this,arguments)};
   try{renderCanvas(c,f*T*1000)}finally{drawFig=od}return{c,cap,T}};
 window.__pts=o=>{const m={};for(const q in o){const v=o[q];if(Array.isArray(v)&&v.length===2&&typeof v[0]==='number')m[q]=[+v[0].toFixed(6),+v[1].toFixed(6)];else if(q==='L'&&v)for(const k in v)m['L.'+k]=[+v[k][0].toFixed(6),+v[k][1].toFixed(6)]}return m};"""
@@ -61,13 +62,14 @@ async def page(b,port):
 async def main():
     async with async_playwright() as p:
         b=await p.chromium.launch();pn,en=await page(b,NEW);po,eo=await page(b,OLD)
-        v=await pn.evaluate("[APP_VER,BK_VER,typeof BODY.f.fr.shV]");chk(v==['3.1',5,'number'],'version 3.1 / backup format 5 '+str(v))
-        await pn.evaluate("go('set')");vl=await pn.text_content('#verLine');chk('Version 3.1 · @ Joschy' in vl,vl)
+        v=await pn.evaluate("[APP_VER,BK_VER,typeof BODY.f.fr.shV]");chk(v==['3.2',5,'number'],'version 3.1 / backup format 5 '+str(v))
+        await pn.evaluate("go('set')");vl=await pn.text_content('#verLine');chk('Version 3.2 · @ Joschy' in vl,vl)
         # 1) joints + grip points identical to 3.0 (all strength animations + yoga loops incl. transitions, both figures, 5 moments)
         gn=await pn.evaluate(GEO);go=await po.evaluate(GEO)
         diff=[(k,q) for k in go for q in go[k] if gn.get(k,{}).get(q)!=go[k][q]]
         miss=[k for k in go if set(go[k])-set(gn.get(k,{}))]
-        chk(len(gn)==len(go)>=150*2*5 and not diff and not miss,f'joints/grip points identical to 3.0: {len(gn)} frames, diffs {len(diff)} {diff[:4]}')
+        chk(len(gn)>=len(go)>=150*2*5 and not diff and not miss,  # 3.2: new exercises/poses are additions; all 3.0 frames must stay identical
+            f'joints/grip points identical to 3.0: {len(gn)} frames, diffs {len(diff)} {diff[:4]}')
         grip=[q for k in gn for q in gn[k] if q in('_gH','_gH2')];chk(len(grip)>500,f'grip centres compared ({len(grip)} hand-to-device points)')
         # 2) every exercise (111) + yoga pose (56) renders for both figures, big + 72 px preview
         r=await pn.evaluate(DRAWN);chk(r['n']>=(111+56)*2*4 and not r['bad'],f"all exercises/poses render: {r['n']} renders, empty {r['bad'][:5]}")
@@ -85,16 +87,16 @@ async def main():
         for pg in(pn,po):await pg.evaluate("()=>{S.settings.theme='arc';applyTheme('arc')}")
         # 4) torso widths measurably changed (front: shoulder/chest/waist, side: bust/waist/seat)
         for g in['m','f']:
-            a=await pn.evaluate(WIDTH,['lateral',g,.3]);o=await po.evaluate(WIDTH,['lateral',g,.3]);print(' front',g,'3.0',o,'3.1',a)
+            a=await pn.evaluate(WIDTH,['lateral',g,.3]);o=await po.evaluate(WIDTH,['lateral',g,.3]);print(' front',g,'3.0',o,'3.2',a)
             if g=='m':chk(a['shoulder']>o['shoulder']+4 and a['chest']>o['chest']+6 and a['waist']<o['waist'],'man: broader shoulders + chest, narrower waist (V)')
             else:chk(a['chest']>o['chest']+1.5 and a['waist']<o['waist']-1,'woman: more bust, narrower waist (front)')
             aw=await pn.evaluate(ARMW,['lateral',g,.3]);ow=await po.evaluate(ARMW,['lateral',g,.3]);print(' upper arm',g,ow,'->',aw)
             if g=='m':chk(aw>ow*1.15,f'man: upper arm at least 15 % thicker ({ow} -> {aw})')
-            a=await pn.evaluate(SIDEW,['curl',g,0]);o=await po.evaluate(SIDEW,['curl',g,0]);print(' side ',g,'3.0',o,'3.1',a)
+            a=await pn.evaluate(SIDEW,['curl',g,0]);o=await po.evaluate(SIDEW,['curl',g,0]);print(' side ',g,'3.0',o,'3.2',a)
             if g=='f':chk(a['seat']>o['seat']+2.5 and a['bust']>o['bust']+1.5 and a['waist']<o['waist'],'woman: more hip/seat + bust, narrower waist (side)')
             else:chk(a['bust']>o['bust']+4 and a['waist']<o['waist'],'man: deeper chest, narrower waist (side)')
         # 5) performance unchanged (render time per frame within 25 % of 3.0)
-        tn=min([await pn.evaluate(PERF) for _ in range(2)]);to=min([await po.evaluate(PERF) for _ in range(2)])
+        tn=min([await asyncio.wait_for(pn.evaluate(PERF),180) for _ in range(2)]);to=min([await asyncio.wait_for(po.evaluate(PERF),180) for _ in range(2)])  # 3.2: hard timeout
         chk(tn<=to*1.25+.15,f'render time per frame {tn:.2f} ms (3.0: {to:.2f} ms)')
         chk(not en,'no JS errors 3.1 '+str(en[:3]))
         await b.close()

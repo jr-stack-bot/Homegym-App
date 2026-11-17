@@ -707,7 +707,7 @@ function cycleWeek(d){const w=Math.round((weekStart(d||new Date()).getTime()-cyc
 function dayDef(week,day){const W=PROGRAM[(week||1)-1]||PROGRAM[0];return W.days.find(x=>x.key===day)||W.days[0]}
 function planItems(day,quick,week){week=week||progBlock();const d=dayDef(week,day);let it=d.items.map((v,i)=>({ex:v[0],sets:v[1],lo:v[2],hi:v[3],slot:i}));
   it.push({ex:d.fin[0],sets:d.fin[1],lo:d.fin[2],hi:d.fin[3],slot:it.length,fin:true});
-  it=adaptItems(day,it);it=kbMix(day,it);it.push(holdFin(day,week,it));it=fitHour(it);
+  it=adaptItems(day,it,week);it=kbMix(day,it);it.push(holdFin(day,week,it));it=fitHour(it);
   if(S.rr&&typeof S.rr==="object")it=it.map(x=>{const o=!x.fin&&S.rr[x.ex];return Array.isArray(o)?{...x,lo:o[0],hi:o[1],rr:1}:x});/* 3.0: rep target changed after a plateau */
   if(quick)it=it.filter(x=>!x.fin).slice(0,4).map(x=>({...x,sets:Math.max(2,x.sets-1)}));return it}
 function doneThisWeek(){const ws=weekStart(new Date());return new Set(S.history.filter(h=>new Date(h.date)>=ws).map(h=>h.plan))}/* calendar week, only for the week card (and the 2.x migration) */
@@ -1479,13 +1479,16 @@ function animPose(def,time,g){if(def.gait==="run")return gaitRun(def,time);let{p
   return{o,ph,p}}
 
 const RUN=new Set();let rafOn=false;
+const OFFP=new Map();function offFor(w,h){const k=w+"x"+h;let v=OFFP.get(k);if(v){OFFP.delete(k);OFFP.set(k,v);return v}
+  v=[0,1,2].map(()=>{const e=document.createElement("canvas");e.width=w;e.height=h;return e});OFFP.set(k,v);if(OFFP.size>6)OFFP.delete(OFFP.keys().next().value);return v}
 function attachAnim(canvas,key,opts={}){const def=AN[key];if(!def)return;canvas._def=def;canvas._key=key;canvas._g=opts.g||figFor(key);canvas._b=boundsOf(def);canvas._fl=floorOf(def);canvas._ph=opts.phaseEl||null;canvas._still=!!opts.still;canvas._done=false;canvas._t0=performance.now()-(opts.offset||0);
-  canvas._offF=canvas._offF||document.createElement("canvas");canvas._offB=canvas._offB||document.createElement("canvas");canvas._offR=canvas._offR||document.createElement("canvas");RUN.add(canvas);if(!rafOn){rafOn=true;requestAnimationFrame(loop)}}
+  RUN.add(canvas);if(!rafOn){rafOn=true;requestAnimationFrame(loop)}}
 function loop(now){for(const c of RUN){if(!c.isConnected){RUN.delete(c);continue}if(c.offsetParent===null&&!c.closest(".sheet"))continue;if(c._still&&c._done)continue;renderCanvas(c,now)}if(RUN.size)requestAnimationFrame(loop);else rafOn=false}
 const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 function animSpd(){const v=S&&S.settings&&+S.settings.animSpd;return v===.75?.75:1}
 function renderCanvas(c,now){const def=c._def;const dpr=Math.min(window.devicePixelRatio||1,2);const W=c.clientWidth,H=c.clientHeight;if(!W||!H)return;
-  if(c.width!==Math.round(W*dpr)||c.height!==Math.round(H*dpr)){c.width=Math.round(W*dpr);c.height=Math.round(H*dpr);for(const o of[c._offF,c._offB,c._offR]){o.width=c.width;o.height=c.height}}
+  if(c.width!==Math.round(W*dpr)||c.height!==Math.round(H*dpr)){c.width=Math.round(W*dpr);c.height=Math.round(H*dpr)}
+  [c._offF,c._offB,c._offR]=offFor(c.width,c.height);for(const o of[c._offF,c._offB,c._offR]){const x=o.getContext("2d");if(x.reset)x.reset();else o.width=o.width}/* 3.2: scratch layers are shared per size (cleared every frame): many previews, little memory */
   const ctx=c.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
   const time=reduce?0:(now-c._t0)/1000*animSpd();
   phaseAt.still=!!c._still;const{o,ph,lbl,dd}=c._loop&&!c._still&&typeof yLoopPose==="function"?yLoopPose(c._loop,time):animPose(def,c._still?def.tempo[0]*.55:time,c._g);phaseAt.still=false;
@@ -1853,7 +1856,16 @@ function repsFor(it,k){if(k===it.ex)return{lo:it.lo,hi:it.hi};const a=EX[it.ex].
   if(b==="bw"||b==="band")return{lo:8,hi:15};
   if(a==="time")return{lo:10,hi:15};
   return{lo:it.lo,hi:it.hi}}
-function adaptItems(day,items){const used=new Set(items.filter(it=>canDo(it.ex)).map(it=>it.ex));const out=[];
+/* 3.2: without any gear ("Ohne Geräte") the whole 4-week cycle is adapted in order (A1,B1,C1,A2,…) and bodyweight substitutes rotate by how
+   often they were already used in the cycle; hard (lvl 3) variants are never planned by default, only offered via swap/progression.
+   With gear the 3.1 choice is kept unchanged. */
+const ADAPT_MEMO={k:null,v:null};
+function adaptBase(w,day){const d=dayDef(w,day);const it=d.items.map((v,i)=>({ex:v[0],sets:v[1],lo:v[2],hi:v[3],slot:i}));it.push({ex:d.fin[0],sets:d.fin[1],lo:d.fin[2],hi:d.fin[3],slot:it.length,fin:true});return it}
+function adaptItems(day,items,week){if(!week||items.length<2)return adaptCore(day,items,null);
+  const key=myGear().slice().sort().join(",")+"|"+JSON.stringify(S.settings||{});
+  if(ADAPT_MEMO.k!==key){const usage={},res={};const rot=!myGear().length;/* rotation only without any gear: equipped presets keep their 3.1 plan exactly */for(let w=1;w<=PROGRAM.length;w++)for(const d of DAYS){const base=adaptBase(w,d);res[w+d]={base:JSON.stringify(base),out:adaptCore(d,base,rot?usage:null)}}ADAPT_MEMO.k=key;ADAPT_MEMO.v=res}
+  const r=ADAPT_MEMO.v[week+day];if(r&&r.base===JSON.stringify(items))return r.out.map(x=>({...x}));return adaptCore(day,items,null)}
+function adaptCore(day,items,usage){const used=new Set(items.filter(it=>canDo(it.ex)).map(it=>it.ex));const out=[];
   for(const it of items){if(canDo(it.ex)){out.push(it);continue}
     let pick=null;
     if(it.fin){pick=(DAYFIN[day]||DAYFIN.A).find(k=>canDo(k)&&!used.has(k))||null}
@@ -1862,11 +1874,14 @@ function adaptItems(day,items){const used=new Set(items.filter(it=>canDo(it.ex))
       let c=allowed.filter(k=>SUB[k]===SUB[it.ex]&&canDo(k)&&!used.has(k)&&AN[animOf(k)]);
       if(it.ex==="facepull")c=allowed.filter(k=>["rear","rowp"].includes(SUB[k])&&canDo(k)&&!used.has(k));
       if(!c.length&&SUB[it.ex]!=="calf")c=allowed.filter(k=>CAT[k]===CAT[it.ex]&&canDo(k)&&!used.has(k)&&AN[animOf(k)]);
-      c.sort((a,b)=>(a==="superman")-(b==="superman")||key(a)-key(b));pick=pref||c[0]||null}
+      c.sort((a,b)=>(a==="superman")-(b==="superman")||key(a)-key(b));pick=pref||c[0]||null;
+      if(usage&&pick&&TRANK[EX[pick].type]>=3){const isT=k=>EX[k].type==="time";const lv=k=>EX[k].lvl||2;const pool=[...new Set([pick,...c])].filter(k=>TRANK[EX[k].type]>=3&&isT(k)===isT(pick)&&isHoldEx(k)===isHoldEx(pick)&&canDo(k)&&!used.has(k)&&AN[animOf(k)]&&lv(k)<3);
+        let best=pool.includes(pick)?pick:pool[0]||pick,bu=usage[best]||0;for(const k of pool){const u=usage[k]||0;if(u<bu){best=k;bu=u}}pick=best}}
     if(!pick)continue;used.add(pick);out.push({...it,ex:pick,...(it.fin?convReps(it,pick):repsFor(it,pick)),adapted:true,orig:it.ex})}
   // keep within 60 minutes: trim sets of adapted items from the end
   const total=()=>estBase(out,false)+out.filter(x=>!x.fin).reduce((a,x)=>a+itemSecs(x),0);
   for(let guard=0;guard<20&&total()>3600;guard++){const x=[...out].reverse().find(x=>!x.fin&&x.sets>2);if(!x)break;x.sets--}
+  if(usage)for(const x of out)if(!x.fin)usage[x.ex]=(usage[x.ex]||0)+1;
   return out.map((x,i)=>({...x,slot:i}))}
 function warmFor(list){const w0=list[0];let first=w0;const kurz=/kurz/.test(w0.n)?" kurz":"";
   if(!hasGear("cross")){first=hasGear("rower")?{...w0,n:"Rudergerät"+(kurz||" locker"),anim:"rowint",t:"Ruhiges Tempo, erst Beine, dann Oberkörper, dann Arme. Puls langsam hoch."}
@@ -2095,7 +2110,10 @@ function swapPool(it,day){day=day||(S.session&&S.session.plan)||"A";const isT=k=
     h=allowed.filter(k=>isHoldEx(k)&&ok(k)&&(rear?SUB[k]==="rear":SUB[k]===sub)&&(isT(k)===isT(it.ex)||it.slot>0));
     h.sort((a,b)=>(isT(a)!==isT(it.ex))-(isT(b)!==isT(it.ex)))}
   c=c.filter(k=>canDo(k));h=h.slice(0,2);
-  return[it.ex,...c.slice(0,4-h.length),...h]}
+  /* 3.2: equipment first (as before), then up to two bodyweight options so the new exercises show up in the dialog */
+  const n=4-h.length,gC=c.filter(k=>TRANK[EX[k].type]<3),lv=k=>EX[k].lvl||2,l0=lv(it.ex),bC=c.filter(k=>TRANK[EX[k].type]>=3).sort((a,b)=>(lv(a)>l0)-(lv(b)>l0)||Math.abs(lv(a)-l0)-Math.abs(lv(b)-l0)||(!EX[a].bwx)-(!EX[b].bwx));const g=gC.slice(0,n);
+  const bx=bC.find(k=>EX[k].bwx&&k!==bC[0]);const bS=[...new Set([bC[0],bx,...bC.slice(1)].filter(Boolean))];/* closest level first, then at least one of the new bodyweight exercises */
+  return[it.ex,...g,...bS.slice(0,Math.max(2,n-g.length)),...h]}
 function openSwap(){const ss=S.session;const it=curItem();const pool=swapPool(it);
   openSheet(`<div class="row between"><h2 style="font-size:24px">Übung tauschen</h2><button class="iconbtn" data-close aria-label="Schließen"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
    <p class="muted" style="margin:0;font-size:13.5px">Gleiche Muskelgruppe, andere Übung. Zum Beispiel wenn etwas zwickt oder du Lust auf Abwechslung hast.</p>
@@ -2220,7 +2238,7 @@ function confirmSheet(title,text,ok,fn,extra="",after){openSheet(`<h2 style="fon
 function openExSheet(key){const e=EX[key];const usedIn=usedInCodes(key);
   openSheet(`<div class="row between"><div><div class="label">${esc(e.m)}</div><h2 style="font-size:30px;margin-top:4px">${esc(e.n)}</h2></div><button class="iconbtn" data-close aria-label="Schließen"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
    <div class="stage"><canvas id="scv"></canvas><span class="phase" id="sph"></span><span class="tempo">${AN[animOf(key)].tempo[0]}s · ${AN[animOf(key)].tempo[2]}s</span><span class="readout">TEMPO · RUNTER · HOCH</span></div>
-   <div class="tagline"><span class="tag">${esc(e.eq)}</span>${usedIn.map(p=>`<span class="tag">Block ${p[0]} · ${p[1]}</span>`).join("")}</div>
+   <div class="tagline"><span class="tag">${esc(e.eq)}</span>${e.lvl?`<span class="tag">Stufe: ${["","leicht","mittel","schwer"][e.lvl]}</span>`:""}${e.daily?`<span class="tag">Alltagsgegenstand: ${esc(e.daily)}</span>`:""}${e.harder&&EX[e.harder]&&canDo(e.harder)?`<span class="tag">Schwerer: ${esc(EX[e.harder].n)}</span>`:""}${usedIn.map(p=>`<span class="tag">Block ${p[0]} · ${p[1]}</span>`).join("")}</div>
    <div><div class="label" style="margin-bottom:8px">So geht's</div><ol class="cues">${e.cues.map(c=>`<li>${esc(c)}</li>`).join("")}</ol></div>
    <div><div class="label" style="margin-bottom:8px">Typische Fehler</div><ul class="cues bad">${e.bad.map(c=>`<li>${esc(c)}</li>`).join("")}</ul></div>
    ${canDo(key)?"":`<div class="hint"><b>Gerät fehlt:</b> ${esc(missingGear(key).join(", "))}. Im Training wird diese Übung automatisch ersetzt.</div>`}
@@ -2688,7 +2706,7 @@ const MOTION={
 };
 for(const k in MOTION){const d=AN[k];if(!d)continue;const m=MOTION[k];for(const f in m){if(f==="A"||f==="B")Object.assign(d[f],m[f]);else d[f]=m[f]}}
 /* ================= 2.1 · HALTE-ÜBUNGEN · KETTLEBELL · GERÄTE-GEWICHTE · BACKUP (@ Joschy) ================= */
-const APP_VER="3.1",BK_VER=5;/* 3.0/3.1 keep backup format 5: all new fields are optional, older apps simply ignore them */
+const APP_VER="3.2",BK_VER=5;/* 3.0–3.2 keep backup format 5: all new fields are optional, older apps simply ignore them */
 /* ---- hold / tempo variants (strength stays the focus: they are alternatives, never forced) ---- */
 Object.assign(EX,{
   pushpause:{n:"Liegestütze mit Halt in der Mitte",eq:"Matte · Griffe optional",m:"Brust · Trizeps · Schultern",type:"bw",rest:90,inc:0,hold:3,holdAt:"auf halber Höhe",base:"pushup",
@@ -2832,7 +2850,7 @@ function bwAdvice(item,r){const reps=r.last.map(s=>+s.r||0);const mn=Math.min(..
   const e=EX[item.ex];const easy=r.eff==="easy",hard=r.eff==="hard";
   const allTop=reps.length>=item.sets&&mn>=hi;
   if(allTop&&hard)return{...r,mode:"hold",up:false,why:`Alle Sätze mit ${hi} Wdh. geschafft, aber hart: heute noch einmal <b>${hi} Wiederholungen pro Satz</b> und festigen.`};
-  if(allTop||r.mode==="up"||r.mode==="up2"||r.mode==="top")return{...r,mode:"top",up:true,why:`Letztes Mal alle Sätze mit ${hi} Wdh. geschafft${easy?" und leicht":""}. Nächster Schritt: ${e.type==="band"?"<b>stärkeres Band</b>":"<b>schwerere Variante</b>"}${e.type!=="band"&&e.inc>0?" oder <b>Zusatzgewicht</b> (Weste, Rucksack)":""} – oder bei ${hi} Wdh. bleiben und <b>langsamer</b> ausführen (3 s nach unten).`};
+  if(allTop||r.mode==="up"||r.mode==="up2"||r.mode==="top")return{...r,mode:"top",up:true,why:`Letztes Mal alle Sätze mit ${hi} Wdh. geschafft${easy?" und leicht":""}. Nächster Schritt: ${e.type==="band"?"<b>stärkeres Band</b>":e.harder&&EX[e.harder]&&canDo(e.harder)?`<b>schwerere Variante: ${esc(EX[e.harder].n)}</b> (über „Tauschen“)`:"<b>schwerere Variante</b>"}${e.type!=="band"&&e.inc>0?" oder <b>Zusatzgewicht</b> (Weste, Rucksack)":""} – oder bei ${hi} Wdh. bleiben und <b>langsamer</b> ausführen (3 s nach unten).`};
   if(r.mode==="early")return{...r,why:`Ziel heute: <b>${hi} Wiederholungen pro Satz</b>, weil letzte Einheit leicht (${lr}). Schaffst du das in allen Sätzen, kommt die schwerere Variante.`};
   if(r.mode==="down"||hard){const rl=r.mode==="down"?repsDown(item):{lo,hi};return{...r,mode:"hold",rlo:rl.lo,rhi:rl.hi,why:`Ziel heute: <b>${span(rl.lo,rl.hi)} Wiederholungen pro Satz</b>, sauber ausführen, weil letzte Einheit hart (${lr}).${r.mode==="down"?" Lieber weniger und sauber, dann wieder aufbauen.":""}`}}
   const t=Math.min(hi,Math.max(lo,mn+1));return{...r,mode:"hold",why:`Ziel heute: <b>${span(t,hi)} Wiederholungen pro Satz</b>${easy?", weil letzte Einheit leicht":mn<lo?", weil letztes Mal unter dem Ziel":""} (letztes Mal ${lr}). Je Satz eine mehr als zuletzt.`}}
@@ -2914,6 +2932,182 @@ function openBackup(){openSheet(`<div class="row between"><h2 style="font-size:2
   $("#bkExport").onclick=exportBackup;$("#bkImport").onclick=importBackup;bindBkFile()}
 function bindBkFile(){$("#bkFile").onchange=e=>{const f=e.target.files&&e.target.files[0];if(!f)return;if(f.size>30e6){toast("Die Datei ist zu groß");return}
     const rd=new FileReader();rd.onload=()=>importBackupText(String(rd.result||""));rd.onerror=()=>toast("Datei konnte nicht gelesen werden");rd.readAsText(f)}}
+/* ================= 3.2 · MEHR ÜBUNGEN OHNE GERÄTE (@ Joschy) =================
+   41 Körpergewichtsübungen für Drücken (A), Ziehen (B) und Beine/Rumpf (C). Kein Gerät nötig (NEEDS leer); wo ein Alltagsgegenstand
+   hilft (Wand, Stuhl, Tisch, Handtuch, Rucksack, Sofa), steht er in eq und in daily. lvl: 1 leicht, 2 mittel, 3 schwer; harder = nächst
+   schwerere Variante (bwAdvice schlägt sie vor, sobald das obere Ziel in allen Sätzen erreicht ist). rr = sinnvoller Wiederholungsbereich. */
+const BWX={
+  /* ---- Drücken ---- */
+  wallpush:{n:"Wand-Liegestütze",eq:"Ohne Gerät · Wand",daily:"Wand",m:"Brust · Trizeps · Schultern",type:"bw",rest:60,inc:0,lvl:1,rr:[12,20],harder:"pushup",
+    cues:["Hände schulterbreit auf Brusthöhe an die Wand","Einen großen Schritt zurück, Körper gerade","Brust zur Wand absenken, Ellbogen schräg nach hinten","Kraftvoll zurückdrücken"],bad:["Hüfte knickt ein","Füße zu nah an der Wand"],note:"Der leichteste Einstieg ins Liegestütz-Training."},
+  pushincl:{n:"Erhöhte Liegestütze (Hände auf Stuhl)",eq:"Ohne Gerät · stabiler Stuhl oder Sofa",daily:"Stuhl",m:"Brust · Trizeps · Schultern",type:"bw",rest:60,inc:0,lvl:1,rr:[10,15],harder:"pushup",
+    cues:["Hände auf die Sitzkante, Stuhl steht an der Wand","Körper gerade vom Kopf bis zu den Fersen","Brust zur Kante absenken","Hochdrücken, ohne die Hüfte zu beugen"],bad:["Hüfte hängt durch","Stuhl rutscht weg"],safe:"Stuhl mit der Lehne an die Wand stellen, damit er nicht wegrutscht."},
+  pushknee:{n:"Liegestütze auf den Knien",eq:"Ohne Gerät · Matte",m:"Brust · Trizeps · Schultern",type:"bw",rest:60,inc:0,lvl:1,rr:[8,15],harder:"pushup",
+    cues:["Knie auf der Matte, Hände unter den Schultern","Gerade Linie von den Knien bis zum Kopf","Brust bis knapp über den Boden","Hochdrücken, Bauch bleibt fest"],bad:["Po zeigt nach oben","Nur halbe Bewegung"]},
+  pseudoplanche:{n:"Pseudo-Planche-Liegestütze",eq:"Ohne Gerät · Matte",m:"Vordere Schulter · Brust · Rumpf",type:"bw",rest:90,inc:0,lvl:3,rr:[5,10],
+    cues:["Hände neben der Taille, Finger zeigen schräg nach außen","Schultern weit vor die Hände schieben","Ellbogen eng am Körper beugen","Schultern bleiben vorn beim Hochdrücken"],bad:["Schultern rutschen zurück über die Hände","Hohlkreuz"],safe:"Belastet die Handgelenke stark: vorher kreisen und dehnen, bei Schmerz auslassen."},
+  packpress:{n:"Schulterdrücken mit Rucksack",eq:"Ohne Gerät · Rucksack mit Büchern",daily:"Rucksack",m:"Schultern · Trizeps",type:"bw",rest:60,inc:0,lvl:1,rr:[10,15],harder:"pikepush",
+    cues:["Rucksack an den Tragegriffen vor die Schultern nehmen","Po und Bauch fest, kein Hohlkreuz","Gerade nach oben drücken, Kopf leicht zurück","Kontrolliert zurück auf Schulterhöhe"],bad:["Hohlkreuz","Rucksack schwingt"],note:"Schwerer: mehr Bücher oder langsamer ablassen."},
+  kneepike:{n:"Pike-Liegestütze auf den Knien",eq:"Ohne Gerät · Matte",m:"Schultern · Trizeps",type:"bw",rest:60,inc:0,lvl:1,rr:[8,12],harder:"pikepush",
+    cues:["Knie auf der Matte, Hände etwa eine Unterarmlänge vor den Knien","Hüfte über die Knie schieben, Oberkörper schräg nach unten","Kopf zwischen den Händen Richtung Boden senken","Zurückdrücken, Bauch bleibt fest"],bad:["Kopf knallt auf den Boden","Schultern zu den Ohren"]},
+  pikeelev:{n:"Pike-Liegestütze, Füße erhöht",eq:"Ohne Gerät · stabiler Stuhl",daily:"Stuhl",m:"Schultern · Trizeps",type:"bw",rest:90,inc:0,lvl:3,rr:[5,10],
+    cues:["Füße auf den Stuhl, Hände auf den Boden, Hüfte hoch","Oberkörper fast senkrecht","Kopf zwischen den Händen Richtung Boden senken","Zurück nach oben drücken"],bad:["Hüfte sinkt ab","Kopf knallt auf den Boden"],safe:"Stuhl an die Wand stellen, Kissen unter den Kopf."},
+  wallhs:{n:"Handstand-Vorstufe an der Wand",eq:"Ohne Gerät · Wand",daily:"Wand",m:"Schultern · Trizeps · Rumpf",type:"time",rest:90,inc:0,lvl:3,hr:[15,30],iso:1,
+    cues:["Hände eine Beinlänge vor der Wand, Füße hinten an die Wand","Mit den Füßen hochgehen, bis die Beine waagerecht sind","Hüfte über den Schultern, Arme gestreckt","Kopf zwischen den Armen, ruhig atmen"],bad:["Schultern sinken ein","Hohlkreuz"],safe:"Nur mit gesunden Schultern und Handgelenken. Langsam wieder runtergehen, nie springen."},
+  chairdipx:{n:"Dips am Stuhl, Beine gestreckt",eq:"Ohne Gerät · stabiler Stuhl",daily:"Stuhl",m:"Trizeps · Brust",type:"bw",rest:75,inc:0,lvl:2,rr:[8,15],
+    cues:["Hände auf die Sitzkante, Beine gestreckt, Fersen am Boden","Po nah an der Kante","Ellbogen nach hinten beugen, bis die Oberarme waagerecht sind","Wieder hochdrücken"],bad:["Schultern ziehen zu den Ohren","Zu tief, Schulter schmerzt"],safe:"Stuhl an die Wand stellen, damit er nicht wegrutscht."},
+  walltri:{n:"Enge Wand-Liegestütze",eq:"Ohne Gerät · Wand",daily:"Wand",m:"Trizeps · Brust",type:"bw",rest:45,inc:0,lvl:1,rr:[12,20],harder:"chairdipx",
+    cues:["Hände schulterbreit oder enger auf Brusthöhe an die Wand","Ellbogen eng am Körper nach unten beugen","Körper bleibt gerade","Mit dem Trizeps zurückdrücken"],bad:["Ellbogen gehen zur Seite","Hüfte knickt ein"]},
+  sphinxpush:{n:"Sphinx-Liegestütze",eq:"Ohne Gerät · Matte",m:"Trizeps · Schultern · Rumpf",type:"bw",rest:75,inc:0,lvl:2,rr:[6,12],
+    cues:["Unterarmstütz, Hände flach vor den Ellbogen","Ellbogen vom Boden lösen und die Arme strecken","Langsam zurück auf die Unterarme","Körper bleibt die ganze Zeit gerade"],bad:["Hüfte hängt durch","Ellbogen knallen auf den Boden"]},
+  /* ---- Ziehen ---- */
+  tablerowkn:{n:"Rudern am Tisch, Knie gebeugt",eq:"Ohne Gerät · stabiler Tisch",daily:"Tisch",m:"Oberer Rücken · Bizeps",type:"bw",rest:75,inc:0,lvl:1,rr:[8,15],harder:"towelrow",
+    cues:["Unter den Tisch legen, Tischkante schulterbreit greifen","Füße flach aufstellen, Knie gebeugt","Hüfte und Brust gemeinsam zur Kante ziehen","Langsam ablassen"],bad:["Hüfte bleibt am Boden","Nur mit den Armen ziehen"],safe:"Nur an einem schweren, stabilen Tisch. Vorher kräftig daran ziehen und testen."},
+  towelpost:{n:"Handtuch-Rudern am Pfosten",eq:"Ohne Gerät · Handtuch · stabiler Pfosten",daily:"Handtuch",m:"Oberer Rücken · Lat · Bizeps",type:"bw",rest:75,inc:0,lvl:2,rr:[8,15],harder:"doorrowuni",
+    cues:["Handtuch um einen stabilen Pfosten (Treppengeländer) legen","Enden greifen, mit gestrecktem Körper nach hinten lehnen","Brust zum Pfosten ziehen, Schulterblätter zusammen","Langsam zurücklehnen"],bad:["Hüfte knickt ein","Handtuch rutscht"],note:"Je steiler du stehst, desto leichter. Füße näher an den Pfosten = schwerer."},
+  doorrowuni:{n:"Einarmiges Rudern am Türrahmen",eq:"Ohne Gerät · stabiler Türrahmen",daily:"Türrahmen",m:"Lat · oberer Rücken · Bizeps",type:"bw",rest:75,inc:0,lvl:3,rr:[6,12],uni:1,
+    cues:["Mit einer Hand an den Türrahmen greifen","Füße nah an der Schwelle, Körper schräg nach hinten","Brust zur Hand ziehen, ohne aufzudrehen","Langsam zurücklehnen, Seite wechseln"],bad:["Oberkörper dreht auf","Hüfte knickt ein"],safe:"Nur an einem stabilen Türrahmen, rutschfeste Socken oder barfuß."},
+  ytw:{n:"Y-T-W-Heben",eq:"Ohne Gerät · Matte",m:"Hintere Schulter · Schulterblätter",type:"bw",rest:45,inc:0,lvl:1,rr:[8,12],harder:"swimmer",
+    cues:["Bäuchlings, Stirn auf einem Handtuch","Arme als Y, dann T, dann W anheben","Daumen zeigen nach oben, Schulterblätter zusammen","Oben kurz halten, langsam ablegen"],bad:["Kopf in den Nacken","Schultern zu den Ohren"]},
+  swimmer:{n:"Schwimmer",eq:"Ohne Gerät · Matte",m:"Rücken · hintere Schulter · Gesäß",type:"bw",rest:45,inc:0,lvl:2,rr:[10,20],
+    cues:["Bäuchlings, Arme und Beine gestreckt","Brust und Beine leicht anheben","Gegengleich Arm und Bein im Wechsel paddeln","Blick zum Boden, Nacken lang"],bad:["Kopf in den Nacken","Zu hektisch"],note:"Eine Wiederholung = einmal rechts und einmal links."},
+  pronepull:{n:"Superman-Latzug",eq:"Ohne Gerät · Matte",m:"Lat · oberer Rücken",type:"bw",rest:45,inc:0,lvl:1,rr:[10,15],
+    cues:["Bäuchlings, Arme gestreckt nach vorn, leicht angehoben","Ellbogen zu den Rippen ziehen, als ob du einen Klimmzug machst","Schulterblätter fest zusammen und nach unten","Arme wieder nach vorn strecken"],bad:["Kopf in den Nacken","Arme berühren den Boden"]},
+  towellat:{n:"Handtuch-Latzug",eq:"Ohne Gerät · Handtuch",daily:"Handtuch",m:"Lat · hintere Schulter",type:"bw",rest:45,inc:0,lvl:1,rr:[10,15],
+    cues:["Handtuch straff über dem Kopf, Hände weit auseinander","Handtuch kräftig auseinanderziehen","Ellbogen nach unten zu den Rippen ziehen","Spannung halten und wieder hochführen"],bad:["Handtuch wird locker","Hohlkreuz"]},
+  packrow:{n:"Rucksack-Rudern vorgebeugt",eq:"Ohne Gerät · Rucksack mit Büchern",daily:"Rucksack",m:"Oberer Rücken · Lat · Bizeps",type:"bw",rest:75,inc:0,lvl:1,rr:[10,15],
+    cues:["Rucksack mit Büchern füllen, Griff mit beiden Händen","Hüfte nach hinten, Oberkörper etwa 45° vor","Rucksack zum Bauchnabel ziehen","Langsam ablassen, Rücken bleibt gerade"],bad:["Runder Rücken","Schwung aus dem Oberkörper"],note:"Schwerer: mehr Bücher in den Rucksack."},
+  packcurl:{n:"Rucksack-Curls",eq:"Ohne Gerät · Rucksack mit Büchern",daily:"Rucksack",m:"Bizeps",type:"bw",rest:60,inc:0,lvl:1,rr:[10,15],
+    cues:["Rucksack am Tragegriff mit beiden Händen halten","Ellbogen bleiben am Körper","Rucksack zur Brust beugen","Langsam ablassen"],bad:["Oberkörper schwingt","Ellbogen wandern nach vorn"]},
+  tablechin:{n:"Untergriff-Rudern am Tisch",eq:"Ohne Gerät · stabiler Tisch",daily:"Tisch",m:"Bizeps · oberer Rücken",type:"bw",rest:60,inc:0,lvl:2,rr:[8,12],
+    cues:["Unter den Tisch legen, Tischkante im Untergriff schulterbreit greifen","Füße flach, Knie gebeugt, Körper gerade","Ellbogen eng am Körper, Brust zur Kante ziehen","Langsam ablassen"],bad:["Ellbogen gehen weit nach außen","Hüfte bleibt am Boden"],safe:"Nur an einem schweren, stabilen Tisch. Vorher kräftig daran ziehen und testen."},
+  bottlehammer:{n:"Hammer-Curls mit Wasserflaschen",eq:"Ohne Gerät · 2 volle Wasserflaschen",daily:"Wasserflaschen",m:"Bizeps · Unterarme",type:"bw",rest:45,inc:0,lvl:1,rr:[12,20],
+    cues:["Je eine volle Flasche in jeder Hand, Daumen oben","Ellbogen bleiben am Körper","Langsam beugen, oben kurz halten","3 Sekunden ablassen"],bad:["Schwung aus dem Rücken","Ellbogen wandern nach vorn"],note:"Schwerer: 1,5-Liter-Flaschen oder langsamer ablassen."},
+  bottleraise:{n:"Seitheben mit Wasserflaschen",eq:"Ohne Gerät · 2 volle Wasserflaschen",daily:"Wasserflaschen",m:"Seitliche Schulter",type:"bw",rest:45,inc:0,lvl:1,rr:[12,20],
+    cues:["Je eine volle Flasche in jeder Hand","Arme seitlich bis Schulterhöhe heben","Ellbogen minimal gebeugt","Langsam ablassen, 2 Sekunden"],bad:["Schultern zu den Ohren","Schwung aus dem Oberkörper"]},
+  bottlefront:{n:"Frontheben mit Wasserflaschen",eq:"Ohne Gerät · 2 volle Wasserflaschen",daily:"Wasserflaschen",m:"Vordere Schulter",type:"bw",rest:45,inc:0,lvl:1,rr:[12,20],
+    cues:["Je eine volle Flasche in jeder Hand","Arme fast gestreckt bis Augenhöhe heben","Ohne Schwung","Langsam ablassen"],bad:["Oberkörper lehnt zurück","Zu hoch heben"]},
+  bottleuni:{n:"Einarmiges Seitheben an der Wand",eq:"Ohne Gerät · Wasserflasche · Wand",daily:"Wasserflasche",m:"Seitliche Schulter",type:"bw",rest:45,inc:0,lvl:2,rr:[10,15],uni:1,
+    cues:["Seitlich neben die Wand stellen, innere Hand an der Wand","Leicht von der Wand weglehnen, Flasche in der äußeren Hand","Arm seitlich bis Schulterhöhe heben","3 Sekunden ablassen, Seite wechseln"],bad:["Schulter zieht zum Ohr","Schwung aus der Hüfte"]},
+  /* ---- Beine ---- */
+  pistolbox:{n:"Pistol-Vorstufe zum Stuhl",eq:"Ohne Gerät · Stuhl",daily:"Stuhl",m:"Oberschenkel vorne · Gesäß",type:"bw",rest:90,inc:0,lvl:3,rr:[5,10],uni:1,
+    cues:["Vor einen Stuhl stellen, ein Bein gestreckt nach vorn","Auf einem Bein langsam zum Stuhl absenken","Kurz antippen, nicht ablegen","Über die ganze Fußsohle wieder aufstehen"],bad:["Knie fällt nach innen","Plumpst auf den Stuhl"]},
+  shrimp:{n:"Shrimp Squat",eq:"Ohne Gerät",m:"Oberschenkel vorne · Gesäß · Gleichgewicht",type:"bw",rest:90,inc:0,lvl:3,rr:[4,8],uni:1,
+    cues:["Auf einem Bein stehen, den anderen Fuß hinten greifen","Langsam absenken, bis das hintere Knie den Boden berührt","Oberkörper neigt sich leicht nach vorn","Über die Ferse hochdrücken"],bad:["Knie knallt auf den Boden","Vorderes Knie kippt nach innen"],note:"Leichter: Kissen unter das hintere Knie."},
+  cossack:{n:"Cossack Squat",eq:"Ohne Gerät",m:"Beine · Innenseite Oberschenkel",type:"bw",rest:75,inc:0,lvl:2,rr:[6,10],uni:1,harder:"pistolbox",
+    cues:["Weiter Stand, Zehen leicht nach außen","Zur Seite in ein Bein absenken, anderes Bein gestreckt","Ferse des Standbeins bleibt am Boden","Zurück zur Mitte, Seite wechseln"],bad:["Ferse hebt ab","Runder Rücken"]},
+  jumpsquat:{n:"Sprungkniebeugen",eq:"Ohne Gerät",m:"Beine · Schnellkraft",type:"bw",rest:75,inc:0,lvl:2,rr:[8,12],
+    cues:["Kniebeuge bis etwa waagerecht","Explosiv nach oben abspringen","Weich und leise auf den Fußballen landen","Direkt in die nächste Kniebeuge federn"],bad:["Harte Landung mit gestreckten Knien","Knie fallen nach innen"],safe:"Auf rutschfestem Boden, Knie bei der Landung immer gebeugt."},
+  bsschair:{n:"Bulgarische Split Squats am Stuhl",eq:"Ohne Gerät · Stuhl",daily:"Stuhl",m:"Beine · Gesäß",type:"bw",rest:75,inc:0,lvl:2,rr:[8,12],uni:1,harder:"pistolbox",
+    cues:["Hinteren Fuß auf die Sitzfläche legen","Vorderer Fuß weit genug vorn, Knie über dem Fuß","Senkrecht nach unten gehen","Über die vordere Ferse hochdrücken"],bad:["Vorderes Knie kippt nach innen","Hinterer Fuß drückt mit"]},
+  chairstep:{n:"Step-ups am Stuhl",eq:"Ohne Gerät · stabiler Stuhl",daily:"Stuhl",m:"Beine · Gesäß",type:"bw",rest:75,inc:0,lvl:1,rr:[8,12],uni:1,harder:"bsschair",
+    cues:["Ganzen Fuß auf die Sitzfläche","Nur mit dem oberen Bein hochdrücken","Oben gerade stehen","Kontrolliert runter"],bad:["Mit dem hinteren Fuß abspringen","Knie fällt nach innen"],safe:"Stuhl an die Wand stellen, keine Rollen oder Klappstühle."},
+  wallsitsgl:{n:"Wandsitzen einbeinig",eq:"Ohne Gerät · Wand",daily:"Wand",m:"Oberschenkel vorne",type:"time",rest:60,inc:0,lvl:3,hr:[15,30],iso:1,uni:1,
+    cues:["Rücken flach an der Wand, Oberschenkel waagerecht","Ein Bein gestreckt nach vorn heben","Knie des Standbeins über dem Fuß","Ruhig weiteratmen, Seite wechseln"],bad:["Hände drücken auf das Bein","Becken kippt zur Seite"]},
+  sglbridge:{n:"Einbeinige Glute Bridge",eq:"Ohne Gerät · Matte",m:"Gesäß · Beinbeuger",type:"bw",rest:60,inc:0,lvl:2,rr:[8,12],uni:1,
+    cues:["Rückenlage, ein Fuß nah am Po, anderes Bein gestreckt","Über die Ferse die Hüfte hochdrücken","Becken bleibt gerade, kippt nicht ab","Oben Po anspannen, langsam ablegen"],bad:["Becken kippt zur Seite","Hohlkreuz statt Hüftstreckung"]},
+  gmbw:{n:"Good Morning ohne Gewicht",eq:"Ohne Gerät",m:"Beinbeuger · unterer Rücken",type:"bw",rest:60,inc:0,lvl:1,rr:[12,15],
+    cues:["Hände hinter den Kopf, Ellbogen weit","Knie leicht gebeugt, Hüfte weit nach hinten","Oberkörper mit geradem Rücken nach vorn neigen","Hüfte nach vorn schieben zum Aufrichten"],bad:["Rücken rundet sich","Daraus wird eine Kniebeuge"]},
+  nordicneg:{n:"Nordic-Curl-Vorstufe",eq:"Ohne Gerät · Sofa zum Fersen-Einhaken",daily:"Sofa",m:"Beinbeuger",type:"bw",rest:90,inc:0,lvl:3,rr:[3,6],
+    cues:["Kniend, Fersen unter dem Sofa einhaken, Kissen unter die Knie","Körper gerade von den Knien bis zum Kopf","So langsam wie möglich nach vorn sinken","Mit den Händen abfangen und zurückdrücken"],bad:["Hüfte knickt ein","Zu schnell fallen lassen"],safe:"Sehr intensiv für die Beinbeuger: wenige Wiederholungen, langsam steigern."},
+  sglcalf:{n:"Einbeiniges Wadenheben",eq:"Ohne Gerät · Wand zum Abstützen",daily:"Wand",m:"Waden",type:"bw",rest:45,inc:0,lvl:2,rr:[10,15],uni:1,
+    cues:["Auf einem Bein stehen, Hand locker an der Wand","Ganz hoch auf die Zehenspitzen","Oben 1 Sekunde halten","Ferse langsam absenken"],bad:["Wippen ohne Pause","Mit der Hand hochziehen"]},
+  /* ---- Rumpf ---- */
+  legraisefloor:{n:"Beinheben liegend",eq:"Ohne Gerät · Matte",m:"Unterer Bauch · Hüftbeuger",type:"bw",rest:60,inc:0,lvl:2,rr:[8,15],harder:"legraise",
+    cues:["Rückenlage, Hände neben dem Po","Gestreckte Beine senkrecht nach oben","Langsam senken, bis der Rücken gerade noch am Boden bleibt","Mit dem Bauch wieder hochheben"],bad:["Hohlkreuz beim Senken","Schwung holen"]},
+  beinschere:{n:"Beinschere",eq:"Ohne Gerät · Matte",m:"Unterer Bauch · Rumpf",type:"time",rest:45,inc:0,lvl:2,hr:[20,30],
+    cues:["Rückenlage, Schultern leicht angehoben","Gestreckte Beine knapp über dem Boden","Beine im Wechsel klein auf und ab bewegen","Unterer Rücken bleibt am Boden"],bad:["Hohlkreuz","Luft anhalten"]},
+  russtwistbw:{n:"Russian Twists ohne Gewicht",eq:"Ohne Gerät · Matte",m:"Seitliche Bauchmuskeln",type:"bw",rest:45,inc:0,lvl:1,rr:[12,20],harder:"russtwist",
+    cues:["Sitzen, Oberkörper leicht zurück, Rücken gerade","Hände vor der Brust zusammen","Oberkörper abwechselnd nach links und rechts drehen","Langsam und kontrolliert"],bad:["Runder Rücken","Nur die Arme bewegen"],note:"Eine Wiederholung = einmal links und rechts. Schwerer: Füße anheben."},
+  bearcrawl:{n:"Bärengang",eq:"Ohne Gerät",m:"Rumpf · Schultern · Kondition",type:"time",rest:45,inc:0,lvl:2,hr:[20,40],
+    cues:["Vierfüßlerstand, Knie eine Handbreit über dem Boden","Gegengleich Hand und Fuß kleine Schritte setzen","Rücken flach wie ein Tisch","Gleichmäßig weiteratmen"],bad:["Po schiebt nach oben","Knie berühren den Boden"],note:"Wenig Platz? Auf der Stelle vor und zurück krabbeln."},
+  sideplankhip:{n:"Seitstütz mit Hüftheben",eq:"Ohne Gerät · Matte",m:"Seitliche Bauchmuskeln · Hüfte",type:"bw",rest:45,inc:0,lvl:2,rr:[8,12],uni:1,
+    cues:["Seitstütz auf dem Unterarm, Ellbogen unter der Schulter","Hüfte langsam Richtung Boden sinken lassen","Wieder hoch über die gerade Linie drücken","Becken kippt nicht nach vorn oder hinten"],bad:["Schulter sackt ein","Zu schnell"]}
+};
+Object.assign(EX,BWX);
+for(const k in BWX){EX[k].bwx=1}
+/* levels of existing exercises that are next steps in a bodyweight chain */
+Object.assign(EX.pushup,{lvl:2});Object.assign(EX.pikepush,{lvl:2});Object.assign(EX.towelrow,{lvl:2});Object.assign(EX.russtwist,{lvl:2});Object.assign(EX.legraise,{lvl:3});for(const k of["snowangel","superman","glutebridge","crunch","deadbug","towelcurl","lungebwx","chairdip"])EX[k].lvl=1;for(const k of["doorrow","widepush","diamondpush","wallsit","plank","birddog","climber","jumpjack"])EX[k].lvl=EX[k].lvl||2;
+Object.assign(CAT,{wallpush:"brust",pushincl:"brust",pushknee:"brust",pseudoplanche:"brust",pikeelev:"schulter",wallhs:"schulter",packpress:"schulter",kneepike:"schulter",chairdipx:"arme",sphinxpush:"arme",walltri:"arme",
+  tablerowkn:"ruecken",towelpost:"ruecken",doorrowuni:"ruecken",ytw:"schulter",swimmer:"ruecken",pronepull:"ruecken",towellat:"ruecken",packrow:"ruecken",packcurl:"arme",tablechin:"arme",bottlehammer:"arme",bottleraise:"schulter",bottlefront:"schulter",bottleuni:"schulter",
+  pistolbox:"beine",shrimp:"beine",cossack:"beine",jumpsquat:"beine",bsschair:"beine",chairstep:"beine",wallsitsgl:"beine",sglbridge:"huefte",gmbw:"huefte",nordicneg:"huefte",sglcalf:"beine",
+  legraisefloor:"rumpf",beinschere:"rumpf",russtwistbw:"rumpf",bearcrawl:"rumpf",sideplankhip:"rumpf"});
+Object.assign(SUB,{wallpush:"chest",pushincl:"chest",pushknee:"chest",pseudoplanche:"chest",pikeelev:"press",wallhs:"press",packpress:"press",kneepike:"press",chairdipx:"tri",sphinxpush:"tri",walltri:"tri",
+  tablerowkn:"rowp",towelpost:"rowp",doorrowuni:"rowp",ytw:"rear",swimmer:"rear",pronepull:"vert",towellat:"vert",packrow:"rowp",packcurl:"bi",tablechin:"bi",bottlehammer:"bi",bottleraise:"raise",bottlefront:"raise",bottleuni:"raise",
+  pistolbox:"uni",shrimp:"uni",cossack:"uni",jumpsquat:"sq",bsschair:"uni",chairstep:"uni",wallsitsgl:"sq",sglbridge:"hinge",gmbw:"hinge",nordicneg:"hamiso",sglcalf:"calf",
+  legraisefloor:"core",beinschere:"core",russtwistbw:"core",bearcrawl:"core",sideplankhip:"core"});
+Object.assign(MG_OF,{wallpush:"brust",pushincl:"brust",pushknee:"brust",pseudoplanche:"brust",pikeelev:"schulter",wallhs:"schulter",packpress:"schulter",kneepike:"schulter",chairdipx:"trizeps",sphinxpush:"trizeps",walltri:"trizeps",
+  tablerowkn:"ruecken",towelpost:"ruecken",doorrowuni:"ruecken",ytw:"schulter",swimmer:"ruecken",pronepull:"ruecken",towellat:"ruecken",packrow:"ruecken",packcurl:"bizeps",tablechin:"bizeps",bottlehammer:"bizeps",bottleraise:"schulter",bottlefront:"schulter",bottleuni:"schulter",
+  pistolbox:"vorn",shrimp:"vorn",cossack:"vorn",jumpsquat:"vorn",bsschair:"vorn",chairstep:"vorn",wallsitsgl:"vorn",sglbridge:"hinten",gmbw:"hinten",nordicneg:"hinten",sglcalf:"waden",
+  legraisefloor:"rumpf",beinschere:"rumpf",russtwistbw:"rumpf",bearcrawl:"rumpf",sideplankhip:"rumpf"});
+DAYEX.A.push("walltri","packpress","kneepike","bottleraise","bottlefront","bottleuni","wallpush","pushincl","pushknee","pseudoplanche","pikeelev","wallhs","chairdipx","sphinxpush");
+DAYEX.B.push("tablerowkn","towelpost","doorrowuni","ytw","swimmer","pronepull","towellat","packrow","packcurl","tablechin","bottlehammer");
+DAYEX.C.push("pistolbox","shrimp","cossack","jumpsquat","bsschair","chairstep","wallsitsgl","sglbridge","gmbw","nordicneg","sglcalf","legraisefloor","beinschere","russtwistbw","bearcrawl","sideplankhip");
+/* no gear: vertical pulls without a bar come before the rows (only reached when nothing with gear is possible) */
+for(const k of["pullup","chinup","negpull"]){const L_=PREFER[k];const i=L_.indexOf("towelrow");L_.splice(i<0?L_.length:i,0,"pronepull","towellat")}
+/* ---- animations (motion engine, soft tempo like 2.2); rucksack drawn as a small bag at the hand ---- */
+const _bwDrawExtra=drawExtraEq;
+drawExtraEq=function(ctx,e,o,P,R,fl,front){if(e.t==="pack"){const h=o[e.at||"hand"];if(!h)return;const c=P([h[0]+(e.dx||0),h[1]-(e.dy!=null?e.dy:10)]);const w=R(e.w||15),hh=R(e.h||18);
+    ctx.save();ctx.fillStyle=e.col||"#4a5a3a";ctx.strokeStyle="rgba(0,0,0,.45)";ctx.lineWidth=Math.max(1,R(1));const x=c[0]-w/2,y=c[1]-hh/2,r=Math.min(w,hh)*.25;
+    ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+hh-r);ctx.quadraticCurveTo(x+w,y+hh,x+w-r,y+hh);ctx.lineTo(x+r,y+hh);ctx.quadraticCurveTo(x,y+hh,x,y+hh-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.fill();ctx.stroke();
+    ctx.fillStyle="rgba(255,255,255,.12)";ctx.fillRect(x+w*.18,y+hh*.55,w*.64,hh*.18);const hp=P(h);ctx.strokeStyle="#2b3424";ctx.lineWidth=Math.max(1,R(1.6));ctx.beginPath();ctx.moveTo(c[0]-w*.2,y);ctx.quadraticCurveTo(hp[0],hp[1]-R(2),c[0]+w*.2,y);ctx.stroke();ctx.restore();return}
+  return _bwDrawExtra(ctx,e,o,P,R,fl,front)};
+if(typeof EXTRA_EQ_LAYER!=="undefined")Object.assign(EXTRA_EQ_LAYER,{pack:"front",chairback:"back",table:"back",post:"back"});
+/* chair = the seat (box) plus a backrest; table = top plate with legs; post = door frame / banister post (all drawn behind the body) */
+{const _d=drawExtraEq;drawExtraEq=function(ctx,e,o,P,R,fl,front){const f0=fl!=null?fl:0;
+  const bar=(a,b,w,col)=>{const A=P(a),B=P(b);ctx.strokeStyle=col;ctx.lineWidth=Math.max(1,R(w));ctx.lineCap="round";ctx.beginPath();ctx.moveTo(A[0],A[1]);ctx.lineTo(B[0],B[1]);ctx.stroke()};
+  if(e.t==="chairback"){/* backrest in profile: one slightly leaning post with a thicker top, pointing away from the person */ctx.save();const x=e.x,h=e.h||42,l=e.lean||0;bar([x,e.y],[x+l,e.y+h],3,"#8a6a4a");bar([x+l*.85,e.y+h*.82],[x+l,e.y+h],5.2,"#8a6a4a");ctx.restore();return}
+  if(e.t==="table"){ctx.save();const A=P([e.x0,e.y]),B=P([e.x1,e.y-3.5]);ctx.fillStyle="#7d5f43";ctx.fillRect(A[0],A[1],B[0]-A[0],B[1]-A[1]);ctx.fillStyle="rgba(255,255,255,.12)";ctx.fillRect(A[0],A[1],B[0]-A[0],Math.max(1,R(1)));
+    for(const lx of e.legs||[e.x0+4,e.x1-4])bar([lx,e.y-3],[lx,f0],2.6,"#6b5039");ctx.restore();return}
+  if(e.t==="post"){ctx.save();const A=P([e.x-(e.w||5)/2,e.h||200]),B=P([e.x+(e.w||5)/2,f0]);const g=ctx.createLinearGradient(A[0],0,B[0],0);g.addColorStop(0,"#9a7a58");g.addColorStop(1,"#6e5338");ctx.fillStyle=g;ctx.fillRect(A[0],A[1],B[0]-A[0],B[1]-A[1]);ctx.restore();return}
+  return _d(ctx,e,o,P,R,fl,front)}}
+{const _b=extraBounds;extraBounds=function(e,o,inc){if(e.t==="chairback"){inc([e.x+(e.lean||0),e.y+(e.h||42)],4);return}if(e.t==="table"){inc([e.x0,e.y]);inc([e.x1,e.y]);return}if(e.t==="post"){inc([e.x,e.h||200]);inc([e.x,0]);return}return _b(e,o,inc)}}
+Object.assign(AN,{
+  wallpush:{anchor:"foot",noBal:1,A:{shin:-110,thigh:-110,torso:70,hand:[56.5,-2],bend:-1,foot:0,neck:4},B:{shin:-118,thigh:-118,torso:62,hand:[37.6,6.6],bend:-1,foot:0,neck:8},eq:[{t:"wall",x:116}],floor:0,tempo:[2,.3,1,.5],ph:["Ablassen","Wegdrücken"]},
+  pushincl:{anchor:"hand",at:[0,44],A:{upper:-90,fore:-90,torso:41,thigh:221,shin:221,foot:-20},B:{upper:-170,fore:-50,torso:29,thigh:209,shin:209,foot:-32},eq:[{t:"box",x:-4,w:52,y:44},{t:"chairback",x:46,y:44,side:"r",h:30,lean:2}],floor:0,tempo:[2,.3,1,.5],ph:["Ablassen","Drücken"]},
+  pushknee:{anchor:"hip",A:{at:[-48.4,28.6],torso:33,thigh:213,shin:150,foot:170,handAt:[0,0],bend:-1,neck:-6},B:{at:[-43.8,19.2],torso:20,thigh:200,shin:150,foot:170,handAt:[0,0],bend:-1,neck:-6},eq:[],floor:0,tempo:[2,.3,1,.5],ph:["Ablassen","Drücken"]},
+  pseudoplanche:{anchor:"hand",A:{upper:-110,fore:-110,torso:18,thigh:198,shin:198,foot:-60},B:{upper:-170,fore:-75,torso:6,thigh:186,shin:186,foot:-72},eq:[],floor:0,tempo:[2,.3,1,.5],ph:["Ablassen","Drücken"]},
+  pikeelev:{anchor:"hand",fixFeet:1,A:{upper:-80,fore:-80,torso:-60,thigh:-124,shin:-134,foot:-40},B:{upper:-110,fore:-49.5,torso:-68,thigh:-124,shin:-134,foot:-40},eq:[{t:"box",x:-122,w:46,y:36},{t:"chairback",x:-120,y:36,side:"l",h:42,lean:-3}],floor:0,tempo:[2,.3,1,.5],ph:["Ablassen","Drücken"]},
+  wallhs:{anchor:"hand",A:{upper:-90,fore:-90,torso:-90,thigh:180,shin:180,foot:90,neck:4},B:{upper:-90.6,fore:-90.4,torso:-90.8,thigh:180.6,shin:180.6,foot:90,neck:5},eq:[{t:"wall",x:-95}],floor:0,tempo:[2,1,2,1],ph:["Halten","Atmen"]},
+  chairdipx:{anchor:"hip",A:{at:[5.1,49.5],torso:95,thigh:-29.2,shin:-29.2,foot:55,handAt:[0,50],bend:-1},B:{at:[-7.3,14.6],torso:88,thigh:-5.9,shin:-5.9,foot:80,handAt:[0,50],bend:-1},eq:[{t:"box",x:-46,w:46,y:50},{t:"chairback",x:-44,y:50,side:"l",h:40,lean:-3}],floor:0,tempo:[2,.3,1,.5],ph:["Runter","Hochdrücken"]},
+  sphinxpush:{anchor:"hand",at:[0,3],A:{upper:-90,fore:0,torso:11,thigh:191,shin:191,foot:-70},B:{upper:-90,fore:0,torso:18,thigh:198,shin:198,foot:-63},eq:[],floor:0,tempo:[1,.3,2,.5],ph:["Hochdrücken","Ablassen"]},
+  tablerowkn:{anchor:"foot",noBal:1,A:{shin:-92,thigh:12,torso:192,handAt:[-80,78],bend:-1,foot:0,neck:-14},B:{shin:-92,thigh:-5,torso:175,handAt:[-80,78],bend:-1,foot:0,neck:-20},eq:[{t:"table",x0:-200,x1:-74,y:80,legs:[-196,-150]}],floor:0,tempo:[1,.5,2,.4],ph:["Ziehen","Ablassen"]},
+  towelpost:{anchor:"foot",noBal:1,A:{shin:-70,thigh:-70,torso:110,hand:[60,-18],bend:1,foot:0},B:{shin:-79,thigh:-79,torso:101,hand:[24,-24],bend:1,foot:0},eq:[{t:"post",x:40,w:7,h:150},{t:"band",from:[36,118]}],floor:0,tempo:[1,.5,2,.4],ph:["Ziehen","Zurücklehnen"]},
+  doorrowuni:{anchor:"foot",noBal:1,A:{shin:-58,thigh:-58,torso:122,handAt:[-22,120],bend:1,foot:0,upper2:-120,fore2:-80,neck:-6},B:{shin:-70,thigh:-70,torso:110,handAt:[-22,120],bend:1,foot:0,upper2:-110,fore2:-70,neck:-4},eq:[{t:"post",x:-19,w:7}],floor:0,tempo:[1,.5,2,.4],ph:["Ziehen","Zurücklehnen"]},
+  ytw:{anchor:"hip",at:[0,10],flip:1,A:{torso:180,thigh:0,shin:0,upper:180,fore:180,foot:-80,neck:-4},B:{torso:172,thigh:0,shin:0,upper:160,fore:160,foot:-80,neck:-4},eq:[],floor:0,tempo:[1,1,1.6,.5],ph:["Anheben","Ablegen"]},
+  swimmer:{anchor:"hip",at:[0,11],flip:1,A:{torso:173,thigh:7,shin:7,thigh2:2,shin2:2,upper:168,fore:168,upper2:178,fore2:178,foot:-75,foot2:-80,neck:-4},B:{torso:173,thigh:2,shin:2,thigh2:7,shin2:7,upper:178,fore:178,upper2:168,fore2:168,foot:-80,foot2:-75,neck:-4},eq:[],floor:0,tempo:[.7,0,.7,0],ph:["Paddeln","Paddeln"]},
+  pronepull:{anchor:"hip",at:[0,10],flip:1,A:{torso:172,thigh:0,shin:0,upper:168,fore:168,foot:-80,neck:-4},B:{torso:170,thigh:0,shin:0,upper:12,fore:140,foot:-80,neck:-4},eq:[],floor:0,tempo:[1,.6,1.8,.4],ph:["Ellbogen zu den Rippen","Arme strecken"]},
+  towellat:{anchor:"foot",A:{...STAND,hand:[-2,60],bend:-1},B:{...STAND,hand:[6,4],bend:-1},eq:[{t:"bandHands"}],floor:0,tempo:[1,.4,1.8,.4],ph:["Runterziehen","Hochführen"]},
+  packrow:{anchor:"foot",A:{shin:-100,thigh:-42,torso:38,hand:[-8,-56],bend:-1},B:{shin:-100,thigh:-42,torso:38,hand:[-26,-28],bend:-1},eq:[{t:"pack",at:"hand"}],floor:0,tempo:[1,.4,2,.4],ph:["Ziehen","Ablassen"]},
+  tablechin:{anchor:"foot",noBal:1,A:{shin:-92,thigh:12,torso:192,handAt:[-78,78],bend:-1,foot:0,neck:-14},B:{shin:-92,thigh:-7,torso:173,handAt:[-78,78],bend:-1,foot:0,neck:-22},eq:[{t:"table",x0:-200,x1:-72,y:80,legs:[-196,-150]}],floor:0,tempo:[1,.5,2,.4],ph:["Ziehen","Ablassen"]},
+  bottlehammer:{anchor:"foot",A:{...STAND,upper:-88,fore:-90},B:{...STAND,upper:-80,fore:78},K:[{t:.7,upper:-86,fore:30}],eq:[{t:"pack",at:"hand",w:6,h:15,dy:2,col:"#5d8fb8"},{t:"pack",at:"hand2",w:6,h:15,dy:2,col:"#5d8fb8"}],floor:0,tempo:[1,.4,2,.4],ph:["Beugen","Ablassen"]},
+  bottleraise:{view:"front",A:{ua:-80,fa:-80,s:12},B:{ua:2,fa:8,s:12},eq:[{t:"pack",at:"handR",w:6,h:15,dy:2,col:"#5d8fb8"},{t:"pack",at:"handL",w:6,h:15,dy:2,col:"#5d8fb8"}],floor:0,tempo:[1.2,.4,2,.4],ph:["Heben","Ablassen"]},
+  bottlefront:{anchor:"foot",A:{...STAND,upper:-88,fore:-86},B:{...STAND,upper:2,fore:4},eq:[{t:"pack",at:"hand",w:6,h:15,dy:2,col:"#5d8fb8"},{t:"pack",at:"hand2",w:6,h:15,dy:2,col:"#5d8fb8"}],floor:0,tempo:[1.2,.4,2,.4],ph:["Heben","Ablassen"]},
+  bottleuni:{view:"front",A:{yf:1,lean:-6,hx:2,ua:-82,fa:-82,uaL:186,faL:186,s:12},B:{yf:1,lean:-6,hx:2,ua:4,fa:8,uaL:186,faL:186,s:12},eq:[{t:"pack",at:"handR",w:6,h:15,dy:2,col:"#5d8fb8"},{t:"wall",x:-74}],floor:0,tempo:[1.2,.4,2,.4],ph:["Heben","Ablassen"]},
+  walltri:{anchor:"foot",noBal:1,A:{shin:-110,thigh:-110,torso:70,hand:[56,-6],bend:-1,foot:0,neck:4},B:{shin:-117,thigh:-117,torso:63,hand:[38,0],bend:-1,foot:0,neck:8},eq:[{t:"wall",x:116}],floor:0,tempo:[2,.3,1,.5],ph:["Ablassen","Wegdrücken"]},
+  packpress:{anchor:"foot",A:{...STAND,hand:[10,1],bend:-1},B:{...STAND,hand:[1,59],bend:-1},K:[{t:.25,hand:[9.5,15]},{t:.5,hand:[6,34]}],eq:[{t:"pack",at:"hand",dy:-4}],floor:0,tempo:[1.2,.4,1.8,.5],ph:["Drücken","Ablassen"]},
+  kneepike:{anchor:"hip",A:{at:[-28,49.3],torso:-8,thigh:-100,shin:180,foot:-160,handAt:[52,0],bend:1,neck:-10},B:{at:[-31.2,49.7],torso:-26,thigh:-96,shin:180,foot:-160,handAt:[52,0],bend:1,neck:-14},eq:[],floor:0,tempo:[2,.3,1,.5],ph:["Ablassen","Drücken"]},
+  packcurl:{anchor:"foot",A:{...STAND,upper:-88,fore:-90},B:{...STAND,upper:-80,fore:78},K:[{t:.7,upper:-86,fore:30}],eq:[{t:"pack",at:"hand",dy:7}],floor:0,tempo:[1,.4,2,.4],ph:["Beugen","Ablassen"]},
+  pistolbox:{lag:.14,anchor:"foot",A:{...STAND,thigh2:-60,shin2:-60,upper:0,fore:2,foot2:20},B:{shin:-122,thigh:-14,torso:56,thigh2:6,shin2:4,upper:4,fore:6,foot2:80},eq:[{t:"box",x:-52,w:40,y:40},{t:"chairback",x:-50,y:40,side:"l",h:44,lean:-3}],floor:0,tempo:[2,.3,1,.5],ph:["Runter","Aufstehen"]},
+  shrimp:{lag:.14,anchor:"foot",A:{...STAND,thigh2:-96,shin2:92,foot2:172,upper:2,fore:4},B:{shin:-123,thigh:-12,torso:52,thigh2:-116,shin2:166,foot2:180,upper:8,fore:10},eq:[],floor:0,tempo:[2,.3,1,.5],ph:["Runter","Hoch"]},
+  cossack:{view:"front",A:{yf:1,hy:82,hx:0,aR:[46,0],kR:[29,41],aL:[-46,0],kL:[-29,41],hR:[2,120],hL:[-2,120],bR:1,bL:-1},B:{yf:1,hy:42,hx:30,aR:[46,0],kR:[66,44],aL:[-46,0],kL:[-8,22],hR:[2,118],hL:[-2,118],bR:1,bL:-1},eq:[],floor:0,tempo:[2,.3,1,.5],ph:["Zur Seite","Zurück"]},
+  jumpsquat:{lag:.1,anchor:"foot",A:{shin:-120,thigh:-12,torso:58,upper:-150,fore:-140,at:[0,0],foot:0},B:{shin:-90,thigh:-90,torso:86,upper:-100,fore:-90,at:[0,24],foot:-58},eq:[],floor:0,tempo:[.45,.12,.7,.6],ph:["Absprung","Landen"]},
+  bsschair:{lag:.14,anchor:"foot",fix2:1,A:{shin:-92,thigh:-95,torso:82,thigh2:-125,shin2:-165,handTo:"hip",bend:1,foot2:-150},B:{shin:-115,thigh:-15,torso:78,thigh2:-96,shin2:-224,handTo:"hip",bend:1,foot2:-150},eq:[{t:"box",x:-92,w:46,y:42},{t:"chairback",x:-90,y:42,side:"l",h:42,lean:-3}],floor:0,tempo:[2,.3,1,.5],ph:["Runter","Hoch"]},
+  chairstep:{lag:.1,anchor:"foot",at:[0,44],A:{shin:-115,thigh:-20,torso:80,thigh2:-100,shin2:-105,handTo:"hip",bend:1},B:{shin:-92,thigh:-92,torso:86,thigh2:-10,shin2:-95,handTo:"hip",bend:1},eq:[{t:"box",x:-18,w:44,y:44},{t:"chairback",x:24,y:44,side:"r",h:26,lean:2}],floor:0,tempo:[1,.5,2,.4],ph:["Hochsteigen","Runter"]},
+  wallsitsgl:{anchor:"foot",noBal:1,A:{shin:-90,thigh:0,torso:90,thigh2:2,shin2:2,foot2:70,hand:[23,-52],bend:1},B:{shin:-90,thigh:0,torso:91,thigh2:4,shin2:4,foot2:72,hand:[23,-51],bend:1},eq:[{t:"wall",x:-58}],floor:0,tempo:[2,1,2,1],ph:["Halten","Atmen"]},
+  sglbridge:{lag:.1,anchor:"shoulder",at:[0,9],A:{torso:180,thigh:42,shin:-62,thigh2:40,shin2:40,foot2:60,hand:[40,-6],bend:1,neck:0},B:{torso:205,thigh:12,shin:-69.4,thigh2:25,shin2:25,foot2:45,hand:[40,-6],bend:1,neck:-25},eq:[],floor:0,tempo:[1,.8,1.6,.4],ph:["Hüfte hoch","Ablegen"]},
+  gmbw:{lag:.1,anchor:"foot",path:{pt:"back",via:"thigh",dx:4},A:{shin:-90,thigh:-90,torso:88,hand:[-10,14],bend:1},B:{shin:-96,thigh:-65,torso:42,hand:[-10,14],bend:1},K:[{t:.25,shin:-95,torso:76}],eq:[],floor:0,tempo:[2,.4,1,.5],ph:["Hüfte zurück","Aufrichten"]},
+  nordicneg:{anchor:"hip",A:{at:[0,50],torso:90,thigh:-90,shin:180,foot:-150,upper:-70,fore:60},B:{at:[29.6,39.2],torso:50,thigh:-130,shin:180,foot:-150,upper:-40,fore:20},eq:[{t:"box",x:-82,w:44,y:20}],floor:0,tempo:[3,.3,1,.6],ph:["Langsam nach vorn","Zurück"]},
+  sglcalf:{anchor:"foot",plantToe:1,A:{shin:-90,thigh:-90,torso:88,at:[0,0],foot:0,thigh2:-96,shin2:-140,foot2:-60,upper:-10,fore:-6},B:{shin:-90,thigh:-90,torso:88,at:[0,9],foot:-52,thigh2:-96,shin2:-140,foot2:-60,upper:-10,fore:-6},eq:[{t:"wall",x:72}],floor:0,tempo:[1,.8,2,.4],ph:["Hoch","Ablassen"]},
+  legraisefloor:{anchor:"hip",at:[0,9],A:{torso:180,thigh:88,shin:88,foot:170,upper:-4,fore:-2,neck:-6},B:{torso:180,thigh:12,shin:12,foot:96,upper:-4,fore:-2,neck:-6},eq:[],floor:0,tempo:[2,.3,1,.5],ph:["Senken","Heben"]},
+  beinschere:{anchor:"hip",at:[0,9],A:{torso:172,thigh:22,shin:22,thigh2:10,shin2:10,foot:100,foot2:90,upper:-8,fore:-6,neck:-16},B:{torso:172,thigh:10,shin:10,thigh2:22,shin2:22,foot:90,foot2:100,upper:-8,fore:-6,neck:-16},eq:[],floor:0,tempo:[.55,0,.55,0],ph:["Wechseln","Wechseln"]},
+  russtwistbw:{anchor:"hip",at:[0,8],A:{torso:122,thigh:38,shin:-12,hand:[30,-26],bend:-1,foot:0},B:{torso:118,thigh:38,shin:-12,hand:[18,-38],bend:-1,foot:0},eq:[],floor:0,tempo:[1.2,.3,1.2,.3],ph:["Drehen","Drehen"]},
+  bearcrawl:{anchor:"hip",at:[0,55],A:{torso:6,thigh:-66,shin:-166,foot:-62,thigh2:-82,shin2:-170,foot2:-66,upper:-96,fore:-92,upper2:-84,fore2:-88,neck:-10},B:{torso:6,thigh:-82,shin:-170,foot:-66,thigh2:-66,shin2:-166,foot2:-62,upper:-84,fore:-88,upper2:-96,fore2:-92,neck:-10},eq:[],floor:0,tempo:[.6,0,.6,0],ph:["Krabbeln","Krabbeln"]},
+  sideplankhip:{view:"front",floor:0,eq:[],tempo:[1,.4,2,.4],ph:["Hüfte hoch","Sinken lassen"],A:{yf:1,hx:12,hy:24,lean:81,aR:[-75,2],aL:[-79.5,20],ua:-9,fa:81,us:1,fs:.8,uaL:171,faL:171},B:{yf:1,hx:12,hy:36,lean:74,aR:[-75,2],aL:[-79.5,20],ua:-16,fa:74,us:1,fs:.8,uaL:164,faL:164}}
+});
+/* repetition targets for the new exercises (time exercises use hr) */
+{const _rf=repsFor;repsFor=function(it,k){if(k!==it.ex&&EX[k]&&EX[k].bwx&&EX[k].type!=="time"&&EX[k].rr&&EX[it.ex].type!=="time")return{lo:EX[k].rr[0],hi:EX[k].rr[1]};return _rf(it,k)}}
+
 /*YOGA*/
 
 /* ================= DESIGNS (2.3) ================= */

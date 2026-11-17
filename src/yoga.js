@@ -1,6 +1,6 @@
 /* ================= 2.1 · YOGA & DEHNEN (@ Joschy) =================
    Zusatzbereich, Kraft bleibt Hauptfokus. Eigene Posen-Bibliothek (YP), eigene Animationen (AN["y_…"]),
-   12-Wochen-Plan in 3 Stufen, Schnell-Dehnen, Dehnen nach dem Training. Fortschritt in S.yoga (im Backup enthalten).
+   24-Wochen-Plan in 3 Stufen (3.2: Anfänger, Fortgeschritten, Profi), Schnell-Dehnen, Dehnen nach dem Training. Fortschritt in S.yoga (im Backup enthalten).
    Yoga zählt NICHT in Verlauf, Wochenziel oder die Push/Pull/Legs-Erholung. */
 
 /* ---------- engine additions (only used by yoga poses, existing exercises unchanged) ---------- */
@@ -47,7 +47,7 @@ drawExtraEq=function(ctx,e,o,P,R,fl,front){if(e.t==="ystrap"){if(!o.hand||!o.toe
 
 /* ---------- poses ---------- */
 const YREG=[["schulter","Schulter & Nacken"],["brust","Brust & Arme"],["huefte","Hüfte"],["ruecken","Rücken"],["beine","Beine"],["ganz","Ganzkörper"]];
-const YLV=["","Einstieg","Aufbau","Fortgeschritten"];
+const YLV=["","Anfänger","Fortgeschritten","Profi"];
 const YBR=["Einatmen","Ausatmen"];
 /* n: Name, sa: Sanskrit, lv: Stufe 1-3, r: Zielregion, z: Ziel kurz, sec: Haltezeit, uni: einseitig, c: Technik, a: Atem, an: Animation */
 const YP={
@@ -222,7 +222,144 @@ const YP={
     c:["Bauchlage, auf einen Unterarm stützen","Mit der anderen Hand den Fuß greifen","Fuß sanft in die Hand drücken, Knie bleibt am Boden"],a:"Ruhig weiteratmen, nicht ruckartig ziehen.",
     an:{anchor:"hip",at:[0,10],flip:1,A:{torso:148,thigh:2,shin:144,foot:150,thigh2:0,shin2:0,foot2:-12,handAt:[8,40],bend:-1,upper2:-90,fore2:180,neck:-4},B:{torso:147,thigh:2,shin:146,foot:152,thigh2:0,shin2:0,foot2:-12,handAt:[7,39],bend:-1,upper2:-90,fore2:180,neck:-4}}}
 };
-const YKEYS=Object.keys(YP);
+/* ================= 3.2 · MEHR YOGA: Anfänger · Fortgeschritten · Profi (@ Joschy) =================
+   Stufen neu: 1 Anfänger, 2 Fortgeschritten, 3 Profi. Die 56 Haltungen bis 3.1: alte Stufe 1 und die sanften Haltungen der alten
+   Stufe 2 -> Anfänger, die übrigen (bisher "Aufbau"/"Fortgeschritten", eher mittleres Niveau) -> Fortgeschritten.
+   Profi-Haltungen haben eine leichtere Variante (alt), Umkehr- und Armbalance-Haltungen zusätzlich einen deutlichen Hinweis (risk). */
+for(const k of["hund","krieger1","krieger2","welpe","faden","happybaby","kobra","stuhl","goettin"])YP[k].lv=1;
+for(const k of["umkrieger","dreieck","hundpedal","drehsitz","malasana","baum","tisch","heuschrecke","seitausfall","taube","kamel","eidechse","delfin","fisch","kuhgesicht","halbmond","seitwinkel","pyramide","sitzvorbeuge","bogen"])YP[k].lv=2;
+const YRISK={
+  inv:"Umkehrhaltung: Nacken und Schultern tragen Gewicht. Nur mit Vorbereitung und aufgewärmt, anfangs an der Wand üben. Bei Schulter- oder Nackenbeschwerden, hohem Blutdruck oder Augenproblemen auslassen.",
+  arm:"Armbalance: viel Last auf Handgelenken und Schultern, Kippgefahr nach vorn. Handgelenke vorher aufwärmen, Kissen vor den Kopf legen. Bei Handgelenk-, Schulter- oder Nackenbeschwerden auslassen.",
+  wrist:"Stütz auf gestreckten Armen hinter dem Körper: belastet Schultern und Handgelenke stark. Handgelenke vorher aufwärmen, Hüfte nur so hoch wie die Schultern es erlauben. Bei Schulter- oder Handgelenkbeschwerden auslassen.",
+  back:"Starke Rückbeuge: belastet Handgelenke, Schultern und den unteren Rücken. Nur nach Brücke und Kamel, gut aufgewärmt. Bei Schulter- oder Rückenbeschwerden auslassen."};
+Object.assign(YP,{
+  /* ---- Anfänger (neu) ---- */
+  krokodil:{n:"Krokodil",sa:"Makarasana",lv:1,r:"ruecken",z:"Unterer Rücken · Entspannung",sec:45,
+    c:["Bauchlage, Beine locker, Fersen fallen nach außen","Unterarme übereinander, Stirn ruht darauf","Schultern und Gesäß ganz weich werden lassen"],a:"In den Bauch atmen: er drückt gegen die Matte, der Rücken hebt sich leicht.",
+    an:{anchor:"hip",at:[0,10],flip:1,A:{torso:175,thigh:0,shin:0,foot:-12,upper:197,fore:-2,neck:-6},B:{torso:175.8,thigh:0,shin:0,foot:-12,upper:197.5,fore:-2,neck:-6.5}}},
+  liegschmetterling:{n:"Liegender Schmetterling",sa:"Supta Baddha Konasana",lv:1,r:"huefte",z:"Leiste · Innenseite Oberschenkel",sec:60,
+    c:["Rückenlage, Fußsohlen zusammen, Füße nah am Becken","Knie sinken zu den Seiten, Kissen darunter erlaubt","Hände ruhen auf dem Bauch, Schultern weich"],a:"Lang ausatmen und die Knie schwer werden lassen.",
+    an:{anchor:"hip",at:[0,10],A:{torso:180,thigh:38,shin:-124,foot:30,handAt:[-14,23],bend:1,neck:-4},B:{torso:180,thigh:35,shin:-126,foot:28,handAt:[-14,22.5],bend:1,neck:-4}}},
+  armeheben:{n:"Arme heben",sa:"Urdhva Hastasana",lv:1,r:"schulter",z:"Schultern · Flanken · Haltung",sec:30,
+    c:["Füße hüftbreit, Arme über vorn nach oben strecken","Schultern bleiben weg von den Ohren","Rippen sinken, kein Hohlkreuz, Blick leicht nach oben"],a:"Einatmen: Arme hoch. Ausatmen: Schultern sinken lassen.",
+    an:{anchor:"foot",noBal:1,A:{...STAND,upper:84,fore:86,neck:3},B:{...STAND,torso:90,upper:94,fore:96,neck:8}}},
+  ragdoll:{n:"Hängende Vorbeuge",sa:"Uttanasana-Variante",lv:1,r:"ruecken",z:"Rücken · Beinrückseite · Nacken",sec:40,
+    c:["Knie deutlich beugen, Oberkörper über die Oberschenkel hängen","Mit den Händen die Ellbogen fassen","Kopf schwer, leicht hin und her pendeln erlaubt"],a:"Ausatmen und den Nacken ganz loslassen.",
+    an:{anchor:"foot",noBal:1,padT:24,A:{shin:-108,thigh:-62,torso:-36,upper:-97,fore:174,neck:-16,lum:-2,tho:-4},B:{shin:-108,thigh:-63,torso:-39,upper:-99,fore:172,neck:-14,lum:-2,tho:-5}}},
+  zehensitz:{n:"Zehensitz",sa:"Vajrasana mit aufgestellten Zehen",lv:1,r:"beine",z:"Fußsohlen · Zehen · Waden",sec:30,
+    c:["Im Fersensitz die Zehen aufstellen","Gewicht langsam nach hinten auf die Fersen bringen","Hände auf den Oberschenkeln, Rücken aufrecht"],a:"Gleichmäßig atmen, bei starkem Ziehen etwas nach vorn kommen.",
+    an:{anchor:"hip",at:[0,22],A:{torso:91,thigh:-20.5,shin:172,foot:-106,handAt:[27,25],bend:1,neck:0},B:{torso:93,thigh:-20.5,shin:172,foot:-106,handAt:[27,25],bend:1,neck:2}}},
+  vierfuessler:{n:"Vierfüßler-Balance",sa:"Dandayamana Bharmanasana",lv:1,r:"ruecken",z:"Rücken · Gesäß · Gleichgewicht",sec:30,uni:1,
+    c:["Vierfüßlerstand, Hände unter den Schultern","Einen Arm nach vorn und das andere Bein nach hinten strecken","Becken bleibt waagerecht, Bauch leicht fest"],a:"Ruhig weiteratmen, Blick zum Boden.",
+    an:{anchor:"hip",at:[0,51],A:{torso:9,thigh:-90,shin:180,foot:180,thigh2:177,shin2:177,foot2:-92,upper:-90,fore:-90,upper2:8,fore2:8,neck:-12},B:{torso:9.6,thigh:-90,shin:180,foot:180,thigh2:179,shin2:179,foot2:-90,upper:-90,fore:-90,upper2:10,fore2:10,neck:-12}}},
+  windloeser:{n:"Windlöser einbeinig",sa:"Ardha Pavanamuktasana",lv:1,r:"ruecken",z:"Unterer Rücken · Gesäß · Hüfte",sec:40,uni:1,
+    c:["Rückenlage, ein Knie zur Brust ziehen","Anderes Bein liegt lang auf der Matte","Hände umfassen das Schienbein, Kopf bleibt am Boden"],a:"Ausatmen: Knie etwas näher, einatmen: leicht lösen.",
+    an:{anchor:"hip",at:[0,9],A:{torso:180,thigh:118,shin:-12,foot:20,thigh2:0,shin2:-1,foot2:62,handAt:[-24,40],bend:1,neck:0},B:{torso:180,thigh:126,shin:-9,foot:23,thigh2:0,shin2:-1,foot2:62,handAt:[-28,40],bend:1,neck:0}}},
+  beinewand:{n:"Beine hoch an der Wand",sa:"Viparita Karani",lv:1,r:"beine",z:"Beine · Entspannung",sec:60,
+    c:["Seitlich an die Wand setzen, dann die Beine an der Wand hochschwingen","Gesäß eine Handbreit bis eine Unterarmlänge vor der Wand, Rücken liegt flach","Arme locker neben dem Körper"],a:"Ruhig und langsam atmen, die Beine werden leicht.",
+    an:{anchor:"hip",at:[0,9],A:{torso:180,thigh:51,shin:51,foot:146,upper:-4,fore:-2,neck:-8},B:{torso:180.4,thigh:51.4,shin:51.4,foot:147,upper:-4,fore:-2,neck:-8},eq:[{t:"wall",x:64}]}},
+  oberschenkel:{n:"Stehende Oberschenkeldehnung",sa:"Ardha Natarajasana-Vorstufe",lv:1,r:"beine",z:"Oberschenkel vorn · Hüftbeuger",sec:30,uni:1,
+    c:["Auf einem Bein stehen, die Ferse zum Gesäß ziehen","Knie zeigen nach unten, Becken leicht nach vorn","Freie Hand an die Wand, wenn das Gleichgewicht wackelt"],a:"Ruhig weiteratmen, Blick auf einen festen Punkt.",
+    an:{anchor:"foot",noBal:1,A:{...STAND,torso:87,thigh2:-110,shin2:80,foot2:160,hand:[-11,-56],bend:1,upper2:62,fore2:72,neck:0},B:{...STAND,torso:87,thigh2:-112,shin2:82,foot2:162,hand:[-12.5,-55.5],bend:1,upper2:66,fore2:76,neck:0}}},
+  /* ---- Fortgeschritten (neu) ---- */
+  robbe:{n:"Robbe",sa:"Sphinx-Variante",lv:2,r:"ruecken",z:"Unterer Rücken · Brust",sec:30,
+    c:["Aus der Sphinx die Hände weit nach vorn setzen","Arme strecken, Brust hebt sich","Po und Beine bleiben weich, nur so hoch wie angenehm"],a:"Ruhig in den Bauch atmen, Schultern weg von den Ohren.",
+    an:{anchor:"hip",at:[0,9],flip:1,A:{torso:146,thigh:0,shin:0,foot:-12,handAt:[-91,3],bend:1,neck:-14},B:{torso:144,thigh:0,shin:0,foot:-12,handAt:[-92,3],bend:1,neck:-16}}},
+  stuhldreh:{n:"Gedrehter Stuhl",sa:"Parivrtta Utkatasana",lv:2,r:"ruecken",z:"Wirbelsäule · Oberschenkel",sec:20,uni:1,
+    c:["Aus dem Stuhl die Hände vor der Brust zusammenlegen","Oberkörper drehen, Ellbogen an die Außenseite des Knies","Knie bleiben auf gleicher Höhe, Po nach hinten"],a:"Einatmen lang machen, ausatmen etwas weiter drehen.",
+    an:{anchor:"foot",A:{shin:-112,thigh:-34,torso:42,handAt:[33,82],bend:-1,neck:10},B:{shin:-113,thigh:-32,torso:40,handAt:[34,80],bend:-1,neck:12}}},
+  adler:{n:"Adler",sa:"Garudasana",lv:2,r:"schulter",z:"Gleichgewicht · Schultern · Hüfte",sec:20,uni:1,
+    c:["Knie beugen, ein Bein über das andere schlagen","Arme vor dem Körper umeinander wickeln","Ellbogen auf Schulterhöhe, Becken sinkt gerade nach unten"],a:"Ruhig atmen, Blick auf einen festen Punkt.",
+    an:{view:"front",A:{yf:1,hy:82,hx:3,aR:[8,0],kR:[17,42],kL:[17,54],aL:[9,22],ua:200,fa:94,us:.62,fs:.92},B:{yf:1,hy:80,hx:3,aR:[8,0],kR:[18,41],kL:[18,52],aL:[10,21],ua:206,fa:92,us:.6,fs:.9}}},
+  brett:{n:"Brett",sa:"Phalakasana",lv:2,r:"ganz",z:"Bauch · Schultern · Rumpf",sec:20,
+    c:["Hände unter den Schultern, Beine lang nach hinten","Eine gerade Linie vom Kopf bis zu den Fersen","Bauch fest, Hüfte weder zu hoch noch durchhängend"],a:"Gleichmäßig weiteratmen, nicht pressen.",
+    an:{anchor:"hand",A:{upper:-90,fore:-90,torso:22,thigh:202,shin:204,foot:-24,neck:-6},B:{upper:-90,fore:-90,torso:21.5,thigh:201.5,shin:203.5,foot:-24.5,neck:-6}}},
+  kopfknie:{n:"Kopf-zum-Knie-Haltung",sa:"Janu Sirsasana",lv:2,r:"beine",z:"Beinrückseite · Rücken",sec:40,uni:1,
+    c:["Ein Bein lang, die andere Fußsohle an die Innenseite des Oberschenkels","Aus der Hüfte über das lange Bein beugen","Rücken lang, Hände an Schienbein oder Fuß"],a:"Ausatmen und den Oberkörper etwas sinken lassen.",
+    an:{anchor:"hip",at:[0,9],A:{torso:40,thigh:4,shin:-4,foot:76,thigh2:5,shin2:184,foot2:150,handAt:[74,11],bend:-1,neck:-14,tho:-3},B:{torso:35,thigh:4,shin:-4,foot:76,thigh2:5,shin2:184,foot2:150,handAt:[77,11],bend:-1,neck:-16,tho:-4}}},
+  bootkn:{n:"Halbes Boot",sa:"Ardha Navasana",lv:2,r:"ganz",z:"Bauch · Hüftbeuger · Rücken",sec:20,
+    c:["Sitzen, Knie gebeugt, Oberkörper leicht zurücklehnen","Füße heben, Schienbeine parallel zum Boden","Arme nach vorn strecken, Brust bleibt offen"],a:"Gleichmäßig atmen, Rücken bleibt lang.",
+    an:{anchor:"hip",at:[0,9],A:{torso:122,thigh:47,shin:0,foot:-6,upper:2,fore:2,neck:-24},B:{torso:120,thigh:49,shin:2,foot:-4,upper:4,fore:4,neck:-24}}},
+  hund3:{n:"Dreibeiniger Hund",sa:"Eka Pada Adho Mukha Svanasana",lv:2,r:"beine",z:"Schultern · Beinrückseite · Hüfte",sec:20,uni:1,
+    c:["Aus dem Herabschauenden Hund ein Bein lang nach hinten-oben heben","Becken bleibt gerade, Hüfte nicht aufdrehen","Hände drücken fest in die Matte"],a:"Ruhig weiteratmen.",
+    an:{anchor:"hand",A:{upper:-60,fore:-60,torso:-40,thigh:-110,shin:-110,foot:-16,thigh2:142,shin2:142,foot2:228,neck:-6},B:{upper:-61,fore:-61,torso:-42,thigh:-108,shin:-106,foot:-8,thigh2:144,shin2:144,foot2:230,neck:-6}}},
+  seitstuetz:{n:"Seitstütz",sa:"Vasisthasana",lv:2,r:"ganz",z:"Schultern · seitlicher Rumpf",sec:20,uni:1,
+    c:["Aus dem Brett auf die Außenkante eines Fußes drehen","Unteres Handgelenk unter der Schulter, Füße übereinander","Obere Hand zur Decke, Hüfte bleibt oben"],a:"Ruhig atmen, Blick nach vorn oder zur oberen Hand.",
+    an:{view:"front",floor:0,A:{yf:1,hx:4,hy:47,lean:60,aR:[-77,2],aL:[-77,11],ua:-30,fa:-30,uaL:150,faL:150},B:{yf:1,hx:4,hy:47.6,lean:59.6,aR:[-77,2],aL:[-77,11],ua:-30.4,fa:-30.4,uaL:148,faL:150}}},
+  heldensitz:{n:"Heldensitz",sa:"Virasana",lv:2,r:"beine",z:"Oberschenkel vorn · Knie · Füße",sec:40,
+    c:["Kniestand, Füße etwas weiter als die Hüfte auseinander","Gesäß zwischen die Fersen setzen, ggf. auf ein Kissen","Hände auf den Oberschenkeln, Rücken aufrecht"],a:"Ruhig durch die Nase atmen.",
+    an:{anchor:"hip",at:[0,16],A:{torso:91,thigh:-15,shin:180,foot:180,handAt:[29,23],bend:1,neck:0},B:{torso:92.5,thigh:-15,shin:180,foot:180,handAt:[29,23],bend:1,neck:2}}},
+  /* ---- Profi (neu): jede Haltung mit leichterer Variante (alt), Risiko-Haltungen mit Hinweis (risk) ---- */
+  kraehe:{n:"Krähe",sa:"Bakasana",lv:3,r:"brust",z:"Arme · Handgelenke · Rumpf",sec:15,alt:"malasana",risk:"arm",
+    c:["Aus der Hocke die Hände schulterbreit aufsetzen, Ellbogen leicht beugen","Knie hoch an die Oberarme, Blick nach vorn","Gewicht langsam nach vorn, erst ein Fuß, dann beide abheben"],a:"Gleichmäßig weiteratmen, nicht die Luft anhalten.",
+    an:{anchor:"hand",A:{fore:-80,upper:-148,torso:-10,thigh:-19,shin:150,foot:160,thigh2:-21,shin2:148,foot2:158,neck:16},B:{fore:-81,upper:-147,torso:-11,thigh:-19,shin:150,foot:160,thigh2:-21,shin2:148,foot2:158,neck:17}}},
+  umgbrett:{n:"Umgekehrtes Brett",sa:"Purvottanasana",lv:3,r:"brust",z:"Brust · vordere Schulter · Rückseite",sec:15,alt:"tisch",risk:"wrist",
+    c:["Sitzen, Hände hinter dem Po, Finger zeigen zu den Füßen","Hüfte heben, bis der Körper eine gerade Linie bildet","Fußsohlen Richtung Boden, Kopf nur so weit zurück wie angenehm"],a:"Oben ruhig weiteratmen.",
+    an:{anchor:"hand",A:{upper:-90,fore:-90,torso:159,thigh:-20,shin:-23,foot:-30,neck:16},B:{upper:-90,fore:-90,torso:158,thigh:-21,shin:-24,foot:-31,neck:20}}},
+  delfinkopf:{n:"Delfin-Kopfstand-Vorbereitung",sa:"Ardha Sirsasana",lv:3,r:"schulter",z:"Schultern · Rumpf · Nacken",sec:20,alt:"delfin",risk:"inv",
+    c:["Unterarme auf der Matte, Finger verschränkt, Scheitel vor den Händen","Knie strecken, mit den Füßen Richtung Kopf gehen","Druck kommt über die Unterarme, der Kopf trägt kaum Gewicht"],a:"Ruhig weiteratmen, bei Druck im Kopf sofort lösen.",
+    an:{anchor:"hand",at:[0,3],A:{fore:0,upper:-125,torso:-70,thigh:-116,shin:-116,foot:0,neck:-18},B:{fore:0,upper:-125,torso:-72,thigh:-114,shin:-114,foot:-2,neck:-16}}},
+  kopfstand:{n:"Kopfstand",sa:"Salamba Sirsasana",lv:3,r:"ganz",z:"Schultern · Rumpf · Gleichgewicht",sec:20,alt:"delfin",risk:"inv",
+    c:["Aus der Delfin-Vorbereitung die Knie zur Brust ziehen, dann die Beine langsam strecken","Unterarme drücken fest in die Matte, Schultern weg von den Ohren","Anfangs mit dem Rücken nah an der Wand, langsam wieder ablegen"],a:"Ruhig und gleichmäßig atmen, danach in der Kindshaltung ausruhen.",
+    an:{anchor:"hand",at:[0,3],A:{fore:0,upper:-125,torso:-90,thigh:90,shin:90,foot:92,neck:2},B:{fore:0,upper:-125,torso:-90.6,thigh:89.2,shin:89.6,foot:93,neck:2.6}}},
+  unterarmvor:{n:"Unterarmstand-Vorbereitung",sa:"Ardha Pincha Mayurasana mit Bein",lv:3,r:"schulter",z:"Schultern · Rumpf",sec:15,uni:1,alt:"delfin",risk:"inv",
+    c:["Im Delfin die Hüfte hoch, Unterarme parallel","Ein Bein lang nach hinten-oben heben","Schultern bleiben über den Ellbogen, Kopf frei"],a:"Gleichmäßig weiteratmen.",
+    an:{anchor:"hand",A:{upper:-88,fore:0,torso:-50,thigh:-118,shin:-132,foot:0,thigh2:131,shin2:131,foot2:224,neck:-4},B:{upper:-87,fore:0,torso:-52,thigh:-118,shin:-134,foot:0,thigh2:133,shin2:133,foot2:226,neck:-4}}},
+  schulterstand:{n:"Schulterstand",sa:"Salamba Sarvangasana",lv:3,r:"ganz",z:"Schultern · Nacken · Rumpf",sec:30,alt:"beinewand",risk:"inv",
+    c:["Gefaltete Decke unter die Schultern, Kopf auf der Matte","Hüfte heben, Hände stützen den Rücken, Ellbogen schulterbreit","Beine nach oben strecken, Kopf dabei nie drehen"],a:"Ruhig atmen, Kinn bleibt locker Richtung Brust.",
+    an:{anchor:"shoulder",at:[0,9],A:{torso:-92,thigh:90,shin:90,foot:94,upper:-7,fore:121,neck:-88},B:{torso:-91.4,thigh:90.6,shin:90.4,foot:95,upper:-7,fore:121,neck:-88.6}}},
+  pflug:{n:"Pflug",sa:"Halasana",lv:3,r:"ruecken",z:"Rücken · Nacken · Beinrückseite",sec:20,alt:"kniebrust",risk:"inv",
+    c:["Aus dem Schulterstand die Beine über den Kopf senken","Zehen Richtung Boden, Knie dürfen gebeugt sein","Arme lang auf der Matte, Nacken nie belasten oder drehen"],a:"Flach weiteratmen, Rücken langsam Wirbel für Wirbel abrollen.",
+    an:{anchor:"shoulder",at:[0,9],A:{torso:-96,thigh:221,shin:221,foot:215,upper:-3,fore:-3,neck:-84},B:{torso:-95,thigh:222,shin:222,foot:216,upper:-3,fore:-3,neck:-85}}},
+  rad:{n:"Rad",sa:"Urdhva Dhanurasana",lv:3,r:"brust",z:"Brust · Schultern · Hüftbeuger",sec:15,alt:"bruecke",risk:"back",
+    c:["Rückenlage, Füße nah am Po, Hände neben den Ohren, Finger zu den Schultern","Erst auf den Scheitel, dann Arme und Beine strecken","Knie zeigen nach vorn, langsam mit dem Kinn zur Brust ablegen"],a:"Oben gleichmäßig weiteratmen.",
+    an:{anchor:"hip",at:[0,75],A:{torso:205,thigh:-40,shin:-78,foot:0,handAt:[-63.5,1],bend:-1,neck:52,lum:-6,tho:-8},B:{torso:207,thigh:-40,shin:-77,foot:0,handAt:[-63.5,1],bend:-1,neck:50,lum:-7,tho:-9}}},
+  kameltief:{n:"Kamel (tief)",sa:"Ustrasana",lv:3,r:"brust",z:"Brust · Hüftbeuger · Bauch",sec:15,alt:"kamel",risk:"back",
+    c:["Kniestand, Zehen aufgestellt, Hüfte über den Knien","Brustbein heben, dann nacheinander die Hände an die Fersen","Hüfte schiebt nach vorn, Kopf folgt nur so weit wie angenehm"],a:"Einatmen in die Brust, langsam mit den Händen am Becken aufrichten.",
+    an:{anchor:"hip",at:[0,51],A:{torso:155,thigh:-99,shin:172,foot:-100,handAt:[-51,15],bend:-1,neck:32,lum:-8,tho:-10},B:{torso:156,thigh:-100,shin:172,foot:-100,handAt:[-51.5,15],bend:-1,neck:36,lum:-8,tho:-11}}},
+  taenzer:{n:"Tänzer",sa:"Natarajasana",lv:3,r:"huefte",z:"Gleichgewicht · Hüftbeuger · Schultern",sec:20,uni:1,alt:"oberschenkel",
+    c:["Auf einem Bein stehen, den anderen Fuß hinten greifen","Fuß in die Hand drücken, Oberkörper neigt sich nach vorn","Freien Arm nach vorn strecken, Becken bleibt gerade"],a:"Ruhig weiteratmen, Blick auf einen festen Punkt.",
+    an:{anchor:"foot",noBal:1,A:{shin:-90,thigh:-88,torso:24,thigh2:152,shin2:24,foot2:100,handAt:[2,132],bend:1,upper2:28,fore2:30,neck:12},B:{shin:-90,thigh:-88,torso:21,thigh2:154,shin2:22,foot2:100,handAt:[0,131],bend:1,upper2:26,fore2:28,neck:13}}},
+  krieger3:{n:"Krieger III",sa:"Virabhadrasana III",lv:3,r:"beine",z:"Gleichgewicht · Beinrückseite · Rumpf",sec:20,uni:1,alt:"krieger1",
+    c:["Auf einem Bein stehen, Oberkörper und anderes Bein waagerecht","Arme nach vorn strecken, eine Linie von den Fingern bis zur Ferse","Standbein leicht gebeugt, Becken bleibt gerade"],a:"Gleichmäßig atmen, Bauch leicht fest.",
+    an:{anchor:"foot",A:{shin:-92,thigh:-90,torso:2,thigh2:180,shin2:180,foot2:-90,upper:-2,fore:-2,upper2:0,fore2:0,neck:10},B:{shin:-92,thigh:-90,torso:0,thigh2:178,shin2:178,foot2:-90,upper:-4,fore:-4,upper2:-2,fore2:-2,neck:11}}},
+  halbmondbal:{n:"Halbmond",sa:"Ardha Chandrasana",lv:3,r:"beine",z:"Gleichgewicht · Beine · Flanke",sec:20,uni:1,alt:"dreieck",
+    c:["Aus dem Dreieck das vordere Knie beugen, Hand auf einen Block vor den Fuß","Hinteres Bein waagerecht heben, Standbein strecken","Obere Hand zur Decke, Becken öffnet sich zur Seite"],a:"Ruhig weiteratmen, Blick nach vorn oder zum Boden.",
+    an:{view:"front",A:{yf:1,hx:30,hy:99,lean:100,aR:[50,0],aL:[-58,126],ua:10,fa:10,uaL:190,faL:190},B:{yf:1,hx:30,hy:99.5,lean:99,aR:[50,0],aL:[-58,128],ua:9,fa:9,uaL:188,faL:189}}},
+  drehhalbmond:{n:"Gedrehter Halbmond",sa:"Parivrtta Ardha Chandrasana",lv:3,r:"beine",z:"Gleichgewicht · Wirbelsäule · Beine",sec:20,uni:1,alt:"pyramide",
+    c:["Standbein gestreckt, anderes Bein waagerecht nach hinten","Gegenhand auf einen Block unter der Schulter","Oberkörper dreht auf, obere Hand zur Decke"],a:"Einatmen lang machen, ausatmen drehen.",
+    an:{anchor:"foot",noBal:1,A:{shin:-92,thigh:-88,torso:-16,thigh2:166,shin2:166,foot2:-104,handAt:[56,19],bend:1,upper2:88,fore2:88,neck:24},B:{shin:-92,thigh:-88,torso:-18,thigh2:164,shin2:164,foot2:-106,handAt:[56,19],bend:1,upper2:90,fore2:90,neck:26},eq:[{t:"yblock",x:56,w:13,h:18}]}},
+  drehdreieck:{n:"Gedrehtes Dreieck",sa:"Parivrtta Trikonasana",lv:3,r:"beine",z:"Beinrückseite · Wirbelsäule · Hüfte",sec:30,uni:1,alt:"pyramide",
+    c:["Pyramidenstand, beide Beine gestreckt, Hüfte zeigt nach vorn","Gegenhand neben den vorderen Fuß oder auf einen Block","Oberkörper aufdrehen, obere Hand zur Decke"],a:"Einatmen lang, ausatmen etwas weiter drehen.",
+    an:{anchor:"hip",at:[0,83],A:{torso:-22,thigh:-63,shin:-66,foot:0,thigh2:-118,shin2:-117,foot2:22,handAt:[46,10],bend:-1,upper2:94,fore2:94,neck:20},B:{torso:-26,thigh:-63,shin:-66,foot:0,thigh2:-118,shin2:-117,foot2:22,handAt:[46,10],bend:-1,upper2:96,fore2:96,neck:22},eq:[{t:"yblock",x:46}]}},
+  koenigstaube:{n:"Königstaube-Vorstufe",sa:"Eka Pada Rajakapotasana (Vorstufe)",lv:3,r:"huefte",z:"Hüftbeuger · Oberschenkel vorn · Brust",sec:20,uni:1,alt:"taube",
+    c:["Aus der Taube aufrichten, Becken gerade","Hinteres Knie beugen, den Fuß mit der Hand greifen (oder Gurt)","Brustbein hebt sich, Nacken bleibt lang"],a:"Ruhig in die Brust atmen, nicht ruckartig ziehen.",
+    an:{anchor:"hip",at:[0,15],A:{torso:98,thigh:-161,shin:62,foot:150,thigh2:-14,shin2:-178,foot2:180,handAt:[-20,42],bend:1,upper2:98,fore2:104,neck:10,lum:-3,tho:-4},B:{torso:101,thigh:-161,shin:64,foot:152,thigh2:-14,shin2:-178,foot2:180,handAt:[-21,43],bend:1,upper2:100,fore2:108,neck:14,lum:-4,tho:-5}}},
+  halbspagat:{n:"Spagat-Vorbereitung",sa:"Ardha Hanumanasana",lv:3,r:"beine",z:"Beinrückseite · Hüftbeuger",sec:30,uni:1,alt:"pyramide",
+    c:["Aus dem knienden Ausfallschritt die Hüfte über das hintere Knie","Vorderes Bein strecken, Zehen zeigen nach oben","Mit langem Rücken nach vorn beugen, Hände auf Blöcke"],a:"Ausatmen und etwas tiefer sinken, nie federn.",
+    an:{anchor:"hip",at:[0,50],A:{torso:16,thigh:-30.7,shin:-30.7,foot:58,thigh2:-90,shin2:180,foot2:180,handAt:[46,9],bend:-1,neck:-10,tho:-3},B:{torso:12,thigh:-30.7,shin:-30.7,foot:58,thigh2:-90,shin2:180,foot2:180,handAt:[47,9],bend:-1,neck:-12,tho:-4},eq:[{t:"yblock",x:47}]}},
+  echseunter:{n:"Echse auf den Unterarmen",sa:"Utthan Pristhasana (tief)",lv:3,r:"huefte",z:"Hüftbeuger · Leiste · Gesäß",sec:30,uni:1,alt:"eidechse",
+    c:["Tiefer Ausfallschritt, beide Hände innen neben den vorderen Fuß","Unterarme nacheinander auf die Matte oder einen Block","Hinteres Knie bleibt am Boden, Hüfte sinkt"],a:"Lang ausatmen und die Hüfte loslassen.",
+    an:{anchor:"hip",at:[0,31],A:{torso:6,thigh:22,shin:-96,foot:0,thigh2:-140,shin2:180,foot2:180,upper:-102,fore:0,neck:-6},B:{torso:4,thigh:22,shin:-96,foot:0,thigh2:-140,shin2:180,foot2:180,upper:-104,fore:0,neck:-7}}},
+  bootvoll:{n:"Boot",sa:"Paripurna Navasana",lv:3,r:"ganz",z:"Bauch · Hüftbeuger · Rücken",sec:15,alt:"bootkn",
+    c:["Aus dem Halben Boot die Beine strecken","Oberkörper und Beine bilden ein V, Rücken lang","Arme parallel zum Boden, Schultern sinken"],a:"Gleichmäßig weiteratmen, nicht pressen.",
+    an:{anchor:"hip",at:[0,9],A:{torso:120,thigh:52,shin:52,foot:56,upper:0,fore:0,neck:-24},B:{torso:118,thigh:54,shin:54,foot:58,upper:2,fore:2,neck:-24}}},
+  seitstuetzbein:{n:"Seitstütz mit gehobenem Bein",sa:"Vasisthasana-Variante",lv:3,r:"ganz",z:"Schultern · seitlicher Rumpf · Hüfte",sec:15,uni:1,alt:"seitstuetz",risk:"arm",
+    c:["Aus dem Seitstütz das obere Bein gestreckt anheben","Hüfte bleibt oben, Becken kippt nicht nach hinten","Obere Hand zur Decke oder zum Fuß"],a:"Gleichmäßig atmen, Blick nach vorn.",
+    an:{view:"front",floor:0,A:{yf:1,hx:4,hy:47,lean:60,aR:[-77,2],aL:[-66,52],ua:-30,fa:-30,uaL:150,faL:150},B:{yf:1,hx:4,hy:47.6,lean:59.6,aR:[-77,2],aL:[-66,55],ua:-30.4,fa:-30.4,uaL:146,faL:148}}},
+  chaturanga:{n:"Chaturanga",sa:"Chaturanga Dandasana",lv:3,r:"brust",z:"Arme · Brust · Rumpf",sec:10,alt:"brett",risk:"arm",
+    c:["Aus dem Brett nach vorn schieben und die Ellbogen nach hinten beugen","Oberarme eng am Körper, höchstens bis waagerecht","Körper bleibt eine gerade Linie, Schultern nicht unter Ellbogenhöhe"],a:"Ruhig weiteratmen, lieber kurz und sauber.",
+    an:{anchor:"hand",A:{upper:-170,fore:-90,torso:11,thigh:191,shin:191,foot:-36,neck:-6},B:{upper:-168,fore:-89,torso:11.4,thigh:191.4,shin:191.4,foot:-36,neck:-6}}},
+  hochhund:{n:"Heraufschauender Hund",sa:"Urdhva Mukha Svanasana",lv:3,r:"ruecken",z:"Brust · Bauch · unterer Rücken",sec:15,alt:"kobra",
+    c:["Bauchlage, Hände neben den Rippen, Fußrücken auf der Matte","Arme strecken, Oberschenkel heben vom Boden ab","Schultern weg von den Ohren, Brust nach vorn-oben"],a:"Einatmen hinein, oben ruhig weiteratmen.",
+    an:{anchor:"hip",at:[0,24],flip:1,A:{torso:150,thigh:-14,shin:-14,foot:-6,handAt:[-51,1],bend:1,neck:-16},B:{torso:148,thigh:-14.4,shin:-14.4,foot:-6,handAt:[-51,1],bend:1,neck:-18}}},
+  feueratem:{n:"Feueratem im Sitz",sa:"Kapalabhati",lv:3,r:"ganz",z:"Atmung · Bauchmuskeln",sec:30,alt:"sukhasana",
+    c:["Aufrecht im bequemen Sitz, Hände auf den Knien","Kurz und kräftig durch die Nase ausatmen, der Bauch zieht nach innen","Einatmen passiert von allein, anfangs nur 20–30 Atemzüge"],a:"Bei Schwindel sofort aufhören und ruhig atmen. Nicht bei hohem Blutdruck oder in der Schwangerschaft.",
+    an:{view:"front",tempo:[.28,.06,.42,.08],ph:["Ausatmen","Einatmen"],A:{yf:1,hy:13,kR:[39,18],aR:[-13,8],aL:[13,7],hR:[33,100],hL:[-33,100],bR:-1,bL:1,shr:0},B:{yf:1,hy:12.6,kR:[39,18],aR:[-13,8],aL:[13,7],hR:[33,100],hL:[-33,100],bR:-1,bL:1,shr:1.6}}}
+});
+
+const YKEYS=Object.keys(YP).sort((a,b)=>YP[a].lv-YP[b].lv);/* 3.2: library sorted by level (stable) */
 /* animation defaults: barefoot, on the mat, breathing tempo */
 for(const k of YKEYS){const d=YP[k].an;const def={floor:0,eq:[],tempo:[3.4,.8,4,.8],ph:YBR,mat:1,bare:1,lag:.04,...d};def.A={...d.A};def.B={...d.B};if(d.view==="front"&&def.floor===0)def.floor=0;AN["y_"+k]=def}
 
@@ -289,6 +426,36 @@ const YL_PATH={kinnbrust:"stand",brustoeffner:"stand",halbevorbeuge:"stand",vorb
 /* lunge with the back knee lifted, derived from the half-kneeling pose itself (toes tucked under) */
 YLK.lunge=P=>ylKF({hip:add(P.hip,[-6,22]),torso:80,neck:0,a1:P.ankle,k1:add(P.knee,[0,4]),f1:0,a2:[P.ankle2[0]+16,9],k2:[P.knee2[0]+6,34],f2:-38,
   h1:add(lerpP(P.hip,P.knee,.75),[-2,26]),e1:add(P.hip,[20,70]),h2:add(lerpP(P.hip,P.knee,.75),[-3,25]),e2:add(P.hip,[18,70])});
+/* ---- 3.2: new keyframes and paths (Profi: crow, headstand, shoulder stand, wheel, half split) ---- */
+Object.assign(YLK,{
+  /* deep squat, hands planted in front (crow) */
+  sqh:()=>ylKF({hip:[-18,30],torso:28,neck:-10,a1:[0,0],k1:[22,42],f1:0,a2:[-1,.2],k2:[21,42],f2:0,h1:[50,1],e1:[44,30],h2:[49,1.2],e2:[43,30],lum:-1}),
+  /* kneeling, forearms and crown on the mat (dolphin / headstand set-up) */
+  fk:()=>ylKF({hip:[0,52],torso:-24,neck:-64,a1:[-44,4.6],k1:[2,5],f1:180,a2:[-45,4.4],k2:[.5,4.8],f2:180,h1:[64.2,3],e1:[35.2,3],h2:[63.2,3.2],e2:[34.2,3.2],lum:.2,tho:-.6}),
+  /* dolphin walk-in: legs straight, hips high (hands at the origin) */
+  dk:()=>ylKF({hip:[-40.2,78.6],torso:-60,neck:-28,a1:[-88,.3],k1:[-64,40],f1:0,a2:[-89,.4],k2:[-65,40],f2:0,h1:[0,3],e1:[-29,3],h2:[-1,3.2],e2:[-30,3.2],lum:0,tho:-.4}),
+  /* tucked headstand: hips over the shoulders, knees to the chest */
+  tk:()=>ylKF({hip:[-11.2,86.4],torso:-90,neck:2,th1:240,sn1:48,f1:68,th2:242,sn2:50,f2:70,h1:[0,3],e1:[-29,3],h2:[-1,3.2],e2:[-30,3.2],lum:0,tho:-.4}),
+  /* supine, knees to the chest, arms long on the mat */
+  kc:()=>ylKF({hip:[0,9],torso:180,neck:0,th1:118,sn1:-12,f1:20,th2:120,sn2:-10,f2:22,u1:-4,fo1:-2,u2:-5,fo2:-3,lum:0,tho:0}),
+  /* hips lifted over the shoulders, hands support the back, knees bent over the face */
+  lift:()=>ylKF({hip:[19.8,63.5],torso:250,neck:-70,th1:135,sn1:95,f1:120,th2:137,sn2:97,f2:122,h1:[22,30],e1:[31,4],h2:[21,31],e2:[30,4.2],lum:0,tho:0}),
+  /* supine, feet close to the seat, hands planted beside the ears (wheel set-up) */
+  hookh:()=>ylKF({hip:[0,9],torso:180,neck:0,a1:[46,0],k1:[23,46],f1:0,a2:[45,.2],k2:[22,46],f2:0,h1:[-65,1],e1:[-50,40],h2:[-64,1.2],e2:[-49,40],lum:0,tho:0})});
+Object.assign(YLP_S,{
+  crow:[["st","ankle"],["sq","ankle"],["sqh","hand"]],
+  dk:[["st","ankle"],["hkn","knee2"],["kn","knee"],["fk","hand"]],
+  hs:[["st","ankle"],["hkn","knee2"],["fk","hand"],["dk","hand"],["tk","hand"]],
+  ss:[["st","ankle"],["sq","ankle"],["sitk","hip"],["kc","sh"],["lift","sh"]],
+  wheel:[["st","ankle"],["sq","ankle"],["sitk","hip"],["hook","hip"],["hookh","ankle"]],
+  hsp:[["st","ankle"],["hkn","knee2"]]});
+/* extra contact points that may pin the body (shoulders stay on the mat while the hips go up) */
+const YLP_PIN={ss:[["sh",12]],wheel:[["sh",12]]};
+Object.assign(YL_PATH,{krokodil:"prone",liegschmetterling:"sup",armeheben:"stand",ragdoll:"fold",zehensitz:"heel",vierfuessler:"four",windloeser:"sup",beinewand:"sup",oberschenkel:"stand",
+  robbe:"prone",stuhldreh:"stand",brett:"dog",kopfknie:"lsit",bootkn:"sit",hund3:"dog",heldensitz:"heel",
+  kraehe:"crow",umgbrett:"tisch",delfinkopf:"dk",kopfstand:"hs",unterarmvor:"dog",schulterstand:"ss",pflug:"ss",rad:"wheel",kameltief:"kneel",taenzer:"stand",krieger3:"stand",
+  drehhalbmond:"stand",drehdreieck:"step",koenigstaube:"dog",halbspagat:"hsp",echseunter:"lunge",bootvoll:"sit",chaturanga:"dog",hochhund:"prone"});
+let ylPinX=null;
 function ylCanS(o){const a=[],l=[];for(const[c,p]of YL_SEG){const d=sub(o[c],o[p]);a.push(ylAng(d));l.push(Math.hypot(d[0],d[1]))}return{hip:o.hip.slice(),a,l,lum:o._lum||0,tho:o._tho||0}}
 function ylVecS(c,mir,prev){const v=[c.hip[0],c.hip[1]];const rel=[];for(let i=0;i<13;i++){if(i===0){let t=c.a[0];if(prev!=null){while(t-prev>180)t-=360;while(t-prev<-180)t+=360}rel.push(t)}
     else{const lo=mir?-YL_WIN[i]-360:YL_WIN[i];rel.push(rel[YL_PAR[i]]+ylWrap(c.a[i]-c.a[YL_PAR[i]],lo))}}return v.concat(rel,c.l,[c.lum,c.tho])}
@@ -300,7 +467,7 @@ function ylFKS(v){const a=[];for(let i=0;i<13;i++)a.push(v[2+i]);const o={hip:[v
 const YL_PIN=[["hip",12],["knee",9],["knee2",9],["ankle",9],["ankle2",9],["hand",7],["hand2",7]];
 const YL_EFF=[["ankle","knee","hip","toe",9],["ankle2","knee2","hip","toe2",9],["hand","elbow","sh",null,10],["hand2","elbow2","sh",null,10]];
 const YL_CLR=[["hip",7],["sh",6],["head",8.5],["neck",3],["knee",4],["knee2",4],["elbow",3],["elbow2",3],["toe",.3],["toe2",.3]];
-function ylSegInfo(A,B,mir,slide){const pin=YL_PIN.find(([k,t])=>A[k][1]<t&&B[k][1]<t&&Math.hypot(A[k][0]-B[k][0],A[k][1]-B[k][1])<3);
+function ylSegInfo(A,B,mir,slide){const pin=(ylPinX?YL_PIN.concat(ylPinX):YL_PIN).find(([k,t])=>A[k][1]<t&&B[k][1]<t&&Math.hypot(A[k][0]-B[k][0],A[k][1]-B[k][1])<3);
   const eff=YL_EFF.map(([e,m,r,toe,t])=>{const on=A[e][1]<t&&B[e][1]<t;const d=Math.hypot(A[e][0]-B[e][0],A[e][1]-B[e][1]);
     const ca=ylCross(A[r],A[e],A[m]),cb=ylCross(B[r],B[e],B[m]);const dflt=(e.startsWith('ankle')?1:-1)*(mir?-1:1);const sa=Math.abs(ca)>25?Math.sign(ca):0,sb=Math.abs(cb)>25?Math.sign(cb):0;
     /* bend side per keyframe (a nearly straight limb takes the side of the other keyframe); if the sides differ the elbow/knee swings over (2D projection of a rotation) */
@@ -349,9 +516,16 @@ function ylFKF(v,g,rf){const G=BODY[g].fr;const o={front:1,_T:{hx:v[0],hy:v[1],l
   const kn=(h,a,p)=>{const d=sub(a,h);const l=Math.hypot(d[0],d[1])||1;return add(h,[d[0]*p[0]-d[1]/l*p[1],d[1]*p[0]+d[0]/l*p[1]])};
   o.kneeR=kn(o.hipR,o.ankR,[v[26],v[27]]);o.kneeL=kn(o.hipL,o.ankL,[v[28],v[29]]);return o}
 const YLFR={st:{yf:1,ua:-85,fa:-87,s:5}};
+/* 3.2: front-view entries for side plank and half moon (stand -> squat -> sit -> side sit / stand -> wide -> triangle) */
+const YLFP_SIDE=()=>[{yf:1,hy:38,kR:[27,47],aR:[13,0],ua:-62,fa:-74},{yf:1,hy:13,kR:[23,44],aR:[14,1],hR:[25,108],hL:[-25,108],bR:1,bL:-1},
+  {yf:1,hx:6,hy:15,lean:42,aR:[-66,2],aL:[-68,9],ua:-48,fa:-48,uaL:120,faL:110}];
+const YLFP={seitstuetz:YLFP_SIDE,seitstuetzbein:YLFP_SIDE,
+  halbmondbal:(P,g,legH,st)=>{const aR=P.ankR.slice(),aL=[-50,0];let hx=(aR[0]+st.ankL[0])/2*.7;const a={...YLFR.st,hx,hy:legH(hx,aR,st.ankL),aR,aL:st.ankL.slice()};
+    hx=(aR[0]+aL[0])/2;const b={...YLFR.st,hx,hy:legH(hx,aR,aL),aR,aL};return[a,b,{yf:1,hx:4,hy:74,lean:58,aR,aL,ua:-32,fa:-32,uaL:148,faL:148}]}};
 function ylFrontPath(k,P,g){const st=solveFrontY(YLFR.st,g);const out=[st];const G=BODY[g].fr;
   const legH=(hx,aR,aL)=>{const dx=Math.max(Math.abs(aR[0]-(hx+G.hipJ)),Math.abs(aL[0]-(hx-G.hipJ)));return Math.min(92,Math.sqrt(Math.max(0,92*92-dx*dx)))-.4};
   const wide=Math.abs(P.ankR[0]-st.ankR[0])>6&&P.ankR[1]<1&&P.ankL[1]<1;
+  if(YLFP[k]){for(const q of YLFP[k](P,g,legH,st))out.push(solveFrontY(q,g));return out}
   if(k==="baum")out.push(solveFrontY({...YLFR.st,hx:-6,lean:-2,ua:-82,fa:-80},g));
   else if(P._T&&P._T.hy<40){/* sitting on the floor: squat down, sit, then fold the legs */
     out.push(solveFrontY({yf:1,hy:38,kR:[27,47],aR:[13,0],ua:-62,fa:-74},g));
@@ -383,7 +557,7 @@ function ylBuild(def,g){const key=Object.keys(AN).find(k=>AN[k]===def)||"";const
     const xs=[0];for(let i=1;i<n;i++){let d=0;for(const p of front?["hipR","shR","head","ankR","ankL","handR","handL"]:["hip","sh","head","knee","ankle","ankle2","hand","hand2"]){const a=K[i-1][p],b=K[i][p];if(a&&b)d=Math.max(d,Math.hypot(a[0]-b[0],a[1]-b[1]))}xs.push(xs[i-1]+Math.pow(Math.max(12,d),.8)+6)}
     const tot=xs[n-1]||1;const xn=xs.map(x=>x/tot);const seg=[];for(let i=0;i<n-1;i++)seg.push(front?ylFrontSeg(K[i],K[i+1]):ylSegInfo(K[i],K[i+1],!!def.flip));
     return{K,vec,xn,seg,rf:C.map(c=>front?(c.T.rfirst||0):0),n}};
-  const E=mk(keys,keys.length-1),X=mk(keysX,0);const ns=keys.length-1;const L0={front,g};ylWarp(L0,E,YL_SLOW[k],1);ylWarp(L0,X,YL_SLOW[k],0);
+  ylPinX=front?null:(YLP_PIN[YL_PATH[k]]||null);const E=mk(keys,keys.length-1),X=mk(keysX,0);ylPinX=null;const ns=keys.length-1;const L0={front,g};ylWarp(L0,E,YL_SLOW[k],1);ylWarp(L0,X,YL_SLOW[k],0);
   const entry=Math.max(3,Math.min(4.5,2.2+.8*ns)),exit=Math.max(3,Math.min(4,entry-.4));/* the way back is at most ~12 % quicker than the way in */const T=YL.stand+entry+H.dur+exit;
   const L_={def,g,front,E,X,H,entry,exit,T,k};L_.b=ylBounds(L_);return L_}
 function ylPath(P,s){const n=P.n;let i=0;while(i<n-2&&s>P.xn[i+1])i++;const t=Math.max(0,Math.min(1,(s-P.xn[i])/((P.xn[i+1]-P.xn[i])||1)));
@@ -426,33 +600,48 @@ function yLoopOf(def,g){def._yl=def._yl||{};return def._yl[g]||(def._yl[g]=ylBui
 {const _att=attachAnim;attachAnim=function(canvas,key,opts={}){_att(canvas,key,opts);const def=AN[key];
   if(def&&def.mat&&!opts.still&&!opts.noLoop){canvas._loop=yLoopOf(def,canvas._g);canvas._b=canvas._loop.b}else canvas._loop=null}}
 
-/* ---------- 12-Wochen-Plan: 3 Stufen à 4 Wochen, 1 Einheit pro Woche ---------- */
-const YSTAGE=[null,{n:"Einstieg",cool:120,t:"Sanft ankommen: Schultern, Nacken und Hüfte mobilisieren."},{n:"Aufbau",cool:150,t:"Stehende Haltungen und Hund: mehr Weite, etwas mehr Kraft."},{n:"Fortgeschritten",cool:180,t:"Tiefere Hüft- und Schulteröffner, längere Haltezeiten. Weiterhin sanft."}];
+
+/* ---------- 3.2 · 24-Wochen-Plan: 3 Stufen à 8 Wochen (Anfänger, Fortgeschritten, Profi), 1 Einheit pro Woche, ca. 15 -> 30 Min.
+   Die Wochen 1–12 behalten ihre Nummer (bis 3.1: 12 Wochen in Stufen à 4): alte Stufen 1+2 = Anfänger Woche 1–8, alte Stufe 3 = Fortgeschritten Woche 9–12. ---------- */
+const YN=24,YPW=8;
+const YSTAGE=[null,{n:"Anfänger",cool:120,t:"Sanft ankommen: Schultern, Nacken und Hüfte mobilisieren, Hund und Krieger kennenlernen."},{n:"Fortgeschritten",cool:150,t:"Stehende Haltungen, Hüft- und Schulteröffner, längere Haltezeiten. Weiterhin ohne Umkehrhaltungen."},{n:"Profi",cool:180,t:"Balancen, Armbalancen und Umkehrhaltungen mit Vorbereitung. Jede Profi-Haltung hat eine leichtere Variante."}];
 const YW=[null,
   {w:["sukhasana","schulterkreisen","nacken","katzekuh"],m:["kind","armquer","adlerarm","wandengel","tiefausfall","figur4","schmetterling","kniebrust"]},
   {w:["sukhasana","schulterkreisen","kinnbrust","katzekuh"],m:["kind","trizeps","brustoeffner","seitbeuge","tiefausfall","figur4","schmetterling","bruecke","kniebrust"]},
   {w:["berg","schulterkreisen","nacken","hueftkreisen","katzekuh"],m:["halbevorbeuge","wandengel","adlerarm","tiefausfall","sphinx","kind","figur4","beingurt","schmetterling"]},
   {w:["sukhasana","sitzseitbeuge","schulterkreisen","katzekuh"],m:["vorbeuge","armquer","trizeps","fersensitz","tiefausfall","sphinx","bruecke","figur4","schmetterling","streckung"]},
-  {w:["sukhasana","schulterkreisen","nacken","katzekuh"],m:["hund","tiefausfall","krieger1","krieger2","adlerarm","welpe","kobra","figur4","schmetterling","happybaby"]},
-  {w:["berg","schulterkreisen","hueftkreisen","katzekuh"],m:["hund","krieger2","umkrieger","dreieck","goettin","faden","sphinx","drehsitz","figur4","kniebrust"]},
-  {w:["sukhasana","sitzseitbeuge","schulterkreisen","katzekuh"],m:["hundpedal","stuhl","krieger1","baum","malasana","tisch","heuschrecke","welpe","drehsitz","happybaby","schmetterling"]},
-  {w:["sukhasana","schulterkreisen","nacken","katzekuh","hund"],m:["krieger2","umkrieger","dreieck","seitausfall","goettin","faden","kobra","bruecke","drehsitz","figur4","happybaby"]},
-  {w:["sukhasana","schulterkreisen","katzekuh","hund"],m:["tiefausfall","halbmond","krieger2","seitwinkel","pyramide","kuhgesicht","delfin","taube","sitzvorbeuge","bruecke"]},
-  {w:["berg","schulterkreisen","hueftkreisen","katzekuh","hundpedal"],m:["krieger1","dreieck","seitwinkel","eidechse","welpe","kuhgesicht","bogen","kamel","taube","drehsitz","happybaby"]},
-  {w:["sukhasana","sitzseitbeuge","katzekuh","hund"],m:["halbmond","pyramide","goettin","malasana","delfin","faden","fisch","heuschrecke","taube","sitzvorbeuge","schmetterling"]},
-  {w:["sukhasana","schulterkreisen","nacken","katzekuh","hund"],m:["krieger2","umkrieger","seitwinkel","eidechse","kuhgesicht","adlerarm","kamel","fisch","taube","drehsitz","sitzvorbeuge","happybaby"]}];
+  {w:["sukhasana","schulterkreisen","nacken","katzekuh"],m:["hund","tiefausfall","krieger1","krieger2","adlerarm","welpe","kobra","figur4","schmetterling","happybaby","beinewand"]},
+  {w:["berg","armeheben","hueftkreisen","katzekuh"],m:["vierfuessler","hund","krieger2","goettin","faden","sphinx","windloeser","figur4","liegschmetterling","kniebrust"]},
+  {w:["sukhasana","sitzseitbeuge","schulterkreisen","katzekuh"],m:["stuhl","krieger1","oberschenkel","ragdoll","welpe","krokodil","kobra","zehensitz","happybaby","schmetterling","beinewand"]},
+  {w:["sukhasana","schulterkreisen","nacken","katzekuh","hund"],m:["armeheben","krieger2","goettin","tiefausfall","faden","vierfuessler","sphinx","bruecke","figur4","liegschmetterling","beingurt"]},
+  {w:["sukhasana","schulterkreisen","katzekuh","hund"],m:["tiefausfall","halbmond","krieger2","seitwinkel","pyramide","kuhgesicht","delfin","taube","sitzvorbeuge","bruecke","brett"]},
+  {w:["berg","schulterkreisen","hueftkreisen","katzekuh","hundpedal"],m:["krieger1","dreieck","seitwinkel","eidechse","welpe","kuhgesicht","bogen","kamel","taube","drehsitz","happybaby","adler"]},
+  {w:["sukhasana","sitzseitbeuge","katzekuh","hund"],m:["halbmond","pyramide","goettin","malasana","delfin","faden","fisch","heuschrecke","taube","sitzvorbeuge","schmetterling","hund3"]},
+  {w:["sukhasana","schulterkreisen","nacken","katzekuh","hund"],m:["krieger2","umkrieger","seitwinkel","eidechse","kuhgesicht","adlerarm","kamel","fisch","taube","drehsitz","sitzvorbeuge","happybaby","heldensitz"]},
+  {w:["sukhasana","schulterkreisen","katzekuh","hund"],m:["stuhldreh","dreieck","umkrieger","seitausfall","robbe","heuschrecke","bootkn","delfin","taube","kopfknie","drehsitz","liegschmetterling"]},
+  {w:["berg","armeheben","hueftkreisen","katzekuh","hundpedal"],m:["baum","adler","krieger2","seitwinkel","brett","seitstuetz","kobra","bogen","kamel","tisch","eidechse","windloeser"]},
+  {w:["heldensitz","sitzseitbeuge","katzekuh","hund"],m:["hund3","halbmond","pyramide","malasana","kuhgesicht","delfin","fisch","robbe","taube","sitzvorbeuge","kopfknie","happybaby"]},
+  {w:["sukhasana","schulterkreisen","nacken","katzekuh","hund"],m:["stuhldreh","dreieck","seitwinkel","adler","brett","seitstuetz","bootkn","heuschrecke","kamel","taube","drehsitz","sitzvorbeuge","schmetterling"]},
+  {w:["sukhasana","schulterkreisen","katzekuh","hund","armeheben"],m:["krieger2","dreieck","halbmondbal","krieger1","krieger3","brett","chaturanga","kobra","bootkn","bootvoll","adlerarm","taube","drehsitz","sitzvorbeuge","happybaby"]},
+  {w:["berg","armeheben","hueftkreisen","katzekuh","hundpedal"],m:["oberschenkel","taenzer","pyramide","drehdreieck","brett","hochhund","delfin","malasana","kraehe","eidechse","echseunter","fisch","kuhgesicht","liegschmetterling"]},
+  {w:["sukhasana","schulterkreisen","nacken","katzekuh","hund"],m:["krieger3","drehhalbmond","halbmondbal","seitstuetz","seitstuetzbein","delfin","delfinkopf","tiefausfall","halbspagat","taube","koenigstaube","bruecke","beinewand","windloeser"]},
+  {w:["heldensitz","sitzseitbeuge","katzekuh","hund","armeheben"],m:["brett","chaturanga","hochhund","malasana","kraehe","umgbrett","kamel","kameltief","delfinkopf","adlerarm","bruecke","schulterstand","kniebrust","sitzvorbeuge","happybaby"]},
+  {w:["berg","armeheben","hueftkreisen","katzekuh","hund3"],m:["krieger2","halbmondbal","drehdreieck","taenzer","unterarmvor","delfinkopf","eidechse","echseunter","halbspagat","bootvoll","schulterstand","pflug","fisch","liegschmetterling"]},
+  {w:["sukhasana","schulterkreisen","nacken","katzekuh","hund"],m:["stuhldreh","krieger3","drehhalbmond","seitstuetzbein","kraehe","delfinkopf","kopfstand","kind","koenigstaube","bogen","bruecke","rad","kopfknie","happybaby"]},
+  {w:["feueratem","schulterkreisen","katzekuh","hund","armeheben"],m:["brett","chaturanga","hochhund","hund3","taenzer","halbmondbal","unterarmvor","kopfstand","kind","kuhgesicht","kameltief","schulterstand","pflug","sitzvorbeuge","liegschmetterling"]},
+  {w:["feueratem","sitzseitbeuge","katzekuh","hund","armeheben"],m:["krieger3","drehdreieck","drehhalbmond","seitstuetzbein","kraehe","echseunter","halbspagat","koenigstaube","kopfstand","kind","welpe","rad","schulterstand","pflug","beinewand"]}];
 const YQUICK=["schulterkreisen","armquer","adlerarm","katzekuh","tiefausfall","figur4","kind"];
 const YPOST={A:["brustoeffner","armquer","trizeps","kind","sphinx"],B:["adlerarm","trizeps","seitbeuge","katzekuh","kind"],C:["tiefausfall","figur4","halbevorbeuge","schmetterling","kniebrust"]};
 const YPREP=6,YSW=5,YPART={warm:"Aufwärmen",main:"Hauptteil",cool:"Endentspannung"};
-function yStageOf(w){return Math.min(3,Math.max(1,Math.ceil(w/4)))}
-function yTarget(w){return Math.round((15+(w-1)*10/11)*60)}
+function yStageOf(w){return Math.min(3,Math.max(1,Math.ceil(w/YPW)))}
+function yTarget(w){return Math.round((15+(w-1)*15/(YN-1))*60)}
 function ySecs(items){let s=0;for(const it of items){const sd=it.uni?2:1;s+=YPREP+sd*it.sec+(sd-1)*YSW}return s}
 function yItem(k,part,fix,sec){const p=YP[k];return{k,part,uni:!!p.uni,sec:sec!=null?sec:part==="warm"?Math.round(p.sec*.8/5)*5:p.sec,fix:!!fix}}
 /* scale the hold times so the whole session meets the target duration (overhead and the final relaxation stay fixed) */
 function yScale(items,target){const over=items.reduce((a,x)=>a+YPREP+(x.uni?YSW:0),0);const F=items.filter(x=>x.fix).reduce((a,x)=>a+x.sec*(x.uni?2:1),0);
   const H=items.filter(x=>!x.fix).reduce((a,x)=>a+x.sec*(x.uni?2:1),0);const f=Math.max(.5,Math.min(2.4,(target-over-F)/(H||1)));
   return items.map(x=>x.fix?x:{...x,sec:Math.max(15,Math.min(90,Math.round(x.sec*f/5)*5))})}
-function yPlan(w){w=Math.min(12,Math.max(1,w|0));const st=yStageOf(w);const d=YW[w];
+function yPlan(w){w=Math.min(YN,Math.max(1,w|0));const st=yStageOf(w);const d=YW[w];
   let items=[...d.w.map(k=>yItem(k,"warm")),...d.m.map(k=>yItem(k,"main")),yItem("savasana","cool",1,YSTAGE[st].cool)];items=yScale(items,yTarget(w));
   const secs=ySecs(items);return{week:w,stage:st,items,secs,min:Math.round(secs/60)}}
 function yQuick(){const items=yScale(YQUICK.map(k=>yItem(k,"main")),300);return{items,secs:ySecs(items),min:Math.round(ySecs(items)/60)}}
@@ -461,15 +650,21 @@ function ySteps(items){const out=[];for(const it of items){if(it.uni){out.push({
 
 /* ---------- state (S.yoga: start, done[week], log) ---------- */
 function yS(){if(!S.yoga||typeof S.yoga!=="object"||Array.isArray(S.yoga))S.yoga={start:null,done:{},log:[]};const y=S.yoga;
-  if(!y.done||typeof y.done!=="object"||Array.isArray(y.done))y.done={};if(!Array.isArray(y.log))y.log=[];else if(y.log.some(l=>!l||typeof l!=="object"))y.log=y.log.filter(l=>l&&typeof l==="object");if(typeof y.start!=="number")y.start=null;return y}
+  if(!y.done||typeof y.done!=="object"||Array.isArray(y.done))y.done={};if(!Array.isArray(y.log))y.log=[];else if(y.log.some(l=>!l||typeof l!=="object"))y.log=y.log.filter(l=>l&&typeof l==="object");if(typeof y.start!=="number")y.start=null;
+  yMigrate(y);return y}
+/* 3.2 migration (idempotent): the 12 weeks up to 3.1 keep their numbers in the 24-week plan (old stages 1+2 = Anfänger weeks 1–8, old stage 3 =
+   Fortgeschritten weeks 9–12), so every finished unit stays finished and unlocks the same; only invalid week keys are dropped. */
+function yMigrate(y){if(y.v!==2){for(const k of Object.keys(y.done)){const w=+k;if(!(Number.isInteger(w)&&w>=1&&w<=YN)||!y.done[k])delete y.done[k]}y.v=2}
+  if(![1,2,3].includes(y.startLv))y.startLv=1}
+function yBase(){return(yS().startLv-1)*YPW+1}
 function yCalWeek(){const y=yS();if(!y.start)return 1;return Math.max(1,Math.round((weekStart(new Date()).getTime()-y.start)/WEEKMS)+1)}
-function yFirstOpen(){const y=yS();for(let w=1;w<=12;w++)if(!y.done[w])return w;return 13}
-function yStageDone(st){const y=yS();for(let w=st*4-3;w<=st*4;w++)if(!y.done[w])return false;return true}
-function yStageCount(st){const y=yS();let n=0;for(let w=st*4-3;w<=st*4;w++)if(y.done[w])n++;return n}
-function yUnlocked(st){for(let s=1;s<st;s++)if(!yStageDone(s))return false;return true}
+function yFirstOpen(){const y=yS();for(let w=yBase();w<=YN;w++)if(!y.done[w])return w;return YN+1}
+function yStageDone(st){const y=yS();for(let w=(st-1)*YPW+1;w<=st*YPW;w++)if(!y.done[w])return false;return true}
+function yStageCount(st){const y=yS();let n=0;for(let w=(st-1)*YPW+1;w<=st*YPW;w++)if(y.done[w])n++;return n}
+function yUnlocked(st){const sl=yS().startLv;for(let s=1;s<st;s++)if(s>=sl&&!yStageDone(s))return false;return true}/* stages below the chosen start stage count as skipped */
 function yDoneThisWeek(){const ws=weekStart(new Date()).getTime();return yS().log.some(l=>l.kind==="plan"&&new Date(l.date).getTime()>=ws)}
 /* current plan week: advances with the calendar, never skips an open week, one unit per calendar week */
-function yCur(){const fo=yFirstOpen();if(fo>12)return{week:12,complete:true,wait:false,next:null};const w=Math.min(fo,yCalWeek());const wait=!!yS().done[w]||yDoneThisWeek();return{week:wait?fo:w,complete:false,wait,next:fo}}
+function yCur(){const fo=yFirstOpen();if(fo>YN)return{week:YN,complete:true,wait:false,next:null};const y=yS();let skip=0;for(let w=1;w<fo;w++)if(!y.done[w])skip++;/* weeks skipped by the start stage */const w=Math.min(fo,yCalWeek()+skip);const wait=!!yS().done[w]||yDoneThisWeek();return{week:wait?fo:w,complete:false,wait,next:fo}}
 function yValidRun(r){return r&&typeof r==="object"&&Array.isArray(r.steps)&&r.steps.length&&r.steps.every(s=>s&&YP[s.k]&&s.sec>0)&&typeof r.i==="number"}
 (function yInit(){yS();if(S.yrun&&!yValidRun(S.yrun))S.yrun=null;if(S.yrun&&S.yrun.ph!=="done"&&!S.yrun.paused){/* app was closed: continue paused at the current pose */const r=S.yrun;const st=r.steps[Math.min(r.i,r.steps.length-1)];r.paused=true;r.left=r.ph==="hold"?st.sec:yPrepOf(r);r.end=null}})();
 function yPrepOf(r){const st=r.steps[r.i];return st&&st.side===2?YSW:YPREP}
@@ -520,6 +715,10 @@ function yPauseToggle(){const r=S.yrun;if(!r||r.ph==="done")return;const now=Dat
   save();yRender();nativeState()}
 function yJump(i){const r=S.yrun;if(!r)return;r.i=i;if(r.i>=r.steps.length){yFinish();save();yRender();nativeState();return}r.ph="prep";const d=yPrepOf(r);if(r.paused)r.left=d;else r.end=Date.now()+d*1000;r.ann=-1;save();yRender();nativeState();yAnnounce()}
 function ySkip(){const r=S.yrun;if(!r||r.ph==="done")return;const st=yCurStep();let j=r.i+1;if(st.side===1&&r.steps[j]&&r.steps[j].k===st.k&&r.steps[j].side===2)j++;yJump(j)}
+/* 3.2: swap the current Profi pose for its easier variant, only for this run (both sides, hold time kept) */
+function yUseAlt(){const r=S.yrun;if(!r||r.ph==="done")return;const st=yCurStep();const p=YP[st.k];const alt=p&&p.alt;if(!alt||!YP[alt])return;
+  let i0=r.i;if(st.side===2&&r.steps[i0-1]&&r.steps[i0-1].k===st.k)i0--;let i1=i0+1;if(r.steps[i0].side===1&&r.steps[i1]&&r.steps[i1].k===st.k&&r.steps[i1].side===2)i1++;
+  const rep=ySteps([{k:alt,sec:st.sec,uni:!!YP[alt].uni,part:st.part}]);r.steps.splice(i0,i1-i0,...rep);r.alts=(r.alts||0)+1;yJump(i0);toast("Leichtere Variante: "+YP[alt].n)}
 function ySideSwitch(){const r=S.yrun;if(!r)return;const st=yCurStep();if(st.side!==1)return;yJump(r.i+1)}
 function yAskClose(){const r=S.yrun;if(!r)return;if(r.ph==="done"){S.yrun=null;save();yClose();return}
   confirmSheet("Einheit beenden?",r.kind==="plan"?"Die Woche zählt erst, wenn die Einheit bis zum Ende gelaufen ist. Bei Schmerzen ist Aufhören immer richtig.":"Du kannst jederzeit neu starten.","Beenden",()=>{S.yrun=null;save();yClose()},`<button class="btn block" id="yLater">Pausieren & später weiter</button>`,()=>{$("#yLater").onclick=()=>{closeSheet();if(!S.yrun.paused)yPauseToggle();yClose()}})}
@@ -530,8 +729,8 @@ function yRegName(r){const x=YREG.find(a=>a[0]===r);return x?x[1]:r}
 function yRender(){const r=S.yrun;const el=$("#yogaInner");if(!r||!el)return;
   if(r.ph==="done"){const rec=r.rec||{dur:0,n:0};
     el.innerHTML=`<div style="text-align:center;padding:18px 0 6px"><div class="donecheck">✓</div><h1 style="font-size:34px;margin-top:10px">Einheit geschafft</h1><p class="muted" style="margin:6px 0 0">${esc(r.title)}${r.kind==="plan"?` · Stufe ${YSTAGE[yStageOf(r.week)].n}`:""}</p></div>
-     <div class="stats">${statTile(mmss(rec.dur),"Dauer")}${statTile(rec.n,"Haltungen")}${statTile(r.kind==="plan"?r.week+"/12":"–","Plan-Woche")}</div>
-     ${r.kind==="plan"?`<div class="hint">${r.week%4===0?`<b>Stufe ${yStageOf(r.week)} abgeschlossen.</b> ${r.week<12?`Stufe ${yStageOf(r.week)+1} ist jetzt freigeschaltet.`:"Der ganze Plan ist geschafft."}`:"Nächste Yoga-Einheit ab nächster Woche, am besten an einem Tag ohne Krafttraining."}</div>`:`<div class="hint">Zählt nicht zum Krafttraining und nicht zur Erholung zwischen Drücken, Ziehen und Beinen.</div>`}
+     <div class="stats">${statTile(mmss(rec.dur),"Dauer")}${statTile(rec.n,"Haltungen")}${statTile(r.kind==="plan"?r.week+"/"+YN:"–","Plan-Woche")}</div>
+     ${r.kind==="plan"?`<div class="hint">${r.week%YPW===0?`<b>Stufe ${YSTAGE[yStageOf(r.week)].n} abgeschlossen.</b> ${r.week<YN?`Stufe ${YSTAGE[yStageOf(r.week)+1].n} ist jetzt freigeschaltet.`:"Der ganze Plan ist geschafft."}`:"Nächste Yoga-Einheit ab nächster Woche, am besten an einem Tag ohne Krafttraining."}</div>`:`<div class="hint">Zählt nicht zum Krafttraining und nicht zur Erholung zwischen Drücken, Ziehen und Beinen.</div>`}
      <button class="btn primary block" id="yDone" style="margin-top:auto">Fertig</button>`;
     $("#yDone").onclick=()=>{S.yrun=null;save();yClose();toast("Yoga gespeichert")};return}
   const st=yCurStep();const p=YP[st.k];const n=r.steps.length;const prep=r.ph==="prep";
@@ -542,7 +741,7 @@ function yRender(){const r=S.yrun;const el=$("#yogaInner");if(!r||!el)return;
     <button class="iconbtn" id="yInfo" aria-label="Haltung erklären"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg></button></div>
    <div class="progress" aria-label="Fortschritt der Einheit"><span style="width:${pct}%"></span></div>
    <div class="row between" style="font-size:12.5px"><span class="muted" id="yPos">Haltung ${r.i+1} von ${n}</span><span class="muted">Danach: ${esc(nxtTxt)}</span></div>
-   <div class="ysafe" role="note">Bei Schmerz sofort abbrechen – nur sanft dehnen.</div>
+   <div class="ysafe" role="note">Bei Schmerz sofort abbrechen – nur sanft dehnen.</div>${p.risk?`<div class="ywarn" role="alert" id="yRisk"><b>Achtung:</b> ${esc(YRISK[p.risk])}</div>`:""}
    <div class="stage ystage"><canvas id="ycv" ${st.side===2?'style="transform:scaleX(-1)"':""}></canvas><span class="phase" id="yph"></span><span class="tempo">${esc(YLV[p.lv])}</span><span class="readout">${esc(yRegName(p.r).toUpperCase())}${st.side?` · SEITE ${st.side}`:""}</span></div>
    <div class="row between" style="align-items:center;gap:12px">
      <div style="min-width:0"><div class="label" id="yLbl">${prep?(st.side===2?"Seite wechseln":"Gleich geht's los"):r.paused?"Pausiert":"Halten"}</div><h1 class="exname" style="font-size:30px">${esc(p.n)}</h1>
@@ -550,36 +749,45 @@ function yRender(){const r=S.yrun;const el=$("#yogaInner");if(!r||!el)return;
      <div class="yring"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" class="yb"/><circle cx="50" cy="50" r="44" class="yf${prep?" yp":""}" id="yRc" stroke-dasharray="${Y_C}" stroke-dashoffset="0"/></svg><div class="t num" id="yTm"></div></div></div>
    <div class="hint"><b>Atem:</b> ${esc(p.a)}</div>
    <ol class="cues">${p.c.map(c=>`<li>${esc(c)}</li>`).join("")}</ol>
-   <div class="ybtns"><button class="btn ${r.paused?"primary":""}" id="yP">${r.paused?"Weiter":"Pause"}</button>${st.side===1?`<button class="btn" id="yS">Seite wechseln</button>`:""}<button class="btn ghost" id="yN">Überspringen</button></div>`;
+   <div class="ybtns"><button class="btn ${r.paused?"primary":""}" id="yP">${r.paused?"Weiter":"Pause"}</button>${st.side===1?`<button class="btn" id="yS">Seite wechseln</button>`:""}<button class="btn ghost" id="yN">Überspringen</button></div>${p.alt&&YP[p.alt]?`<button class="btn block" id="yAlt">Leichtere Variante: ${esc(YP[p.alt].n)}</button>`:""}`;
   /* 2.2: the stand -> pose -> stand loop runs independently of the countdown; a re-render of the same step keeps its loop time */
   const now_=performance.now();if(!yRender._a||yRender._a.i!==r.i||yRender._a.k!==st.k)yRender._a={i:r.i,k:st.k,t0:now_};
   attachAnim($("#ycv"),"y_"+st.k,{phaseEl:$("#yph"),offset:now_-yRender._a.t0});
-  $("#yX").onclick=yAskClose;$("#yInfo").onclick=()=>yPoseSheet(st.k);$("#yP").onclick=()=>{audio();yPauseToggle()};$("#yN").onclick=ySkip;const sb=$("#yS");if(sb)sb.onclick=ySideSwitch;
+  $("#yX").onclick=yAskClose;$("#yInfo").onclick=()=>yPoseSheet(st.k);$("#yP").onclick=()=>{audio();yPauseToggle()};$("#yN").onclick=ySkip;const sb=$("#yS");if(sb)sb.onclick=ySideSwitch;const ab=$("#yAlt");if(ab)ab.onclick=yUseAlt;
   yTick._s=null;yTick()}
-function yPoseSheet(k){const p=YP[k];const inW=[];for(let w=1;w<=12;w++)if(YW[w].w.includes(k)||YW[w].m.includes(k))inW.push(w);
+function yPoseSheet(k){const p=YP[k];const inW=[];for(let w=1;w<=YN;w++)if(YW[w].w.includes(k)||YW[w].m.includes(k))inW.push(w);
   openSheet(`<div class="row between"><div><div class="label">${esc(YLV[p.lv])} · ${esc(yRegName(p.r))}</div><h2 style="font-size:28px;margin-top:4px">${esc(p.n)}</h2>${p.sa?`<div class="muted" style="font-size:13px">${esc(p.sa)}</div>`:""}</div><button class="iconbtn" data-close aria-label="Schließen"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
    <div class="stage"><canvas id="ysc"></canvas><span class="phase" id="ysp"></span><span class="readout">${esc(p.z.toUpperCase())}</span></div>
    <div class="tagline"><span class="tag">${p.sec} s halten</span>${p.uni?`<span class="tag">einseitig · Seite wechseln</span>`:`<span class="tag">beidseitig</span>`}${inW.length?`<span class="tag">Plan: Woche ${inW.join(", ")}</span>`:""}</div>
    <div><div class="label" style="margin-bottom:8px">So geht's</div><ol class="cues">${p.c.map(c=>`<li>${esc(c)}</li>`).join("")}</ol></div>
-   <div class="hint"><b>Atem:</b> ${esc(p.a)}</div><div class="ysafe">Bei Schmerz sofort abbrechen – nur sanft dehnen.</div>`);
+   <div class="hint"><b>Atem:</b> ${esc(p.a)}</div>${p.risk?`<div class="ywarn"><b>Achtung:</b> ${esc(YRISK[p.risk])}</div>`:""}${p.alt&&YP[p.alt]?`<div class="hint"><b>Leichtere Variante:</b> ${esc(YP[p.alt].n)} – im Ablauf mit „Leichtere Variante“ tauschen.</div>`:""}<div class="ysafe">Bei Schmerz sofort abbrechen – nur sanft dehnen.</div>`);
   attachAnim($("#ysc"),"y_"+k,{phaseEl:$("#ysp")})}
 function yPlanSheet(){const c=yCur();const y=yS();
-  openSheet(`<div class="row between"><h2 style="font-size:24px">Yoga · 12-Wochen-Plan</h2><button class="iconbtn" data-close aria-label="Schließen"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-   <p class="muted" style="margin:0;font-size:13.5px">Eine Einheit pro Woche, am besten an einem Tag ohne Krafttraining. Aufwärmen, Hauptteil für Schultern und Hüfte, dann Endentspannung. Die nächste Stufe wird frei, wenn alle 4 Wochen der vorherigen geschafft sind.</p>
-   ${[1,2,3].map(st=>{const un=yUnlocked(st);return`<div class="card${un?"":" ylock"}" data-stage="${st}"><div class="row between"><div class="label">Stufe ${st} · ${YSTAGE[st].n}</div><span class="tag">${un?yStageCount(st)+" / 4":"gesperrt"}</span></div>
-     <div class="muted" style="font-size:12.5px">${un?esc(YSTAGE[st].t):`Wird freigeschaltet, wenn Stufe ${st-1} abgeschlossen ist (${yStageCount(st-1)} von 4 Einheiten).`}</div>
-     ${[0,1,2,3].map(i=>{const w=(st-1)*4+1+i;const P=yPlan(w);const done=!!y.done[w];const cur=!c.complete&&w===c.week;
+  openSheet(`<div class="row between"><h2 style="font-size:24px">Yoga · 24-Wochen-Plan</h2><button class="iconbtn" data-close aria-label="Schließen"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+   <p class="muted" style="margin:0;font-size:13.5px">Eine Einheit pro Woche, am besten an einem Tag ohne Krafttraining. Aufwärmen, Hauptteil für Schultern und Hüfte, dann Endentspannung. Die nächste Stufe wird frei, wenn alle 8 Wochen der vorherigen geschafft sind.</p>
+   ${yStartPick()}
+   ${[1,2,3].map(st=>{const un=yUnlocked(st);const skip=st<y.startLv;return`<div class="card${un?"":" ylock"}" data-stage="${st}"><div class="row between"><div class="label">Stufe ${st} · ${YSTAGE[st].n}</div><span class="tag">${skip?"übersprungen · "+yStageCount(st)+" / "+YPW:un?yStageCount(st)+" / "+YPW:"gesperrt"}</span></div>
+     <div class="muted" style="font-size:12.5px">${un?esc(YSTAGE[st].t):`Wird freigeschaltet, wenn Stufe ${st-1} abgeschlossen ist (${yStageCount(st-1)} von ${YPW} Einheiten).`}</div>
+     ${Array.from({length:YPW},(_,i)=>{const w=(st-1)*YPW+1+i;const P=yPlan(w);const done=!!y.done[w];const cur=!c.complete&&w===c.week;
        const act=!un?"":cur&&!c.wait?`<button class="btn small" data-yweek="${w}">Starten</button>`:done?`<button class="btn small ghost" data-yrep="${w}">Wiederholen</button>`:cur&&c.wait?`<span class="tag">ab nächster Woche</span>`:"";
        return`<div class="ywk" data-w="${w}"><div style="min-width:0"><b>Woche ${w}${done?" ✓":""}</b> <span class="muted" style="font-size:12.5px">· ca. ${P.min} Min.</span><div class="muted" style="font-size:12px">${P.items.filter(x=>x.part==="main").map(x=>esc(YP[x.k].n)).join(" · ")}</div></div>${act}</div>`}).join("")}</div>`}).join("")}
    <button class="btn block" data-close>Schließen</button>`);
   for(const b of document.querySelectorAll("[data-yweek]"))b.onclick=()=>yStart("plan",{week:+b.dataset.yweek});
-  for(const b of document.querySelectorAll("[data-yrep]"))b.onclick=()=>yStart("repeat",{week:+b.dataset.yrep})}
+  for(const b of document.querySelectorAll("[data-yrep]"))b.onclick=()=>yStart("repeat",{week:+b.dataset.yrep});
+  yBindStartPick(yPlanSheet)}
+/* 3.2 · Startstufe (Yoga-Einstellungen): Standard Anfänger, Profi nur nach Sicherheitsabfrage; erledigte Einheiten bleiben immer erhalten */
+function yStartPick(){const sl=yS().startLv;return`<div class="ystartpick"><div class="label">Startstufe</div><div class="seg" id="yLvSeg">${[1,2,3].map(l=>`<button type="button" data-ystart="${l}" aria-pressed="${sl===l}">${YLV[l]}</button>`).join("")}</div>
+  <div class="muted" style="font-size:12px">Ab welcher Stufe dein Plan beginnt. Niedrigere Stufen gelten dann als übersprungen, erledigte Wochen bleiben erhalten.</div></div>`}
+function yBindStartPick(rerender){for(const b of document.querySelectorAll("[data-ystart]"))b.onclick=()=>{const l=+b.dataset.ystart;const y=yS();if(l===y.startLv)return;
+  const apply=()=>{y.startLv=l;save();toast("Startstufe: "+YLV[l]);if(rerender)rerender()};
+  if(l===3)confirmSheet("Mit Profi starten?","Profi enthält Armbalancen und Umkehrhaltungen (Krähe, Kopfstand, Schulterstand, Pflug, Rad). Nur wählen, wenn du die Fortgeschritten-Haltungen sicher beherrschst und keine Schulter-, Nacken- oder Rückenbeschwerden hast. Jede Profi-Haltung lässt sich im Ablauf durch eine leichtere Variante ersetzen.","Ja, mit Profi starten",apply);
+  else apply()}}
 function yHomeCard(){const c=yCur();const r=S.yrun;const tt=trainedToday();const P=yPlan(c.week);const st=yStageOf(c.week);
   let main;
   if(r&&r.ph!=="done")main=`<div class="row between"><div><b class="ytitle">${esc(r.title)}</b><div class="muted" style="font-size:13px">läuft · Haltung ${Math.min(r.i+1,r.steps.length)} von ${r.steps.length}</div></div><button class="btn small" id="yResume">Fortsetzen</button></div>`;
-  else if(c.complete)main=`<div><b class="ytitle">Plan geschafft ✓</b><div class="muted" style="font-size:13px">Alle 12 Wochen erledigt. Einheiten lassen sich im Plan wiederholen.</div></div>`;
-  else if(c.wait)main=`<div><b class="ytitle">Yoga diese Woche erledigt ✓</b><div class="muted" style="font-size:13px">Woche ${c.next} von 12 ab Montag · ca. ${yPlan(c.next).min} Min.</div></div>`;
-  else main=`<div class="row between"><div style="min-width:0"><b class="ytitle">Woche ${c.week} von 12 · ${YSTAGE[st].n}</b><div class="muted" style="font-size:13px">ca. ${P.min} Min. · ${tt.length?"heute lieber nur dehnen":"am besten an einem Tag ohne Krafttraining"}</div></div><button class="btn small" id="yStartBtn">Starten</button></div>`;
+  else if(c.complete)main=`<div><b class="ytitle">Plan geschafft ✓</b><div class="muted" style="font-size:13px">Alle 24 Wochen erledigt. Einheiten lassen sich im Plan wiederholen.</div></div>`;
+  else if(c.wait)main=`<div><b class="ytitle">Yoga diese Woche erledigt ✓</b><div class="muted" style="font-size:13px">Woche ${c.next} von ${YN} ab Montag · ca. ${yPlan(c.next).min} Min.</div></div>`;
+  else main=`<div class="row between"><div style="min-width:0"><b class="ytitle">Woche ${c.week} von ${YN} · ${YSTAGE[st].n}</b><div class="muted" style="font-size:13px">ca. ${P.min} Min. · ${tt.length?"heute lieber nur dehnen":"am besten an einem Tag ohne Krafttraining"}</div></div><button class="btn small" id="yStartBtn">Starten</button></div>`;
   return`<div class="card ycard" id="yCard"><div class="row between"><div class="label">Zusatz · Yoga & Dehnen</div><button class="chip" id="yPlanBtn">Plan</button></div>${main}
    <div class="row" style="gap:6px;flex-wrap:wrap">${tt.length?`<button class="chip" id="yPostBtn">Dehnen nach dem Training · 5 Min.</button>`:""}<button class="chip" id="yQuickBtn">Schnell-Dehnen · 5 Min.</button></div></div>`}
 function yBindHome(){const b=(id,fn)=>{const e=$(id);if(e)e.onclick=fn};
@@ -591,12 +799,12 @@ let LIBMODE="kraft",YLF={lv:0,r:""};
 function libSeg(){return`<div class="seg" id="libSeg"><button data-lm="kraft" aria-pressed="${LIBMODE==="kraft"}">Kraft</button><button data-lm="yoga" aria-pressed="${LIBMODE==="yoga"}">Yoga & Dehnen</button></div>`}
 function bindLibSeg(){for(const b of document.querySelectorAll("[data-lm]"))b.onclick=()=>{LIBMODE=b.dataset.lm;RENDER.lib();window.scrollTo(0,0)}}
 function renderYogaLib(){const ks=YKEYS.filter(k=>(!YLF.lv||YP[k].lv===YLF.lv)&&(!YLF.r||YP[k].r===YLF.r));
-  $("#v-lib").innerHTML=`${libSeg()}<h1 style="font-size:34px">Yoga & Dehnen</h1><p class="muted" style="margin:-8px 0 0">${YKEYS.length} anfängertaugliche Haltungen, Schwerpunkt Schultern und Hüfte. Zusatz zum Krafttraining.</p>
-   <div class="row" style="gap:6px;flex-wrap:wrap"><button class="btn small" id="yLibPlan">12-Wochen-Plan</button><button class="btn small ghost" id="yLibQuick">Schnell-Dehnen · 5 Min.</button></div>
+  $("#v-lib").innerHTML=`${libSeg()}<h1 style="font-size:34px">Yoga & Dehnen</h1><p class="muted" style="margin:-8px 0 0">${YKEYS.length} Haltungen in drei Stufen (Anfänger, Fortgeschritten, Profi), Schwerpunkt Schultern und Hüfte. Zusatz zum Krafttraining.</p>
+   <div class="row" style="gap:6px;flex-wrap:wrap"><button class="btn small" id="yLibPlan">24-Wochen-Plan</button><button class="btn small ghost" id="yLibQuick">Schnell-Dehnen · 5 Min.</button></div>
    <div class="label">Stufe</div><div class="row" style="flex-wrap:wrap;gap:6px">${[0,1,2,3].map(l=>`<button class="chip" data-ylv="${l}" aria-pressed="${YLF.lv===l}">${l?YLV[l]:"Alle"}</button>`).join("")}</div>
    <div class="label">Region</div><div class="row" style="flex-wrap:wrap;gap:6px"><button class="chip" data-yr="" aria-pressed="${!YLF.r}">Alle</button>${YREG.map(([k,l])=>`<button class="chip" data-yr="${k}" aria-pressed="${YLF.r===k}">${esc(l)}</button>`).join("")}</div>
    <div class="label" id="yCount">${ks.length} Haltungen</div>
-   ${ks.map(k=>{const p=YP[k];return`<button class="libitem" data-ypose="${k}"><canvas data-ymini="${k}"></canvas><span><b>${esc(p.n)}</b><small>${esc(YLV[p.lv])} · ${esc(yRegName(p.r))}${p.sa?" · "+esc(p.sa):""}</small></span><span class="sr">${p.sec} s${p.uni?" je S.":""}</span></button>`}).join("")||`<div class="empty">Keine Haltung für diese Auswahl.</div>`}
+   ${ks.map(k=>{const p=YP[k];return`<button class="libitem" data-ypose="${k}"><canvas data-ymini="${k}"></canvas><span><b>${esc(p.n)}</b><small>${esc(YLV[p.lv])} · ${esc(yRegName(p.r))}${p.sa?" · "+esc(p.sa):""}${p.risk?" · ⚠":""}</small></span><span class="sr">${p.sec} s${p.uni?" je S.":""}</span></button>`}).join("")||`<div class="empty">Keine Haltung für diese Auswahl.</div>`}
    <div class="ysafe">Bei Schmerz sofort abbrechen – nur sanft dehnen.</div>`;
   bindLibSeg();for(const c of document.querySelectorAll("[data-ymini]"))attachAnim(c,"y_"+c.dataset.ymini,{still:1});
   for(const b of document.querySelectorAll("[data-ylv]"))b.onclick=()=>{YLF.lv=+b.dataset.ylv;renderYogaLib()};
@@ -616,6 +824,8 @@ function renderYogaLib(){const ks=YKEYS.filter(k=>(!YLF.lv||YP[k].lv===YLF.lv)&&
 .ycard .ytitle{font-family:var(--display);font-size:17px;letter-spacing:.04em;text-transform:uppercase}
 .ywk{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
 .ylock{opacity:.55}
+.ywarn{font-size:12.5px;color:var(--warn-text);border:1px solid rgba(245,90,46,.55);background:rgba(245,90,46,.10);border-radius:4px;padding:7px 10px;line-height:1.35}
+.ystartpick{display:grid;gap:6px}
 #libSeg{margin-bottom:2px}
 body.pip #yoga{display:none!important}`;document.head.appendChild(st);
   const ov=document.createElement("div");ov.id="yoga";ov.className="overlay";ov.hidden=true;ov.innerHTML=`<div class="inner" id="yogaInner"></div>`;document.body.insertBefore(ov,$("#onb"))}
@@ -627,8 +837,10 @@ body.pip #yoga{display:none!important}`;document.head.appendChild(st);
   const _ns=nativeState;nativeState=function(force){if(yNative(force))return;return _ns(force)};
   const _pip=pipRender;pipRender=function(){const v=$("#pipView");if(v&&S.yrun&&!$("#yoga").hidden){yPip(v);return}return _pip()};
   const _back=window.appBack;window.appBack=function(){if(!$("#yoga").hidden&&$("#sheetBg").hidden&&$("#onb").hidden){yAskClose();return}return _back()};
+  const _set=renderSet;renderSet=function(){_set();const v=$("#verLine");const h=`<div class="card" id="yogaSetCard"><div class="label">Yoga</div>${yStartPick()}<button class="btn small" id="ySetPlan">24-Wochen-Plan öffnen</button></div>`;
+    if(v)v.insertAdjacentHTML("beforebegin",h);else $("#v-set").insertAdjacentHTML("beforeend",h);yBindStartPick(()=>RENDER.set());const b=$("#ySetPlan");if(b)b.onclick=yPlanSheet};RENDER.set=renderSet;
   const _res=window.appResume;window.appResume=function(){_res();if(S.yrun&&!$("#yoga").hidden){yTick();nativeState(true)}};
-  const _bk=openBackup;openBackup=function(){_bk();const y=yS();const p=[...document.querySelectorAll("#sheet p.muted")].pop();if(p)p.textContent+=` · ${y.log.length} Yoga-Einheiten (Plan: ${Object.keys(y.done).length}/12 Wochen)`}}
+  const _bk=openBackup;openBackup=function(){_bk();const y=yS();const p=[...document.querySelectorAll("#sheet p.muted")].pop();if(p)p.textContent+=` · ${y.log.length} Yoga-Einheiten (Plan: ${Object.keys(y.done).length}/${YN} Wochen)`}}
 function yNative(force){const A=nat();if(!A||!S.yrun||$("#yoga").hidden)return false;const r=S.yrun;const st=yCurStep();const p=YP[st.k];
   const o={active:true,pip:S.settings.pip!==false,notif:S.settings.notif!==false,jai:jaiOn(),sound:S.settings.sound!==false,start:r.start,yoga:true};
   if(r.ph==="done"){o.phase="done";o.title="Yoga geschafft";o.text="Tippen zum Abschließen"}
