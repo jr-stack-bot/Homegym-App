@@ -13,6 +13,7 @@
 # Aufrufe:
 #   tools/build.sh fonts   # lädt die Schriften per "npm pack" nach tools/.cache
 #   tools/build.sh         # baut out/index.html und dist/Homegym.apk
+# Hinweis: Bei jeder neuen Version den Download-Link oben im README auf die neue APK ändern.
 set -euo pipefail
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
 CACHE="$REPO/tools/.cache"

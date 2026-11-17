@@ -1,5 +1,11 @@
 # Homegym – dein persönlicher Trainingscoach
 
+## Download
+
+**[Homegym 3.1 herunterladen (APK, ca. 3 MB)](https://github.com/jr-stack-bot/homegym-app/raw/main/releases/Homegym-3.1.apk)**
+
+Auf dem Android-Handy antippen, Datei öffnen und die Installation aus unbekannter Quelle einmalig erlauben. Ab Android 7.
+
 Android-App für Krafttraining zu Hause: geführte Trainings mit animierten Übungen, Pausen-Timer und dem Sprachassistenten JAI, komplett offline.
 
 ![Homegym: Startseite, Training, Pausen-Timer und Übungsbibliothek](docs/screenshots/banner.png)
@@ -40,7 +46,7 @@ Android-App für Krafttraining zu Hause: geführte Trainings mit animierten Übu
 ![Startseite in allen 8 Designs nebeneinander](docs/screenshots/08_designs_vergleich.png)
 
 ## Installation
-1. Die aktuelle APK aus dem Ordner [`releases/`](releases/) laden (aktuell `releases/Homegym-3.1.apk`).
+1. Die APK über den [Download-Link ganz oben](https://github.com/jr-stack-bot/homegym-app/raw/main/releases/Homegym-3.1.apk) laden (aktuell Version 3.1; ältere Versionen liegen im Ordner [`releases/`](releases/)).
 2. Auf dem Handy öffnen und „Installation aus unbekannten Quellen“ erlauben.
 3. Beim ersten Training die Benachrichtigungen zulassen.
 
@@ -64,6 +70,8 @@ Voraussetzungen: JDK, python3, npm. Die Werkzeuge (apktool 2.9.3, uber-apk-signe
 tools/build.sh fonts   # Schriften per npm holen (einmalig)
 tools/build.sh         # -> out/index.html und dist/Homegym.apk
 ```
+
+Bei jeder neuen Version den Download-Link oben im README auf die neue APK ändern.
 
 Die Java-Klassen werden mit `--release 8` kompiliert (keine Lambdas), damit `dx` sie für minSdk 24 übersetzen kann.
 
