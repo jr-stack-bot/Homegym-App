@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.3
+- **Griffkraft & Hängen** (neu, Ziel: 1–2 Minuten frei hängen):
+  - Am **Zieh-Tag** ein eigener Block nach den Hauptübungen in **4 Stufen**: Hängen mit Fußstütze → aktives Schulterblatt-Hängen → freies Hängen → Handtuch-Hang. Die Zeit steigt automatisch um 5 s, oben in der Stufe geht es eine Stufe weiter; zweimal verfehlt gibt es 5 s weniger.
+  - Am **Beintag** **Farmer's Hold** auf Zeit, passend zu den Geräten (Kurzhanteln, Kettlebells oder Taschen/Kanister).
+  - **Hang-Test alle 4 Wochen** (1 Versuch) mit Kurve im Verlauf und Ziellinien 1 und 2 Minuten; freiwillige **Hang-Pause** (3 × 10 s) an freien Tagen.
+  - **Sicherheits-Hinweise** für Schulter, Ellbogen und Handgelenk. Hauptübungen bleiben unverändert, jede Einheit bleibt bei max. 60 Minuten.
+- **Anzeige-Fixes**:
+  - Figuren werden nicht mehr am Bildrand oder unter Beschriftungen abgeschnitten; kein Überlauf bei 360 px Breite oder großer Schrift, lange Blätter scrollen statt die Animation zu quetschen.
+  - Halte-Übungen zeigen auf der Bühne „Halten · Zeit“ statt Tempo, beim Hängen gibt es kein Feld „Zusatz kg“, Übungen mit Körpergewicht ohne „Gewicht wählen“-Hinweis.
+  - Hang-Pause nur an freien Tagen (Ruhetag nach einem Training oder Wochenziel erreicht), nicht an Plan-Tagen; das Backup nennt Hang-Tests und Hang-Pausen nur, wenn vorhanden.
+
 ## 3.2
 - **Mehr Yoga in drei Stufen**:
   - Yoga wächst von **56 auf 96 Haltungen**, neu eingeteilt in die Stufen **Anfänger**, **Fortgeschritten** und **Profi**.

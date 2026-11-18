@@ -1,4 +1,4 @@
-# Homegym 3.2 @ Joschy – Yoga in 3 Stufen (96 Haltungen), 24-Wochen-Plan, Startstufe, Migration, Profi-Sicherheit; 41 neue Übungen ohne Geräte
+# Homegym 3.2/3.3 @ Joschy – Yoga in 3 Stufen (96 Haltungen), 24-Wochen-Plan, Startstufe, Migration, Profi-Sicherheit; 41 neue Übungen ohne Geräte
 import os as _os
 _REPO=_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
 _OUTDIR=_os.environ.get('HOMEGYM_OUT',_os.path.join(_REPO,'out'))
@@ -23,8 +23,8 @@ async def main():
         b=await p.chromium.launch();ctx=await b.new_context(viewport={'width':390,'height':844},accept_downloads=True);pg=await ctx.new_page()
         errs=[];pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:errs.append(m.text) if m.type=='error' else None)
         await setup(pg,U)
-        v=await pg.evaluate("[APP_VER,BK_VER]");chk(v==['3.2',5],'version 3.2, backup format 5 '+str(v))
-        await pg.evaluate("go('set')");vl=await pg.text_content('#verLine');chk('Version 3.2 · @ Joschy' in vl,vl)
+        v=await pg.evaluate("[APP_VER,BK_VER]");chk(v==['3.3',5],'version 3.3, backup format 5 '+str(v))
+        await pg.evaluate("go('set')");vl=await pg.text_content('#verLine');chk('Version 3.3 · @ Joschy' in vl,vl)
         # 1) catalogue
         r=await pg.evaluate("""()=>{const lv=[1,2,3].map(l=>YKEYS.filter(k=>YP[k].lv===l).length);const bad=YKEYS.filter(k=>{const p=YP[k];return!p.n||!p.sa&&p.lv>1&&false||!(p.c.length>=2&&p.c.length<=3)||!p.a||!YREG.some(x=>x[0]===p.r)||!(p.sec>0)||!AN['y_'+k]});
           const prof=YKEYS.filter(k=>YP[k].lv===3);const noAlt=prof.filter(k=>!YP[k].alt||!YP[YP[k].alt]||YP[YP[k].alt].lv>=3);
@@ -122,12 +122,21 @@ async def main():
         chk(not nd['over'] and nd['distinct']>=40,f"'Ohne Geräte': no exercise more than 2x per 4-week cycle ({nd['distinct']} different exercises) {nd['over']}")
         # 10) Joschys Homegym (and the other presets): plan identical to 3.1
         po=await ctx.new_page();await setup(po,UO)
-        PLAN="(g)=>{S.profile.gear=eval(g);const o={};for(let w=1;w<=4;w++)for(const d of DAYS)o[w+d]=planItems(d,false,w).map(x=>[x.ex,x.sets,x.lo,x.hi]);S.profile.gear=[...JOSCHYGEAR];return o}"
+        # 3.3 Griffkraft & Hängen (@ Joschy): the new block (blk items) is an intended addition; for the hour limit only assistance
+        # and bonus sets may be shortened. Exercises, order and rep targets stay identical to 3.1 everywhere, and the main lifts
+        # (Kniebeuge, Bankdrücken, Kreuzheben, Schulterdrücken, Rudern, Klimmzug incl. Negativ-Klimmzüge) keep their sets at EVERY
+        # position (not only slot 0) – strict check of exercise, sets, reps and order.
+        MAINRE=r"/Kniebeuge|Bankdrück|Kreuzheb|Schulterdrück|Rudern|Klimmz|Chin-up/i"
+        PLAN="(g)=>{const M="+MAINRE+";S.profile.gear=eval(g);const o={};for(let w=1;w<=4;w++)for(const d of DAYS)o[w+d]=planItems(d,false,w).filter(x=>!x.blk).map(x=>[x.ex,x.sets,x.lo,x.hi,x.slot===0||M.test(EX[x.ex].n)]);S.profile.gear=[...JOSCHYGEAR];return o}"
+        def same31(a,b2):
+            return a.keys()==b2.keys() and all(len(a[k])==len(b2[k]) and all(x[0]==y[0] and x[2:4]==y[2:4] and x[4]==y[4] and (x[1]==y[1] if y[4] else 1<=x[1]<=y[1]) for x,y in zip(a[k],b2[k])) for k in a)
+        def mains(a):return sum(1 for k in a for x in a[k] if x[4])
         for g,name in [('[...JOSCHYGEAR]','Joschys Homegym'),('ALLGEAR','Alles')]:
             a=await pg.evaluate(PLAN,g);b2=await po.evaluate(PLAN,g)
-            chk(a==b2,f'preset {name}: all 12 sessions identical to 3.1')
+            if not same31(a,b2):print('DIFF',[(k,x,y) for k in a for x,y in zip(a[k],b2[k]) if x!=y][:8])
+            chk(same31(a,b2) and mains(b2)>=12,f'preset {name}: all 12 sessions as in 3.1, main lifts strict at every position ({mains(b2)} main-lift slots); plus grip block, only assistance/bonus sets may be shortened for the hour')
         a=await pg.evaluate(PLAN,'["db","bench","band"]');b2=await po.evaluate(PLAN,'["db","bench","band"]')
-        chk(a==b2,'preset Nur Kurzhanteln: all 12 sessions identical to 3.1 (exercises, sets, reps)')
+        chk(same31(a,b2) and mains(b2)>=12,f'preset Nur Kurzhanteln: all 12 sessions as in 3.1, main lifts strict at every position ({mains(b2)} slots); plus grip block')
         await po.close()
         sw=await pg.evaluate("()=>{const it=planItems('A',false,1)[0];const p=swapPool(it,'A');return{p,gear:p.filter(k=>TRANK[EX[k].type]<3).length,bw:p.filter(k=>EX[k].bwx).length}}")
         chk(sw['p'][0]=='bench' and sw['gear']>=2 and sw['bw']>=1,f"swap dialog (Joschy, bench): equipment first, bodyweight options added {sw['p']}")

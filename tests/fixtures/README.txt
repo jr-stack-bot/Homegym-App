@@ -16,3 +16,13 @@ v31/index.html  eingefrorener Stand der Version 3.1, byte-gleich zu android/asse
 
 Neu erzeugen:   git show 7f0aa3d:android/assets/index.html > tests/fixtures/v31/index.html
 Anderer Ordner: Umgebungsvariable HOMEGYM_V31=<ordner mit index.html>
+
+Testdaten für tests/t32.py
+
+v32/index.html  eingefrorener Stand der Version 3.2, byte-gleich zu android/assets/index.html aus
+                Commit 7a3ce77 (= assets/index.html aus releases/Homegym-3.2.apk). t32 prüft damit, dass
+                das Hang-/Griffkraft-Programm nur einen Block ergänzt: gleiche Übungen und Wiederholungsziele,
+                Hauptübungen mit gleichen Sätzen. Den 3.1-Stand (v31) nutzt t32 für Migration und Backup.
+
+Neu erzeugen:   git show 7a3ce77:android/assets/index.html > tests/fixtures/v32/index.html
+Anderer Ordner: Umgebungsvariable HOMEGYM_V32=<ordner mit index.html>

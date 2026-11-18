@@ -169,6 +169,7 @@ textarea{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
 .setchip.done{background:rgba(var(--ac),.12);border-color:rgba(var(--ac),.6);color:var(--fg)}
 .setchip.cur{border-color:var(--fg);color:var(--fg)}
 .steppers{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stepper .label .opt{font-size:.82em;letter-spacing:.06em;opacity:.75;margin-left:2px}/* 3.3: optional added weight */
 .stepper{padding:10px;display:flex;flex-direction:column;align-items:center;gap:6px}
 .stepper .ctl{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;width:100%}
 .stepper .ctl button{height:44px;border-radius:var(--rs);border:1px solid var(--line2);color:var(--arc);font-size:24px;font-family:var(--display);font-weight:700}
@@ -196,6 +197,8 @@ textarea{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
 .restbtns{display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:10px;width:100%;max-width:420px}
 .sheet-bg{position:fixed;inset:0;background:var(--scrim);z-index:40;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(2px)}
 .sheet{background:linear-gradient(180deg,var(--sheet1),var(--sheet2));width:100%;max-width:640px;max-height:88vh;overflow-y:auto;border-top:1px solid var(--arc);box-shadow:0 -12px 40px rgba(var(--ac),.15);padding:18px max(16px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:14px}
+/* 3.3 (@ Joschy): sheet children keep their height; a long sheet scrolls instead of squeezing the animation stage (Krähe: feet cut off, region line on the figure) */
+.sheet>*{flex-shrink:0}
 .platebar{display:flex;align-items:center;gap:3px;min-height:110px;overflow-x:auto;padding:6px 0}
 .platebar .sleeve{height:12px;width:30px;background:linear-gradient(180deg,#c8d6df,#6d8392);border-radius:2px}
 .platebar .pl{border-radius:4px;display:grid;place-items:center;font-family:var(--hud);font-weight:700;font-size:11px;color:#071018;writing-mode:vertical-rl;flex:none;box-shadow:0 0 12px rgba(255,255,255,.12)}
@@ -311,6 +314,14 @@ input[type=date]{background:rgba(var(--ac),.05);color:var(--fg);border:1px solid
 .rmg>div{display:flex;justify-content:space-between;gap:8px;padding:3px 0;border-bottom:1px solid var(--line);min-width:0}.rmg>div>span:first-child{min-width:0;overflow-wrap:anywhere}
 .rrow{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:14px;flex-wrap:wrap}.rrow .num{font-size:14px}
 .rrow small,.rlist small{font-size:12px}.rup{color:var(--good)}.rdn{color:var(--bad)}
+/* 3.3 (@ Joschy) · layout fixes from the 360 px / large-text check: no horizontal overflow, long single words shrink (fitHeads) or break */
+.libitem{grid-template-columns:72px minmax(0,1fr) auto}
+.libitem b,.libitem small{overflow-wrap:anywhere;hyphens:auto;-webkit-hyphens:auto}
+.geartile small{overflow-wrap:anywhere;hyphens:auto;-webkit-hyphens:auto}
+.stat{min-width:0}
+.seg button{min-width:0;overflow-wrap:anywhere}
+.row:has(>#bwSave){flex-wrap:wrap}#bwSave{flex:1 1 auto}
+@media (max-width:380px){.stage .phase{font-size:13.5px;letter-spacing:.17em}}
 </style>
 
 <div id="app">
@@ -515,7 +526,7 @@ function jaiSetSeq(ss,it,st){const e=EX[it.ex];const w=+st.w;const last=ss.si===
   if(w>0&&e.type!=="band"&&e.type!=="time")s.push(...jaiKg(w));return s}
 function repSpeak(it){const e=EX[it.ex];const r=it.lo===it.hi?`${it.lo}`:`${it.lo} bis ${it.hi}`;return e.type==="time"?`${r} Sekunden halten`:`${r} Wiederholungen${e.uni?" pro Seite":""}`}
 function plateText(w){if(+w<=+S.settings.bar)return w>0?"Nur die Stange":"";const r=plateSplit(w);if(r.err||!r.out.length)return"";return"Pro Seite: "+r.out.map(fmtKg).join(" + ")+" kg"+(r.rest>0?` (es fehlen ${fmtKg(r.rest)} kg)`:"")}
-function estMin(plan,quick,week){const its=planItems(plan,quick,week);let s=estBase(its,quick);for(const it of its){if(it.fin)continue;const e=EX[it.ex];const work=e.type==="time"?it.hi+10:(e.uni?75:40);s+=it.sets*work+(it.sets)*restOf(it)}return Math.round(s/60/5)*5}
+function estMin(plan,quick,week){const its=planItems(plan,quick,week);let s=estBase(its,quick);for(const it of its){if(it.fin&&!it.blk)continue;const e=EX[it.ex];const work=e.type==="time"?it.hi+10:(e.uni?75:40);s+=it.sets*work+(it.sets)*restOf(it)}return Math.round(s/60/5)*5}
 function repLabel(it){const e=EX[it.ex];const r=it.lo===it.hi?it.lo:it.lo+"–"+it.hi;return e.type==="time"?r+" s":r+(e.uni?" je S.":"")}
 function weekStart(d){const x=new Date(d);const day=(x.getDay()+6)%7;x.setHours(0,0,0,0);x.setDate(x.getDate()-day);return x}
 function vib(ms){if(!S.settings.vib)return;if(typeof nativeBg==="function"&&nativeBg())return;try{if(window.Android&&Android.vibrate){Android.vibrate(ms);return}}catch(e){}try{navigator.vibrate&&navigator.vibrate(ms)}catch(e){}}
@@ -733,7 +744,7 @@ function cycleWeek(d){const w=Math.round((weekStart(d||new Date()).getTime()-cyc
 function dayDef(week,day){const W=PROGRAM[(week||1)-1]||PROGRAM[0];return W.days.find(x=>x.key===day)||W.days[0]}
 function planItems(day,quick,week){week=week||progBlock();const d=dayDef(week,day);let it=d.items.map((v,i)=>({ex:v[0],sets:v[1],lo:v[2],hi:v[3],slot:i}));
   it.push({ex:d.fin[0],sets:d.fin[1],lo:d.fin[2],hi:d.fin[3],slot:it.length,fin:true});
-  it=adaptItems(day,it,week);it=kbMix(day,it);it.push(holdFin(day,week,it));it=fitHour(it);
+  it=adaptItems(day,it,week);it=kbMix(day,it);it=hangMix(day,it);it.push(holdFin(day,week,it));it=fitHour(it);
   if(S.rr&&typeof S.rr==="object")it=it.map(x=>{const o=!x.fin&&S.rr[x.ex];return Array.isArray(o)?{...x,lo:o[0],hi:o[1],rr:1}:x});/* 3.0: rep target changed after a plateau */
   if(quick)it=it.filter(x=>!x.fin).slice(0,4).map(x=>({...x,sets:Math.max(2,x.sets-1)}));return it}
 function doneThisWeek(){const ws=weekStart(new Date());return new Set(S.history.filter(h=>new Date(h.date)>=ws).map(h=>h.plan))}/* calendar week, only for the week card (and the 2.x migration) */
@@ -794,7 +805,7 @@ function openMonth(){const p=prog();const cw=p.block;const nu=nextUnit();
   openSheet(`<div class="row between"><h2 style="font-size:24px">Zyklusplan</h2><button class="iconbtn" data-close aria-label="Schließen"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
    <p class="muted" style="margin:0;font-size:13.5px">4 Blöcke mit je 3 Einheiten. Ein Block ist fertig, wenn A, B und C erledigt sind, egal wie lange das dauert. Nach 12 Einheiten beginnt der Zyklus von vorn, dann mit mehr Gewicht.</p>
    ${PROGRAM.map((W,wi)=>`<div class="card" ${wi+1===cw?'style="border-color:var(--arc)"':""}><div class="row between"><div class="label">Block ${wi+1} · ${esc(W.theme)}</div>${wi+1===cw?`<span class="tag">aktuell</span>`:wi+1<cw?`<span class="tag">✓</span>`:""}</div>
-     ${W.days.map(d=>{const its=planItems(d.key,false,wi+1);const main=its.filter(x=>!x.fin),fins=its.filter(x=>x.fin);const st=wi+1<cw||(wi+1===cw&&p.done.includes(d.key))?" ✓":wi+1===cw&&d.key===nu?" ▶ nächste":"";return`<div><b style="font-family:var(--display);font-size:16px;letter-spacing:.04em;text-transform:uppercase">${d.key} · ${esc(d.name)}${st}</b><div class="muted" style="font-size:12.5px">${main.map(x=>esc(EX[x.ex].n)+(x.adapted?"*":"")).join(" · ")}${fins.length?` · <i>Bonus: ${fins.map(f=>esc(EX[f.ex].n)).join(" + ")}</i>`:""}</div></div>`}).join("")}</div>`).join("")}
+     ${W.days.map(d=>{const its=planItems(d.key,false,wi+1);const main=its.filter(x=>!x.fin||x.blk),fins=its.filter(x=>x.fin&&!x.blk);const st=wi+1<cw||(wi+1===cw&&p.done.includes(d.key))?" ✓":wi+1===cw&&d.key===nu?" ▶ nächste":"";return`<div><b style="font-family:var(--display);font-size:16px;letter-spacing:.04em;text-transform:uppercase">${d.key} · ${esc(d.name)}${st}</b><div class="muted" style="font-size:12.5px">${main.map(x=>esc(EX[x.ex].n)+(x.adapted?"*":"")).join(" · ")}${fins.length?` · <i>Bonus: ${fins.map(f=>esc(EX[f.ex].n)).join(" + ")}</i>`:""}</div></div>`}).join("")}</div>`).join("")}
    ${PROGRAM.some((W,wi)=>W.days.some(d=>planItems(d.key,false,wi+1).some(x=>x.adapted)))?`<p class="muted" style="margin:0;font-size:12.5px">* an deine Ausstattung angepasst</p>`:""}`)}
 
 /* ================= MORE ANIMATIONS ================= */
@@ -830,11 +841,18 @@ const ease=t=>.5-.5*Math.cos(Math.PI*t);
 function cyc(def,time){const[d1,h1,d2,h2]=def.tempo;const T=d1+h1+d2+h2;let t=time%T;
   if(t<d1)return{k:ease(t/d1),ph:0};t-=d1;if(t<h1)return{k:1,ph:0};t-=h1;if(t<d2)return{k:1-ease(t/d2),ph:1};return{k:0,ph:1}}
 function poseAt(def,k){if(def.gait==="run")return gaitRun(def,k*def.tempo.reduce((a,b)=>a+b,0)).o;const p=typeof poseAtU==="function"?poseAtU(def,k,k,1):lerpPose(def.A,def.B,k);p.anchor=def.anchor;if(def.at&&!p.at)p.at=def.at;return def.view==="front"?solveFront(p):(typeof solveC==="function"?solveC(def,p):solve(p))}
-function boundsOf(def){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;const inc=(p,r=0)=>{if(!p)return;x0=Math.min(x0,p[0]-r);x1=Math.max(x1,p[0]+r);y0=Math.min(y0,p[1]-r);y1=Math.max(y1,p[1]+r)};
-  for(let i=0;i<=8;i++){const o=poseAt(def,i/8);for(const k in o)if(Array.isArray(o[k]))inc(o[k],k==="head"?L.hd:4);
-    for(const e of def.eq){if(e.t==="plate"){const p=o[e.at];inc(p?add(p,[0,e.dy||0]):null,(e.r||21)+7)}if(e.t==="box"){inc([e.x,e.y]);inc([e.x+e.w,e.y])}if(e.t==="band")inc(e.from);if(e.t==="rackbar"){inc(e.at,6);inc([e.at[0],0])}if(e.t==="bag"){inc([e.x,40]);inc([e.x+34,178])}if(e.t==="tread"){inc([-62,0]);inc([66,0])}if(e.t==="wall"){inc([e.x-8,0]);inc([e.x,190])}if(typeof extraBounds==="function")extraBounds(e,o,inc)}}
+/* 3.3: drawn size around a joint (body volume at hip/shoulder, fist and shoe outline), body units */
+function bndR(k){return k==="head"?L.hd+2:/^(hip|sh|back)/.test(k)?13:/^(knee|elbow)/.test(k)?8:7}
+function boundsOf(def,g,still){const ck=(g||"_")+(still?"s":"");def._bb=def._bb||{};if(def._bb[ck])return{...def._bb[ck]};let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;const inc=(p,r=0)=>{if(!p)return;x0=Math.min(x0,p[0]-r);x1=Math.max(x1,p[0]+r);y0=Math.min(y0,p[1]-r);y1=Math.max(y1,p[1]+r)};
+  /* 3.3 (@ Joschy): besides the A->B blend, sample the pose the renderer really draws (animPose over one full cycle: lag, circles,
+     pauses), so circling arms or a lagging leg are inside the box too; plus dumbbells, pull-up bar, rack upright and bag chain */
+  const poses=[];for(let i=0;i<=8;i++)poses.push(poseAt(def,i/8));
+  if(g&&typeof animPose==="function"&&typeof cycT==="function"){const st=phaseAt.still;if(still){phaseAt.still=true;try{poses.push(animPose(def,def.tempo[0]*.55,g).o)}catch(e){}}/* still preview: just the frame it shows (no lag tables for the library) */
+    else{const T=cycT(def);phaseAt.still=false;for(let i=0;i<48;i++){try{poses.push(animPose(def,(i+.5)/48*T,g).o)}catch(e){}}}phaseAt.still=st}
+  for(const o of poses){for(const k in o)if(Array.isArray(o[k])&&o[k].length===2&&typeof o[k][0]==="number")inc(o[k],bndR(k));
+    for(const e of def.eq){if(e.t==="plate"){const p=o[e.at];inc(p?add(p,[0,e.dy||0]):null,(e.r||21)+7)}if(e.t==="db"&&o[e.at])inc(o[e.at],12);if(e.t==="bar"){inc([-44,-4]);inc([44,20])}if(e.t==="box"){inc([e.x,e.y]);inc([e.x+e.w,e.y])}if(e.t==="band")inc(e.from);if(e.t==="rackbar"){inc(e.at,6);inc([e.at[0],0]);inc([e.at[0]+10,e.at[1]+31])}if(e.t==="bag"){inc([e.x,40]);inc([e.x+34,178]);inc([e.x+17,215])}if(e.t==="tread"){inc([-62,0]);inc([66,0])}if(e.t==="wall"){inc([e.x-8,0]);inc([e.x,190])}if(typeof extraBounds==="function")extraBounds(e,o,inc)}}
   const fl=floorOf(def);if(fl!=null)y0=Math.min(y0,fl);if(def.padT)y1+=def.padT;
-  return{x0,y0,x1,y1}}
+  def._bb[ck]={x0,y0,x1,y1};return{x0,y0,x1,y1}}
 function floorOf(def){if(def.floor===null)return null;if(typeof def.floor==="number")return def.floor;if(def.view==="front")return 0;
   let m=1e9;for(let i=0;i<=8;i++){const o=poseAt(def,i/8);m=Math.min(m,o.ankle[1],o.toe[1],o.ankle2[1],o.toe2[1])}return Math.min(m,0)}
 
@@ -1047,7 +1065,7 @@ function drawFig(ctx,def,o,tr,g,time,c){
   const Ls=norm2([.55*face,-.85]);
   const light={lx:Ls[0],ly:Ls[1],gx0:face>0?W*.85:W*.15,gy0:0,gx1:face>0?W*.15:W*.85,gy1:H};
   /* floor */
-  if(fl!=null){const cx=front?0:(o.ankle[0]+o.ankle2[0])/2;const F=P([cx,fl]);
+  if(fl!=null){let cx=front?0:(o.ankle[0]+o.ankle2[0])/2;if(tr.fx0!=null&&tr.fx1-tr.fx0>70)cx=Math.max(tr.fx0+28,Math.min(tr.fx1-28,cx));/* 3.3: the dark floor shadow stays inside the fit box (feet at the very edge: plank, push-up) */const F=P([cx,fl]);
     ctx.save();ctx.translate(F[0],F[1]);ctx.scale(1,.16);const rg=ctx.createRadialGradient(0,0,0,0,0,R(85));rg.addColorStop(0,ACol(.13));rg.addColorStop(1,ACol(0));ctx.fillStyle=rg;ctx.beginPath();ctx.arc(0,0,R(85),0,7);ctx.fill();
     const sg=ctx.createRadialGradient(0,0,0,0,0,R(38));sg.addColorStop(0,"rgba(0,0,0,.65)");sg.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=sg;ctx.beginPath();ctx.arc(0,0,R(38),0,7);ctx.fill();ctx.restore();
     const L0=P([tr.bx0-40,fl]),L1=P([tr.bx1+40,fl]);const lg=ctx.createLinearGradient(L0[0],0,L1[0],0);lg.addColorStop(0,ACol(0));lg.addColorStop(.5,ACol(.3));lg.addColorStop(1,ACol(0));ctx.strokeStyle=lg;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(L0[0],L0[1]);ctx.lineTo(L1[0],L1[1]);ctx.stroke()}
@@ -1507,20 +1525,34 @@ function animPose(def,time,g){if(def.gait==="run")return gaitRun(def,time);let{p
 const RUN=new Set();let rafOn=false;
 const OFFP=new Map();function offFor(w,h){const k=w+"x"+h;let v=OFFP.get(k);if(v){OFFP.delete(k);OFFP.set(k,v);return v}
   v=[0,1,2].map(()=>{const e=document.createElement("canvas");e.width=w;e.height=h;return e});OFFP.set(k,v);if(OFFP.size>6)OFFP.delete(OFFP.keys().next().value);return v}
-function attachAnim(canvas,key,opts={}){const def=AN[key];if(!def)return;canvas._def=def;canvas._key=key;canvas._g=opts.g||figFor(key);canvas._b=boundsOf(def);canvas._fl=floorOf(def);canvas._ph=opts.phaseEl||null;canvas._still=!!opts.still;canvas._done=false;canvas._t0=performance.now()-(opts.offset||0);
+function attachAnim(canvas,key,opts={}){const def=AN[key];if(!def)return;canvas._def=def;canvas._key=key;canvas._g=opts.g||figFor(key);canvas._b=boundsOf(def,canvas._g,!!opts.still);canvas._fl=floorOf(def);canvas._ph=opts.phaseEl||null;canvas._still=!!opts.still;canvas._done=false;canvas._t0=performance.now()-(opts.offset||0);
   RUN.add(canvas);if(!rafOn){rafOn=true;requestAnimationFrame(loop)}}
 function loop(now){for(const c of RUN){if(!c.isConnected){RUN.delete(c);continue}if(c.offsetParent===null&&!c.closest(".sheet"))continue;if(c._still&&c._done)continue;renderCanvas(c,now)}if(RUN.size)requestAnimationFrame(loop);else rafOn=false}
 const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 function animSpd(){const v=S&&S.settings&&+S.settings.animSpd;return v===.75?.75:1}
+/* 3.3: fit box = body bounds + the yoga mat (drawMat sizes the mat from the body bounds bx0/bx1, which stay as they were) */
+function fitBox(def,b){const f={x0:b.x0,x1:b.x1,y0:b.y0,y1:b.y1,bx0:b.x0,bx1:b.x1};
+  if(floorOf(def)!=null)f.y0-=6;/* floor shadow and floor-level frames reach a little below the floor */
+  if(def.mat){const front=def.view==="front";const cx=def.matX!=null?def.matX:(b.x0+b.x1)/2;const hw=front?Math.max(52,(b.x1-b.x0)/2+8):Math.max(70,Math.min(104,(b.x1-b.x0)/2+16));
+    f.x0=Math.min(f.x0,cx-hw-2);f.x1=Math.max(f.x1,cx+hw+(front?2:6))}
+  return f}
+/* 3.3: label bands of the stage around a canvas (CSS px from the top / bottom edge of the canvas), measured once per canvas size */
+function ovBands(c){const st=c.parentElement;const o={t:0,b:0};if(!st||!st.classList||!st.classList.contains("stage"))return o;const H=c.offsetHeight,y0=c.offsetTop;
+  for(const el of st.children){if(el===c||!/\b(phase|tempo|readout)\b/.test(el.className))continue;const cs=getComputedStyle(el);const fs=parseFloat(cs.fontSize)||12;const lh=Math.max(el.offsetHeight,parseFloat(cs.lineHeight)||fs*1.25);
+    const t=el.offsetTop-y0,bt=y0+H-(el.offsetTop+el.offsetHeight);if(t+el.offsetHeight/2<H/2)o.t=Math.max(o.t,t+lh+4);else o.b=Math.max(o.b,bt+lh+4)}
+  return o}
 function renderCanvas(c,now){const def=c._def;const dpr=Math.min(window.devicePixelRatio||1,2);const W=c.clientWidth,H=c.clientHeight;if(!W||!H)return;
   if(c.width!==Math.round(W*dpr)||c.height!==Math.round(H*dpr)){c.width=Math.round(W*dpr);c.height=Math.round(H*dpr)}
   [c._offF,c._offB,c._offR]=offFor(c.width,c.height);for(const o of[c._offF,c._offB,c._offR]){const x=o.getContext("2d");if(x.reset)x.reset();else o.width=o.width}/* 3.2: scratch layers are shared per size (cleared every frame): many previews, little memory */
   const ctx=c.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
   const time=reduce?0:(now-c._t0)/1000*animSpd();
   phaseAt.still=!!c._still;const{o,ph,lbl,dd}=c._loop&&!c._still&&typeof yLoopPose==="function"?yLoopPose(c._loop,time):animPose(def,c._still?def.tempo[0]*.55:time,c._g);phaseAt.still=false;
-  const b=c._b;const mini=W<110;const pad=mini?6:18;const top=mini?6:34;const s=Math.min((W-2*pad)/(b.x1-b.x0),(H-top-pad)/(b.y1-b.y0));
-  const ox=(W-(b.x1-b.x0)*s)/2-b.x0*s;const oy=H-pad+b.y0*s-((H-top-pad)-(b.y1-b.y0)*s)/2;
-  drawFig(ctx,dd||def,o,{s,ox,oy,floor:c._fl,bx0:b.x0,bx1:b.x1,W,H,dpr},c._g,time,c);
+  /* 3.3 (@ Joschy): the fit box covers the whole loop (c._b) plus the yoga mat; the labels on the stage (phase/tempo on top,
+     region/readout at the bottom) get their own bands, so the figure never runs under them. Scale is constant over the loop. */
+  const b=c._b._f||(c._b._f=fitBox(def,c._b));const mini=W<110;const pad=mini?6:18;const ov=c._ovK===W+"x"+H?c._ov:(c._ovK=W+"x"+H,c._ov=ovBands(c));
+  const top=Math.max(mini?6:34,ov.t);const padB=Math.max(pad,ov.b);const s=Math.min((W-2*pad)/(b.x1-b.x0),(H-top-padB)/(b.y1-b.y0));
+  const ox=(W-(b.x1-b.x0)*s)/2-b.x0*s;const oy=H-padB+b.y0*s-((H-top-padB)-(b.y1-b.y0)*s)/2;
+  drawFig(ctx,dd||def,o,{s,ox,oy,floor:c._fl,bx0:b.bx0,bx1:b.bx1,fx0:b.x0,fx1:b.x1,W,H,dpr},c._g,time,c);
   c._done=true;if(c._ph){const t=lbl!=null?lbl:(def.ph[ph]||"");if(c._ph.textContent!==t)c._ph.textContent=t}}
 
 /* ================= NAV ================= */
@@ -1547,7 +1579,7 @@ function renderHome(){const p=prog();const ss=S.session;const cw=ss?(ss.week||1)
     ${ss?"":`<div class="seg"><button data-quick="0" aria-pressed="${!quick}">Komplett · ${estMin(nextKey,false,cw)} Min.</button><button data-quick="1" aria-pressed="${quick}">Kurz · ${estMin(nextKey,true,cw)} Min.</button></div>`}
     ${!ss&&quick?`<div class="muted" style="font-size:12.5px">Kurz-Training zählt nicht als Plan-Einheit: Danach bleibt ${nextKey} die nächste komplette Einheit.</div>`:""}
     ${gap>=14?`<div class="hint" id="gapHint"><b>Lange Pause (${gap} Tage):</b> Beim Start schlägt dir die App einen leichten Wiedereinstieg vor.</div>`:""}
-    <ul class="exlist">${items.map(it=>`<li><span>${esc(EX[it.ex].n)}${it.fin?` <span class="tag" style="margin-left:4px">${it.hfin?"Bonus · Halten":"Bonus"}</span>`:""}${EX[it.ex].hold&&!it.fin?` <span class="tag" style="margin-left:4px">Halten</span>`:""}${it.adapted?` <span class="tag" style="margin-left:4px">angepasst</span>`:""}</span><span class="sr">${it.sets} × ${repLabel(it)}</span></li>`).join("")}</ul>
+    <ul class="exlist">${items.map(it=>`<li><span>${esc(EX[it.ex].n)}${it.blk?` <span class="tag" style="margin-left:4px">Griffkraft</span>`:it.fin?` <span class="tag" style="margin-left:4px">${it.hfin?"Bonus · Halten":"Bonus"}</span>`:""}${EX[it.ex].hold&&!it.fin?` <span class="tag" style="margin-left:4px">Halten</span>`:""}${it.adapted?` <span class="tag" style="margin-left:4px">angepasst</span>`:""}</span><span class="sr">${it.sets} × ${repLabel(it)}</span></li>`).join("")}</ul>
     <div class="muted" style="font-size:12.5px">A Drücken → B Ziehen → C Beine, immer der Reihe nach. Der Plan geht da weiter, wo du aufgehört hast, egal wie viele Trainings pro Woche. Nach 3 Einheiten wechselt der Block, nach 12 beginnt der Zyklus neu.</div>
     <button class="btn primary block" id="startBtn">${ss?"Training fortsetzen":"Training starten"}</button>
     ${ss||rem.length<2?"":`<div class="row" style="flex-wrap:wrap"><span class="muted" style="font-size:13px">Im Block tauschen:</span>${DAYS.map(k=>`<button class="chip" data-pick="${k}" aria-pressed="${k===nextKey}" ${p.done.includes(k)?"disabled":""}>${k}${p.done.includes(k)?" ✓":""}</button>`).join("")}</div>`}
@@ -1699,13 +1731,17 @@ function workView(){const ss=S.session;const it=curItem();const e=EX[it.ex];cons
   if(sg.why&&ss.si===0)hint+=`<div class="hint ${sg.up?"up":""}" id="sgWhy">${sg.why}</div>`;
   const pl=fresh&&!it.fin?plateauOf(it.ex):null;if(pl)hint=platCard(it,pl)+hint;
   if(it.noGear&&!canDo(it.ex))hint=`<div class="hint" id="noGearHint"><b>Gerät fehlt:</b> Für diese Übung fehlt dir laut Ausstattung ein Gerät und es gibt keine passende Alternative. Überspring sie mit „Übung überspringen“ oder schalte das Gerät unter Einstellungen wieder ein.</div>`+hint;
-  else if(!sg.last&&ss.si===0)hint+=`<div class="hint">Erstes Mal: Wähle ein Gewicht, bei dem du ${it.hi} saubere Wiederholungen schaffst und noch 2 im Tank hast.</div>`;
+  else if(!sg.last&&ss.si===0)hint+=`<div class="hint" id="firstHint">${/* 3.3 (@ Joschy): no "choose a weight" for bodyweight / everyday-item exercises */
+    e.type==="band"?`Erstes Mal: Wähle ein Band, mit dem du ${it.hi} saubere Wiederholungen schaffst und noch 2 im Tank hast.`
+    :isTime?`Erstes Mal: Halte sauber im Zielbereich (${repLabel(it)}). Zusatzgewicht brauchst du nicht.`
+    :bw?`Erstes Mal: Saubere Wiederholungen im Zielbereich (${repLabel(it)}), etwa 2 im Tank lassen.${e.daily&&/flasche|rucksack/i.test(e.daily)?` Als Gewicht dient: ${esc(e.daily)}. Zusatz-kg ist freiwillig – nur eintragen, wenn du das Gewicht mitschreiben willst.`:" Zusatzgewicht ist freiwillig."}`
+    :`Erstes Mal: Wähle ein Gewicht, bei dem du ${it.hi} saubere Wiederholungen schaffst und noch 2 im Tank hast.`}</div>`;
   if(e.note&&ss.si===0)hint+=`<div class="hint">${esc(e.note)}</div>`;
   if(e.hold&&ss.si===0)hint+=`<div class="hint"><b>Halte-Variante:</b> in jeder Wiederholung ${e.hold} Sekunden halten (${esc(e.holdAt||"")}). Der Halte-Timer zählt mit.</div>`;
   if(it.hfin&&ss.si===0)hint+=`<div class="hint"><b>Bonus:</b> Halte-Finisher zum Schluss, freiwillig. Ruhig weiteratmen, Spannung halten. Starte den Halte-Timer.</div>`;
-  const wLabel=bw?(e.type==="band"?"Band / kg":"Zusatz kg"):"Gewicht kg";
+  const wLabel=bw?(e.type==="band"?"Band / kg":"Zusatz kg <small class=\"opt\">optional</small>"):"Gewicht kg";
   return`<div class="stage"><canvas id="cv"></canvas><span class="phase" id="ph"></span><span class="tempo">${tempo[0]}s · ${tempo[2]}s</span><span class="readout">BEWEGUNGS-SCAN · AKTIV</span></div>
-  <div><div class="label">${it.hfin?"Bonus · Halte-Finisher · optional · ":it.fin?"Bonus-Finisher · optional · ":""}${it.adapted?"Angepasst · ":""}${esc(e.m)}</div><h1 class="exname">${esc(e.n)}</h1><div class="muted" style="margin-top:4px">Satz <b class="num" style="color:var(--fg);font-size:18px">${Math.min(ss.si+1,it.sets)}</b> von ${it.sets} · Ziel ${repLabel(it)} · ${esc(e.eq)}</div></div>
+  <div><div class="label">${it.blk?"Griffkraft & Hängen · ":it.hfin?"Bonus · Halte-Finisher · optional · ":it.fin?"Bonus-Finisher · optional · ":""}${it.adapted?"Angepasst · ":""}${esc(e.m)}</div><h1 class="exname">${esc(e.n)}</h1><div class="muted" style="margin-top:4px">Satz <b class="num" style="color:var(--fg);font-size:18px">${Math.min(ss.si+1,it.sets)}</b> von ${it.sets} · Ziel ${repLabel(it)} · ${esc(e.eq)}</div></div>
   ${wuActive(ss)?wuCard(ss):""}
   <div class="setchips">${lg.sets.map((s,i)=>`<button class="setchip ${s.done?"done":""} ${i===ss.si?"cur":""}" data-set="${i}"><small>Satz ${i+1}</small>${s.done?(bw&&!+s.w?"":fmtKg(s.w)+"×")+s.r+(isTime?"s":""):"–"}</button>`).join("")}</div>
   ${lastLine(it)}
@@ -2732,7 +2768,7 @@ const MOTION={
 };
 for(const k in MOTION){const d=AN[k];if(!d)continue;const m=MOTION[k];for(const f in m){if(f==="A"||f==="B")Object.assign(d[f],m[f]);else d[f]=m[f]}}
 /* ================= 2.1 · HALTE-ÜBUNGEN · KETTLEBELL · GERÄTE-GEWICHTE · BACKUP (@ Joschy) ================= */
-const APP_VER="3.2",BK_VER=5;/* 3.0–3.2 keep backup format 5: all new fields are optional, older apps simply ignore them */
+const APP_VER="3.3",BK_VER=5;/* 3.0–3.3 keep backup format 5: all new fields are optional, older apps simply ignore them */
 /* ---- hold / tempo variants (strength stays the focus: they are alternatives, never forced) ---- */
 Object.assign(EX,{
   pushpause:{n:"Liegestütze mit Halt in der Mitte",eq:"Matte · Griffe optional",m:"Brust · Trizeps · Schultern",type:"bw",rest:90,inc:0,hold:3,holdAt:"auf halber Höhe",base:"pushup",
@@ -2831,9 +2867,9 @@ function kbMix(day,items){if(!kbOn())return items;const out=items.map(x=>({...x}
 /* ---- time budget: the existing estimate, now including the bonus items ---- */
 function estSecs(items,quick){let s=estBase(items,quick);for(const it of items){const e=EX[it.ex];const work=e.type==="time"?it.hi+10:(e.uni?75:40);s+=it.sets*(work+restOf(it))}return s}
 function estMinFull(plan,quick,week){return estSecs(planItems(plan,quick,week),quick)/60}
-function bonusMin(plan,week){const its=planItems(plan,false,week).filter(x=>x.fin);return Math.round((estSecs(its,false)-estBase(its,false))/60)}
+function bonusMin(plan,week){const its=planItems(plan,false,week).filter(x=>x.fin&&!x.blk);return Math.round((estSecs(its,false)-estBase(its,false))/60)}
 function fitHour(items){const out=items.map(x=>({...x}));
-  for(let g=0;g<40&&estSecs(out,false)>3540;g++){const f=[...out].reverse().find(x=>x.fin&&x.sets>(x.hfin?1:2));if(f){f.sets--;continue}
+  for(let g=0;g<40&&estSecs(out,false)>3540;g++){const f=[...out].reverse().find(x=>x.fin&&!x.blk&&x.sets>(x.hfin?1:2));if(f){f.sets--;continue}
     const x=[...out].reverse().find(x=>!x.fin&&x.slot>0&&x.sets>2);if(x){x.sets--;continue}break}
   return out.map((x,i)=>({...x,slot:i}))}
 /* ---- weights per gear (catalogue only) ---- */
@@ -3730,8 +3766,8 @@ function yLoopPose(L_,time){const def=L_.def;const T=L_.T;let t=((time%T)+T)%T;c
   if(t<L_.H.dur){const r=animPose(def,t*L_.H.f,L_.g);return{o:r.o,ph:r.ph,dd:def,stage:"hold"}}t-=L_.H.dur;
   const o=ylTrans(L_,L_.X,Math.min(1,t/L_.exit));o._br=0;return{o,lbl:"Lösen · zurück",dd:noEq,ph:1,stage:"out"}}
 function ylBounds(L_){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;const inc=(p,r)=>{x0=Math.min(x0,p[0]-r);x1=Math.max(x1,p[0]+r);y0=Math.min(y0,p[1]-r);y1=Math.max(y1,p[1]+r)};
-  const was=reduce;for(let i=0;i<=72;i++){const{o}=yLoopPose(L_,i/72*L_.T+.001);for(const k in o){const v=o[k];if(Array.isArray(v)&&v.length===2&&typeof v[0]==="number")inc(v,k==="head"?L.hd:4)}}
-  const b0=boundsOf(L_.def);x0=Math.min(x0,b0.x0);x1=Math.max(x1,b0.x1);y1=Math.max(y1,b0.y1);y0=Math.min(y0,0);return{x0,y0,x1,y1}}
+  const was=reduce;for(let i=0;i<=144;i++){const{o}=yLoopPose(L_,i/144*L_.T+.001);for(const k in o){const v=o[k];if(Array.isArray(v)&&v.length===2&&typeof v[0]==="number")inc(v,bndR(k))}}
+  const b0=boundsOf(L_.def,L_.g);/* 3.3: same margins as boundsOf (hand/foot outline, hair) */x0=Math.min(x0,b0.x0);x1=Math.max(x1,b0.x1);y1=Math.max(y1,b0.y1);y0=Math.min(y0,0);return{x0,y0,x1,y1}}
 function yLoopOf(def,g){def._yl=def._yl||{};return def._yl[g]||(def._yl[g]=ylBuild(def,g))}
 {const _att=attachAnim;attachAnim=function(canvas,key,opts={}){_att(canvas,key,opts);const def=AN[key];
   if(def&&def.mat&&!opts.still&&!opts.noLoop){canvas._loop=yLoopOf(def,canvas._g);canvas._b=canvas._loop.b}else canvas._loop=null}}
@@ -3989,6 +4025,300 @@ function yPip(v){const r=S.yrun;if(r.ph==="done"){v.innerHTML=`<div class="pipL"
   v.innerHTML=`<div class="pipL">${r.paused?"Pausiert":r.ph==="prep"?(st.side===2?"Seite wechseln":"Gleich"):"Halten"}</div><div class="pipRing"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" class="pb"/><circle cx="50" cy="50" r="44" class="pf" stroke-dasharray="${C}" stroke-dashoffset="${off}"/></svg><div class="pipT">${mmss(left)}</div></div><div class="pipS">${esc(YP[st.k].n)}</div><div class="pipS2">${r.i+1}/${r.steps.length}${st.side?" · Seite "+st.side:""}</div>`}
 if(S.yrun&&S.yrun.ph==="done"){/* finished before the app closed: keep the result, just clear the run */S.yrun=null;save()}
 
+/* ================= 3.3 · GRIFFKRAFT & HÄNGEN (@ Joschy) =================
+   Ziel: von < 10 s auf 1–2 Minuten frei hängen.
+   · Zieh-Tag (B): Block "Griffkraft & Hängen" nach den Hauptübungen, vor den Bonus-Finishern. 4 Stufen:
+       1 Hängen mit Fußstütze → 2 aktives Schulterblatt-Hängen (5 × 10 s) → 3 freies Hängen (Zeit steigt) → 4 Handtuch-Hang.
+   · Beintag (C): Farmer's Hold auf Zeit (Kurzhanteln → Kettlebells → Taschen/Kanister, je nach Geräten).
+   · Steigerung (konservativ): alle Sätze ≥ Zielzeit und nicht "hart" → +5 s; oben in der Stufe → nächste Stufe.
+     Zweimal das Ziel verfehlt → −5 s, auf der Mindestzeit → eine Stufe zurück. Entlastung, Wiedereinstieg und Kurz-Training ändern nichts.
+     Der Stand wird jedes Mal aus dem Verlauf berechnet (keine zweite Wahrheit, Backups bleiben stimmig); S.hang.base = manuell gewählte Startstufe.
+   · Hang-Test alle 4 Wochen (1 Versuch, max. Zeit frei hängend) → S.hang.tests, Kurve im Verlauf (Ziellinien 60 s / 120 s).
+   · Hang-Pause an freien Tagen (3 × 10 s), freiwillig → S.hang.pauses, zählt nicht als Training.
+   Die Items tragen fin:true + blk ("hang" / "grip"): sie fallen beim Kurz-Training weg, werden nie gekürzt und nie getauscht. */
+const HG_KEYS=["hangsupp","scaphang","deadhang","towelhang"];
+const GRIP_KEYS=["farmerhold","kbfarmhold","jughold"];
+const HG_ALL=[...HG_KEYS,...GRIP_KEYS];
+const HG_ST=[null,
+  {k:"hangsupp",n:"Hängen mit Fußstütze",sets:3,start:15,min:10,top:45,step:5,t:"Füße auf Stuhl oder Kiste, die Arme tragen nur einen Teil des Gewichts. Gewöhnt Hände, Sehnen und Schultern ans Hängen."},
+  {k:"scaphang",n:"Aktives Schulterblatt-Hängen",sets:5,start:10,min:10,top:20,step:5,t:"Frei hängen, Arme gestreckt, Schultern aktiv nach unten ziehen. Kurze Sätze, schützt die Schulter."},
+  {k:"deadhang",n:"Freies Hängen",sets:3,start:15,min:10,top:60,step:5,t:"Längere Sätze frei hängend. Die Zeit steigt automatisch, sobald alle Sätze geschafft sind."},
+  {k:"towelhang",n:"Handtuch-Hang",sets:3,start:10,min:10,top:30,step:5,t:"An zwei Handtüchern hängen: maximale Griffkraft. Endstufe, dazu alle 4 Wochen der Hang-Test."}];
+const GR={sets:2,start:30,min:20,top:60,step:5};
+const HG_TEST_DAYS=28,HG_PAUSE={n:3,hold:10,rest:30,prep:5};
+const HG_SAFE="Bei Schmerzen in Schulter, Ellbogen oder Handgelenk sofort loslassen und abbrechen. Kontrolliert ein- und aussteigen (Füße auf Stuhl oder Kiste), nie ruckartig fallen lassen.";
+const HG_WARN="Schulter & Gelenke: Bei Schmerz sofort loslassen und abbrechen. Kein Ruck, kein Schwingen.";
+var HG_ON=false;/* var: planItems() may run before this block (very old running session at boot) – then without the block */
+
+/* ---------- exercises ---------- */
+Object.assign(EX,{
+  hangsupp:{n:"Hängen mit Fußstütze",eq:"Klimmzugstange · Stuhl oder Kiste",m:"Griffkraft · Unterarme · Schultern",type:"time",rest:60,inc:0,
+    cues:["Stuhl oder Kiste vor die Stange stellen","Stange schulterbreit im Obergriff fassen","Füße auf dem Stuhl lassen, Knie gebeugt","Nur so viel Gewicht an die Hände geben, wie es sich gut anfühlt"],
+    bad:["Schultern hängen ganz locker bis zu den Ohren","Mit den Füßen abspringen statt ruhig umzusetzen"],safe:HG_SAFE,note:"Stufe 1 von 4: Schritt für Schritt mehr Gewicht an die Arme, die Füße bleiben die Sicherung."},
+  scaphang:{n:"Aktives Schulterblatt-Hängen",eq:"Klimmzugstange · Stuhl zum Aufsteigen",m:"Griffkraft · Schulterblätter · Lat",type:"time",rest:45,inc:0,
+    cues:["Frei hängen, Arme gestreckt","Schultern weg von den Ohren nach unten ziehen","Brust leicht nach vorn, Körper ruhig","Spannung halten, nicht die Arme beugen"],
+    bad:["Arme beugen (wird zum Klimmzug)","Schultern fallen zurück zu den Ohren","Schwingen"],safe:HG_SAFE,note:"Stufe 2 von 4: kurze, aktive Sätze. Die Schulter bleibt stabil, das schützt sie beim späteren langen Hängen."},
+  deadhang:{n:"Freies Hängen",eq:"Klimmzugstange · Stuhl zum Aufsteigen",m:"Griffkraft · Unterarme · Schultern",type:"time",rest:75,inc:0,
+    cues:["Über den Stuhl an die Stange, schulterbreiter Obergriff","Ganze Hand um die Stange, Daumen mit herum","Schultern leicht aktiv, Körper ruhig","Ruhig weiteratmen, vor dem Loslassen Füße zurück auf den Stuhl"],
+    bad:["Schwingen und Strampeln","Ganz passiv in die Schultern sacken","Abspringen und hart landen"],safe:HG_SAFE,note:"Stufe 3 von 4: die Zeit steigt automatisch, wenn alle Sätze geschafft sind."},
+  towelhang:{n:"Handtuch-Hang",eq:"Klimmzugstange · 2 Handtücher",m:"Griffkraft · Unterarme · Finger",type:"time",rest:75,inc:0,
+    cues:["Zwei feste Handtücher über die Stange hängen","Je ein Handtuch mit einer Hand fest umgreifen","Über den Stuhl einsteigen, dann frei hängen","Schultern aktiv, ruhig atmen"],
+    bad:["Dünne oder rutschige Handtücher","Ruckartig einsteigen","Ellbogen stark beugen"],safe:HG_SAFE+" Handtücher vorher auf festen Sitz prüfen.",note:"Stufe 4 von 4: die schwerste Griffvariante."},
+  farmerhold:{n:"Farmer's Hold",eq:"Kurzhanteln",m:"Griffkraft · Unterarme · Rumpf",type:"time",rest:60,inc:2,
+    cues:["Zwei schwere Kurzhanteln seitlich halten","Aufrecht stehen, Schultern nach hinten-unten","Bauch fest, ruhig atmen","Hanteln am Ende kontrolliert absetzen, Rücken gerade"],
+    bad:["Schultern hängen nach vorn","Hanteln mit rundem Rücken aufheben"],safe:"Hanteln aus den Knien aufheben und absetzen. Bei Schmerz in Schulter, Ellbogen oder Handgelenk abbrechen.",note:"Zeit steigt um 5 s pro Einheit, ab 60 s geht es mit schwereren Hanteln wieder bei 30 s los."},
+  kbfarmhold:{n:"Farmer's Hold mit Kettlebells",eq:"Kettlebells",m:"Griffkraft · Unterarme · Rumpf",type:"time",rest:60,inc:4,
+    cues:["Zwei schwere Kettlebells seitlich halten","Aufrecht stehen, Schultern nach hinten-unten","Bauch fest, ruhig atmen","Kettlebells kontrolliert absetzen, Rücken gerade"],
+    bad:["Schultern hängen nach vorn","Kettlebells schlagen gegen die Beine"],safe:"Kettlebells aus den Knien aufheben und absetzen. Bei Schmerz in Schulter, Ellbogen oder Handgelenk abbrechen.",note:"Zeit steigt um 5 s pro Einheit, ab 60 s kommt die nächste Kettlebell."},
+  jughold:{n:"Farmer's Hold mit Taschen",eq:"Wasserkanister oder gefüllte Taschen",m:"Griffkraft · Unterarme · Rumpf",type:"time",rest:60,inc:0,wOpt:1,daily:"Wasserkanister oder gefüllte Einkaufstaschen",
+    cues:["Zwei Wasserkanister oder schwer gefüllte Taschen nehmen","Seitlich halten, aufrecht stehen","Schultern nach hinten-unten, Bauch fest","Am Ende kontrolliert absetzen"],
+    bad:["Henkel schneiden ein: Handtuch um den Griff","Oberkörper kippt zur Seite"],safe:"Henkel und Taschen vorher prüfen. Bei Schmerz in Schulter, Ellbogen oder Handgelenk abbrechen.",note:"Ohne Hanteln: Kanister oder Taschen. Wird es leicht, die Taschen schwerer packen."}
+});
+CATS.push(["griff","Griffkraft & Hängen"]);
+for(const k of HG_ALL){CAT[k]="griff";SUB[k]="grip";MG_OF[k]=null}
+Object.assign(NEEDS,{hangsupp:[["pullbar"],["rack"]],scaphang:[["pullbar"],["rack"]],deadhang:[["pullbar"],["rack"]],towelhang:[["pullbar"],["rack"]],farmerhold:[["db"]],kbfarmhold:[["kb"]]});
+
+/* ---------- animations (motion engine; hang = anchored at the hands like the pull-up) ---------- */
+/* towel: one strip per hand, folded over the bar, the end hangs below the fist (drawn behind the body) */
+if(typeof EXTRA_EQ_LAYER!=="undefined")EXTRA_EQ_LAYER.towel="back";
+{const _d=drawExtraEq;drawExtraEq=function(ctx,e,o,P,R,fl,front){if(e.t!=="towel")return _d(ctx,e,o,P,R,fl,front);
+  ctx.save();ctx.lineCap="round";ctx.lineJoin="round";
+  for(const[hk,dx]of[["hand2",-2.2],["hand",2.2]]){const h=o[hk];if(!h)continue;const x0=h[0]+dx*.4;
+    const pts=[[x0-2.6,2.2],[x0,3.4],[x0+2.6,2.2],[h[0]+1.6,h[1]+6],[h[0]+.8,h[1]],[h[0]+.4,h[1]-9]];
+    const pp=pts.map(P);ctx.strokeStyle="#8f8676";ctx.lineWidth=Math.max(2,R(5.2));ctx.beginPath();ctx.moveTo(pp[0][0],pp[0][1]);ctx.quadraticCurveTo(pp[1][0],pp[1][1]-R(1.5),pp[2][0],pp[2][1]);
+    ctx.lineTo(pp[3][0],pp[3][1]);ctx.lineTo(pp[4][0],pp[4][1]);ctx.lineTo(pp[5][0],pp[5][1]);ctx.stroke();
+    ctx.strokeStyle=hk==="hand"?"#e9e1cf":"#cbbfa6";ctx.lineWidth=Math.max(1.4,R(4));ctx.stroke();
+    ctx.strokeStyle="rgba(120,90,60,.45)";ctx.lineWidth=Math.max(.6,R(.7));ctx.setLineDash([R(1.6),R(1.6)]);ctx.beginPath();ctx.moveTo(pp[3][0],pp[3][1]);ctx.lineTo(pp[5][0],pp[5][1]);ctx.stroke();ctx.setLineDash([])}
+  ctx.restore()}}
+{const _b=extraBounds;extraBounds=function(e,o,inc){if(e.t==="towel"){for(const hk of["hand","hand2"]){const h=o[hk];if(h){inc([h[0],4],4);inc([h[0],h[1]-10],4)}}return}return _b(e,o,inc)}}
+/* active shoulder blades: an optional pose field "scap" adds to the computed elevation (negative = pulled down, body rises) */
+{const _sc=scapOf;scapOf=function(def,p,o){const r=_sc(def,p,o);if(typeof p.scap==="number")r[0]+=p.scap;return r}}
+{const HANG={upper:90,fore:90,torso:90,thigh:-95,shin:-100,foot:-60};
+  const HOLD_UP={upper:-92,fore:-90,upper2:-88,fore2:-90};
+  /* chair under the feet: seat top at y, legs down to the floor; back rest on the far side */
+  const SY=-182.5,FL=SY-44;
+  Object.assign(AN,{
+    hangsupp:{anchor:"hand",A:{upper:90,fore:90,torso:93,thigh:-12,shin:-92,foot:2,neck:-2,scap:0},B:{upper:90,fore:90,torso:92,thigh:-13,shin:-93,foot:1,neck:-2,scap:-1.5},
+      eq:[{t:"bar"},{t:"box",x:34,w:44,y:SY},{t:"chairback",x:76,y:SY,side:"r",h:40,lean:3}],floor:FL,tempo:[2,1,2,1],ph:["Halten","Atmen"],spine:[.9,.5]},
+    scaphang:{anchor:"hand",A:{...HANG,scap:0},B:{upper:90,fore:90,torso:87,thigh:-91,shin:-97,foot:-58,scap:-7},eq:[{t:"bar"}],floor:null,tempo:[1.2,2,1.2,1],hseg:1,ph:["Schultern runter","Lösen","Aktiv halten"],spine:[.9,.5]},
+    deadhang:{anchor:"hand",A:{...HANG,scap:-1},B:{upper:90,fore:90,torso:89,thigh:-93,shin:-99,foot:-58,scap:-2},eq:[{t:"bar"}],floor:null,tempo:[2,1,2,1],ph:["Halten","Atmen"],spine:[.9,.5]},
+    towelhang:{anchor:"hand",at:[0,-24],A:{upper:91,fore:90,torso:90,thigh:-95,shin:-100,foot:-60,scap:-1},B:{upper:91,fore:90,torso:89,thigh:-93,shin:-99,foot:-58,scap:-2},eq:[{t:"bar"},{t:"towel"}],floor:null,tempo:[2,1,2,1],ph:["Halten","Atmen"],spine:[.9,.5]},
+    farmerhold:{anchor:"foot",A:{...STAND,...HOLD_UP},B:{...STAND,torso:87.4,...HOLD_UP},eq:[{t:"db",at:"hand"},{t:"db",at:"hand2"}],floor:0,tempo:[2,1,2,1],ph:["Halten","Atmen"]},
+    kbfarmhold:{anchor:"foot",A:{...STAND,...HOLD_UP},B:{...STAND,torso:87.4,...HOLD_UP},eq:[{t:"kb",at:"hand",off:[0,-8]},{t:"kb",at:"hand2",off:[0,-8]}],floor:0,tempo:[2,1,2,1],ph:["Halten","Atmen"]},
+    jughold:{anchor:"foot",A:{...STAND,...HOLD_UP},B:{...STAND,torso:87.4,...HOLD_UP},eq:[{t:"pack",at:"hand",w:11,h:19,dy:12,col:"#5d8fb8"},{t:"pack",at:"hand2",w:11,h:19,dy:12,col:"#4f7ea3"}],floor:0,tempo:[2,1,2,1],ph:["Halten","Atmen"]}
+  })}
+
+/* ---------- state ---------- */
+function hgNorm(h){const o={v:1,tests:[],pauses:[],base:null};if(!h||typeof h!=="object"||Array.isArray(h))return o;
+  const by=(a,f)=>{const m={};for(const x of Array.isArray(a)?a:[]){const y=f(x);if(y)m[y.d]=y}return Object.values(m).sort((p,q)=>p.d<q.d?-1:p.d>q.d?1:0)};
+  o.tests=by(h.tests,x=>x&&typeof x==="object"&&validDk(x.d)&&isFinite(+x.s)&&+x.s>=0&&+x.s<=1800&&x.s!==""&&x.s!==null?{d:x.d,s:Math.round(+x.s)}:null).slice(-200);
+  o.pauses=by(h.pauses,x=>x&&typeof x==="object"&&validDk(x.d)&&Number.isInteger(+x.n)&&+x.n>=1&&+x.n<=20&&x.n!==""&&x.n!==null?{d:x.d,n:+x.n}:null).slice(-400);
+  const b=h.base;if(b&&typeof b==="object"&&!Array.isArray(b)&&[1,2,3,4].includes(b.stage)&&Number.isInteger(b.sec)&&b.sec>=5&&b.sec<=120&&typeof b.at==="string"&&isFinite(new Date(b.at).getTime()))o.base={stage:b.stage,sec:b.sec,at:b.at};
+  return o}
+function hgS(){if(!S.hang||S.hang.v!==1||!Array.isArray(S.hang.tests)||!Array.isArray(S.hang.pauses))S.hang=hgNorm(S.hang);return S.hang}
+/* migration (idempotent): old states get an empty S.hang; a valid one stays byte-identical */
+{const n=hgNorm(S.hang);if(JSON.stringify(n)!==JSON.stringify(S.hang)){S.hang=n;save()}}
+
+/* history occurrences of the given exercises, oldest first */
+function hgOcc(keys,after){const out=[];(Array.isArray(S.history)?S.history:[]).forEach((h,i)=>{if(!h||typeof h!=="object"||!Array.isArray(h.log))return;const t=new Date(h.date).getTime();if(!isFinite(t)||(after!=null&&t<=after))return;
+  for(const l of h.log)if(l&&keys.includes(l.ex)&&Array.isArray(l.sets))out.push({h,l,t,i})});return out.sort((a,b)=>a.t-b.t||a.i-b.i)}
+const hgSecs=l=>l.sets.filter(s=>sDone(s)).map(s=>Math.max(0,Math.round(+s.r||0)));
+/* hang ladder, replayed from the history */
+function hangState(){const H=hgS();const b=H.base;let st={stage:b?b.stage:1,sec:b?b.sec:HG_ST[1].start,miss:0,n:0,ev:null,last:null};
+  for(const o of hgOcc(HG_KEYS,b?new Date(b.at).getTime():null)){const D=HG_ST[st.stage];const r=hgSecs(o.l);st.last={r,eff:effOf(o.l),t:o.t,ex:o.l.ex,sec:st.sec,stage:st.stage};st.n++;
+    if(o.h.deload||o.h.reentry||o.h.quick||!r.length){st.ev="skip";continue}
+    const hit=r.length>=D.sets&&r.every(x=>x>=st.sec);const eff=effOf(o.l);
+    if(hit&&eff!=="hard"){st.miss=0;if(st.sec>=D.top){if(st.stage<4){st.stage++;st.sec=HG_ST[st.stage].start;st.ev="up"}else st.ev="top"}else{st.sec=Math.min(D.top,st.sec+D.step);st.ev="plus"}}
+    else if(hit){st.miss=0;st.ev="hard"}
+    else{st.miss++;st.ev="miss";if(st.miss>=2){st.miss=0;if(st.sec>D.min){st.sec=Math.max(D.min,st.sec-D.step);st.ev="minus"}else if(st.stage>1){st.stage--;const P=HG_ST[st.stage];st.sec=Math.max(P.min,P.top-10);st.ev="down"}else st.ev="miss2"}}}
+  return st}
+function gripKey(){return GRIP_KEYS.find(k=>canDo(k))||"jughold"}
+function gripStartW(k){const e=EX[k];if(e.wOpt)return 0;const t=Math.max(6,bodyKg()*.2);const L=wList(k);return L?snapW(L,t):Math.round(t)}
+/* farmer's hold: seconds first (30 → 60 s), then the next weight from 30 s again */
+function gripState(k){let st={sec:GR.start,w:gripStartW(k),miss:0,n:0,ev:null,last:null,cap:false};const e=EX[k];
+  for(const o of hgOcc([k])){const r=hgSecs(o.l);const wu=Math.max(0,...o.l.sets.filter(s=>sDone(s)).map(s=>+s.w||0));st.last={r,eff:effOf(o.l),t:o.t,w:wu,sec:st.sec};st.n++;
+    if(wu>0||e.wOpt)st.w=wu;
+    if(o.h.deload||o.h.reentry||o.h.quick||!r.length){st.ev="skip";continue}
+    const hit=r.length>=GR.sets&&r.every(x=>x>=st.sec);const eff=effOf(o.l);st.cap=false;
+    if(hit&&eff!=="hard"){st.miss=0;if(st.sec>=GR.top){const nw=e.wOpt||!(st.w>0)?null:wUp(k,st.w,1);if(nw!=null&&nw>st.w+1e-9){st.w=nw;st.sec=GR.start;st.ev="wup"}else{st.ev="top";st.cap=true}}else{st.sec=Math.min(GR.top,st.sec+GR.step);st.ev="plus"}}
+    else if(hit){st.miss=0;st.ev="hard"}
+    else{st.miss++;st.ev="miss";if(st.miss>=2){st.miss=0;if(st.sec>GR.min){st.sec=Math.max(GR.min,st.sec-GR.step);st.ev="minus"}else if(st.w>0&&!e.wOpt){const nw=wFloor(k,st.w-Math.max(e.inc||2,st.w*.1));if(nw<st.w-1e-9){st.w=nw;st.sec=GR.start;st.ev="wdown"}}}}}
+  return st}
+function hgLastTest(){const T=hgS().tests;return T.length?T[T.length-1]:null}
+function hgDaysTo(){const l=hgLastTest();if(!l)return 0;return Math.max(0,HG_TEST_DAYS-Math.floor((dT(todayKey())-dT(l.d))/864e5))}
+function hgTestDue(){return canDo("deadhang")&&hgDaysTo()<=0}
+function hgPauseKey(stage){return stage<=1?"hangsupp":stage===2?"scaphang":"deadhang"}
+
+/* ---------- plan: block after the main exercises, before the bonus finishers ---------- */
+function hangMix(day,items){if(!HG_ON||!Array.isArray(items))return items;let blk=null;
+  if(day==="B"&&canDo("deadhang")){const st=hangState();const D=HG_ST[st.stage];blk={ex:D.k,sets:D.sets,lo:st.sec,hi:st.sec,fin:true,blk:"hang",stage:st.stage}}
+  else if(day==="C"){const k=gripKey();const g=gripState(k);blk={ex:k,sets:GR.sets,lo:g.sec,hi:g.sec,fin:true,blk:"grip"}}
+  if(!blk)return items;const out=items.map(x=>({...x}));let at=out.findIndex(x=>x.fin);if(at<0)at=out.length;out.splice(at,0,blk);return out.map((x,i)=>({...x,slot:i}))}
+const hgList=r=>r.map(x=>x+" s").join(" / ");
+function hangWhy(it){const st=hangState();const D=HG_ST[st.stage];const tgt=`<b>${D.sets} × ${st.sec} s</b>`;const L=st.last;const n=`Stufe ${st.stage} von 4`;
+  switch(st.ev){
+    case null:return`${n}: <b>${esc(D.n)}</b>. Ziel heute: ${tgt}. Schaffst du alle Sätze, kommen beim nächsten Mal 5 s dazu.`;
+    case"plus":return`Letztes Mal alle Sätze geschafft (${hgList(L.r)}). Heute <b>+5 s</b>: ${tgt}.`;
+    case"up":return`<b>Neue Stufe!</b> ${n}: <b>${esc(D.n)}</b>, Start mit ${tgt}. ${esc(D.t)}`;
+    case"top":return`Endstufe geschafft (${hgList(L.r)}). ${tgt} halten und alle 4 Wochen beim Hang-Test schauen, wie lange du frei hängst.`;
+    case"hard":return`Alle Sätze geschafft, aber hart: <b>Zeit halten</b> (${tgt}) und festigen.`;
+    case"miss":return`Ziel letztes Mal verfehlt (${hgList(L.r)}): gleiche Zeit, ${tgt}. Lieber sauber und ruhig halten.`;
+    case"minus":return`<b>−5 s</b>, weil zweimal das Ziel verfehlt. Heute ${tgt}, dann wieder aufbauen.`;
+    case"down":return`<b>Eine Stufe zurück</b> (${n}: ${esc(D.n)}), weil zweimal das Ziel verfehlt. Heute ${tgt}, in Ruhe neu aufbauen.`;
+    case"miss2":return`Noch einmal ${tgt}. Kurz und sauber ist besser als lang und verkrampft.`;
+    default:return`${n}: <b>${esc(D.n)}</b>. Ziel heute: ${tgt}.`}}
+function gripWhy(it){const k=it.ex;const e=EX[k];const st=gripState(k);const kg=st.w>0?`, <b>${fmtKg(st.w)} kg je Hand</b>`:"";const tgt=`<b>${GR.sets} × ${st.sec} s</b>${kg}`;const L=st.last;
+  switch(st.ev){
+    case null:return e.wOpt?`Farmer's Hold mit Kanistern oder Taschen: ${tgt}. Gewicht in kg ist freiwillig. Schaffst du alle Sätze, kommen 5 s dazu.`
+      :`Farmer's Hold: schwer halten, ruhig atmen. Start: ${tgt}. Schaffst du alle Sätze, kommen 5 s dazu, ab ${GR.top} s geht's schwerer weiter.`;
+    case"plus":return`Letztes Mal alle Sätze geschafft (${hgList(L.r)}). Heute <b>+5 s</b>: ${tgt}.`;
+    case"wup":return`<b>${GR.top} s geschafft:</b> heute schwerer, ${tgt}, wieder ab ${GR.start} s.`;
+    case"top":return`<b>${GR.top} s geschafft.</b> ${e.wOpt?"Pack die Taschen oder Kanister etwas schwerer":"Schwerer geht mit deiner Ausstattung nicht"} – heute ${tgt}.`;
+    case"hard":return`Alle Sätze geschafft, aber hart: <b>Zeit halten</b>, ${tgt}.`;
+    case"miss":return`Ziel letztes Mal verfehlt (${hgList(L.r)}): gleiche Zeit, ${tgt}.`;
+    case"minus":return`<b>−5 s</b>, weil zweimal das Ziel verfehlt: ${tgt}.`;
+    case"wdown":return`<b>Leichter</b>, weil zweimal das Ziel verfehlt: ${tgt}, neu aufbauen.`;
+    default:return`Heute ${tgt}.`}}
+{const _sg=suggest;suggest=function(item){if(item&&HG_KEYS.includes(item.ex))return{w:0,last:[],dr:0,mode:"hang",up:["plus","up"].includes(hangState().ev),why:hangWhy(item)};
+  if(item&&GRIP_KEYS.includes(item.ex)){const g=gripState(item.ex);return{w:g.w,last:[],dr:0,mode:"grip",up:["plus","wup"].includes(g.ev),why:gripWhy(item)}}
+  return _sg(item)}}
+/* farmer's hold with dumbbells: weights from the dumbbell list (if any) */
+{const _wg=wGearOf;wGearOf=function(k){if(k==="farmerhold")return"db";return _wg(k)}}
+/* block items: never swapped, never replaced by a cardio finisher */
+{const _sp=swapPool;swapPool=function(it,day){if(it&&it.blk)return[it.ex];return _sp(it,day)}}
+{const _as=adaptSession;adaptSession=function(){const ss=S.session;if(!ss||!Array.isArray(ss.items)||!Array.isArray(ss.log))return _as();let ch=false;const hold=[];
+  ss.items.forEach((it,i)=>{if(!it||!it.blk)return;const lg=ss.log[i];const any=lg&&Array.isArray(lg.sets)&&lg.sets.some(x=>x&&x.done);
+    if(!canDo(it.ex)&&!any){const k=it.blk==="grip"?gripKey():null;if(k&&k!==it.ex){const g=gripState(k);const ni={...it,ex:k,lo:g.sec,hi:g.sec};delete ni.noGear;ss.items[i]=ni;ss.log[i]={ex:k,sets:initSets(ni,suggest(ni))};if(i===ss.ei){ss.si=0;ss.annEi=null}ch=true}
+      else if(!it.noGear){it.noGear=true;ch=true}}else if(canDo(it.ex)&&it.noGear){delete it.noGear;ch=true}
+    hold.push([i,ss.items[i]]);ss.items[i]={ex:"__hg"}});
+  let r;try{r=_as()}finally{for(const[i,it]of hold)ss.items[i]=it}return r||ch}}
+HG_ON=true;
+
+/* ---------- training screen ---------- */
+{const _wv=workView;workView=function(){let h=_wv();const ss=S.session;const it=ss&&ss.items[ss.ei];if(!it||!HG_ALL.includes(it.ex))return h;
+  if(GRIP_KEYS.includes(it.ex))h=h.replace('Zusatz kg <small class="opt">optional</small>',EX[it.ex].wOpt?'kg je Hand <small class="opt">optional</small>':"kg je Hand");
+  let x="";const hang=HG_KEYS.includes(it.ex);
+  /* 3.3 (@ Joschy): hanging is body weight only – no "Zusatz kg" stepper, the seconds stepper takes the full width */
+  h=h.replace(/<span class="tempo">[^<]*<\/span>/,`<span class="tempo">${it.hi} s</span>`);/* 3.3: hold time instead of the 2s · 2s tempo */
+  if(hang)h=h.replace(/<div class="steppers">\s*<div class="stepper"><span class="label">Zusatz kg[\s\S]*?<\/div><\/div>/,'<div class="steppers" style="grid-template-columns:1fr">');
+  if(ss.si===0&&it.blk)x+=`<div class="hint" id="hgHint"><b>Griffkraft & Hängen:</b> ${hang?"Zeit läuft mit dem Halte-Timer. Stopp, sobald du loslassen musst: die Sekunden werden eingetragen.":"Halte-Timer starten, Hanteln ruhig halten."}</div>`;
+  if(hang&&ss.si===0&&hgTestDue())x+=`<div class="hint" id="hgTestHint"><b>Hang-Test fällig</b> (alle 4 Wochen): 1 Versuch, so lange wie möglich frei hängen. Am besten jetzt, vor dem ersten Satz. <button class="btn small" id="hgTestW" style="margin-top:6px">Hang-Test starten</button></div>`;
+  x+=`<div class="ywarn" id="hgWarnT" role="note">${esc(HG_WARN)}</div>`;
+  const m='<div class="row" style="flex-wrap:wrap;gap:8px">';return h.includes(m)?h.replace(m,x+m):h+x}}
+{const _bw=bindWork;bindWork=function(){_bw();const b=$("#hgTestW");if(b)b.onclick=()=>hgRun("test")}}
+/* exercise details: stage tag + shoulder warning */
+{const _oe=openExSheet;openExSheet=function(key){_oe(key);if(!HG_ALL.includes(key))return;const tl=$("#sheet .tagline");
+  const tag=HG_KEYS.includes(key)?(i=>`Zieh-Tag · Stufe ${i} von 4${canDo(key)&&hangState().stage===i?" · aktuell":""}`)(HG_KEYS.indexOf(key)+1):`Beintag · Griffkraft${canDo(key)&&gripKey()===key?" · aktuell":""}`;
+  if(tl)tl.insertAdjacentHTML("beforeend",`<span class="tag" id="hgTag">${esc(tag)}</span>`);
+  /* 3.3 (@ Joschy): hold exercises have no lowering/lifting tempo – the stage shows the hold time instead */
+  const tp=$("#sheet .stage .tempo"),ro=$("#sheet .stage .readout");if(tp)tp.remove();if(ro)ro.textContent=`HALTEN · ${hgHoldLabel(key)}`;
+  $("#sheet").insertAdjacentHTML("beforeend",`<div class="ywarn" id="hgWarn" role="alert"><b>Achtung Schulter & Gelenke:</b> Bei Schmerz in Schulter, Ellbogen oder Handgelenk sofort abbrechen. Du hattest Schulterprobleme: lieber kürzer und sauber als lang und verkrampft. Nie ruckartig einsteigen oder abspringen.</div>`)}}
+
+function hgHoldLabel(key){if(HG_KEYS.includes(key)){const i=HG_KEYS.indexOf(key)+1,D=HG_ST[i],st=hangState();return st.stage===i&&canDo(key)?`${D.sets} × ${st.sec} s`:`${D.sets} × ${D.start}–${D.top} s`}
+  return gripKey()===key&&canDo(key)?`${GR.sets} × ${gripState(key).sec} s`:`${GR.sets} × ${GR.start}–${GR.top} s`}
+
+/* ---------- mini runner in a sheet: hang test (count up, 1 attempt) and hang pause (3 × 10 s) ---------- */
+let HGR=null;
+function hgRun(kind){audio();const st=hangState();const ak=kind==="test"?"deadhang":hgPauseKey(st.stage);
+  HGR={kind,ak,ph:"ready",i:0,end:0,t0:0,res:null,done:0,cd:null};const test=kind==="test";
+  openSheet(`<div class="row between"><div><div class="label">${test?"Alle 4 Wochen · 1 Versuch":"Freier Tag · freiwillig"}</div><h2 style="font-size:26px;margin-top:4px">${test?"Hang-Test":"Hang-Pause"}</h2></div><button class="iconbtn" data-close aria-label="Schließen"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+   <div class="stage"><canvas id="hgc"></canvas><span class="phase" id="hgph"></span><span class="readout">${test?"FREI HÄNGEN · MAX. ZEIT":esc(EX[ak].n.toUpperCase())}</span></div>
+   <div class="hgrun"><div class="label" id="hgLbl"></div><div class="num" id="hgT"></div>${test?"":`<div class="hgdots" id="hgDots"></div>`}</div>
+   <p class="muted" id="hgTxt" style="margin:0;font-size:13.5px"></p>
+   <div class="ywarn" role="note">${esc(HG_WARN)}</div>
+   <div id="hgBtns" class="ybtns"></div>`);
+  attachAnim($("#hgc"),ak,{phaseEl:$("#hgph")});hgRunRender()}
+function hgRunRender(){const r=HGR;if(!r||!$("#hgBtns"))return;const test=r.kind==="test";const lbl=$("#hgLbl"),tx=$("#hgTxt"),bt=$("#hgBtns");
+  const B=(id,t,p)=>`<button class="btn ${p?"primary":""}" id="${id}">${t}</button>`;
+  if(r.ph==="ready"){lbl.textContent="Bereit";$("#hgT").textContent=test?"0:00":HG_PAUSE.hold+" s";
+    tx.innerHTML=test?"Stuhl unter die Stange, schulterbreit greifen. Nach dem Start zählt die Uhr 3 Sekunden runter, dann frei hängen, so lange es sauber geht. <b>Nur ein Versuch.</b>":`${HG_PAUSE.n} × ${HG_PAUSE.hold} s ${esc(EX[r.ak].n)} mit ${HG_PAUSE.rest} s Pause. Freiwillig, zählt nicht als Training.`;
+    bt.innerHTML=B("hgGo","Start",1)}
+  else if(r.ph==="result"){lbl.textContent="Ergebnis";$("#hgT").textContent=mmss(r.res);const b=hgS().tests.reduce((m,x)=>Math.max(m,x.s),0);
+    tx.innerHTML=`Du hast <b>${r.res} s</b> frei gehangen.${b?` Bisheriger Bestwert: ${b} s.`:" Das ist dein Startwert."} Ziel: 60 s, dann 120 s.`;bt.innerHTML=B("hgSave","Speichern",1)+B("hgDrop","Verwerfen")}
+  else if(r.ph==="done"){lbl.textContent="Geschafft";$("#hgT").textContent="✓";tx.innerHTML=`${r.done} von ${HG_PAUSE.n} Halten erledigt. Gut für Griff und Sehnen – zählt nicht als Training.`;bt.innerHTML=B("hgOk","Fertig",1)}
+  else{bt.innerHTML=test&&r.ph==="run"?B("hgStop","Losgelassen · Stopp",1):B("hgStop","Stopp")}
+  const d=$("#hgDots");if(d)d.innerHTML=Array.from({length:HG_PAUSE.n},(_,i)=>`<i class="${i<r.done?"on":""}${i===r.done&&r.ph==="hold"?" cur":""}"></i>`).join("");
+  const on=(id,f)=>{const e=$("#"+id);if(e)e.onclick=f};
+  on("hgGo",()=>{audio();r.ph="prep";r.end=Date.now()+(test?3:HG_PAUSE.prep)*1000;hgRunRender();hgTick();clearInterval(holdT);holdT=setInterval(hgTick,200)});
+  on("hgStop",()=>{clearInterval(holdT);if(test){if(r.ph==="run"){r.res=Math.max(0,Math.round((Date.now()-r.t0)/1000));r.ph="result";beep(990,.3);vib(200)}else{r.ph="ready"}hgRunRender()}else hgPauseEnd()});
+  on("hgSave",()=>{const H=hgS();const d=todayKey();H.tests=H.tests.filter(x=>x.d!==d);H.tests.push({d,s:r.res});H.tests.sort((a,b)=>a.d<b.d?-1:1);save();HGR=null;closeSheet();hgRefresh();toast(`Hang-Test gespeichert: ${r.res} s`)});
+  on("hgDrop",()=>{HGR=null;closeSheet();toast("Test verworfen")});
+  on("hgOk",()=>{HGR=null;closeSheet();hgRefresh()});
+  hgTick()}
+function hgTick(){const r=HGR;const t=$("#hgT"),lbl=$("#hgLbl");if(!r||!t){clearInterval(holdT);return}const now=Date.now();const test=r.kind==="test";
+  if(r.ph==="prep"){const left=(r.end-now)/1000;if(left<=0){if(test){r.ph="run";r.t0=r.end;beep(990,.25);vib(120)}else{r.ph="hold";r.end+=HG_PAUSE.hold*1000;beep(880,.15);vib(80)}hgRunRender();return}
+    lbl.textContent=test?"Greif die Stange":"Gleich: "+EX[r.ak].n;const s=Math.ceil(left);t.textContent=s;if(s!==r.cd){r.cd=s;if(s<=3)beep(660,.08)}return}
+  if(r.ph==="run"){lbl.textContent="Frei hängen";t.textContent=mmss((now-r.t0)/1000);return}
+  if(r.ph==="hold"||r.ph==="rest"){let left=(r.end-now)/1000;
+    if(left<=0){if(r.ph==="hold"){r.done++;beep(990,.3);vib(250);if(r.done>=HG_PAUSE.n){hgPauseEnd();return}r.ph="rest";r.end+=HG_PAUSE.rest*1000}else{r.ph="hold";r.end+=HG_PAUSE.hold*1000;beep(880,.15);vib(80)}hgRunRender();return}
+    lbl.textContent=r.ph==="hold"?`Halten · ${r.done+1} von ${HG_PAUSE.n}`:"Pause";const s=Math.ceil(left);t.textContent=r.ph==="hold"?s+" s":mmss(left);if(s!==r.cd){r.cd=s;if(s<=3&&s>0)beep(660,.08)}}}
+function hgPauseEnd(){const r=HGR;clearInterval(holdT);if(!r)return;if(r.done>0){const H=hgS();const d=todayKey();const o=H.pauses.find(x=>x.d===d);if(o)o.n=Math.min(20,o.n+r.done);else H.pauses.push({d,n:r.done});H.pauses.sort((a,b)=>a.d<b.d?-1:1);save()}
+  if(r.done>0){r.ph="done";hgRunRender()}else{HGR=null;closeSheet();toast("Hang-Pause abgebrochen")}}
+function hgRefresh(){if(S.session&&!$("#train").hidden){renderTrain();return}if(TAB==="home")renderHome();else if(TAB==="hist")renderHist()}
+
+/* ---------- home card ---------- */
+function hgWeekPauses(){const ws=dkey(weekStart(new Date()).getTime());return hgS().pauses.filter(x=>x.d>=ws).reduce((a,x)=>a+x.n,0)}
+function hgTestLine(){const l=hgLastTest();if(!l)return"Hang-Test: noch keiner – der erste zeigt deinen Startwert.";const d=hgDaysTo();
+  return`Letzter Hang-Test: <b>${l.s} s</b> (${fDs(dT(l.d))})${d>0?` · nächster in ${d} Tag${d===1?"":"en"}`:" · wieder fällig"}`}
+/* 3.3 (@ Joschy): a free day = no training running or done today AND either a training yesterday (rest day between two units)
+   or the weekly goal already reached. Any other day is a plan day (next unit due) – then no hang pause, the grip stays fresh. */
+function hgFreeDay(){if(S.session||trainedToday().length)return false;const y=new Date();y.setDate(y.getDate()-1);const yk=dkey(y.getTime());
+  if(S.history.some(h=>h&&h.date&&dkey(new Date(h.date).getTime())===yk))return true;const ws=weekStart(new Date());
+  return S.history.filter(h=>h&&new Date(h.date)>=ws).length>=(S.settings.goal||3)}
+function hgHomeCard(){if(!canDo("deadhang"))return"";const st=hangState();const D=HG_ST[st.stage];const free=hgFreeDay();const due=hgTestDue();const wp=hgWeekPauses();
+  return`<div class="card hgcard" id="hgCard"><div class="row between"><div class="label">Zusatz · Griffkraft & Hängen</div><button class="chip" id="hgPlanBtn">Plan</button></div>
+   <div><b class="ytitle">Stufe ${st.stage} von 4 · ${esc(D.n)}</b><div class="muted" style="font-size:13px">Am Zieh-Tag: ${D.sets} × ${st.sec} s · Ziel: 1–2 Min. frei hängen</div></div>
+   <div class="row between" style="gap:10px;align-items:center"><div class="muted" style="font-size:13px;min-width:0" id="hgTestLine">${hgTestLine()}</div>${due?`<button class="btn small" id="hgTestBtn">Hang-Test</button>`:""}</div>
+   ${free?`<div class="row" style="gap:6px;flex-wrap:wrap;align-items:center"><button class="chip" id="hgPauseBtn">Hang-Pause · ${HG_PAUSE.n} × ${HG_PAUSE.hold} s</button><span class="muted" style="font-size:12px">freiwillig, für freie Tage${wp?` · diese Woche ${wp}×`:""}</span></div>`:""}</div>`}
+function hgBindHome(){const b=(id,f)=>{const e=$(id);if(e)e.onclick=f};b("#hgPlanBtn",hgPlanSheet);b("#hgTestBtn",()=>hgRun("test"));b("#hgPauseBtn",()=>hgRun("pause"))}
+function hgPlanSheet(){const st=hangState();const gk=gripKey();const g=gripState(gk);const ok=canDo("deadhang");
+  openSheet(`<div class="row between"><h2 style="font-size:24px">Griffkraft & Hängen</h2><button class="iconbtn" data-close aria-label="Schließen"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+   <p class="muted" style="margin:0;font-size:13.5px">Ziel: 1–2 Minuten frei an der Stange hängen. Der Block kommt am Zieh-Tag nach den Hauptübungen. Schaffst du alle Sätze (und war es nicht hart), steigt die Zeit um 5 s; oben in der Stufe geht es eine Stufe weiter. Zweimal verfehlt: 5 s weniger, auf der Mindestzeit eine Stufe zurück.</p>
+   ${ok?"":`<div class="hint"><b>Gerät fehlt:</b> Für das Hängen brauchst du eine Klimmzugstange oder ein Power Rack (Einstellungen → Geräte).</div>`}
+   ${HG_ST.slice(1).map((D,i)=>{const s=i+1;const cur=s===st.stage;return`<div class="hgst${cur?" cur":""}" data-hgst="${s}"><div style="min-width:0"><b>Stufe ${s} · ${esc(D.n)}${s<st.stage?" ✓":""}</b><div class="muted" style="font-size:12.5px">${D.sets} × ${D.start}–${D.top} s · ${esc(D.t)}</div></div>${cur?`<span class="tag">aktuell</span>`:ok?`<button class="btn small ghost" data-hgset="${s}">Hier starten</button>`:""}</div>`}).join("")}
+   <div class="hint"><b>Beintag · ${esc(EX[gk].n)}:</b> ${GR.sets} × ${g.sec} s${g.w>0?` mit ${fmtKg(g.w)} kg je Hand`:""}. +5 s pro Einheit, ab ${GR.top} s ${EX[gk].wOpt?"die Taschen schwerer packen":"das nächste Gewicht"}.</div>
+   <div class="hint"><b>Hang-Test:</b> alle 4 Wochen 1 Versuch, so lange wie möglich frei hängen. ${hgTestLine()}</div>
+   <div class="ywarn" role="note">${esc(HG_SAFE)}</div>
+   <button class="btn block" data-close>Schließen</button>`);
+  for(const b of document.querySelectorAll("[data-hgset]"))b.onclick=()=>{const s=+b.dataset.hgset;const D=HG_ST[s];
+    confirmSheet(`Mit Stufe ${s} weitermachen?`,`${D.n}: ab jetzt ${D.sets} × ${D.start} s am Zieh-Tag. Dein bisheriger Verlauf bleibt erhalten.${s>=3?" Nur wählen, wenn du schon sicher frei hängen kannst.":""}`,"Ja, Stufe "+s,()=>{hgS().base={stage:s,sec:D.start,at:new Date().toISOString()};save();toast("Hang-Programm: Stufe "+s);hgRefresh()})}}
+
+/* ---------- Verlauf: hang test curve with goal lines 60 s and 120 s ---------- */
+function hgStatCard(){const T=hgS().tests;if(!T.length&&!canDo("deadhang"))return"";const best=T.reduce((m,x)=>Math.max(m,x.s),0);const l=hgLastTest();const d=hgDaysTo();
+  return`<div class="card" id="hgStat"><div class="row between"><div class="label">Hang-Test · frei hängen</div><span class="tag">alle 4 Wochen</span></div>
+   <div class="kpis"><div><span class="num" id="hgBest">${T.length?best:"–"}<small> s</small></span><span class="kl">Bestwert</span></div><div><span class="num" id="hgLast">${l?l.s:"–"}<small> s</small></span><span class="kl">Zuletzt${l?" · "+fDs(dT(l.d)):""}</span></div><div><span class="num">${T.length?Math.min(100,Math.round(best/1.2))+"<small> %</small>":"–"}</span><span class="kl">von 2 Min.</span></div></div>
+   <canvas id="hgChart" class="tchart" aria-label="Hang-Test über die Zeit mit Ziellinien 60 und 120 Sekunden"></canvas>
+   <div class="muted fine">Gestrichelt: Ziel 1 Min. (60 s) und 2 Min. (120 s). ${!T.length?"Noch kein Test – der erste zeigt deinen Startwert.":d>0?`Nächster Test in ${d} Tag${d===1?"":"en"}.`:"Der nächste Test ist fällig."}</div>
+   ${hgTestDue()?`<button class="btn small" id="hgTestH">Hang-Test starten</button>`:""}</div>`}
+function hgChart(c){if(!c)return;const pts=hgS().tests.map(x=>({t:dT(x.d),v:x.s}));const dpr=Math.min(devicePixelRatio||1,2),W=c.clientWidth,Hh=c.clientHeight;if(!W||!Hh)return;
+  c.width=Math.round(W*dpr);c.height=Math.round(Hh*dpr);const x=c.getContext("2d");x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,Hh);const ff=getComputedStyle(document.body).fontFamily;x.font="11px "+ff;
+  const mx=Math.max(130,...pts.map(p=>p.v*1.1));const L0=Math.ceil(x.measureText(String(Math.round(mx))).width)+12,R0=44,T0=10,B0=20;
+  const Y=v=>T0+(Hh-T0-B0)*(1-v/mx);const tA=pts.length?pts[0].t:Date.now(),tB=pts.length?pts[pts.length-1].t:tA,span=Math.max(1,tB-tA);const X=t=>pts.length<2?(L0+W-R0)/2:L0+(W-L0-R0)*(t-tA)/span;
+  x.strokeStyle=CSS["--line"];x.lineWidth=1;x.fillStyle=CSS["--faint"];x.textAlign="right";
+  for(const v of[0,30,90]){const y=Y(v);x.beginPath();x.moveTo(L0,y);x.lineTo(W-R0,y);x.stroke();x.fillText(String(v),L0-6,y+4)}
+  for(const[v,lab]of[[60,"1 Min."],[120,"2 Min."]]){const y=Y(v);x.save();x.setLineDash([5,4]);x.strokeStyle=CSS["--gold"];x.lineWidth=1.4;x.beginPath();x.moveTo(L0,y);x.lineTo(W-R0,y);x.stroke();x.restore();
+    x.fillStyle=CSS["--gold"];x.textAlign="left";x.fillText(lab,W-R0+5,y+4);x.textAlign="right";x.fillStyle=CSS["--faint"];x.fillText(String(v),L0-6,y+4)}
+  if(!pts.length){x.fillStyle=CSS["--muted"];x.font="13px "+ff;x.textAlign="center";x.fillText("Noch kein Test",(L0+W-R0)/2,Y(30)-6);return}
+  x.fillStyle=CSS["--muted"];x.textAlign="left";x.fillText(fDs(tA),L0,Hh-5);if(pts.length>1){x.textAlign="right";x.fillText(fDs(tB),W-R0,Hh-5)}
+  if(pts.length>1){const g=x.createLinearGradient(0,T0,0,Hh-B0);g.addColorStop(0,ACol(.26));g.addColorStop(1,ACol(0));x.beginPath();pts.forEach((p,i)=>i?x.lineTo(X(p.t),Y(p.v)):x.moveTo(X(p.t),Y(p.v)));x.lineTo(X(tB),Y(0));x.lineTo(X(tA),Y(0));x.closePath();x.fillStyle=g;x.fill();
+    x.beginPath();pts.forEach((p,i)=>i?x.lineTo(X(p.t),Y(p.v)):x.moveTo(X(p.t),Y(p.v)));x.strokeStyle=CSS["--accent"];x.lineWidth=2.2;x.lineJoin="round";x.stroke()}
+  for(const p of pts){x.beginPath();x.arc(X(p.t),Y(p.v),p===pts[pts.length-1]?4.5:2.6,0,7);x.fillStyle=CSS["--accent"];x.fill()}}
+{const _rh=renderHsub;renderHsub=function(){_rh();if(HSUB!=="kraft")return;const h=hgStatCard();if(!h)return;const rc=$("#rmCard");if(rc)rc.insertAdjacentHTML("afterend",h);else{const el=$("#hsub");if(el)el.insertAdjacentHTML("afterbegin",h)}
+  const b=$("#hgTestH");if(b)b.onclick=()=>hgRun("test");hgChart($("#hgChart"))};
+  const _hr=histRedraw;histRedraw=function(){_hr();if(TAB==="hist")hgChart($("#hgChart"))};
+  const _home=renderHome;renderHome=function(){_home();const h=hgHomeCard();if(!h)return;const y=$("#yCard");const wk=document.querySelector("#v-home .week");const card=y||(wk&&wk.closest(".card"));
+    if(card)card.insertAdjacentHTML("afterend",h);else $("#v-home").insertAdjacentHTML("beforeend",h);hgBindHome()};RENDER.home=renderHome;
+  const _bk=openBackup;openBackup=function(){_bk();const H=hgS();const p=[...document.querySelectorAll("#sheet p.muted")].pop();const t=H.tests.length,n=H.pauses.length;const parts=[t?`${t} Hang-Test${t===1?"":"s"}`:"",n?`${n} Hang-Pause${n===1?"":"n"}`:""].filter(Boolean);if(p&&parts.length)p.textContent+=` · ${parts.join(" · ")}`}}
+/* backup: S.hang validated tolerantly (broken entries are dropped, never the history); older backups simply have none */
+{const _s3=sanitize3;sanitize3=function(st){const r=_s3(st);if(st.hang!=null)st.hang=hgNorm(st.hang);return r||st}}
+{const st=document.createElement("style");st.textContent=`
+.hgcard .ytitle{font-family:var(--display);font-size:17px;letter-spacing:.04em;text-transform:uppercase}
+.hgrun{display:grid;justify-items:center;gap:2px}
+.hgrun .num{font-size:56px;line-height:1}
+.hgdots{display:flex;gap:8px;margin-top:4px}.hgdots i{width:12px;height:12px;border-radius:50%;border:1px solid var(--line2)}.hgdots i.on{background:var(--arc);border-color:var(--arc)}.hgdots i.cur{border-color:var(--arc);box-shadow:0 0 6px var(--arc)}
+.hgst{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+.hgst.cur b{color:var(--arc)}`;document.head.appendChild(st)}
+
 
 /* ================= DESIGNS (2.3) ================= */
 function curTheme(){const t=S&&S.settings&&S.settings.theme;return THEME_KEYS.includes(t)?t:"arc"}
@@ -4055,5 +4385,22 @@ if(!(S.profile&&S.profile.name))openOnboarding();
 if(S.session&&S.session.restEnd&&S.session.restEnd>Date.now()){openTrain();$("#rest").hidden=false;renderRest()}
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&TAB==="hist")drawChart();if(!document.hidden&&window.appResume)window.appResume()});
 nativeState(true);
+/* 3.3 (@ Joschy): headings with one long word (SCHULTERKREISEN next to the yoga ring, long exercise names at 360 px or with large
+   text) shrink step by step until they fit their box (down to ~62 %), only then they break inside the word. Runs after every
+   render (not for the animation labels / timers) and after fonts or the screen width change. */
+function fitHeads(root){const groups=new Set();
+  for(const h of (root||document.body).querySelectorAll("h1,h2,.libitem b,.stat .num,.stat .label,.seg button,.subtabs button")){if(!h.isConnected||!h.clientWidth)continue;
+    if(!h.dataset.fs0){h.dataset.fs0=parseFloat(getComputedStyle(h).fontSize)||0}const f0=+h.dataset.fs0;if(!f0)continue;
+    const m=getComputedStyle(h).textOverflow==="ellipsis"?1:-.5;/* an ellipsis shows up already at a fraction of a pixel */const over=()=>h.scrollWidth>h.clientWidth-m;
+    const g=h.parentElement&&h.parentElement.matches(".seg,.subtabs")?h.parentElement:null;if(g)groups.add(g);
+    let fs=parseFloat(h.style.fontSize)||f0;if(fitHeads.reset||g){fs=f0;h.style.fontSize="";h.style.overflowWrap=""}
+    if(!over())continue;
+    while(over()&&fs>f0*.62){fs-=1;h.style.fontSize=fs+"px"}
+    if(over()&&!g)h.style.overflowWrap="anywhere"}
+  /* a row of tabs / segment buttons keeps one common size */
+  for(const g of groups){const bs=[...g.children].filter(b=>b.dataset.fs0);const mn=Math.min(...bs.map(b=>parseFloat(b.style.fontSize)||+b.dataset.fs0));for(const b of bs)if((parseFloat(b.style.fontSize)||+b.dataset.fs0)!==mn)b.style.fontSize=mn+"px"}}
+{let q=0;const run=()=>{q=0;fitHeads(document.body);fitHeads.reset=false};const kick=()=>{if(!q){q=1;requestAnimationFrame(run)}};
+  new MutationObserver(ms=>{for(const m of ms){const t=m.target;if(t.nodeType===1&&t.closest&&t.closest(".stage,.num,.ring,.yring,#clock"))continue;kick();return}}).observe(document.body,{childList:true,subtree:true});
+  addEventListener("resize",()=>{fitHeads.reset=true;kick()});if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{fitHeads.reset=true;kick()});kick()}
 </script>
 </body></html>

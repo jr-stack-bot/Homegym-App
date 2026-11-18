@@ -594,8 +594,8 @@ function yLoopPose(L_,time){const def=L_.def;const T=L_.T;let t=((time%T)+T)%T;c
   if(t<L_.H.dur){const r=animPose(def,t*L_.H.f,L_.g);return{o:r.o,ph:r.ph,dd:def,stage:"hold"}}t-=L_.H.dur;
   const o=ylTrans(L_,L_.X,Math.min(1,t/L_.exit));o._br=0;return{o,lbl:"Lösen · zurück",dd:noEq,ph:1,stage:"out"}}
 function ylBounds(L_){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;const inc=(p,r)=>{x0=Math.min(x0,p[0]-r);x1=Math.max(x1,p[0]+r);y0=Math.min(y0,p[1]-r);y1=Math.max(y1,p[1]+r)};
-  const was=reduce;for(let i=0;i<=72;i++){const{o}=yLoopPose(L_,i/72*L_.T+.001);for(const k in o){const v=o[k];if(Array.isArray(v)&&v.length===2&&typeof v[0]==="number")inc(v,k==="head"?L.hd:4)}}
-  const b0=boundsOf(L_.def);x0=Math.min(x0,b0.x0);x1=Math.max(x1,b0.x1);y1=Math.max(y1,b0.y1);y0=Math.min(y0,0);return{x0,y0,x1,y1}}
+  const was=reduce;for(let i=0;i<=144;i++){const{o}=yLoopPose(L_,i/144*L_.T+.001);for(const k in o){const v=o[k];if(Array.isArray(v)&&v.length===2&&typeof v[0]==="number")inc(v,bndR(k))}}
+  const b0=boundsOf(L_.def,L_.g);/* 3.3: same margins as boundsOf (hand/foot outline, hair) */x0=Math.min(x0,b0.x0);x1=Math.max(x1,b0.x1);y1=Math.max(y1,b0.y1);y0=Math.min(y0,0);return{x0,y0,x1,y1}}
 function yLoopOf(def,g){def._yl=def._yl||{};return def._yl[g]||(def._yl[g]=ylBuild(def,g))}
 {const _att=attachAnim;attachAnim=function(canvas,key,opts={}){_att(canvas,key,opts);const def=AN[key];
   if(def&&def.mat&&!opts.still&&!opts.noLoop){canvas._loop=yLoopOf(def,canvas._g);canvas._b=canvas._loop.b}else canvas._loop=null}}
