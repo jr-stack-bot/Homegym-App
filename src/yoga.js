@@ -86,7 +86,7 @@ const YP={
     an:{view:"front",A:{yf:1,hR:[13,100],hL:[-13,100],bR:1,bL:-1,s:10,hx:-7,lean:-6},B:{yf:1,hR:[13,100],hL:[-13,100],bR:1,bL:-1,s:10,hx:7,lean:6},tempo:[1.6,0,1.6,0],ph:["Kreisen","Kreisen"]}},
   katzekuh:{n:"Katze-Kuh",sa:"Marjaryasana-Bitilasana",lv:1,r:"ruecken",z:"Wirbelsäule · Rücken",sec:45,
     c:["Vierfüßlerstand: Hände unter den Schultern, Knie unter der Hüfte","Ausatmen: Rücken rund machen, Kinn zur Brust","Einatmen: Brust nach vorn, Blick leicht nach oben"],a:"Die Atmung führt die Bewegung.",
-    an:{anchor:"hip",at:[0,51],A:{torso:10.5,thigh:-90,shin:180,upper:-90,fore:-90,foot:180,neck:22,lum:7,tho:3},B:{torso:10.7,thigh:-90,shin:180,upper:-90.5,fore:-90,foot:180,neck:-42,lum:-6,tho:-9},tempo:[3,.6,3,.6],ph:["Ausatmen · Katze","Einatmen · Kuh"]}},
+    an:{anchor:"hip",at:[0,51],A:{torso:10.5,thigh:-90,shin:180,upper:-90,fore:-90,foot:180,neck:22,lum:7,tho:3},B:{torso:10.7,thigh:-90,shin:180,upper:-90.5,fore:-90,foot:180,neck:-42,lum:-6,tho:-9},tempo:[3,.6,3,.6],ph:["Ausatmen → Katze","Einatmen → Kuh"]}},
   kind:{n:"Kindshaltung",sa:"Balasana",lv:1,r:"ruecken",z:"Rücken · Hüfte · Schultern",sec:45,
     c:["Auf die Fersen setzen, Knie hüftbreit","Oberkörper auf die Oberschenkel sinken lassen","Arme lang nach vorn, Stirn ruht auf der Matte"],a:"In den unteren Rücken atmen, er hebt und senkt sich.",
     an:{anchor:"hip",at:[0,20],A:{torso:-4,thigh:-20.5,shin:180,foot:180,handAt:[113,5],bend:1,neck:-16,lum:-2,tho:-3},B:{torso:-2,thigh:-20.5,shin:180,foot:180,handAt:[113,5],bend:1,neck:-18,lum:-2,tho:-4}}},
@@ -359,6 +359,195 @@ Object.assign(YP,{
     an:{view:"front",tempo:[.28,.06,.42,.08],ph:["Ausatmen","Einatmen"],A:{yf:1,hy:13,kR:[39,18],aR:[-13,8],aL:[13,7],hR:[33,100],hL:[-33,100],bR:-1,bL:1,shr:0},B:{yf:1,hy:12.6,kR:[39,18],aR:[-13,8],aL:[13,7],hR:[33,100],hL:[-33,100],bR:-1,bL:1,shr:1.6}}}
 });
 
+/* ================= 3.4 · YOGA-BIBLIOTHEK ERWEITERT (@ Joschy) =================
+   59 neue Haltungen (Anfänger, Fortgeschritten, Profi). Jede neue Haltung hat eine leichtere Variante (alt); belastende Haltungen
+   für Schulter, Hüfte oder Knie zusätzlich einen Achtung-Hinweis (risk). Animationen über dieselbe Engine (Stand -> Haltung -> Stand). */
+Object.assign(YRISK,{
+  shoulder:"Belastet die Schultern: nur so weit gehen, wie es schmerzfrei ist, Schultern weg von den Ohren. Bei Schulterbeschwerden die leichtere Variante nehmen.",
+  hip:"Starke Hüftdehnung: langsam hineingehen, nichts erzwingen, Kissen oder Block unterlegen. Bei Hüft- oder Leistenbeschwerden die leichtere Variante nehmen.",
+  knee:"Starke Kniebeugung: bei Druck oder Ziehen im Knie sofort lösen, Kissen unter Gesäß oder Knie legen. Bei Kniebeschwerden die leichtere Variante nehmen."});
+Object.assign(YP,{
+  /* ---- 3.4 · Anfänger ---- */
+  palme:{n:"Palme",sa:"Talasana",lv:1,r:"ganz",z:"Gleichgewicht · Waden · Flanken",sec:20,alt:"armeheben",
+    c:["Arme über vorn nach oben strecken, Handflächen zueinander","Langsam auf die Fußballen kommen, Fersen heben","Bauch leicht fest, Blick auf einen festen Punkt"],a:"Einatmen auf die Zehen, oben ruhig weiteratmen.",
+    an:{anchor:"foot",noBal:1,A:{...STAND,at:[0,6.5],foot:-36,torso:89,upper:91,fore:92,neck:4},B:{...STAND,at:[0,7.5],foot:-43,torso:89.5,upper:92,fore:93,neck:6}}},
+  rueckbeuge:{n:"Stehende Rückbeuge",sa:"Anuvittasana",lv:1,r:"brust",z:"Brust · Bauch · Hüftbeuger",sec:20,alt:"armeheben",
+    c:["Füße hüftbreit, Hände stützen das Becken oder Arme nach oben","Becken leicht nach vorn, Brustbein hebt sich nach oben-hinten","Nur so weit wie angenehm, Kopf fällt nicht in den Nacken"],a:"Einatmen in die Brust, ausatmen langsam aufrichten.",
+    an:{anchor:"foot",noBal:1,A:{shin:-96,thigh:-93,torso:100,upper:100,fore:103,neck:8,lum:2,tho:1},B:{shin:-97,thigh:-94,torso:105,upper:106,fore:110,neck:12,lum:3,tho:1.5}}},
+  kniestand:{n:"Knie zur Brust im Stehen",sa:"Tadasana mit Knie",lv:1,r:"huefte",z:"Gesäß · Hüfte · Gleichgewicht",sec:20,uni:1,alt:"windloeser",
+    c:["Auf einem Bein stehen, Standbein weich","Anderes Knie heben und mit beiden Händen zur Brust ziehen","Oberkörper aufrecht, Schultern sinken"],a:"Ruhig weiteratmen, Blick auf einen festen Punkt.",
+    an:{anchor:"foot",noBal:1,A:{...STAND,torso:89,thigh2:58,shin2:-104,foot2:-20,handAt:[21,116.5],bend:-1,neck:0},B:{...STAND,torso:90,thigh2:64,shin2:-100,foot2:-16,handAt:[18,118.5],bend:-1,neck:2}}},
+  wandhund:{n:"Halber Hund an der Wand",sa:"Ardha Adho Mukha Svanasana",lv:1,r:"schulter",z:"Schultern · Brust · Beinrückseite",sec:30,alt:"armeheben",
+    c:["Hände auf Hüfthöhe schulterbreit an die Wand","Zurückgehen, bis Oberkörper und Arme eine Linie bilden","Brust sinkt sanft Richtung Boden, Knie dürfen weich sein"],a:"Ausatmen und die Brust etwas tiefer sinken lassen.",
+    an:{anchor:"foot",noBal:1,A:{shin:-94,thigh:-86,torso:-2,upper:4,fore:3,neck:-2,lum:-1,tho:-1},B:{shin:-94,thigh:-85,torso:-7,upper:6,fore:5,neck:-1,lum:-1.5,tho:-1.5},eq:[{t:"wall",x:121}]}},
+  reiter:{n:"Reiterhaltung",sa:"Ashwa Sanchalanasana",lv:1,r:"huefte",z:"Hüftbeuger · Leiste · Beine",sec:30,uni:1,alt:"tiefausfall",
+    c:["Großer Schritt, hinteres Knie auf der Matte","Hände links und rechts neben den vorderen Fuß","Brust nach vorn, Becken sinkt, Blick nach vorn"],a:"Ausatmen und die Hüfte etwas tiefer sinken lassen.",
+    an:{anchor:"hip",at:[0,34],A:{torso:28,thigh:15,shin:-96,foot:0,thigh2:-140,shin2:180,foot2:180,handAt:[46,3],bend:-1,neck:24},B:{torso:29,thigh:15,shin:-96,foot:0,thigh2:-140,shin2:180,foot2:180,handAt:[46,3],bend:-1,neck:28}}},
+  loewe:{n:"Löwe",sa:"Simhasana",lv:1,r:"ganz",z:"Gesicht · Hals · Atmung",sec:30,alt:"fersensitz",
+    c:["Im Fersensitz die Hände auf die Oberschenkel, Finger gespreizt","Einatmen durch die Nase","Kräftig durch den Mund ausatmen, Zunge raus, Blick nach oben"],a:"Ausatmen mit einem lauten „Haaa“, 3–5 Wiederholungen.",
+    an:{anchor:"hip",at:[0,20],tempo:[2.2,.3,1.4,.9],ph:["Einatmen","Ausatmen · Zunge raus"],A:{torso:76,thigh:-20.5,shin:180,foot:180,handAt:[34,21],bend:1,neck:4},B:{torso:66,thigh:-20.5,shin:180,foot:180,handAt:[37,20],bend:1,neck:16}}},
+  tiger:{n:"Tiger",sa:"Vyaghrasana",lv:1,r:"ruecken",z:"Rücken · Gesäß · Hüftbeuger",sec:30,uni:1,alt:"katzekuh",
+    c:["Vierfüßlerstand, Hände unter den Schultern","Ausatmen: Knie Richtung Nase, Rücken rund","Einatmen: Bein nach hinten-oben, Knie gebeugt, Blick nach vorn"],a:"Die Atmung führt die Bewegung.",
+    an:{anchor:"hip",at:[0,51],tempo:[3,.6,3,.6],ph:["Ausatmen · Knie zur Nase","Einatmen · Bein hoch"],A:{torso:9,thigh:-90,shin:180,foot:180,thigh2:-40,shin2:175,foot2:180,upper:-90,fore:-90,neck:-30,lum:-5,tho:-7},B:{torso:10,thigh:-90,shin:180,foot:180,thigh2:165,shin2:80,foot2:150,upper:-90,fore:-90,neck:24,lum:5,tho:2}}},
+  kniebrett:{n:"Brett auf den Knien",sa:"Ardha Phalakasana",lv:1,r:"ganz",z:"Bauch · Schultern · Rumpf",sec:20,alt:"vierfuessler",
+    c:["Hände unter den Schultern, Knie hinter der Hüfte ablegen","Eine gerade Linie von den Knien bis zum Kopf","Bauch fest, Schultern weg von den Ohren"],a:"Gleichmäßig weiteratmen, nicht pressen.",
+    an:{anchor:"hand",A:{upper:-90,fore:-90,torso:32,thigh:212,shin:180,foot:180,neck:-8},B:{upper:-90,fore:-90,torso:31.6,thigh:211.6,shin:180,foot:180,neck:-8}}},
+  /* ---- 3.4 · Fortgeschritten ---- */
+  hoherausfall:{n:"Hoher Ausfallschritt",sa:"Ashta Chandrasana",lv:2,r:"huefte",z:"Hüftbeuger · Beine · Gleichgewicht",sec:30,uni:1,alt:"tiefausfall",
+    c:["Großer Schritt, vorderes Knie über dem Knöchel","Hintere Ferse gehoben, hinteres Bein lang","Arme nach oben, Becken gerade nach vorn"],a:"Einatmen lang nach oben, ausatmen tiefer sinken.",
+    an:{anchor:"hip",at:[0,54],A:{torso:90,thigh:-10,shin:-90,foot:0,thigh2:-150,shin2:-150,foot2:-50,upper:93,fore:95,neck:3},B:{torso:92,thigh:-10,shin:-90,foot:0,thigh2:-150,shin2:-150,foot2:-50,upper:98,fore:100,neck:6}}},
+  demkrieger:{n:"Demütiger Krieger",sa:"Baddha Virabhadrasana",lv:2,r:"schulter",z:"Schultern · Hüfte · Beine",sec:20,uni:1,alt:"krieger1",risk:"shoulder",
+    c:["Aus Krieger I die Hände hinter dem Rücken verschränken","Oberkörper an der Innenseite des vorderen Knies nach unten sinken lassen","Arme Richtung Decke, bei Schulterdruck Hände an die Hüfte"],a:"Ausatmen beim Sinken, unten ruhig weiteratmen.",
+    an:{anchor:"hip",at:[0,62],A:{torso:-38,thigh:-20,shin:-90,foot:0,thigh2:-139.5,shin2:-139.5,foot2:8,upper:118,fore:116,neck:6,tho:-2},B:{torso:-42,thigh:-20,shin:-90,foot:0,thigh2:-139.5,shin2:-139.5,foot2:8,upper:112,fore:110,neck:4,tho:-2.5}}},
+  drehausfall:{n:"Gedrehter Ausfallschritt",sa:"Parivrtta Anjaneyasana",lv:2,r:"ruecken",z:"Wirbelsäule · Hüftbeuger",sec:30,uni:1,alt:"tiefausfall",
+    c:["Tiefer Ausfallschritt, hinteres Knie auf der Matte","Hände vor der Brust zusammen, Ellbogen außen ans vordere Knie","Erst lang machen, dann drehen, Blick nach oben"],a:"Einatmen lang machen, ausatmen etwas weiter drehen.",
+    an:{anchor:"hip",at:[0,35],A:{torso:52,thigh:14,shin:-88,foot:0,thigh2:-142,shin2:180,foot2:180,upper:-72,fore:88,neck:30,tho:-1},B:{torso:48,thigh:14,shin:-88,foot:0,thigh2:-142,shin2:180,foot2:180,upper:-74,fore:86,neck:34,tho:-1.5}}},
+  achtpunkt:{n:"Acht-Punkt-Haltung",sa:"Ashtanga Namaskara",lv:2,r:"brust",z:"Brust · Schultern · Arme",sec:15,alt:"welpe",
+    c:["Aus dem Vierfüßlerstand Knie, Brust und Kinn ablegen","Hüfte bleibt oben, Ellbogen eng am Körper","Hände unter den Schultern, Zehen aufgestellt"],a:"Ruhig weiteratmen, Schultern weg von den Ohren.",
+    an:{anchor:"hip",at:[16,47],A:{torso:-43.5,thigh:-110,shin:180,foot:180,handAt:[52,2],bend:-1,neck:50,tho:1},B:{torso:-44,thigh:-110.5,shin:180,foot:180,handAt:[52,2],bend:-1,neck:51,tho:1}}},
+  unterarmstuetz:{n:"Unterarmstütz",sa:"Makara Adho Mukha Svanasana",lv:2,r:"ganz",z:"Bauch · Schultern · Rumpf",sec:20,alt:"kniebrett",
+    c:["Unterarme parallel, Ellbogen unter den Schultern","Beine lang nach hinten, Zehen aufgestellt","Körper bildet eine gerade Linie, Bauch und Gesäß fest"],a:"Gleichmäßig weiteratmen, nicht pressen.",
+    an:{anchor:"hand",at:[0,3],A:{upper:-88,fore:0,torso:11,thigh:191,shin:191,foot:-30,neck:-6},B:{upper:-88,fore:0,torso:10.6,thigh:190.6,shin:190.6,foot:-30.4,neck:-6}}},
+  /* ---- 3.4 · Profi ---- */
+  stehspagat:{n:"Stehender Spagat",sa:"Urdhva Prasarita Eka Padasana",lv:3,r:"beine",z:"Beinrückseite · Hüfte · Gleichgewicht",sec:20,uni:1,alt:"hund3",
+    c:["Aus der Vorbeuge die Hände neben den Standfuß","Ein Bein lang nach hinten-oben heben","Becken bleibt gerade, Kopf hängt locker zum Schienbein"],a:"Ausatmen und das Bein etwas höher, nie federn.",
+    an:{anchor:"foot",noBal:1,A:{shin:-91,thigh:-86,torso:-80,thigh2:108,shin2:110,foot2:128,handAt:[16,1.5],bend:-1,neck:-10,lum:-1,tho:-3},B:{shin:-91,thigh:-86,torso:-82,thigh2:112,shin2:114,foot2:132,handAt:[16,1.5],bend:-1,neck:-10,lum:-1,tho:-3.5}}},
+  /* ---- 3.4 · Batch 2: Sitzen, Liegen, Umkehr ---- */
+  stab:{n:"Stabhaltung",sa:"Dandasana",lv:1,r:"ruecken",z:"Rücken · Haltung · Beinrückseite",sec:30,alt:"sukhasana",
+    c:["Langsitz, Beine gestreckt, Zehen zeigen nach oben","Hände neben der Hüfte, Finger nach vorn","Scheitel zieht nach oben, Brust weit, Knie dürfen leicht gebeugt sein"],a:"Einatmen und lang werden, ausatmen Schultern sinken lassen.",
+    an:{anchor:"hip",at:[0,9],A:{torso:93,thigh:0,shin:-1,foot:80,handAt:[8,9],bend:-1,neck:-2},B:{torso:92,thigh:0,shin:-1,foot:82,handAt:[8,9],bend:-1,neck:-1}}},
+  schneidervor:{n:"Vorbeuge im Schneidersitz",sa:"Adho Mukha Sukhasana",lv:1,r:"huefte",z:"Gesäß · äußere Hüfte · Rücken",sec:40,alt:"sukhasana",
+    c:["Im Schneidersitz aufrecht sitzen","Hände nach vorn auf die Matte wandern lassen","Rücken lang, Gesäß bleibt am Boden, nach der Hälfte Beine andersherum kreuzen"],a:"Ausatmen und die Hände ein Stück weiter wandern lassen.",
+    an:{anchor:"hip",at:[0,9],A:{torso:42,thigh:31,shin:-136,foot:-8,thigh2:23,shin2:-145,foot2:-4,handAt:[78,4],bend:-1,neck:-12,lum:-1.5,tho:-2.5},B:{torso:38,thigh:31,shin:-136,foot:-8,thigh2:23,shin2:-145,foot2:-4,handAt:[80,4],bend:-1,neck:-14,lum:-2,tho:-3}}},
+  marichi1:{n:"Marichi-Vorbeuge",sa:"Marichyasana I",lv:2,r:"beine",z:"Beinrückseite · Hüfte · Schultern",sec:30,uni:1,alt:"kopfknie",risk:"shoulder",
+    c:["Langsitz, ein Bein aufstellen, Fuß nah am Gesäß","Arm von innen um das aufgestellte Schienbein legen","Mit langem Rücken über das gestreckte Bein beugen, Hände hinter dem Rücken fassen oder Gurt"],a:"Einatmen lang machen, ausatmen etwas tiefer sinken.",
+    an:{anchor:"hip",at:[0,9],A:{torso:36,thigh:60,shin:-94,foot:0,thigh2:0,shin2:-1,foot2:76,upper:-84,fore:186,neck:-10,tho:-3},B:{torso:33,thigh:60,shin:-94,foot:0,thigh2:0,shin2:-1,foot2:76,upper:-86,fore:184,neck:-12,tho:-3.5}}},
+  marichi3:{n:"Marichi-Drehsitz",sa:"Marichyasana III",lv:2,r:"ruecken",z:"Wirbelsäule · Gesäß · Schultern",sec:30,uni:1,alt:"drehsitz",
+    c:["Langsitz, ein Bein aufstellen, das andere bleibt lang","Hintere Hand stützt hinter dem Po, Ellbogen außen ans aufgestellte Knie","Erst lang machen, dann drehen, Blick über die Schulter"],a:"Einatmen aufrichten, ausatmen etwas weiter drehen.",
+    an:{anchor:"hip",at:[0,9],A:{torso:93,thigh:53,shin:-87,foot:0,thigh2:0,shin2:-1,foot2:76,handAt:[-18,9],bend:1,upper2:-35,fore2:85,neck:6},B:{torso:94,thigh:53,shin:-87,foot:0,thigh2:0,shin2:-1,foot2:76,handAt:[-18,9],bend:1,upper2:-37,fore2:86,neck:8}}},
+  bharadvaja:{n:"Bharadvaja-Drehsitz",sa:"Bharadvajasana",lv:2,r:"ruecken",z:"Wirbelsäule · Schultern · Hüfte",sec:30,uni:1,alt:"sitzseitbeuge",
+    c:["Sitzen, beide Beine gebeugt zu einer Seite ablegen","Hand ans äußere Knie, andere Hand hinter dem Po","Erst lang machen, dann zur Seite der Knie weg drehen"],a:"Einatmen aufrichten, ausatmen sanft weiterdrehen.",
+    an:{anchor:"hip",at:[0,9],A:{torso:82,thigh:6,shin:178,foot:180,thigh2:2,shin2:176,foot2:182,handAt:[42,20],bend:-1,upper2:-112,fore2:-100,neck:6},B:{torso:83,thigh:6,shin:178,foot:180,thigh2:2,shin2:176,foot2:182,handAt:[42,20],bend:-1,upper2:-113,fore2:-101,neck:8}}},
+  liegheld:{n:"Liegender Held",sa:"Supta Virasana",lv:2,r:"beine",z:"Oberschenkel vorn · Hüftbeuger · Knie",sec:30,alt:"heldensitz",risk:"knee",
+    c:["Aus dem Heldensitz die Hände hinter den Po setzen","Auf die Unterarme und langsam auf den Rücken sinken, Kissen erlaubt","Knie bleiben zusammen, Rücken nicht ins Hohlkreuz"],a:"Ruhig in den Bauch atmen, über die Unterarme wieder hochkommen.",
+    an:{anchor:"hip",at:[0,16],A:{torso:188,thigh:-15,shin:180,foot:180,upper:-6,fore:-3,neck:-13},B:{torso:187.4,thigh:-15,shin:180,foot:180,upper:-6,fore:-3,neck:-13.4}}},
+  bruecke1:{n:"Einbeinige Brücke",sa:"Eka Pada Setu Bandhasana",lv:2,r:"huefte",z:"Gesäß · Hüftbeuger · Rumpf",sec:20,uni:1,alt:"bruecke",
+    c:["Aus der Brücke das Becken oben halten","Ein Bein lang nach oben strecken, Fuß gebeugt","Becken bleibt waagerecht, Standfuß drückt in die Matte"],a:"Gleichmäßig weiteratmen, ausatmen beim Ablegen.",
+    an:{anchor:"shoulder",at:[0,9],A:{torso:204,thigh:5,shin:-53,foot:0,thigh2:75,shin2:76,foot2:165,hand:[40,-6],bend:1,neck:-27,lum:.4},B:{torso:204,thigh:5,shin:-53,foot:0,thigh2:79,shin2:80,foot2:169,hand:[40,-6],bend:1,neck:-27,lum:.8}}},
+  superman:{n:"Superman",sa:"Viparita Shalabhasana",lv:2,r:"ruecken",z:"Rücken · Gesäß · Schultern",sec:15,alt:"heuschrecke",risk:"shoulder",
+    c:["Bauchlage, Arme lang nach vorn","Arme, Brust und Beine gleichzeitig leicht anheben","Nacken lang, Blick zum Boden, nicht ins Hohlkreuz pressen"],a:"Oben gleichmäßig weiteratmen.",
+    an:{anchor:"hip",at:[0,10],flip:1,A:{torso:168,thigh:8,shin:8,foot:-6,upper:172,fore:174,neck:-4},B:{torso:165,thigh:11,shin:11,foot:-6,upper:168,fore:170,neck:-6}}},
+  halbheuschrecke:{n:"Halbe Heuschrecke",sa:"Ardha Salabhasana",lv:1,r:"ruecken",z:"Unterer Rücken · Gesäß",sec:20,uni:1,alt:"krokodil",
+    c:["Bauchlage, Arme neben dem Körper, Kinn auf der Matte","Ein gestrecktes Bein langsam anheben","Becken bleibt am Boden, nicht verdrehen"],a:"Einatmen heben, ausatmen ablegen.",
+    an:{anchor:"hip",at:[0,10],flip:1,A:{torso:176,thigh:0,shin:0,foot:-12,thigh2:14,shin2:14,foot2:-4,upper:2,fore:2,neck:-6},B:{torso:176,thigh:0,shin:0,foot:-12,thigh2:17,shin2:17,foot2:-4,upper:2,fore:2,neck:-6}}},
+  bogenvoll:{n:"Bogen",sa:"Dhanurasana",lv:3,r:"brust",z:"Brust · Hüftbeuger · Schultern",sec:15,alt:"bogen",risk:"back",
+    c:["Bauchlage, Knie beugen, mit beiden Händen die Fußgelenke fassen","Füße in die Hände drücken, Brust und Oberschenkel heben","Knie nicht weiter als hüftbreit, Nacken lang"],a:"Einatmen heben, oben ruhig weiteratmen, ausatmen ablegen.",
+    an:{anchor:"hip",at:[0,10],flip:1,A:{torso:138,thigh:16,shin:132,foot:150,thigh2:16,shin2:132,foot2:150,handAt:[14,57],bend:-1,neck:-10},B:{torso:135,thigh:19,shin:130,foot:148,thigh2:19,shin2:130,foot2:148,handAt:[14,60],bend:-1,neck:-12}}},
+  frosch:{n:"Frosch",sa:"Bhekasana",lv:3,r:"beine",z:"Oberschenkel vorn · Knie · Brust",sec:15,alt:"bogen",risk:"knee",
+    c:["Bauchlage, auf die Unterarme stützen","Beide Knie beugen, die Hände auf die Fußrücken legen","Füße sanft Richtung Boden neben die Hüfte drücken, Brust hebt sich"],a:"Ruhig weiteratmen, nicht ruckartig drücken.",
+    an:{anchor:"hip",at:[0,10],flip:1,A:{torso:152,thigh:0,shin:165,foot:200,thigh2:0,shin2:163,foot2:198,handAt:[-2,26],bend:1,neck:-8},B:{torso:154,thigh:0,shin:167,foot:202,thigh2:0,shin2:165,foot2:200,handAt:[-2,25],bend:1,neck:-9}}},
+  spagat:{n:"Spagat",sa:"Hanumanasana",lv:3,r:"beine",z:"Beinrückseite · Hüftbeuger · Leiste",sec:30,uni:1,alt:"eidechse",risk:"hip",
+    c:["Aus der Spagat-Vorbereitung das vordere Bein nach vorn gleiten lassen","Hinteres Bein lang nach hinten, Becken zeigt nach vorn","Blöcke unter die Hände oder ein Kissen unter das Becken, nie federn"],a:"Ruhig und lang ausatmen, nur so tief wie es angenehm ist.",
+    an:{anchor:"hip",at:[0,12],A:{torso:90,thigh:-6,shin:-6,foot:80,thigh2:-172,shin2:-174,foot2:180,upper:92,fore:94,neck:4},B:{torso:92,thigh:-6,shin:-6,foot:80,thigh2:-172,shin2:-174,foot2:180,upper:96,fore:98,neck:6}}},
+  ohrendruck:{n:"Ohrendruck",sa:"Karnapidasana",lv:3,r:"ruecken",z:"Rücken · Nacken · Gesäß",sec:15,alt:"kniebrust",risk:"inv",
+    c:["Aus dem Pflug die Knie beugen und neben die Ohren sinken lassen","Arme lang auf der Matte oder Hände stützen den Rücken","Nacken nie belasten oder drehen, langsam abrollen"],a:"Flach weiteratmen, der Bauch ist zusammengedrückt.",
+    an:{anchor:"shoulder",at:[0,9],A:{torso:-85,thigh:248,shin:200,foot:180,upper:-3,fore:-3,neck:-95},B:{torso:-84,thigh:249,shin:201,foot:181,upper:-3,fore:-3,neck:-96}}},
+  halbschulter:{n:"Halber Schulterstand",sa:"Viparita Karani Mudra",lv:3,r:"ganz",z:"Schultern · Rumpf · Beine",sec:30,alt:"beinewand",risk:"inv",
+    c:["Rückenlage, Beine über den Kopf schwingen, Hände stützen das Becken","Ellbogen schulterbreit auf der Matte, Becken ruht in den Händen","Beine schräg nach oben, Kopf nie drehen"],a:"Ruhig atmen, langsam Wirbel für Wirbel ablegen.",
+    an:{anchor:"shoulder",at:[0,9],A:{torso:-125,thigh:100,shin:100,foot:104,upper:0,fore:85,neck:-55},B:{torso:-124.4,thigh:100.6,shin:100.6,foot:105,upper:0,fore:85,neck:-55.6}}},
+  schildkroete:{n:"Schildkröte",sa:"Kurmasana",lv:3,r:"ruecken",z:"Rücken · Beinrückseite · Hüfte",sec:20,alt:"sitzvorbeuge",risk:"hip",
+    c:["Grätschsitz, Knie leicht gebeugt, Oberkörper nach vorn","Arme unter den Knien hindurch zur Seite strecken","Brust sinkt zur Matte, Beine langsam strecken, nicht ziehen"],a:"Lang ausatmen und den Rücken loslassen.",
+    an:{anchor:"hip",at:[0,9],A:{torso:12,thigh:8,shin:-14,foot:60,upper:-168,fore:-178,neck:-32,lum:-2,tho:-4},B:{torso:11,thigh:8,shin:-13,foot:61,upper:-168,fore:-178,neck:-33,lum:-2.5,tho:-4.5}}},
+  reiher:{n:"Reiher",sa:"Krounchasana",lv:3,r:"beine",z:"Beinrückseite · Oberschenkel vorn",sec:20,uni:1,alt:"beingurt",risk:"knee",
+    c:["Ein Bein im Heldensitz nach hinten falten, anderes Knie aufstellen","Fuß mit beiden Händen fassen und das Bein nach oben strecken","Rücken lang, Brust zum Schienbein, Gurt erlaubt"],a:"Einatmen lang machen, ausatmen das Bein etwas heranholen.",
+    an:{anchor:"hip",at:[0,9],A:{torso:96,thigh:2,shin:178,foot:180,thigh2:70,shin2:70,foot2:100,handAt:[31,95],bend:-1,neck:-24},B:{torso:97,thigh:2,shin:178,foot:180,thigh2:73,shin2:73,foot2:103,handAt:[27,96.5],bend:-1,neck:-26}}},
+  zehenboot:{n:"Zehen-Boot",sa:"Ubhaya Padangusthasana",lv:3,r:"beine",z:"Beinrückseite · Bauch · Gleichgewicht",sec:15,alt:"bootkn",
+    c:["Sitzen, Knie gebeugt, die großen Zehen fassen","Auf die Sitzknochen zurückrollen und beide Beine strecken","Rücken lang, Brust offen, Knie dürfen leicht gebeugt bleiben"],a:"Gleichmäßig weiteratmen, Blick nach vorn-oben.",
+    an:{anchor:"hip",at:[0,9],A:{torso:108,thigh:71,shin:71,foot:96,handAt:[30,96],bend:-1,neck:-10},B:{torso:107,thigh:72,shin:72,foot:97,handAt:[28.4,96.5],bend:-1,neck:-12}}},
+  pfau:{n:"Pfau",sa:"Mayurasana",lv:3,r:"brust",z:"Handgelenke · Arme · Rumpf",sec:10,alt:"brett",risk:"arm",
+    c:["Kniend die Hände mit den Fingern zu den Füßen aufsetzen","Ellbogen in den Bauch, Oberkörper weit nach vorn legen","Beine lang nach hinten und abheben, Körper waagerecht"],a:"Ruhig weiteratmen, lieber kurz und sauber.",
+    an:{anchor:"hand",A:{fore:-95,upper:-160,torso:-6,thigh:186,shin:186,foot:186,neck:14},B:{fore:-94,upper:-159,torso:-5.5,thigh:186.5,shin:186.5,foot:186,neck:15}}},
+  handstand:{n:"Handstand",sa:"Adho Mukha Vrksasana",lv:3,r:"schulter",z:"Schultern · Handgelenke · Rumpf",sec:15,alt:"delfin",risk:"inv",
+    c:["Aus dem Hund die Füße heranlaufen, Hände schulterbreit, Finger gespreizt","Ein Bein heben und mit Schwung über die Hände kommen, anfangs an der Wand","Arme gestreckt, Bauch fest, Blick zwischen die Hände"],a:"Gleichmäßig weiteratmen, kontrolliert wieder ablegen.",
+    an:{anchor:"hand",A:{fore:-90,upper:-90,torso:-90,thigh:90,shin:90,foot:92,neck:20},B:{fore:-90.6,upper:-90.6,torso:-90.8,thigh:89.4,shin:89.8,foot:93,neck:21}}},
+  unterarmstand:{n:"Unterarmstand",sa:"Pincha Mayurasana",lv:3,r:"schulter",z:"Schultern · Rumpf · Gleichgewicht",sec:15,alt:"delfin",risk:"inv",
+    c:["Aus dem Delfin die Füße heranlaufen, Unterarme parallel","Ein Bein heben und kontrolliert hochschwingen, anfangs an der Wand","Schultern über den Ellbogen, Kopf frei, Blick nach vorn"],a:"Ruhig weiteratmen, langsam ablegen und in der Kindshaltung ausruhen.",
+    an:{anchor:"hand",at:[0,3],A:{fore:0,upper:-90,torso:-90,thigh:90,shin:90,foot:92,neck:40},B:{fore:0,upper:-90.6,torso:-90.8,thigh:89.4,shin:89.8,foot:93,neck:41}}},
+  kopfkniestand:{n:"Kopf-zum-Knie im Stand",sa:"Dandayamana Janushirasana",lv:3,r:"beine",z:"Gleichgewicht · Beinrückseite · Rumpf",sec:20,uni:1,alt:"beingurt",
+    c:["Auf einem Bein stehen, den anderen Fuß mit beiden Händen fassen","Bein nach vorn strecken, Standbein bleibt fest","Ellbogen nach unten, Oberkörper sinkt Richtung Knie"],a:"Ruhig weiteratmen, Blick auf einen festen Punkt.",
+    an:{anchor:"foot",noBal:1,A:{shin:-86,thigh:-82,torso:2,thigh2:0,shin2:0,foot2:80,handAt:[80,96],bend:-1,neck:-18,tho:-3},B:{shin:-86,thigh:-82,torso:-2,thigh2:-1,shin2:-1,foot2:80,handAt:[80,94],bend:-1,neck:-20,tho:-4}}},
+  drehvorbeuge:{n:"Gedrehte Vorbeuge",sa:"Parivrtta Uttanasana",lv:2,r:"ruecken",z:"Wirbelsäule · Beinrückseite",sec:20,uni:1,alt:"vorbeuge",
+    c:["Aus der Vorbeuge eine Hand unter die Schulter auf die Matte","Andere Hand an die Hüfte, dann Arm zur Decke strecken","Knie weich, Hüfte bleibt gerade über den Füßen"],a:"Einatmen lang machen, ausatmen aufdrehen.",
+    an:{anchor:"foot",noBal:1,padT:24,A:{shin:-104,thigh:-62,torso:-50,handAt:[40,2],bend:1,upper2:88,fore2:88,neck:22,lum:-1,tho:-2},B:{shin:-104,thigh:-62,torso:-52,handAt:[40,2],bend:1,upper2:92,fore2:92,neck:26,lum:-1,tho:-2}}},
+  /* ---- 3.4 · Batch 3: Frontansicht (Stand, Sitz, Seitlage) ---- */
+  stern:{n:"Fünfzackiger Stern",sa:"Utthita Tadasana",lv:1,r:"ganz",z:"Ganzkörper · Schultern · Haltung",sec:20,alt:"berg",
+    c:["Weiter Stand, Füße parallel","Arme auf Schulterhöhe weit zur Seite strecken","Scheitel, Fingerspitzen und Füße ziehen in fünf Richtungen auseinander"],a:"Einatmen und weit werden, ausatmen Schultern sinken lassen.",
+    an:{view:"front",A:{yf:1,hy:75,aR:[62,0],ua:6,fa:8},B:{yf:1,hy:74.6,aR:[62,0],ua:10,fa:13}}},
+  sitzberg:{n:"Sitzender Berg",sa:"Parvatasana",lv:1,r:"schulter",z:"Schultern · Flanken · Haltung",sec:30,alt:"sukhasana",
+    c:["Im Schneidersitz aufrecht sitzen","Finger verschränken, Handflächen nach oben über den Kopf strecken","Schultern weg von den Ohren, Rippen sinken"],a:"Einatmen nach oben wachsen, ausatmen Schultern sinken lassen.",
+    an:{view:"front",A:{yf:1,hy:13,kR:[39,18],aR:[-13,8],aL:[13,7],hR:[2.5,205],hL:[-2.5,205],bR:1,bL:-1},B:{yf:1,hy:13.4,kR:[39,18],aR:[-13,8],aL:[13,7],hR:[2.5,207],hL:[-2.5,207],bR:1,bL:-1}}},
+  sitzdreh:{n:"Drehung im Schneidersitz",sa:"Parivrtta Sukhasana",lv:1,r:"ruecken",z:"Wirbelsäule · Schultern",sec:30,uni:1,alt:"sukhasana",
+    c:["Im Schneidersitz aufrecht sitzen","Eine Hand ans gegenüberliegende Knie, die andere hinter den Po","Einatmen lang machen, ausatmen sanft drehen, Blick über die Schulter"],a:"Einatmen aufrichten, ausatmen ein kleines Stück weiter drehen.",
+    an:{view:"front",A:{yf:1,hy:13,kR:[39,18],aR:[-13,8],aL:[13,7],hR:[-12,101],bR:-1,uaL:-112,faL:-104,tilt:-10,lean:-3},B:{yf:1,hy:13.3,kR:[39,18],aR:[-13,8],aL:[13,7],hR:[-14,102],bR:-1,uaL:-114,faL:-106,tilt:-14,lean:-4}}},
+  graetsche:{n:"Grätsche im Sitzen",sa:"Upavistha Konasana",lv:1,r:"huefte",z:"Oberschenkel innen · Beinrückseite",sec:40,alt:"schmetterling",
+    c:["Langsitz, Beine weit zur Seite öffnen, Zehen zeigen nach oben","Hände vor dem Körper auf die Matte","Rücken lang, aus der Hüfte leicht nach vorn neigen"],a:"Ausatmen und die Hände ein Stück nach vorn wandern lassen.",
+    an:{view:"front",A:{yf:1,hy:13,kR:[46,10],aR:[82,4],hR:[17,86],hL:[-17,86],bR:-1,bL:1,br:-8},B:{yf:1,hy:13,kR:[46,10],aR:[82,4],hR:[17,85],hL:[-17,85],bR:-1,bL:1,br:-11}}},
+  wechselatmung:{n:"Wechselatmung",sa:"Nadi Shodhana",lv:1,r:"ganz",z:"Atmung · Ruhe · Konzentration",sec:60,alt:"sukhasana",
+    c:["Aufrecht im bequemen Sitz, linke Hand auf dem Knie","Rechter Daumen schließt das rechte Nasenloch, Ringfinger das linke","Links ein, rechts aus, rechts ein, links aus, ruhig und gleichmäßig"],a:"Etwa 4 Sekunden ein, 6 Sekunden aus, ohne zu pressen.",
+    an:{view:"front",tempo:[4,.6,5.4,.6],ph:["Links einatmen","Rechts ausatmen"],A:{yf:1,hy:13,kR:[39,18],aR:[-13,8],aL:[13,7],ua:-70,us:.5,fa:124,fs:1.1,hL:[-33,100],bL:1,tilt:-2},B:{yf:1,hy:13.4,kR:[39,18],aR:[-13,8],aL:[13,7],ua:-70,us:.5,fa:125,fs:1.12,hL:[-33,100],bL:1,tilt:2,br:.6}}},
+  bienenatmung:{n:"Bienenatmung",sa:"Bhramari",lv:1,r:"ganz",z:"Atmung · Nacken · Entspannung",sec:60,alt:"sukhasana",
+    c:["Aufrecht im bequemen Sitz, Augen schließen","Daumen verschließen sanft die Ohren, Finger liegen auf der Stirn","Mit geschlossenem Mund summend ausatmen wie eine Biene"],a:"Normal einatmen, lang und summend ausatmen, 5–7 Runden.",
+    an:{view:"front",tempo:[3.4,.4,6,.6],ph:["Einatmen","Summend ausatmen"],A:{yf:1,hy:13,kR:[39,18],aR:[-13,8],aL:[13,7],ua:20,fa:165},B:{yf:1,hy:13.3,kR:[39,18],aR:[-13,8],aL:[13,7],ua:21,fa:165,br:.4}}},
+  wiege:{n:"Baby-Wiege",sa:"Hindolasana",lv:1,r:"huefte",z:"Gesäß · äußere Hüfte",sec:30,uni:1,alt:"figur4",
+    c:["Aufrecht sitzen, ein Schienbein anheben","Knie in eine Ellenbeuge, Fuß in die andere, wie ein Baby halten","Rücken lang, sanft hin und her wiegen"],a:"Ruhig in die Hüfte atmen.",
+    an:{view:"front",A:{yf:1,hy:13,kR:[36,52],aR:[-17,58],kL:[-39,18],aL:[13,7],hR:[34,135],hL:[-17,135],bR:1,bL:-1},B:{yf:1,hy:13,hx:1.5,lean:2,kR:[37.5,54],aR:[-15.5,59],kL:[-39,18],aL:[13,7],hR:[34,136],hL:[-17,136],bR:1,bL:-1}}},
+  halblotus:{n:"Halber Lotus",sa:"Ardha Padmasana",lv:2,r:"huefte",z:"Hüfte · Knie · Haltung",sec:40,uni:1,alt:"sukhasana",risk:"knee",
+    c:["Im Schneidersitz einen Fuß auf den gegenüberliegenden Oberschenkel legen","Fußsohle zeigt nach oben, Knie sinkt Richtung Boden","Nie am Fuß ziehen: zwickt das Knie, zurück in den Schneidersitz"],a:"Ruhig und gleichmäßig atmen, Schultern sinken.",
+    an:{view:"front",A:{yf:1,hy:13,kR:[33,16],aR:[-22,22],kL:[-39,18],aL:[13,7],hR:[30,96],hL:[-36,98],bR:-1,bL:1},B:{yf:1,hy:13.4,kR:[33,16],aR:[-22,22],kL:[-39,18],aL:[13,7],hR:[30,96],hL:[-36,98],bR:-1,bL:1}}},
+  lotus:{n:"Lotus",sa:"Padmasana",lv:3,r:"huefte",z:"Hüfte · Knie · Haltung",sec:40,alt:"halblotus",risk:"knee",
+    c:["Aus dem Halben Lotus den zweiten Fuß auf den anderen Oberschenkel legen","Beide Knie sinken Richtung Boden, Rücken aufrecht","Nur mit offenen Hüften: Druck im Knie heißt sofort lösen"],a:"Ruhig und gleichmäßig atmen, nach der Hälfte die Beine andersherum kreuzen.",
+    an:{view:"front",A:{yf:1,hy:13,kR:[33,16],aR:[-22,22],aL:[22,23],hR:[30,96],hL:[-30,96],bR:-1,bL:1},B:{yf:1,hy:13.4,kR:[33,16],aR:[-22,22],aL:[22,23],hR:[30,96],hL:[-30,96],bR:-1,bL:1}}},
+  kuhgesichtsitz:{n:"Kuhgesicht",sa:"Gomukhasana",lv:2,r:"huefte",z:"Äußere Hüfte · Schultern · Trizeps",sec:30,uni:1,alt:"kuhgesicht",risk:"hip",
+    c:["Knie übereinander stapeln, Füße neben die Hüften","Ein Arm von oben, der andere von unten hinter den Rücken, Gurt erlaubt","Beide Sitzknochen am Boden, Kissen darunter wenn nötig"],a:"Ruhig in Hüfte und Brust atmen.",
+    an:{view:"front",A:{yf:1,hy:13,kR:[-14,22],aR:[-38,6],kL:[14,14],aL:[38,6],ua:93,fa:-98,uaL:-96,faL:76,fsL:.8},B:{yf:1,hy:13.4,kR:[-14,22],aR:[-38,6],kL:[14,14],aL:[38,6],ua:96,fa:-95,uaL:-98,faL:80,fsL:.8}}},
+  feuerholz:{n:"Feuerholz",sa:"Agnistambhasana",lv:2,r:"huefte",z:"Äußere Hüfte · Gesäß",sec:30,uni:1,alt:"figur4",risk:"hip",
+    c:["Schienbeine übereinander stapeln, Knöchel auf das andere Knie","Füße gebeugt, Knie sinken lassen, Kissen erlaubt","Rücken lang, wer mag neigt sich leicht nach vorn"],a:"Lang ausatmen, die Hüfte öffnet sich langsam.",
+    an:{view:"front",A:{yf:1,hy:13,kR:[30,26],aR:[-25,24],kL:[-32,17],aL:[22,12],hR:[28,104],hL:[-30,100],bR:-1,bL:1},B:{yf:1,hy:13,kR:[30,25],aR:[-25,23.5],kL:[-32,17],aL:[22,12],hR:[28,103],hL:[-30,99],bR:-1,bL:1,br:-3}}},
+  drehkopfknie:{n:"Gedrehtes Kopf-zum-Knie",sa:"Parivrtta Janu Sirsasana",lv:2,r:"ruecken",z:"Flanke · Beinrückseite · Rücken",sec:30,uni:1,alt:"sitzseitbeuge",
+    c:["Ein Bein zur Seite strecken, andere Fußsohle an den Oberschenkel","Seitlich über das gestreckte Bein neigen, untere Hand innen am Bein","Oberen Arm über den Kopf strecken, Brust öffnet sich nach oben"],a:"Einatmen in die obere Flanke.",
+    an:{view:"front",A:{yf:1,hy:13,kR:[48,9],aR:[86,5],kL:[-40,14],aL:[6,7],lean:38,hR:[57,133],bR:-1,uaL:62,faL:50,tilt:8},B:{yf:1,hy:13,kR:[48,9],aR:[86,5],kL:[-40,14],aL:[6,7],lean:42,hR:[58,131],bR:-1,uaL:60,faL:46,tilt:10}}},
+  graetschseit:{n:"Seitbeuge im Grätschsitz",sa:"Parsva Upavistha Konasana",lv:2,r:"ruecken",z:"Flanke · Innenseite Oberschenkel",sec:30,uni:1,alt:"sitzseitbeuge",
+    c:["Grätsche im Sitzen, Zehen zeigen nach oben","Zur Seite über ein Bein neigen, Unterarm innen ans Bein","Oberen Arm über den Kopf, beide Sitzknochen bleiben am Boden"],a:"In die lange Seite atmen.",
+    an:{view:"front",A:{yf:1,hy:13,kR:[46,10],aR:[82,4],lean:34,hR:[50,128],bR:-1,uaL:66,faL:54,tilt:6},B:{yf:1,hy:13,kR:[46,10],aR:[82,4],lean:38,hR:[52,127],bR:-1,uaL:64,faL:50,tilt:8}}},
+  seitunterarm:{n:"Seitstütz auf dem Unterarm",sa:"Salamba Vasisthasana",lv:2,r:"ganz",z:"Seitlicher Rumpf · Schultern",sec:20,uni:1,alt:"seitstuetz",risk:"shoulder",
+    c:["Seitlich liegen, Ellbogen unter der Schulter, Füße übereinander","Hüfte heben, bis der Körper eine gerade Linie bildet","Obere Hand an die Hüfte oder zur Decke, Kopf in Verlängerung"],a:"Gleichmäßig weiteratmen, nicht pressen.",
+    an:{view:"front",A:{yf:1,hx:4,hy:35,lean:75,aR:[-80,2],aL:[-80,10],ua:-15,fa:-15,fs:.3,uaL:165,faL:165},B:{yf:1,hx:4,hy:35.6,lean:74.6,aR:[-80,2],aL:[-80,10],ua:-15.4,fa:-15.4,fs:.3,uaL:162,faL:164}}},
+  liegevishnu:{n:"Vishnus Liegehaltung",sa:"Anantasana (Vorstufe)",lv:2,r:"beine",z:"Oberschenkel innen · Hüfte",sec:30,uni:1,alt:"beingurt",
+    c:["Seitlich liegen, Kopf ruht in der unteren Hand","Oberes Knie beugen und den großen Zeh oder den Fuß greifen","Bein Richtung Decke strecken, nur so weit wie es geht, Gurt erlaubt"],a:"Ruhig weiteratmen, Becken bleibt senkrecht.",
+    an:{view:"front",A:{yf:1,hx:0,hy:22,lean:90,aR:[-88,4],kR:[-44,8],kL:[18,72],aL:[52,84],ua:90,fa:200,hL:[-62,144],bL:1,tilt:-6},B:{yf:1,hx:0,hy:22,lean:90,aR:[-88,4],kR:[-44,8],kL:[20,74],aL:[55,88],ua:90,fa:200,hL:[-65,146],bL:1,tilt:-6}}},
+  goettinseit:{n:"Seitbeuge in der Göttin",sa:"Parsva Utkata Konasana",lv:2,r:"huefte",z:"Hüfte · Flanke · Oberschenkel innen",sec:20,uni:1,alt:"goettin",
+    c:["Göttin: weiter Stand, Knie über den Zehen gebeugt","Einen Unterarm auf den Oberschenkel legen","Anderen Arm über den Kopf strecken, Brust bleibt offen"],a:"In die obere Flanke einatmen, ausatmen tiefer sinken.",
+    an:{view:"front",A:{yf:1,hy:64,kR:[48,50],aR:[52,0],lean:28,hR:[36,104],bR:1,uaL:78,faL:62},B:{yf:1,hy:62,kR:[49,48],aR:[52,0],lean:31,hR:[36,103],bR:1,uaL:76,faL:58}}},
+  stehtaube:{n:"Stehende Taube",sa:"Eka Pada Utkatasana",lv:2,r:"huefte",z:"Gesäß · äußere Hüfte · Gleichgewicht",sec:20,uni:1,alt:"figur4",risk:"hip",
+    c:["Auf einem Bein stehen, den anderen Knöchel aufs Knie legen","Wie auf einen Stuhl nach hinten-unten setzen","Hände vor der Brust, Fuß gebeugt, Rücken lang"],a:"Ruhig weiteratmen, Blick auf einen festen Punkt.",
+    an:{view:"front",A:{yf:1,hx:-4,hy:70,aL:[-15,0],kL:[-18,38],kR:[40,58],aR:[-10,42],hR:[1.5,128],hL:[-1.5,128],bR:1,bL:-1},B:{yf:1,hx:-4,hy:68,aL:[-15,0],kL:[-18,37],kR:[41,56],aR:[-10,40.5],hR:[1.5,128],hL:[-1.5,128],bR:1,bL:-1}}},
+  lotusstand:{n:"Halber Lotus im Stand",sa:"Ardha Baddha Padmasana",lv:3,r:"huefte",z:"Gleichgewicht · Hüfte · Knie",sec:20,uni:1,alt:"baum",risk:"knee",
+    c:["Auf einem Bein stehen, den anderen Fuß hoch in die Leiste legen","Knie zeigt nach unten-außen, Becken bleibt gerade","Hände vor der Brust, bei Druck im Knie zurück in den Baum"],a:"Langsam und gleichmäßig atmen.",
+    an:{view:"front",A:{yf:1,hx:-4,aL:[-13,0],kL:[-14.5,46],kR:[30,58],aR:[-8,80],hR:[1.5,128],hL:[-1.5,128],bR:1,bL:-1},B:{yf:1,hx:-4,aL:[-13,0],kL:[-14.5,46],kR:[31,57],aR:[-8,80],hR:[1.5,129],hL:[-1.5,129],bR:1,bL:-1}}},
+  handzeh:{n:"Hand zum großen Zeh",sa:"Utthita Hasta Padangusthasana",lv:3,r:"beine",z:"Gleichgewicht · Beinrückseite · Hüfte",sec:20,uni:1,alt:"baum",risk:"hip",
+    c:["Auf einem Bein stehen, Knie heben und den großen Zeh fassen","Bein langsam zur Seite strecken, Standbein fest","Anderen Arm zur Seite, Becken bleibt gerade, Gurt erlaubt"],a:"Ruhig weiteratmen, Blick auf einen festen Punkt.",
+    an:{view:"front",A:{yf:1,hx:-6,aL:[-15,0],kL:[-16.5,46],kR:[35,124],aR:[66,152],hR:[72,151],bR:1,uaL:180,faL:180},B:{yf:1,hx:-6,aL:[-15,0],kL:[-16.5,46],kR:[36,125],aR:[67,154],hR:[73,153],bR:1,uaL:178,faL:180}}},
+  waage:{n:"Waage",sa:"Tolasana",lv:3,r:"brust",z:"Arme · Handgelenke · Rumpf",sec:10,alt:"halblotus",risk:"arm",
+    c:["Im Lotus oder Schneidersitz die Hände neben die Hüften","Arme strecken und das Becken mit den Beinen vom Boden heben","Bauch fest, Schultern weg von den Ohren"],a:"Kurz halten und gleichmäßig weiteratmen.",
+    an:{view:"front",A:{yf:1,hy:32,kR:[33,35],aR:[-22,41],aL:[22,42],br:-32,hR:[26,60],hL:[-26,60],bR:-1,bL:1},B:{yf:1,hy:32.8,kR:[33,35.8],aR:[-22,41.8],aL:[22,42.8],br:-32,hR:[26,59.2],hL:[-26,59.2],bR:-1,bL:1}}},
+  /* ---- 3.4 · weitere Seitenansicht ---- */
+  yogamudra:{n:"Yoga-Mudra",sa:"Yoga Mudrasana",lv:2,r:"schulter",z:"Schultern · Brust · Rücken",sec:30,alt:"kind",risk:"shoulder",
+    c:["Im Fersensitz die Hände hinter dem Rücken verschränken","Oberkörper auf die Oberschenkel sinken, Stirn zur Matte","Arme nur so weit nach oben, wie die Schultern es erlauben"],a:"Ausatmen und den Nacken lang loslassen.",
+    an:{anchor:"hip",at:[0,20],A:{torso:-4,thigh:-20.5,shin:180,foot:180,upper:110,fore:104,neck:-16,lum:-2,tho:-3},B:{torso:-2,thigh:-20.5,shin:180,foot:180,upper:104,fore:100,neck:-18,lum:-2,tho:-4}}},
+  wandl:{n:"L-Handstand an der Wand",sa:"Ardha Adho Mukha Vrksasana",lv:3,r:"schulter",z:"Schultern · Handgelenke · Rumpf",sec:20,alt:"delfin",risk:"inv",
+    c:["Mit dem Rücken zur Wand sitzen, Abstand der Hände merken","Hände dort aufsetzen, Füße an der Wand hochlaufen bis auf Hüfthöhe","Hüfte über den Schultern, Körper bildet ein L, langsam zurück"],a:"Gleichmäßig weiteratmen, nicht die Luft anhalten.",
+    an:{anchor:"hand",A:{fore:-90,upper:-90,torso:-90,thigh:180,shin:180,foot:90,neck:20},B:{fore:-90.5,upper:-90.5,torso:-91,thigh:180.5,shin:180.5,foot:90.5,neck:21},eq:[{t:"wall",x:-95}]}}
+});
 const YKEYS=Object.keys(YP).sort((a,b)=>YP[a].lv-YP[b].lv);/* 3.2: library sorted by level (stable) */
 /* animation defaults: barefoot, on the mat, breathing tempo */
 for(const k of YKEYS){const d=YP[k].an;const def={floor:0,eq:[],tempo:[3.4,.8,4,.8],ph:YBR,mat:1,bare:1,lag:.04,...d};def.A={...d.A};def.B={...d.B};if(d.view==="front"&&def.floor===0)def.floor=0;AN["y_"+k]=def}
@@ -599,6 +788,34 @@ function ylBounds(L_){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;const inc=(p,r)=>{x0=Mat
 function yLoopOf(def,g){def._yl=def._yl||{};return def._yl[g]||(def._yl[g]=ylBuild(def,g))}
 {const _att=attachAnim;attachAnim=function(canvas,key,opts={}){_att(canvas,key,opts);const def=AN[key];
   if(def&&def.mat&&!opts.still&&!opts.noLoop){canvas._loop=yLoopOf(def,canvas._g);canvas._b=canvas._loop.b}else canvas._loop=null}}
+
+/* ---- 3.4 (@ Joschy): Wege für die neuen Haltungen ---- */
+Object.assign(YL_PATH,{palme:"stand",rueckbeuge:"stand",kniestand:"stand",wandhund:"stand",reiter:"lunge",loewe:"heel",tiger:"four",kniebrett:"four",
+  hoherausfall:"step",demkrieger:"step",drehausfall:"lunge",achtpunkt:"four",unterarmstuetz:"dog",stehspagat:"fold"});
+Object.assign(YL_PATH,{stab:"lsit",schneidervor:"sit",marichi1:"lsit",marichi3:"sit",bharadvaja:"sit",liegheld:"heel",bruecke1:"bridge",superman:"prone",halbheuschrecke:"proneb",
+  bogenvoll:"prone",frosch:"prone",spagat:"split",ohrendruck:"ss",halbschulter:"ss",schildkroete:"lsit",reiher:"sit",zehenboot:"sit",pfau:"crow",handstand:"hand",unterarmstand:"pin",
+  kopfkniestand:"stand",drehvorbeuge:"fold"});
+YL_SLOW.bogenvoll=YL_SLOW.bogen;YL_SLOW.frosch=YL_SLOW.bogen;
+/* handstand: fold -> walk the feet in (hands planted) -> tuck over the hands; forearm stand: kneel -> all fours -> dolphin -> tuck */
+Object.assign(YLK,{
+  hdog:()=>ylKF({hip:[-60,90],torso:-50,neck:-20,a1:[-70,0],k1:[-50,45],f1:0,a2:[-71,.2],k2:[-51,45],f2:0,h1:[0,0],e1:[-20,30],h2:[-1,.2],e2:[-21,30],lum:0,tho:-.4}),
+  htk:()=>ylKF({hip:[0,116],torso:-90,neck:20,th1:240,sn1:50,f1:70,th2:242,sn2:52,f2:72,h1:[0,0],e1:[1,30],h2:[-1,.2],e2:[0,30],lum:0,tho:-.4}),
+  fk2:()=>ylKF({hip:[0,52],torso:-24,neck:-26,a1:[-44,4.6],k1:[2,5],f1:180,a2:[-45,4.4],k2:[.5,4.8],f2:180,h1:[64.2,3],e1:[35.2,3],h2:[63.2,3.2],e2:[34.2,3.2],lum:.2,tho:-.6}),
+  ptk:()=>ylKF({hip:[-29,92],torso:-90,neck:40,th1:240,sn1:48,f1:68,th2:242,sn2:50,f2:70,h1:[0,3],e1:[-29,3],h2:[-1,3.2],e2:[-30,3.2],lum:0,tho:-.4})});
+Object.assign(YLP_S,{hand:[["st","ankle"],["fold","ankle"],["hdog","hand"],["htk","hand"]],
+  pin:[["st","ankle"],["hkn","knee2"],["fk2","hand"],["dk","hand"],["ptk","hand"]]});
+YLP_PIN.hand=null;
+YL_SLOW.handstand={w:1.5,wx:1.8};
+/* full split: half kneel -> half split with the hands on the mat -> slide into the split */
+YLK.hspk=()=>ylKF({hip:[0,50],torso:32,neck:-8,th1:-30.7,sn1:-30.7,f1:58,th2:-90,sn2:180,f2:180,h1:[42,3],e1:[46,30],h2:[41,3.2],e2:[45,30],lum:-.4,tho:-1});
+YLP_S.split=[["st","ankle"],["hkn","knee2"],["hspk","knee2"]];
+Object.assign(YL_PATH,{yogamudra:"heel",wandl:"wall"});
+/* L at the wall: fold -> hands planted, feet walk back to the wall -> feet climb to hip height */
+YLK.wl1=()=>ylKF({hip:[-48,72],torso:-35,neck:-20,a1:[-95,24],k1:[-70,40],f1:90,a2:[-95,23],k2:[-71,40],f2:90,h1:[0,0],e1:[-14,30],h2:[-1,.2],e2:[-15,30],lum:0,tho:-.4});
+YLP_S.wall=[["st","ankle"],["fold","ankle"],["hdog","hand"],["wl1","hand"]];
+Object.assign(YLFP,{seitunterarm:YLFP_SIDE,liegevishnu:YLFP_SIDE,
+  stehtaube:()=>[{...YLFR.st,hx:-5,lean:-2,ua:-82,fa:-80}],lotusstand:()=>[{...YLFR.st,hx:-5,lean:-2,ua:-82,fa:-80}],
+  handzeh:()=>[{...YLFR.st,hx:-6,lean:-1,ua:-82,fa:-80},{yf:1,hx:-6,aL:[-15,0],kL:[-16.5,46],kR:[12,124],aR:[14,82],hR:[20,100],bR:1,uaL:-100,faL:-95}]});
 
 
 /* ---------- 3.2 · 24-Wochen-Plan: 3 Stufen à 8 Wochen (Anfänger, Fortgeschritten, Profi), 1 Einheit pro Woche, ca. 15 -> 30 Min.
@@ -852,3 +1069,65 @@ function yPip(v){const r=S.yrun;if(r.ph==="done"){v.innerHTML=`<div class="pipL"
   const st=yCurStep();const now=Date.now();const left=r.paused?r.left:Math.max(0,(r.end-now)/1000);const tot=r.ph==="prep"?yPrepOf(r):st.sec;const C=2*Math.PI*44;const off=C*(1-Math.max(0,Math.min(1,left/tot)));
   v.innerHTML=`<div class="pipL">${r.paused?"Pausiert":r.ph==="prep"?(st.side===2?"Seite wechseln":"Gleich"):"Halten"}</div><div class="pipRing"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" class="pb"/><circle cx="50" cy="50" r="44" class="pf" stroke-dasharray="${C}" stroke-dashoffset="${off}"/></svg><div class="pipT">${mmss(left)}</div></div><div class="pipS">${esc(YP[st.k].n)}</div><div class="pipS2">${r.i+1}/${r.steps.length}${st.side?" · Seite "+st.side:""}</div>`}
 if(S.yrun&&S.yrun.ph==="done"){/* finished before the app closed: keep the result, just clear the run */S.yrun=null;save()}
+/* ================= 3.4 · Rotation & Auswahl in den Abläufen (@ Joschy) =================
+   Die neuen Haltungen kommen ohne neue Abläufe in die bestehenden:
+   - 24-Wochen-Plan: beim Wiederholen einer Woche werden bis zu 2 Haltungen (Hauptteil) und das Ankommen durch passende
+     Alternativen ersetzt (gleiche Zielregion bei Schulter/Hüfte, Stufe <= Stufe der Woche). Der erste Durchgang bleibt wie bisher.
+   - Schnell-Dehnen und Dehnen nach dem Training: wöchentlich abwechselnd die bisherige und eine neue Variante.
+   - Im laufenden Ablauf: „Andere Haltung“ tauscht die aktuelle Haltung gegen eine passende Alternative (nur für diesen Durchgang).
+   Haltezeiten werden wie bisher über yScale auf die Zieldauer gebracht, die Dauer der Abläufe bleibt gleich. */
+const YROT={
+  /* Schultern (bleibt Schulter) */
+  schulterkreisen:["sitzberg","wandhund"],armquer:["wandhund"],trizeps:["sitzberg"],adlerarm:["wandhund"],wandengel:["sitzberg","wandhund"],brustoeffner:["wandhund"],
+  armeheben:["sitzberg","wandhund"],hund:["wandhund"],welpe:["yogamudra","wandhund"],faden:["wandhund","yogamudra"],kuhgesicht:["yogamudra","demkrieger"],delfin:["yogamudra"],
+  adler:["demkrieger"],delfinkopf:["wandl"],unterarmvor:["unterarmstand","handstand"],
+  /* Hüfte (bleibt Hüfte) */
+  tiefausfall:["reiter","hoherausfall"],figur4:["wiege","feuerholz"],schmetterling:["graetsche","schneidervor","halblotus"],liegschmetterling:["graetsche"],happybaby:["graetsche","schneidervor"],
+  bruecke:["bruecke1"],krieger1:["hoherausfall"],krieger2:["goettinseit"],goettin:["goettinseit"],halbmond:["hoherausfall"],eidechse:["reiter","hoherausfall"],
+  taube:["feuerholz","kuhgesichtsitz","stehtaube"],malasana:["graetsche","schneidervor"],bogen:["bruecke1"],seitausfall:["goettinseit"],baum:["stehtaube"],
+  koenigstaube:["kuhgesichtsitz","lotus"],taenzer:["lotusstand"],echseunter:["feuerholz","lotus"],
+  /* Rücken, Brust, Beine, Ganzkörper */
+  katzekuh:["tiger"],vierfuessler:["tiger","kniebrett"],sphinx:["halbheuschrecke","tiger"],kobra:["halbheuschrecke","superman"],krokodil:["halbheuschrecke"],windloeser:["kniestand"],
+  seitbeuge:["sitzdreh"],sitzseitbeuge:["sitzdreh"],kniebrust:["stab"],ragdoll:["drehvorbeuge"],stuhldreh:["drehausfall","drehvorbeuge"],drehsitz:["marichi3","bharadvaja"],
+  seitwinkel:["drehausfall","graetschseit"],umkrieger:["graetschseit"],heuschrecke:["superman"],robbe:["superman"],hochhund:["superman"],pflug:["ohrendruck"],
+  kamel:["rueckbeuge","achtpunkt"],fisch:["rueckbeuge"],tisch:["achtpunkt"],fersensitz:["loewe"],kraehe:["pfau","waage"],chaturanga:["pfau"],umgbrett:["bogenvoll"],rad:["bogenvoll"],kameltief:["bogenvoll"],
+  beingurt:["liegevishnu","marichi1"],pyramide:["marichi1","kopfkniestand"],sitzvorbeuge:["marichi1","schildkroete"],kopfknie:["marichi1","drehkopfknie"],heldensitz:["liegheld","frosch"],oberschenkel:["liegheld"],
+  zehensitz:["liegheld"],halbspagat:["spagat"],krieger3:["stehspagat","kopfkniestand"],halbmondbal:["stehspagat"],drehhalbmond:["kopfkniestand"],drehdreieck:["reiher"],
+  streckung:["stern","palme"],brett:["unterarmstuetz","kniebrett"],seitstuetz:["seitunterarm"],seitstuetzbein:["seitunterarm"],bootkn:["zehenboot"],bootvoll:["zehenboot"],
+  kopfstand:["halbschulter"],schulterstand:["halbschulter"],
+  /* Ankommen (Aufwärmen) */
+  sukhasana:["wechselatmung","bienenatmung"],feueratem:["wechselatmung"]};
+/* Alternativen einer Haltung in beide Richtungen (die neue Haltung lässt sich auch zurücktauschen) */
+function yRotGroup(k){const g=[k,...(YROT[k]||[])];for(const o in YROT)if(YROT[o].includes(k)&&!g.includes(o))g.push(o);return g.filter(x=>YP[x])}
+function yRound(w){return yS().log.filter(l=>l&&l.week===w&&(l.kind==="plan"||l.kind==="repeat")).length}
+/* Plan: Durchgang 0 = unverändert; ab dem 2. Durchgang einer Woche werden bis zu 2 Hauptteil-Haltungen und das Ankommen rotiert */
+function yRotate(items,stage,r){if(!r)return items;const used=new Set(items.map(x=>x.k));const out=items.map(x=>({...x}));
+  const pick=(x,i)=>{const c=(YROT[x.k]||[]).filter(k=>YP[k]&&YP[k].lv<=stage&&!used.has(k));if(!c.length)return false;const k=c[(r-1+i)%c.length];used.delete(x.k);used.add(k);Object.assign(x,yItem(k,x.part,x.fix));return true};
+  const main=out.filter(x=>x.part==="main"&&(YROT[x.k]||[]).some(k=>YP[k]&&YP[k].lv<=stage));let n=0;
+  for(let j=0;j<main.length&&n<2;j++){const x=main[(2*(r-1)+j)%main.length];if(pick(x,n))n++}
+  for(const x of out)if(x.part==="warm"&&(x.k==="sukhasana"||x.k==="feueratem"||(x.k==="katzekuh"&&r%2===0)))pick(x,0);
+  return out}
+{const _plan=yPlan;yPlan=function(w,round){w=Math.min(YN,Math.max(1,w|0));const P=_plan(w);const r=round!=null?round:yRound(w);if(!r)return P;
+    const st=yStageOf(w);const cool=P.items.filter(x=>x.part==="cool");const items=yScale(yRotate(P.items.filter(x=>x.part!=="cool").map(x=>yItem(x.k,x.part)),st,r).concat(cool.map(x=>yItem(x.k,"cool",1,x.sec))),yTarget(w));
+    const secs=ySecs(items);return{...P,items,secs,min:Math.round(secs/60),round:r}}}
+/* Schnell-Dehnen und Dehnen nach dem Training: wöchentlich abwechselnd (Kalenderwoche gerade/ungerade) */
+const YQUICK2=["schulterkreisen","wandhund","adlerarm","tiger","reiter","wiege","kind"];
+const YPOST2={A:["wandhund","armquer","trizeps","kind","sphinx"],B:["adlerarm","trizeps","seitbeuge","katzekuh","schneidervor"],C:["tiefausfall","wiege","halbevorbeuge","graetsche","kniebrust"]};
+function yAltWeek(){return Math.round(weekStart(new Date()).getTime()/WEEKMS)%2===1}
+{const _q=yQuick;yQuick=function(){if(!yAltWeek())return _q();const items=yScale(YQUICK2.map(k=>yItem(k,"main")),300);return{items,secs:ySecs(items),min:Math.round(ySecs(items)/60)}}
+  const _p=yPost;yPost=function(day){if(!yAltWeek()||!YPOST2[day])return _p(day);const items=yScale(YPOST2[day].map(k=>yItem(k,"main")),300);return{items,secs:ySecs(items),min:Math.round(ySecs(items)/60)}}}
+/* Auswahl im laufenden Ablauf: nächste passende Alternative (Stufe <= Stufe der Plan-Woche bzw. der Haltung), beide Seiten, Haltezeit bleibt */
+function ySwapNext(){const r=S.yrun;if(!r||r.ph==="done")return null;const st=yCurStep();if(!st)return null;const lim=r.kind==="plan"||r.kind==="repeat"?yStageOf(r.week):Math.max(1,YP[st.k].lv);
+  let base=r.orig&&r.orig[r.i];if(!base||!yRotGroup(base).includes(st.k))base=st.k;const g=yRotGroup(base).filter(k=>YP[k].lv<=lim&&(k===st.k||!r.steps.some(s=>s.k===k)));if(g.length<2)return null;const i=g.indexOf(st.k);return g[(i+1)%g.length]}
+function ySwap(){const r=S.yrun;const nk=ySwapNext();if(!nk)return;const st=yCurStep();let base=r.orig&&r.orig[r.i];if(!base||!yRotGroup(base).includes(st.k))base=st.k;
+  let i0=r.i;if(st.side===2&&r.steps[i0-1]&&r.steps[i0-1].k===st.k)i0--;let i1=i0+1;if(r.steps[i0].side===1&&r.steps[i1]&&r.steps[i1].k===st.k&&r.steps[i1].side===2)i1++;
+  const rep=ySteps([{k:nk,sec:st.sec,uni:!!YP[nk].uni,part:st.part}]);r.steps.splice(i0,i1-i0,...rep);
+  /* remember the original pose of the slot (index based), so the group stays the same while cycling */
+  const o=r.orig||{};const shifted={};for(const k in o){const j=+k;shifted[j<i0?j:j>=i1?j-(i1-i0)+rep.length:j]=o[k]}for(let j=i0;j<i0+rep.length;j++)shifted[j]=base;r.orig=shifted;
+  r.swaps=(r.swaps||0)+1;yJump(i0);toast("Andere Haltung: "+YP[nk].n)}
+{const _r=yRender;yRender=function(){_r();const r=S.yrun;if(!r||r.ph==="done")return;const nk=ySwapNext();if(!nk)return;const ab=$("#yAlt");
+    const b=`<button class="btn${ab?"":" block"}" id="ySwap">Andere Haltung: ${esc(YP[nk].n)}</button>`;
+    if(ab){ab.insertAdjacentHTML("beforebegin",`<div class="yalts"></div>`);const w=ab.previousElementSibling;w.appendChild(ab);ab.classList.remove("block");w.insertAdjacentHTML("beforeend",b)}
+    else{const yb=document.querySelector("#yogaInner .ybtns");if(yb)yb.insertAdjacentHTML("afterend",b)}
+    $("#ySwap").onclick=()=>{audio();ySwap()}}}
+{const st=document.createElement("style");st.textContent=`.yalts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}.yalts .btn,#ySwap{white-space:normal;line-height:1.2}`;document.head.appendChild(st)}

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Baut die eigenständige index.html aus src/app.html + src/program.js + src/yoga.js + src/hang.js und bettet die Schriften ein.
+"""Baut die eigenständige index.html aus src/app.html + src/program.js + src/yoga.js + src/hang.js + src/kraft.js und bettet die Schriften ein.
 
 Aufruf: python3 tools/build_html.py <ausgabe.html>
 Schriften: Ordner mit den entpackten npm-Paketen @fontsource/rajdhani, @fontsource/orbitron,
@@ -33,6 +33,9 @@ src = src.replace('/*YOGA*/', yoga)
 hang = open(os.path.join(REPO, 'src', 'hang.js'), encoding='utf-8').read()
 assert src.count('/*HANG*/') == 1, 'Marker /*HANG*/ fehlt in app.html'
 src = src.replace('/*HANG*/', hang)
+kraft = open(os.path.join(REPO, 'src', 'kraft.js'), encoding='utf-8').read()
+assert src.count('/*KRAFT*/') == 1, 'Marker /*KRAFT*/ fehlt in app.html'
+src = src.replace('/*KRAFT*/', kraft)
 page = ('<!doctype html><html lang="de"><head><meta charset="utf-8">'
         '<title>Homegym @ Joschy</title><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">'
         '<meta name="theme-color" content="#03060b"></head><body>' + src + '</body></html>')

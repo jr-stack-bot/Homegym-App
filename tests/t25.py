@@ -9,6 +9,7 @@ srv=subprocess.Popen([sys.executable,'-m','http.server','8782','-d',_OUTDIR],std
 U='http://127.0.0.1:8782/index.html'
 # explosive / cardio exercises (ballistic on purpose) are exempt from the smoothness limit
 EXPL={'jumpsquat','bearcrawl',  # 3.2: new explosive bodyweight moves
+'plyopush','highknees','shadowbox','skater','dbsnatch',  # Kraft-Bibliothek +100: explosive/cardio moves
 'mbslam','boxing','run','jumpjack','jj','climber','rowint','boxjump','kbswing','jumprope','bikeint','cross','march','walk'}
 JERK=r"""(EXPL)=>{const out=[];const pts=o=>{const m={};for(const q in o){const v=o[q];if(Array.isArray(v)&&v.length===2&&typeof v[0]==='number')m[q]=v}return m};
   for(const ex of Object.keys(EX)){const k=animOf(ex);if(EXPL.includes(ex)||EXPL.includes(k))continue;const def=AN[k];for(const g of['m','f']){const T=cycT(def);let prev=null,pv=null,pa=null,jerk=0,at='';

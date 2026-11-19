@@ -32,7 +32,7 @@ async def main():
           const names=Object.keys(EX).map(k=>EX[k].n.toLowerCase());const dup=names.filter((n,i)=>names.indexOf(n)!==i);
           return{n:YKEYS.length,lv,bad,noAlt,bw:bw.length,bwBad,dup,ex:Object.keys(EX).length,days:['A','B','C'].map(d=>bw.filter(k=>DAYEX[d].includes(k)).length)}}""")
         print('catalogue',r)
-        chk(95<=r['n']<=100 and r['lv'][2]>=18 and r['lv'][2]<=22 and not r['bad'],f"{r['n']} yoga poses, levels {r['lv']}, all complete")
+        chk(150<=r['n']<=160 and r['lv'][2]>=36 and r['lv'][2]<=44 and not r['bad'],f"{r['n']} yoga poses, levels {r['lv']}, all complete")
         chk(not r['noAlt'],'every Profi pose has an easier (non-Profi) variant')
         chk(r['bw']>=30 and not r['bwBad'] and not r['dup'] and min(r['days'])>=8,f"{r['bw']} new bodyweight exercises (A/B/C {r['days']}), complete, no duplicates")
         # 2) everything renders for both figures (big + library preview)

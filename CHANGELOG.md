@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.4
+- **58 neue Yoga-Haltungen** (jetzt 154): die Haltungen wechseln von Einheit zu Einheit (Rotation), mit dem Knopf **„Andere Haltung“** lässt sich eine Haltung austauschen.
+- **100 neue Kraftübungen** (jetzt 259): kommen nur auf **Nebenplätzen in jedem zweiten Zyklus** dran, die **Hauptübungen bleiben unverändert**, jede Einheit bleibt bei **≤ 59 Minuten**.
+- **Übungsblatt** mit den Abschnitten **Atmung**, **Leichter** und **Achtung**.
+- **Katze-Kuh**: Beschriftung korrigiert.
+- **Layout-Fix** bei 130 % Schriftgröße.
+
 ## 3.3
 - **Griffkraft & Hängen** (neu, Ziel: 1–2 Minuten frei hängen):
   - Am **Zieh-Tag** ein eigener Block nach den Hauptübungen in **4 Stufen**: Hängen mit Fußstütze → aktives Schulterblatt-Hängen → freies Hängen → Handtuch-Hang. Die Zeit steigt automatisch um 5 s, oben in der Stufe geht es eine Stufe weiter; zweimal verfehlt gibt es 5 s weniger.

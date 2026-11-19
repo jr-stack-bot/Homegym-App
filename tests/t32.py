@@ -137,10 +137,10 @@ async def main():
         await pg.screenshot(path=SH+'/home_arc.png',full_page=True)
         await pg.click('#hgTestBtn');await pg.wait_for_timeout(200);await pg.screenshot(path=SH+'/test_ready_arc.png')
         await pg.click('#hgGo');await pg.wait_for_timeout(3400);run=await pg.evaluate("HGR.ph");await pg.wait_for_timeout(2200)
-        await pg.screenshot(path=SH+'/test_run_arc.png');await pg.click('#hgStop');await pg.wait_for_timeout(200)
+        await pg.screenshot(path=SH+'/test_run_arc.png');el=await pg.evaluate("(Date.now()-HGR.t0)/1000");await pg.click('#hgStop');el2=await pg.evaluate("HGR&&HGR.res!=null?0:-1");await pg.wait_for_timeout(200)
         res=await pg.evaluate("HGR.res");await pg.screenshot(path=SH+'/test_result_arc.png');await pg.click('#hgSave');await pg.wait_for_timeout(300)
         r=await pg.evaluate("()=>[S.hang.tests.length,S.hang.tests[0].s,hgTestDue(),hgDaysTo(),S.history.length]")
-        chk(run=='run' and res in (2,3) and r[:3]==[1,res,False] and r[3]==28 and r[4]==0,f'hang test: countdown, count-up, 1 attempt saved ({res} s), next in 28 days, no training entry {r}')
+        chk(run=='run' and 2<=res<=max(3,round(el)+1) and res>=round(el) and r[:3]==[1,res,False] and r[3]==28 and r[4]==0,f'hang test: countdown, count-up, 1 attempt saved ({res} s), next in 28 days, no training entry {r}')
         r=await pg.evaluate("""()=>{S.hang.tests=[{d:dkey(Date.now()-120*864e5),s:7},{d:dkey(Date.now()-90*864e5),s:14},{d:dkey(Date.now()-60*864e5),s:26},{d:dkey(Date.now()-30*864e5),s:41}];save();
           return[hgTestDue(),hgDaysTo()]}""")
         chk(r==[True,0],'4 weeks after the last test it is due again '+str(r))

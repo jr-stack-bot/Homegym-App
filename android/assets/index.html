@@ -160,6 +160,7 @@ textarea{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
 .stage canvas{display:block;width:100%;height:250px;position:relative}
 .stage .phase{position:absolute;left:14px;top:10px;font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.22em;text-transform:uppercase;color:var(--arc);text-shadow:0 0 10px rgba(var(--ac),.6);z-index:1}
 .stage .phase:not(:empty)::before{content:"▸ "}
+.stage .phase#yph{letter-spacing:.12em}/* yoga: long breathing labels next to the stage label (130 % text) */
 .stage .tempo{position:absolute;right:14px;top:12px;font-family:var(--hud);font-size:10.5px;letter-spacing:.08em;color:var(--muted);z-index:1}
 .stage .readout{position:absolute;left:14px;bottom:9px;font-family:var(--hud);font-size:9.5px;letter-spacing:.14em;color:var(--faint);z-index:1}
 .exname{font-size:34px}
@@ -2768,7 +2769,7 @@ const MOTION={
 };
 for(const k in MOTION){const d=AN[k];if(!d)continue;const m=MOTION[k];for(const f in m){if(f==="A"||f==="B")Object.assign(d[f],m[f]);else d[f]=m[f]}}
 /* ================= 2.1 · HALTE-ÜBUNGEN · KETTLEBELL · GERÄTE-GEWICHTE · BACKUP (@ Joschy) ================= */
-const APP_VER="3.3",BK_VER=5;/* 3.0–3.3 keep backup format 5: all new fields are optional, older apps simply ignore them */
+const APP_VER="3.4",BK_VER=5;/* 3.0–3.4 keep backup format 5: all new fields are optional, older apps simply ignore them */
 /* ---- hold / tempo variants (strength stays the focus: they are alternatives, never forced) ---- */
 Object.assign(EX,{
   pushpause:{n:"Liegestütze mit Halt in der Mitte",eq:"Matte · Griffe optional",m:"Brust · Trizeps · Schultern",type:"bw",rest:90,inc:0,hold:3,holdAt:"auf halber Höhe",base:"pushup",
@@ -3258,7 +3259,7 @@ const YP={
     an:{view:"front",A:{yf:1,hR:[13,100],hL:[-13,100],bR:1,bL:-1,s:10,hx:-7,lean:-6},B:{yf:1,hR:[13,100],hL:[-13,100],bR:1,bL:-1,s:10,hx:7,lean:6},tempo:[1.6,0,1.6,0],ph:["Kreisen","Kreisen"]}},
   katzekuh:{n:"Katze-Kuh",sa:"Marjaryasana-Bitilasana",lv:1,r:"ruecken",z:"Wirbelsäule · Rücken",sec:45,
     c:["Vierfüßlerstand: Hände unter den Schultern, Knie unter der Hüfte","Ausatmen: Rücken rund machen, Kinn zur Brust","Einatmen: Brust nach vorn, Blick leicht nach oben"],a:"Die Atmung führt die Bewegung.",
-    an:{anchor:"hip",at:[0,51],A:{torso:10.5,thigh:-90,shin:180,upper:-90,fore:-90,foot:180,neck:22,lum:7,tho:3},B:{torso:10.7,thigh:-90,shin:180,upper:-90.5,fore:-90,foot:180,neck:-42,lum:-6,tho:-9},tempo:[3,.6,3,.6],ph:["Ausatmen · Katze","Einatmen · Kuh"]}},
+    an:{anchor:"hip",at:[0,51],A:{torso:10.5,thigh:-90,shin:180,upper:-90,fore:-90,foot:180,neck:22,lum:7,tho:3},B:{torso:10.7,thigh:-90,shin:180,upper:-90.5,fore:-90,foot:180,neck:-42,lum:-6,tho:-9},tempo:[3,.6,3,.6],ph:["Ausatmen → Katze","Einatmen → Kuh"]}},
   kind:{n:"Kindshaltung",sa:"Balasana",lv:1,r:"ruecken",z:"Rücken · Hüfte · Schultern",sec:45,
     c:["Auf die Fersen setzen, Knie hüftbreit","Oberkörper auf die Oberschenkel sinken lassen","Arme lang nach vorn, Stirn ruht auf der Matte"],a:"In den unteren Rücken atmen, er hebt und senkt sich.",
     an:{anchor:"hip",at:[0,20],A:{torso:-4,thigh:-20.5,shin:180,foot:180,handAt:[113,5],bend:1,neck:-16,lum:-2,tho:-3},B:{torso:-2,thigh:-20.5,shin:180,foot:180,handAt:[113,5],bend:1,neck:-18,lum:-2,tho:-4}}},
@@ -3531,6 +3532,195 @@ Object.assign(YP,{
     an:{view:"front",tempo:[.28,.06,.42,.08],ph:["Ausatmen","Einatmen"],A:{yf:1,hy:13,kR:[39,18],aR:[-13,8],aL:[13,7],hR:[33,100],hL:[-33,100],bR:-1,bL:1,shr:0},B:{yf:1,hy:12.6,kR:[39,18],aR:[-13,8],aL:[13,7],hR:[33,100],hL:[-33,100],bR:-1,bL:1,shr:1.6}}}
 });
 
+/* ================= 3.4 · YOGA-BIBLIOTHEK ERWEITERT (@ Joschy) =================
+   59 neue Haltungen (Anfänger, Fortgeschritten, Profi). Jede neue Haltung hat eine leichtere Variante (alt); belastende Haltungen
+   für Schulter, Hüfte oder Knie zusätzlich einen Achtung-Hinweis (risk). Animationen über dieselbe Engine (Stand -> Haltung -> Stand). */
+Object.assign(YRISK,{
+  shoulder:"Belastet die Schultern: nur so weit gehen, wie es schmerzfrei ist, Schultern weg von den Ohren. Bei Schulterbeschwerden die leichtere Variante nehmen.",
+  hip:"Starke Hüftdehnung: langsam hineingehen, nichts erzwingen, Kissen oder Block unterlegen. Bei Hüft- oder Leistenbeschwerden die leichtere Variante nehmen.",
+  knee:"Starke Kniebeugung: bei Druck oder Ziehen im Knie sofort lösen, Kissen unter Gesäß oder Knie legen. Bei Kniebeschwerden die leichtere Variante nehmen."});
+Object.assign(YP,{
+  /* ---- 3.4 · Anfänger ---- */
+  palme:{n:"Palme",sa:"Talasana",lv:1,r:"ganz",z:"Gleichgewicht · Waden · Flanken",sec:20,alt:"armeheben",
+    c:["Arme über vorn nach oben strecken, Handflächen zueinander","Langsam auf die Fußballen kommen, Fersen heben","Bauch leicht fest, Blick auf einen festen Punkt"],a:"Einatmen auf die Zehen, oben ruhig weiteratmen.",
+    an:{anchor:"foot",noBal:1,A:{...STAND,at:[0,6.5],foot:-36,torso:89,upper:91,fore:92,neck:4},B:{...STAND,at:[0,7.5],foot:-43,torso:89.5,upper:92,fore:93,neck:6}}},
+  rueckbeuge:{n:"Stehende Rückbeuge",sa:"Anuvittasana",lv:1,r:"brust",z:"Brust · Bauch · Hüftbeuger",sec:20,alt:"armeheben",
+    c:["Füße hüftbreit, Hände stützen das Becken oder Arme nach oben","Becken leicht nach vorn, Brustbein hebt sich nach oben-hinten","Nur so weit wie angenehm, Kopf fällt nicht in den Nacken"],a:"Einatmen in die Brust, ausatmen langsam aufrichten.",
+    an:{anchor:"foot",noBal:1,A:{shin:-96,thigh:-93,torso:100,upper:100,fore:103,neck:8,lum:2,tho:1},B:{shin:-97,thigh:-94,torso:105,upper:106,fore:110,neck:12,lum:3,tho:1.5}}},
+  kniestand:{n:"Knie zur Brust im Stehen",sa:"Tadasana mit Knie",lv:1,r:"huefte",z:"Gesäß · Hüfte · Gleichgewicht",sec:20,uni:1,alt:"windloeser",
+    c:["Auf einem Bein stehen, Standbein weich","Anderes Knie heben und mit beiden Händen zur Brust ziehen","Oberkörper aufrecht, Schultern sinken"],a:"Ruhig weiteratmen, Blick auf einen festen Punkt.",
+    an:{anchor:"foot",noBal:1,A:{...STAND,torso:89,thigh2:58,shin2:-104,foot2:-20,handAt:[21,116.5],bend:-1,neck:0},B:{...STAND,torso:90,thigh2:64,shin2:-100,foot2:-16,handAt:[18,118.5],bend:-1,neck:2}}},
+  wandhund:{n:"Halber Hund an der Wand",sa:"Ardha Adho Mukha Svanasana",lv:1,r:"schulter",z:"Schultern · Brust · Beinrückseite",sec:30,alt:"armeheben",
+    c:["Hände auf Hüfthöhe schulterbreit an die Wand","Zurückgehen, bis Oberkörper und Arme eine Linie bilden","Brust sinkt sanft Richtung Boden, Knie dürfen weich sein"],a:"Ausatmen und die Brust etwas tiefer sinken lassen.",
+    an:{anchor:"foot",noBal:1,A:{shin:-94,thigh:-86,torso:-2,upper:4,fore:3,neck:-2,lum:-1,tho:-1},B:{shin:-94,thigh:-85,torso:-7,upper:6,fore:5,neck:-1,lum:-1.5,tho:-1.5},eq:[{t:"wall",x:121}]}},
+  reiter:{n:"Reiterhaltung",sa:"Ashwa Sanchalanasana",lv:1,r:"huefte",z:"Hüftbeuger · Leiste · Beine",sec:30,uni:1,alt:"tiefausfall",
+    c:["Großer Schritt, hinteres Knie auf der Matte","Hände links und rechts neben den vorderen Fuß","Brust nach vorn, Becken sinkt, Blick nach vorn"],a:"Ausatmen und die Hüfte etwas tiefer sinken lassen.",
+    an:{anchor:"hip",at:[0,34],A:{torso:28,thigh:15,shin:-96,foot:0,thigh2:-140,shin2:180,foot2:180,handAt:[46,3],bend:-1,neck:24},B:{torso:29,thigh:15,shin:-96,foot:0,thigh2:-140,shin2:180,foot2:180,handAt:[46,3],bend:-1,neck:28}}},
+  loewe:{n:"Löwe",sa:"Simhasana",lv:1,r:"ganz",z:"Gesicht · Hals · Atmung",sec:30,alt:"fersensitz",
+    c:["Im Fersensitz die Hände auf die Oberschenkel, Finger gespreizt","Einatmen durch die Nase","Kräftig durch den Mund ausatmen, Zunge raus, Blick nach oben"],a:"Ausatmen mit einem lauten „Haaa“, 3–5 Wiederholungen.",
+    an:{anchor:"hip",at:[0,20],tempo:[2.2,.3,1.4,.9],ph:["Einatmen","Ausatmen · Zunge raus"],A:{torso:76,thigh:-20.5,shin:180,foot:180,handAt:[34,21],bend:1,neck:4},B:{torso:66,thigh:-20.5,shin:180,foot:180,handAt:[37,20],bend:1,neck:16}}},
+  tiger:{n:"Tiger",sa:"Vyaghrasana",lv:1,r:"ruecken",z:"Rücken · Gesäß · Hüftbeuger",sec:30,uni:1,alt:"katzekuh",
+    c:["Vierfüßlerstand, Hände unter den Schultern","Ausatmen: Knie Richtung Nase, Rücken rund","Einatmen: Bein nach hinten-oben, Knie gebeugt, Blick nach vorn"],a:"Die Atmung führt die Bewegung.",
+    an:{anchor:"hip",at:[0,51],tempo:[3,.6,3,.6],ph:["Ausatmen · Knie zur Nase","Einatmen · Bein hoch"],A:{torso:9,thigh:-90,shin:180,foot:180,thigh2:-40,shin2:175,foot2:180,upper:-90,fore:-90,neck:-30,lum:-5,tho:-7},B:{torso:10,thigh:-90,shin:180,foot:180,thigh2:165,shin2:80,foot2:150,upper:-90,fore:-90,neck:24,lum:5,tho:2}}},
+  kniebrett:{n:"Brett auf den Knien",sa:"Ardha Phalakasana",lv:1,r:"ganz",z:"Bauch · Schultern · Rumpf",sec:20,alt:"vierfuessler",
+    c:["Hände unter den Schultern, Knie hinter der Hüfte ablegen","Eine gerade Linie von den Knien bis zum Kopf","Bauch fest, Schultern weg von den Ohren"],a:"Gleichmäßig weiteratmen, nicht pressen.",
+    an:{anchor:"hand",A:{upper:-90,fore:-90,torso:32,thigh:212,shin:180,foot:180,neck:-8},B:{upper:-90,fore:-90,torso:31.6,thigh:211.6,shin:180,foot:180,neck:-8}}},
+  /* ---- 3.4 · Fortgeschritten ---- */
+  hoherausfall:{n:"Hoher Ausfallschritt",sa:"Ashta Chandrasana",lv:2,r:"huefte",z:"Hüftbeuger · Beine · Gleichgewicht",sec:30,uni:1,alt:"tiefausfall",
+    c:["Großer Schritt, vorderes Knie über dem Knöchel","Hintere Ferse gehoben, hinteres Bein lang","Arme nach oben, Becken gerade nach vorn"],a:"Einatmen lang nach oben, ausatmen tiefer sinken.",
+    an:{anchor:"hip",at:[0,54],A:{torso:90,thigh:-10,shin:-90,foot:0,thigh2:-150,shin2:-150,foot2:-50,upper:93,fore:95,neck:3},B:{torso:92,thigh:-10,shin:-90,foot:0,thigh2:-150,shin2:-150,foot2:-50,upper:98,fore:100,neck:6}}},
+  demkrieger:{n:"Demütiger Krieger",sa:"Baddha Virabhadrasana",lv:2,r:"schulter",z:"Schultern · Hüfte · Beine",sec:20,uni:1,alt:"krieger1",risk:"shoulder",
+    c:["Aus Krieger I die Hände hinter dem Rücken verschränken","Oberkörper an der Innenseite des vorderen Knies nach unten sinken lassen","Arme Richtung Decke, bei Schulterdruck Hände an die Hüfte"],a:"Ausatmen beim Sinken, unten ruhig weiteratmen.",
+    an:{anchor:"hip",at:[0,62],A:{torso:-38,thigh:-20,shin:-90,foot:0,thigh2:-139.5,shin2:-139.5,foot2:8,upper:118,fore:116,neck:6,tho:-2},B:{torso:-42,thigh:-20,shin:-90,foot:0,thigh2:-139.5,shin2:-139.5,foot2:8,upper:112,fore:110,neck:4,tho:-2.5}}},
+  drehausfall:{n:"Gedrehter Ausfallschritt",sa:"Parivrtta Anjaneyasana",lv:2,r:"ruecken",z:"Wirbelsäule · Hüftbeuger",sec:30,uni:1,alt:"tiefausfall",
+    c:["Tiefer Ausfallschritt, hinteres Knie auf der Matte","Hände vor der Brust zusammen, Ellbogen außen ans vordere Knie","Erst lang machen, dann drehen, Blick nach oben"],a:"Einatmen lang machen, ausatmen etwas weiter drehen.",
+    an:{anchor:"hip",at:[0,35],A:{torso:52,thigh:14,shin:-88,foot:0,thigh2:-142,shin2:180,foot2:180,upper:-72,fore:88,neck:30,tho:-1},B:{torso:48,thigh:14,shin:-88,foot:0,thigh2:-142,shin2:180,foot2:180,upper:-74,fore:86,neck:34,tho:-1.5}}},
+  achtpunkt:{n:"Acht-Punkt-Haltung",sa:"Ashtanga Namaskara",lv:2,r:"brust",z:"Brust · Schultern · Arme",sec:15,alt:"welpe",
+    c:["Aus dem Vierfüßlerstand Knie, Brust und Kinn ablegen","Hüfte bleibt oben, Ellbogen eng am Körper","Hände unter den Schultern, Zehen aufgestellt"],a:"Ruhig weiteratmen, Schultern weg von den Ohren.",
+    an:{anchor:"hip",at:[16,47],A:{torso:-43.5,thigh:-110,shin:180,foot:180,handAt:[52,2],bend:-1,neck:50,tho:1},B:{torso:-44,thigh:-110.5,shin:180,foot:180,handAt:[52,2],bend:-1,neck:51,tho:1}}},
+  unterarmstuetz:{n:"Unterarmstütz",sa:"Makara Adho Mukha Svanasana",lv:2,r:"ganz",z:"Bauch · Schultern · Rumpf",sec:20,alt:"kniebrett",
+    c:["Unterarme parallel, Ellbogen unter den Schultern","Beine lang nach hinten, Zehen aufgestellt","Körper bildet eine gerade Linie, Bauch und Gesäß fest"],a:"Gleichmäßig weiteratmen, nicht pressen.",
+    an:{anchor:"hand",at:[0,3],A:{upper:-88,fore:0,torso:11,thigh:191,shin:191,foot:-30,neck:-6},B:{upper:-88,fore:0,torso:10.6,thigh:190.6,shin:190.6,foot:-30.4,neck:-6}}},
+  /* ---- 3.4 · Profi ---- */
+  stehspagat:{n:"Stehender Spagat",sa:"Urdhva Prasarita Eka Padasana",lv:3,r:"beine",z:"Beinrückseite · Hüfte · Gleichgewicht",sec:20,uni:1,alt:"hund3",
+    c:["Aus der Vorbeuge die Hände neben den Standfuß","Ein Bein lang nach hinten-oben heben","Becken bleibt gerade, Kopf hängt locker zum Schienbein"],a:"Ausatmen und das Bein etwas höher, nie federn.",
+    an:{anchor:"foot",noBal:1,A:{shin:-91,thigh:-86,torso:-80,thigh2:108,shin2:110,foot2:128,handAt:[16,1.5],bend:-1,neck:-10,lum:-1,tho:-3},B:{shin:-91,thigh:-86,torso:-82,thigh2:112,shin2:114,foot2:132,handAt:[16,1.5],bend:-1,neck:-10,lum:-1,tho:-3.5}}},
+  /* ---- 3.4 · Batch 2: Sitzen, Liegen, Umkehr ---- */
+  stab:{n:"Stabhaltung",sa:"Dandasana",lv:1,r:"ruecken",z:"Rücken · Haltung · Beinrückseite",sec:30,alt:"sukhasana",
+    c:["Langsitz, Beine gestreckt, Zehen zeigen nach oben","Hände neben der Hüfte, Finger nach vorn","Scheitel zieht nach oben, Brust weit, Knie dürfen leicht gebeugt sein"],a:"Einatmen und lang werden, ausatmen Schultern sinken lassen.",
+    an:{anchor:"hip",at:[0,9],A:{torso:93,thigh:0,shin:-1,foot:80,handAt:[8,9],bend:-1,neck:-2},B:{torso:92,thigh:0,shin:-1,foot:82,handAt:[8,9],bend:-1,neck:-1}}},
+  schneidervor:{n:"Vorbeuge im Schneidersitz",sa:"Adho Mukha Sukhasana",lv:1,r:"huefte",z:"Gesäß · äußere Hüfte · Rücken",sec:40,alt:"sukhasana",
+    c:["Im Schneidersitz aufrecht sitzen","Hände nach vorn auf die Matte wandern lassen","Rücken lang, Gesäß bleibt am Boden, nach der Hälfte Beine andersherum kreuzen"],a:"Ausatmen und die Hände ein Stück weiter wandern lassen.",
+    an:{anchor:"hip",at:[0,9],A:{torso:42,thigh:31,shin:-136,foot:-8,thigh2:23,shin2:-145,foot2:-4,handAt:[78,4],bend:-1,neck:-12,lum:-1.5,tho:-2.5},B:{torso:38,thigh:31,shin:-136,foot:-8,thigh2:23,shin2:-145,foot2:-4,handAt:[80,4],bend:-1,neck:-14,lum:-2,tho:-3}}},
+  marichi1:{n:"Marichi-Vorbeuge",sa:"Marichyasana I",lv:2,r:"beine",z:"Beinrückseite · Hüfte · Schultern",sec:30,uni:1,alt:"kopfknie",risk:"shoulder",
+    c:["Langsitz, ein Bein aufstellen, Fuß nah am Gesäß","Arm von innen um das aufgestellte Schienbein legen","Mit langem Rücken über das gestreckte Bein beugen, Hände hinter dem Rücken fassen oder Gurt"],a:"Einatmen lang machen, ausatmen etwas tiefer sinken.",
+    an:{anchor:"hip",at:[0,9],A:{torso:36,thigh:60,shin:-94,foot:0,thigh2:0,shin2:-1,foot2:76,upper:-84,fore:186,neck:-10,tho:-3},B:{torso:33,thigh:60,shin:-94,foot:0,thigh2:0,shin2:-1,foot2:76,upper:-86,fore:184,neck:-12,tho:-3.5}}},
+  marichi3:{n:"Marichi-Drehsitz",sa:"Marichyasana III",lv:2,r:"ruecken",z:"Wirbelsäule · Gesäß · Schultern",sec:30,uni:1,alt:"drehsitz",
+    c:["Langsitz, ein Bein aufstellen, das andere bleibt lang","Hintere Hand stützt hinter dem Po, Ellbogen außen ans aufgestellte Knie","Erst lang machen, dann drehen, Blick über die Schulter"],a:"Einatmen aufrichten, ausatmen etwas weiter drehen.",
+    an:{anchor:"hip",at:[0,9],A:{torso:93,thigh:53,shin:-87,foot:0,thigh2:0,shin2:-1,foot2:76,handAt:[-18,9],bend:1,upper2:-35,fore2:85,neck:6},B:{torso:94,thigh:53,shin:-87,foot:0,thigh2:0,shin2:-1,foot2:76,handAt:[-18,9],bend:1,upper2:-37,fore2:86,neck:8}}},
+  bharadvaja:{n:"Bharadvaja-Drehsitz",sa:"Bharadvajasana",lv:2,r:"ruecken",z:"Wirbelsäule · Schultern · Hüfte",sec:30,uni:1,alt:"sitzseitbeuge",
+    c:["Sitzen, beide Beine gebeugt zu einer Seite ablegen","Hand ans äußere Knie, andere Hand hinter dem Po","Erst lang machen, dann zur Seite der Knie weg drehen"],a:"Einatmen aufrichten, ausatmen sanft weiterdrehen.",
+    an:{anchor:"hip",at:[0,9],A:{torso:82,thigh:6,shin:178,foot:180,thigh2:2,shin2:176,foot2:182,handAt:[42,20],bend:-1,upper2:-112,fore2:-100,neck:6},B:{torso:83,thigh:6,shin:178,foot:180,thigh2:2,shin2:176,foot2:182,handAt:[42,20],bend:-1,upper2:-113,fore2:-101,neck:8}}},
+  liegheld:{n:"Liegender Held",sa:"Supta Virasana",lv:2,r:"beine",z:"Oberschenkel vorn · Hüftbeuger · Knie",sec:30,alt:"heldensitz",risk:"knee",
+    c:["Aus dem Heldensitz die Hände hinter den Po setzen","Auf die Unterarme und langsam auf den Rücken sinken, Kissen erlaubt","Knie bleiben zusammen, Rücken nicht ins Hohlkreuz"],a:"Ruhig in den Bauch atmen, über die Unterarme wieder hochkommen.",
+    an:{anchor:"hip",at:[0,16],A:{torso:188,thigh:-15,shin:180,foot:180,upper:-6,fore:-3,neck:-13},B:{torso:187.4,thigh:-15,shin:180,foot:180,upper:-6,fore:-3,neck:-13.4}}},
+  bruecke1:{n:"Einbeinige Brücke",sa:"Eka Pada Setu Bandhasana",lv:2,r:"huefte",z:"Gesäß · Hüftbeuger · Rumpf",sec:20,uni:1,alt:"bruecke",
+    c:["Aus der Brücke das Becken oben halten","Ein Bein lang nach oben strecken, Fuß gebeugt","Becken bleibt waagerecht, Standfuß drückt in die Matte"],a:"Gleichmäßig weiteratmen, ausatmen beim Ablegen.",
+    an:{anchor:"shoulder",at:[0,9],A:{torso:204,thigh:5,shin:-53,foot:0,thigh2:75,shin2:76,foot2:165,hand:[40,-6],bend:1,neck:-27,lum:.4},B:{torso:204,thigh:5,shin:-53,foot:0,thigh2:79,shin2:80,foot2:169,hand:[40,-6],bend:1,neck:-27,lum:.8}}},
+  superman:{n:"Superman",sa:"Viparita Shalabhasana",lv:2,r:"ruecken",z:"Rücken · Gesäß · Schultern",sec:15,alt:"heuschrecke",risk:"shoulder",
+    c:["Bauchlage, Arme lang nach vorn","Arme, Brust und Beine gleichzeitig leicht anheben","Nacken lang, Blick zum Boden, nicht ins Hohlkreuz pressen"],a:"Oben gleichmäßig weiteratmen.",
+    an:{anchor:"hip",at:[0,10],flip:1,A:{torso:168,thigh:8,shin:8,foot:-6,upper:172,fore:174,neck:-4},B:{torso:165,thigh:11,shin:11,foot:-6,upper:168,fore:170,neck:-6}}},
+  halbheuschrecke:{n:"Halbe Heuschrecke",sa:"Ardha Salabhasana",lv:1,r:"ruecken",z:"Unterer Rücken · Gesäß",sec:20,uni:1,alt:"krokodil",
+    c:["Bauchlage, Arme neben dem Körper, Kinn auf der Matte","Ein gestrecktes Bein langsam anheben","Becken bleibt am Boden, nicht verdrehen"],a:"Einatmen heben, ausatmen ablegen.",
+    an:{anchor:"hip",at:[0,10],flip:1,A:{torso:176,thigh:0,shin:0,foot:-12,thigh2:14,shin2:14,foot2:-4,upper:2,fore:2,neck:-6},B:{torso:176,thigh:0,shin:0,foot:-12,thigh2:17,shin2:17,foot2:-4,upper:2,fore:2,neck:-6}}},
+  bogenvoll:{n:"Bogen",sa:"Dhanurasana",lv:3,r:"brust",z:"Brust · Hüftbeuger · Schultern",sec:15,alt:"bogen",risk:"back",
+    c:["Bauchlage, Knie beugen, mit beiden Händen die Fußgelenke fassen","Füße in die Hände drücken, Brust und Oberschenkel heben","Knie nicht weiter als hüftbreit, Nacken lang"],a:"Einatmen heben, oben ruhig weiteratmen, ausatmen ablegen.",
+    an:{anchor:"hip",at:[0,10],flip:1,A:{torso:138,thigh:16,shin:132,foot:150,thigh2:16,shin2:132,foot2:150,handAt:[14,57],bend:-1,neck:-10},B:{torso:135,thigh:19,shin:130,foot:148,thigh2:19,shin2:130,foot2:148,handAt:[14,60],bend:-1,neck:-12}}},
+  frosch:{n:"Frosch",sa:"Bhekasana",lv:3,r:"beine",z:"Oberschenkel vorn · Knie · Brust",sec:15,alt:"bogen",risk:"knee",
+    c:["Bauchlage, auf die Unterarme stützen","Beide Knie beugen, die Hände auf die Fußrücken legen","Füße sanft Richtung Boden neben die Hüfte drücken, Brust hebt sich"],a:"Ruhig weiteratmen, nicht ruckartig drücken.",
+    an:{anchor:"hip",at:[0,10],flip:1,A:{torso:152,thigh:0,shin:165,foot:200,thigh2:0,shin2:163,foot2:198,handAt:[-2,26],bend:1,neck:-8},B:{torso:154,thigh:0,shin:167,foot:202,thigh2:0,shin2:165,foot2:200,handAt:[-2,25],bend:1,neck:-9}}},
+  spagat:{n:"Spagat",sa:"Hanumanasana",lv:3,r:"beine",z:"Beinrückseite · Hüftbeuger · Leiste",sec:30,uni:1,alt:"eidechse",risk:"hip",
+    c:["Aus der Spagat-Vorbereitung das vordere Bein nach vorn gleiten lassen","Hinteres Bein lang nach hinten, Becken zeigt nach vorn","Blöcke unter die Hände oder ein Kissen unter das Becken, nie federn"],a:"Ruhig und lang ausatmen, nur so tief wie es angenehm ist.",
+    an:{anchor:"hip",at:[0,12],A:{torso:90,thigh:-6,shin:-6,foot:80,thigh2:-172,shin2:-174,foot2:180,upper:92,fore:94,neck:4},B:{torso:92,thigh:-6,shin:-6,foot:80,thigh2:-172,shin2:-174,foot2:180,upper:96,fore:98,neck:6}}},
+  ohrendruck:{n:"Ohrendruck",sa:"Karnapidasana",lv:3,r:"ruecken",z:"Rücken · Nacken · Gesäß",sec:15,alt:"kniebrust",risk:"inv",
+    c:["Aus dem Pflug die Knie beugen und neben die Ohren sinken lassen","Arme lang auf der Matte oder Hände stützen den Rücken","Nacken nie belasten oder drehen, langsam abrollen"],a:"Flach weiteratmen, der Bauch ist zusammengedrückt.",
+    an:{anchor:"shoulder",at:[0,9],A:{torso:-85,thigh:248,shin:200,foot:180,upper:-3,fore:-3,neck:-95},B:{torso:-84,thigh:249,shin:201,foot:181,upper:-3,fore:-3,neck:-96}}},
+  halbschulter:{n:"Halber Schulterstand",sa:"Viparita Karani Mudra",lv:3,r:"ganz",z:"Schultern · Rumpf · Beine",sec:30,alt:"beinewand",risk:"inv",
+    c:["Rückenlage, Beine über den Kopf schwingen, Hände stützen das Becken","Ellbogen schulterbreit auf der Matte, Becken ruht in den Händen","Beine schräg nach oben, Kopf nie drehen"],a:"Ruhig atmen, langsam Wirbel für Wirbel ablegen.",
+    an:{anchor:"shoulder",at:[0,9],A:{torso:-125,thigh:100,shin:100,foot:104,upper:0,fore:85,neck:-55},B:{torso:-124.4,thigh:100.6,shin:100.6,foot:105,upper:0,fore:85,neck:-55.6}}},
+  schildkroete:{n:"Schildkröte",sa:"Kurmasana",lv:3,r:"ruecken",z:"Rücken · Beinrückseite · Hüfte",sec:20,alt:"sitzvorbeuge",risk:"hip",
+    c:["Grätschsitz, Knie leicht gebeugt, Oberkörper nach vorn","Arme unter den Knien hindurch zur Seite strecken","Brust sinkt zur Matte, Beine langsam strecken, nicht ziehen"],a:"Lang ausatmen und den Rücken loslassen.",
+    an:{anchor:"hip",at:[0,9],A:{torso:12,thigh:8,shin:-14,foot:60,upper:-168,fore:-178,neck:-32,lum:-2,tho:-4},B:{torso:11,thigh:8,shin:-13,foot:61,upper:-168,fore:-178,neck:-33,lum:-2.5,tho:-4.5}}},
+  reiher:{n:"Reiher",sa:"Krounchasana",lv:3,r:"beine",z:"Beinrückseite · Oberschenkel vorn",sec:20,uni:1,alt:"beingurt",risk:"knee",
+    c:["Ein Bein im Heldensitz nach hinten falten, anderes Knie aufstellen","Fuß mit beiden Händen fassen und das Bein nach oben strecken","Rücken lang, Brust zum Schienbein, Gurt erlaubt"],a:"Einatmen lang machen, ausatmen das Bein etwas heranholen.",
+    an:{anchor:"hip",at:[0,9],A:{torso:96,thigh:2,shin:178,foot:180,thigh2:70,shin2:70,foot2:100,handAt:[31,95],bend:-1,neck:-24},B:{torso:97,thigh:2,shin:178,foot:180,thigh2:73,shin2:73,foot2:103,handAt:[27,96.5],bend:-1,neck:-26}}},
+  zehenboot:{n:"Zehen-Boot",sa:"Ubhaya Padangusthasana",lv:3,r:"beine",z:"Beinrückseite · Bauch · Gleichgewicht",sec:15,alt:"bootkn",
+    c:["Sitzen, Knie gebeugt, die großen Zehen fassen","Auf die Sitzknochen zurückrollen und beide Beine strecken","Rücken lang, Brust offen, Knie dürfen leicht gebeugt bleiben"],a:"Gleichmäßig weiteratmen, Blick nach vorn-oben.",
+    an:{anchor:"hip",at:[0,9],A:{torso:108,thigh:71,shin:71,foot:96,handAt:[30,96],bend:-1,neck:-10},B:{torso:107,thigh:72,shin:72,foot:97,handAt:[28.4,96.5],bend:-1,neck:-12}}},
+  pfau:{n:"Pfau",sa:"Mayurasana",lv:3,r:"brust",z:"Handgelenke · Arme · Rumpf",sec:10,alt:"brett",risk:"arm",
+    c:["Kniend die Hände mit den Fingern zu den Füßen aufsetzen","Ellbogen in den Bauch, Oberkörper weit nach vorn legen","Beine lang nach hinten und abheben, Körper waagerecht"],a:"Ruhig weiteratmen, lieber kurz und sauber.",
+    an:{anchor:"hand",A:{fore:-95,upper:-160,torso:-6,thigh:186,shin:186,foot:186,neck:14},B:{fore:-94,upper:-159,torso:-5.5,thigh:186.5,shin:186.5,foot:186,neck:15}}},
+  handstand:{n:"Handstand",sa:"Adho Mukha Vrksasana",lv:3,r:"schulter",z:"Schultern · Handgelenke · Rumpf",sec:15,alt:"delfin",risk:"inv",
+    c:["Aus dem Hund die Füße heranlaufen, Hände schulterbreit, Finger gespreizt","Ein Bein heben und mit Schwung über die Hände kommen, anfangs an der Wand","Arme gestreckt, Bauch fest, Blick zwischen die Hände"],a:"Gleichmäßig weiteratmen, kontrolliert wieder ablegen.",
+    an:{anchor:"hand",A:{fore:-90,upper:-90,torso:-90,thigh:90,shin:90,foot:92,neck:20},B:{fore:-90.6,upper:-90.6,torso:-90.8,thigh:89.4,shin:89.8,foot:93,neck:21}}},
+  unterarmstand:{n:"Unterarmstand",sa:"Pincha Mayurasana",lv:3,r:"schulter",z:"Schultern · Rumpf · Gleichgewicht",sec:15,alt:"delfin",risk:"inv",
+    c:["Aus dem Delfin die Füße heranlaufen, Unterarme parallel","Ein Bein heben und kontrolliert hochschwingen, anfangs an der Wand","Schultern über den Ellbogen, Kopf frei, Blick nach vorn"],a:"Ruhig weiteratmen, langsam ablegen und in der Kindshaltung ausruhen.",
+    an:{anchor:"hand",at:[0,3],A:{fore:0,upper:-90,torso:-90,thigh:90,shin:90,foot:92,neck:40},B:{fore:0,upper:-90.6,torso:-90.8,thigh:89.4,shin:89.8,foot:93,neck:41}}},
+  kopfkniestand:{n:"Kopf-zum-Knie im Stand",sa:"Dandayamana Janushirasana",lv:3,r:"beine",z:"Gleichgewicht · Beinrückseite · Rumpf",sec:20,uni:1,alt:"beingurt",
+    c:["Auf einem Bein stehen, den anderen Fuß mit beiden Händen fassen","Bein nach vorn strecken, Standbein bleibt fest","Ellbogen nach unten, Oberkörper sinkt Richtung Knie"],a:"Ruhig weiteratmen, Blick auf einen festen Punkt.",
+    an:{anchor:"foot",noBal:1,A:{shin:-86,thigh:-82,torso:2,thigh2:0,shin2:0,foot2:80,handAt:[80,96],bend:-1,neck:-18,tho:-3},B:{shin:-86,thigh:-82,torso:-2,thigh2:-1,shin2:-1,foot2:80,handAt:[80,94],bend:-1,neck:-20,tho:-4}}},
+  drehvorbeuge:{n:"Gedrehte Vorbeuge",sa:"Parivrtta Uttanasana",lv:2,r:"ruecken",z:"Wirbelsäule · Beinrückseite",sec:20,uni:1,alt:"vorbeuge",
+    c:["Aus der Vorbeuge eine Hand unter die Schulter auf die Matte","Andere Hand an die Hüfte, dann Arm zur Decke strecken","Knie weich, Hüfte bleibt gerade über den Füßen"],a:"Einatmen lang machen, ausatmen aufdrehen.",
+    an:{anchor:"foot",noBal:1,padT:24,A:{shin:-104,thigh:-62,torso:-50,handAt:[40,2],bend:1,upper2:88,fore2:88,neck:22,lum:-1,tho:-2},B:{shin:-104,thigh:-62,torso:-52,handAt:[40,2],bend:1,upper2:92,fore2:92,neck:26,lum:-1,tho:-2}}},
+  /* ---- 3.4 · Batch 3: Frontansicht (Stand, Sitz, Seitlage) ---- */
+  stern:{n:"Fünfzackiger Stern",sa:"Utthita Tadasana",lv:1,r:"ganz",z:"Ganzkörper · Schultern · Haltung",sec:20,alt:"berg",
+    c:["Weiter Stand, Füße parallel","Arme auf Schulterhöhe weit zur Seite strecken","Scheitel, Fingerspitzen und Füße ziehen in fünf Richtungen auseinander"],a:"Einatmen und weit werden, ausatmen Schultern sinken lassen.",
+    an:{view:"front",A:{yf:1,hy:75,aR:[62,0],ua:6,fa:8},B:{yf:1,hy:74.6,aR:[62,0],ua:10,fa:13}}},
+  sitzberg:{n:"Sitzender Berg",sa:"Parvatasana",lv:1,r:"schulter",z:"Schultern · Flanken · Haltung",sec:30,alt:"sukhasana",
+    c:["Im Schneidersitz aufrecht sitzen","Finger verschränken, Handflächen nach oben über den Kopf strecken","Schultern weg von den Ohren, Rippen sinken"],a:"Einatmen nach oben wachsen, ausatmen Schultern sinken lassen.",
+    an:{view:"front",A:{yf:1,hy:13,kR:[39,18],aR:[-13,8],aL:[13,7],hR:[2.5,205],hL:[-2.5,205],bR:1,bL:-1},B:{yf:1,hy:13.4,kR:[39,18],aR:[-13,8],aL:[13,7],hR:[2.5,207],hL:[-2.5,207],bR:1,bL:-1}}},
+  sitzdreh:{n:"Drehung im Schneidersitz",sa:"Parivrtta Sukhasana",lv:1,r:"ruecken",z:"Wirbelsäule · Schultern",sec:30,uni:1,alt:"sukhasana",
+    c:["Im Schneidersitz aufrecht sitzen","Eine Hand ans gegenüberliegende Knie, die andere hinter den Po","Einatmen lang machen, ausatmen sanft drehen, Blick über die Schulter"],a:"Einatmen aufrichten, ausatmen ein kleines Stück weiter drehen.",
+    an:{view:"front",A:{yf:1,hy:13,kR:[39,18],aR:[-13,8],aL:[13,7],hR:[-12,101],bR:-1,uaL:-112,faL:-104,tilt:-10,lean:-3},B:{yf:1,hy:13.3,kR:[39,18],aR:[-13,8],aL:[13,7],hR:[-14,102],bR:-1,uaL:-114,faL:-106,tilt:-14,lean:-4}}},
+  graetsche:{n:"Grätsche im Sitzen",sa:"Upavistha Konasana",lv:1,r:"huefte",z:"Oberschenkel innen · Beinrückseite",sec:40,alt:"schmetterling",
+    c:["Langsitz, Beine weit zur Seite öffnen, Zehen zeigen nach oben","Hände vor dem Körper auf die Matte","Rücken lang, aus der Hüfte leicht nach vorn neigen"],a:"Ausatmen und die Hände ein Stück nach vorn wandern lassen.",
+    an:{view:"front",A:{yf:1,hy:13,kR:[46,10],aR:[82,4],hR:[17,86],hL:[-17,86],bR:-1,bL:1,br:-8},B:{yf:1,hy:13,kR:[46,10],aR:[82,4],hR:[17,85],hL:[-17,85],bR:-1,bL:1,br:-11}}},
+  wechselatmung:{n:"Wechselatmung",sa:"Nadi Shodhana",lv:1,r:"ganz",z:"Atmung · Ruhe · Konzentration",sec:60,alt:"sukhasana",
+    c:["Aufrecht im bequemen Sitz, linke Hand auf dem Knie","Rechter Daumen schließt das rechte Nasenloch, Ringfinger das linke","Links ein, rechts aus, rechts ein, links aus, ruhig und gleichmäßig"],a:"Etwa 4 Sekunden ein, 6 Sekunden aus, ohne zu pressen.",
+    an:{view:"front",tempo:[4,.6,5.4,.6],ph:["Links einatmen","Rechts ausatmen"],A:{yf:1,hy:13,kR:[39,18],aR:[-13,8],aL:[13,7],ua:-70,us:.5,fa:124,fs:1.1,hL:[-33,100],bL:1,tilt:-2},B:{yf:1,hy:13.4,kR:[39,18],aR:[-13,8],aL:[13,7],ua:-70,us:.5,fa:125,fs:1.12,hL:[-33,100],bL:1,tilt:2,br:.6}}},
+  bienenatmung:{n:"Bienenatmung",sa:"Bhramari",lv:1,r:"ganz",z:"Atmung · Nacken · Entspannung",sec:60,alt:"sukhasana",
+    c:["Aufrecht im bequemen Sitz, Augen schließen","Daumen verschließen sanft die Ohren, Finger liegen auf der Stirn","Mit geschlossenem Mund summend ausatmen wie eine Biene"],a:"Normal einatmen, lang und summend ausatmen, 5–7 Runden.",
+    an:{view:"front",tempo:[3.4,.4,6,.6],ph:["Einatmen","Summend ausatmen"],A:{yf:1,hy:13,kR:[39,18],aR:[-13,8],aL:[13,7],ua:20,fa:165},B:{yf:1,hy:13.3,kR:[39,18],aR:[-13,8],aL:[13,7],ua:21,fa:165,br:.4}}},
+  wiege:{n:"Baby-Wiege",sa:"Hindolasana",lv:1,r:"huefte",z:"Gesäß · äußere Hüfte",sec:30,uni:1,alt:"figur4",
+    c:["Aufrecht sitzen, ein Schienbein anheben","Knie in eine Ellenbeuge, Fuß in die andere, wie ein Baby halten","Rücken lang, sanft hin und her wiegen"],a:"Ruhig in die Hüfte atmen.",
+    an:{view:"front",A:{yf:1,hy:13,kR:[36,52],aR:[-17,58],kL:[-39,18],aL:[13,7],hR:[34,135],hL:[-17,135],bR:1,bL:-1},B:{yf:1,hy:13,hx:1.5,lean:2,kR:[37.5,54],aR:[-15.5,59],kL:[-39,18],aL:[13,7],hR:[34,136],hL:[-17,136],bR:1,bL:-1}}},
+  halblotus:{n:"Halber Lotus",sa:"Ardha Padmasana",lv:2,r:"huefte",z:"Hüfte · Knie · Haltung",sec:40,uni:1,alt:"sukhasana",risk:"knee",
+    c:["Im Schneidersitz einen Fuß auf den gegenüberliegenden Oberschenkel legen","Fußsohle zeigt nach oben, Knie sinkt Richtung Boden","Nie am Fuß ziehen: zwickt das Knie, zurück in den Schneidersitz"],a:"Ruhig und gleichmäßig atmen, Schultern sinken.",
+    an:{view:"front",A:{yf:1,hy:13,kR:[33,16],aR:[-22,22],kL:[-39,18],aL:[13,7],hR:[30,96],hL:[-36,98],bR:-1,bL:1},B:{yf:1,hy:13.4,kR:[33,16],aR:[-22,22],kL:[-39,18],aL:[13,7],hR:[30,96],hL:[-36,98],bR:-1,bL:1}}},
+  lotus:{n:"Lotus",sa:"Padmasana",lv:3,r:"huefte",z:"Hüfte · Knie · Haltung",sec:40,alt:"halblotus",risk:"knee",
+    c:["Aus dem Halben Lotus den zweiten Fuß auf den anderen Oberschenkel legen","Beide Knie sinken Richtung Boden, Rücken aufrecht","Nur mit offenen Hüften: Druck im Knie heißt sofort lösen"],a:"Ruhig und gleichmäßig atmen, nach der Hälfte die Beine andersherum kreuzen.",
+    an:{view:"front",A:{yf:1,hy:13,kR:[33,16],aR:[-22,22],aL:[22,23],hR:[30,96],hL:[-30,96],bR:-1,bL:1},B:{yf:1,hy:13.4,kR:[33,16],aR:[-22,22],aL:[22,23],hR:[30,96],hL:[-30,96],bR:-1,bL:1}}},
+  kuhgesichtsitz:{n:"Kuhgesicht",sa:"Gomukhasana",lv:2,r:"huefte",z:"Äußere Hüfte · Schultern · Trizeps",sec:30,uni:1,alt:"kuhgesicht",risk:"hip",
+    c:["Knie übereinander stapeln, Füße neben die Hüften","Ein Arm von oben, der andere von unten hinter den Rücken, Gurt erlaubt","Beide Sitzknochen am Boden, Kissen darunter wenn nötig"],a:"Ruhig in Hüfte und Brust atmen.",
+    an:{view:"front",A:{yf:1,hy:13,kR:[-14,22],aR:[-38,6],kL:[14,14],aL:[38,6],ua:93,fa:-98,uaL:-96,faL:76,fsL:.8},B:{yf:1,hy:13.4,kR:[-14,22],aR:[-38,6],kL:[14,14],aL:[38,6],ua:96,fa:-95,uaL:-98,faL:80,fsL:.8}}},
+  feuerholz:{n:"Feuerholz",sa:"Agnistambhasana",lv:2,r:"huefte",z:"Äußere Hüfte · Gesäß",sec:30,uni:1,alt:"figur4",risk:"hip",
+    c:["Schienbeine übereinander stapeln, Knöchel auf das andere Knie","Füße gebeugt, Knie sinken lassen, Kissen erlaubt","Rücken lang, wer mag neigt sich leicht nach vorn"],a:"Lang ausatmen, die Hüfte öffnet sich langsam.",
+    an:{view:"front",A:{yf:1,hy:13,kR:[30,26],aR:[-25,24],kL:[-32,17],aL:[22,12],hR:[28,104],hL:[-30,100],bR:-1,bL:1},B:{yf:1,hy:13,kR:[30,25],aR:[-25,23.5],kL:[-32,17],aL:[22,12],hR:[28,103],hL:[-30,99],bR:-1,bL:1,br:-3}}},
+  drehkopfknie:{n:"Gedrehtes Kopf-zum-Knie",sa:"Parivrtta Janu Sirsasana",lv:2,r:"ruecken",z:"Flanke · Beinrückseite · Rücken",sec:30,uni:1,alt:"sitzseitbeuge",
+    c:["Ein Bein zur Seite strecken, andere Fußsohle an den Oberschenkel","Seitlich über das gestreckte Bein neigen, untere Hand innen am Bein","Oberen Arm über den Kopf strecken, Brust öffnet sich nach oben"],a:"Einatmen in die obere Flanke.",
+    an:{view:"front",A:{yf:1,hy:13,kR:[48,9],aR:[86,5],kL:[-40,14],aL:[6,7],lean:38,hR:[57,133],bR:-1,uaL:62,faL:50,tilt:8},B:{yf:1,hy:13,kR:[48,9],aR:[86,5],kL:[-40,14],aL:[6,7],lean:42,hR:[58,131],bR:-1,uaL:60,faL:46,tilt:10}}},
+  graetschseit:{n:"Seitbeuge im Grätschsitz",sa:"Parsva Upavistha Konasana",lv:2,r:"ruecken",z:"Flanke · Innenseite Oberschenkel",sec:30,uni:1,alt:"sitzseitbeuge",
+    c:["Grätsche im Sitzen, Zehen zeigen nach oben","Zur Seite über ein Bein neigen, Unterarm innen ans Bein","Oberen Arm über den Kopf, beide Sitzknochen bleiben am Boden"],a:"In die lange Seite atmen.",
+    an:{view:"front",A:{yf:1,hy:13,kR:[46,10],aR:[82,4],lean:34,hR:[50,128],bR:-1,uaL:66,faL:54,tilt:6},B:{yf:1,hy:13,kR:[46,10],aR:[82,4],lean:38,hR:[52,127],bR:-1,uaL:64,faL:50,tilt:8}}},
+  seitunterarm:{n:"Seitstütz auf dem Unterarm",sa:"Salamba Vasisthasana",lv:2,r:"ganz",z:"Seitlicher Rumpf · Schultern",sec:20,uni:1,alt:"seitstuetz",risk:"shoulder",
+    c:["Seitlich liegen, Ellbogen unter der Schulter, Füße übereinander","Hüfte heben, bis der Körper eine gerade Linie bildet","Obere Hand an die Hüfte oder zur Decke, Kopf in Verlängerung"],a:"Gleichmäßig weiteratmen, nicht pressen.",
+    an:{view:"front",A:{yf:1,hx:4,hy:35,lean:75,aR:[-80,2],aL:[-80,10],ua:-15,fa:-15,fs:.3,uaL:165,faL:165},B:{yf:1,hx:4,hy:35.6,lean:74.6,aR:[-80,2],aL:[-80,10],ua:-15.4,fa:-15.4,fs:.3,uaL:162,faL:164}}},
+  liegevishnu:{n:"Vishnus Liegehaltung",sa:"Anantasana (Vorstufe)",lv:2,r:"beine",z:"Oberschenkel innen · Hüfte",sec:30,uni:1,alt:"beingurt",
+    c:["Seitlich liegen, Kopf ruht in der unteren Hand","Oberes Knie beugen und den großen Zeh oder den Fuß greifen","Bein Richtung Decke strecken, nur so weit wie es geht, Gurt erlaubt"],a:"Ruhig weiteratmen, Becken bleibt senkrecht.",
+    an:{view:"front",A:{yf:1,hx:0,hy:22,lean:90,aR:[-88,4],kR:[-44,8],kL:[18,72],aL:[52,84],ua:90,fa:200,hL:[-62,144],bL:1,tilt:-6},B:{yf:1,hx:0,hy:22,lean:90,aR:[-88,4],kR:[-44,8],kL:[20,74],aL:[55,88],ua:90,fa:200,hL:[-65,146],bL:1,tilt:-6}}},
+  goettinseit:{n:"Seitbeuge in der Göttin",sa:"Parsva Utkata Konasana",lv:2,r:"huefte",z:"Hüfte · Flanke · Oberschenkel innen",sec:20,uni:1,alt:"goettin",
+    c:["Göttin: weiter Stand, Knie über den Zehen gebeugt","Einen Unterarm auf den Oberschenkel legen","Anderen Arm über den Kopf strecken, Brust bleibt offen"],a:"In die obere Flanke einatmen, ausatmen tiefer sinken.",
+    an:{view:"front",A:{yf:1,hy:64,kR:[48,50],aR:[52,0],lean:28,hR:[36,104],bR:1,uaL:78,faL:62},B:{yf:1,hy:62,kR:[49,48],aR:[52,0],lean:31,hR:[36,103],bR:1,uaL:76,faL:58}}},
+  stehtaube:{n:"Stehende Taube",sa:"Eka Pada Utkatasana",lv:2,r:"huefte",z:"Gesäß · äußere Hüfte · Gleichgewicht",sec:20,uni:1,alt:"figur4",risk:"hip",
+    c:["Auf einem Bein stehen, den anderen Knöchel aufs Knie legen","Wie auf einen Stuhl nach hinten-unten setzen","Hände vor der Brust, Fuß gebeugt, Rücken lang"],a:"Ruhig weiteratmen, Blick auf einen festen Punkt.",
+    an:{view:"front",A:{yf:1,hx:-4,hy:70,aL:[-15,0],kL:[-18,38],kR:[40,58],aR:[-10,42],hR:[1.5,128],hL:[-1.5,128],bR:1,bL:-1},B:{yf:1,hx:-4,hy:68,aL:[-15,0],kL:[-18,37],kR:[41,56],aR:[-10,40.5],hR:[1.5,128],hL:[-1.5,128],bR:1,bL:-1}}},
+  lotusstand:{n:"Halber Lotus im Stand",sa:"Ardha Baddha Padmasana",lv:3,r:"huefte",z:"Gleichgewicht · Hüfte · Knie",sec:20,uni:1,alt:"baum",risk:"knee",
+    c:["Auf einem Bein stehen, den anderen Fuß hoch in die Leiste legen","Knie zeigt nach unten-außen, Becken bleibt gerade","Hände vor der Brust, bei Druck im Knie zurück in den Baum"],a:"Langsam und gleichmäßig atmen.",
+    an:{view:"front",A:{yf:1,hx:-4,aL:[-13,0],kL:[-14.5,46],kR:[30,58],aR:[-8,80],hR:[1.5,128],hL:[-1.5,128],bR:1,bL:-1},B:{yf:1,hx:-4,aL:[-13,0],kL:[-14.5,46],kR:[31,57],aR:[-8,80],hR:[1.5,129],hL:[-1.5,129],bR:1,bL:-1}}},
+  handzeh:{n:"Hand zum großen Zeh",sa:"Utthita Hasta Padangusthasana",lv:3,r:"beine",z:"Gleichgewicht · Beinrückseite · Hüfte",sec:20,uni:1,alt:"baum",risk:"hip",
+    c:["Auf einem Bein stehen, Knie heben und den großen Zeh fassen","Bein langsam zur Seite strecken, Standbein fest","Anderen Arm zur Seite, Becken bleibt gerade, Gurt erlaubt"],a:"Ruhig weiteratmen, Blick auf einen festen Punkt.",
+    an:{view:"front",A:{yf:1,hx:-6,aL:[-15,0],kL:[-16.5,46],kR:[35,124],aR:[66,152],hR:[72,151],bR:1,uaL:180,faL:180},B:{yf:1,hx:-6,aL:[-15,0],kL:[-16.5,46],kR:[36,125],aR:[67,154],hR:[73,153],bR:1,uaL:178,faL:180}}},
+  waage:{n:"Waage",sa:"Tolasana",lv:3,r:"brust",z:"Arme · Handgelenke · Rumpf",sec:10,alt:"halblotus",risk:"arm",
+    c:["Im Lotus oder Schneidersitz die Hände neben die Hüften","Arme strecken und das Becken mit den Beinen vom Boden heben","Bauch fest, Schultern weg von den Ohren"],a:"Kurz halten und gleichmäßig weiteratmen.",
+    an:{view:"front",A:{yf:1,hy:32,kR:[33,35],aR:[-22,41],aL:[22,42],br:-32,hR:[26,60],hL:[-26,60],bR:-1,bL:1},B:{yf:1,hy:32.8,kR:[33,35.8],aR:[-22,41.8],aL:[22,42.8],br:-32,hR:[26,59.2],hL:[-26,59.2],bR:-1,bL:1}}},
+  /* ---- 3.4 · weitere Seitenansicht ---- */
+  yogamudra:{n:"Yoga-Mudra",sa:"Yoga Mudrasana",lv:2,r:"schulter",z:"Schultern · Brust · Rücken",sec:30,alt:"kind",risk:"shoulder",
+    c:["Im Fersensitz die Hände hinter dem Rücken verschränken","Oberkörper auf die Oberschenkel sinken, Stirn zur Matte","Arme nur so weit nach oben, wie die Schultern es erlauben"],a:"Ausatmen und den Nacken lang loslassen.",
+    an:{anchor:"hip",at:[0,20],A:{torso:-4,thigh:-20.5,shin:180,foot:180,upper:110,fore:104,neck:-16,lum:-2,tho:-3},B:{torso:-2,thigh:-20.5,shin:180,foot:180,upper:104,fore:100,neck:-18,lum:-2,tho:-4}}},
+  wandl:{n:"L-Handstand an der Wand",sa:"Ardha Adho Mukha Vrksasana",lv:3,r:"schulter",z:"Schultern · Handgelenke · Rumpf",sec:20,alt:"delfin",risk:"inv",
+    c:["Mit dem Rücken zur Wand sitzen, Abstand der Hände merken","Hände dort aufsetzen, Füße an der Wand hochlaufen bis auf Hüfthöhe","Hüfte über den Schultern, Körper bildet ein L, langsam zurück"],a:"Gleichmäßig weiteratmen, nicht die Luft anhalten.",
+    an:{anchor:"hand",A:{fore:-90,upper:-90,torso:-90,thigh:180,shin:180,foot:90,neck:20},B:{fore:-90.5,upper:-90.5,torso:-91,thigh:180.5,shin:180.5,foot:90.5,neck:21},eq:[{t:"wall",x:-95}]}}
+});
 const YKEYS=Object.keys(YP).sort((a,b)=>YP[a].lv-YP[b].lv);/* 3.2: library sorted by level (stable) */
 /* animation defaults: barefoot, on the mat, breathing tempo */
 for(const k of YKEYS){const d=YP[k].an;const def={floor:0,eq:[],tempo:[3.4,.8,4,.8],ph:YBR,mat:1,bare:1,lag:.04,...d};def.A={...d.A};def.B={...d.B};if(d.view==="front"&&def.floor===0)def.floor=0;AN["y_"+k]=def}
@@ -3771,6 +3961,34 @@ function ylBounds(L_){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;const inc=(p,r)=>{x0=Mat
 function yLoopOf(def,g){def._yl=def._yl||{};return def._yl[g]||(def._yl[g]=ylBuild(def,g))}
 {const _att=attachAnim;attachAnim=function(canvas,key,opts={}){_att(canvas,key,opts);const def=AN[key];
   if(def&&def.mat&&!opts.still&&!opts.noLoop){canvas._loop=yLoopOf(def,canvas._g);canvas._b=canvas._loop.b}else canvas._loop=null}}
+
+/* ---- 3.4 (@ Joschy): Wege für die neuen Haltungen ---- */
+Object.assign(YL_PATH,{palme:"stand",rueckbeuge:"stand",kniestand:"stand",wandhund:"stand",reiter:"lunge",loewe:"heel",tiger:"four",kniebrett:"four",
+  hoherausfall:"step",demkrieger:"step",drehausfall:"lunge",achtpunkt:"four",unterarmstuetz:"dog",stehspagat:"fold"});
+Object.assign(YL_PATH,{stab:"lsit",schneidervor:"sit",marichi1:"lsit",marichi3:"sit",bharadvaja:"sit",liegheld:"heel",bruecke1:"bridge",superman:"prone",halbheuschrecke:"proneb",
+  bogenvoll:"prone",frosch:"prone",spagat:"split",ohrendruck:"ss",halbschulter:"ss",schildkroete:"lsit",reiher:"sit",zehenboot:"sit",pfau:"crow",handstand:"hand",unterarmstand:"pin",
+  kopfkniestand:"stand",drehvorbeuge:"fold"});
+YL_SLOW.bogenvoll=YL_SLOW.bogen;YL_SLOW.frosch=YL_SLOW.bogen;
+/* handstand: fold -> walk the feet in (hands planted) -> tuck over the hands; forearm stand: kneel -> all fours -> dolphin -> tuck */
+Object.assign(YLK,{
+  hdog:()=>ylKF({hip:[-60,90],torso:-50,neck:-20,a1:[-70,0],k1:[-50,45],f1:0,a2:[-71,.2],k2:[-51,45],f2:0,h1:[0,0],e1:[-20,30],h2:[-1,.2],e2:[-21,30],lum:0,tho:-.4}),
+  htk:()=>ylKF({hip:[0,116],torso:-90,neck:20,th1:240,sn1:50,f1:70,th2:242,sn2:52,f2:72,h1:[0,0],e1:[1,30],h2:[-1,.2],e2:[0,30],lum:0,tho:-.4}),
+  fk2:()=>ylKF({hip:[0,52],torso:-24,neck:-26,a1:[-44,4.6],k1:[2,5],f1:180,a2:[-45,4.4],k2:[.5,4.8],f2:180,h1:[64.2,3],e1:[35.2,3],h2:[63.2,3.2],e2:[34.2,3.2],lum:.2,tho:-.6}),
+  ptk:()=>ylKF({hip:[-29,92],torso:-90,neck:40,th1:240,sn1:48,f1:68,th2:242,sn2:50,f2:70,h1:[0,3],e1:[-29,3],h2:[-1,3.2],e2:[-30,3.2],lum:0,tho:-.4})});
+Object.assign(YLP_S,{hand:[["st","ankle"],["fold","ankle"],["hdog","hand"],["htk","hand"]],
+  pin:[["st","ankle"],["hkn","knee2"],["fk2","hand"],["dk","hand"],["ptk","hand"]]});
+YLP_PIN.hand=null;
+YL_SLOW.handstand={w:1.5,wx:1.8};
+/* full split: half kneel -> half split with the hands on the mat -> slide into the split */
+YLK.hspk=()=>ylKF({hip:[0,50],torso:32,neck:-8,th1:-30.7,sn1:-30.7,f1:58,th2:-90,sn2:180,f2:180,h1:[42,3],e1:[46,30],h2:[41,3.2],e2:[45,30],lum:-.4,tho:-1});
+YLP_S.split=[["st","ankle"],["hkn","knee2"],["hspk","knee2"]];
+Object.assign(YL_PATH,{yogamudra:"heel",wandl:"wall"});
+/* L at the wall: fold -> hands planted, feet walk back to the wall -> feet climb to hip height */
+YLK.wl1=()=>ylKF({hip:[-48,72],torso:-35,neck:-20,a1:[-95,24],k1:[-70,40],f1:90,a2:[-95,23],k2:[-71,40],f2:90,h1:[0,0],e1:[-14,30],h2:[-1,.2],e2:[-15,30],lum:0,tho:-.4});
+YLP_S.wall=[["st","ankle"],["fold","ankle"],["hdog","hand"],["wl1","hand"]];
+Object.assign(YLFP,{seitunterarm:YLFP_SIDE,liegevishnu:YLFP_SIDE,
+  stehtaube:()=>[{...YLFR.st,hx:-5,lean:-2,ua:-82,fa:-80}],lotusstand:()=>[{...YLFR.st,hx:-5,lean:-2,ua:-82,fa:-80}],
+  handzeh:()=>[{...YLFR.st,hx:-6,lean:-1,ua:-82,fa:-80},{yf:1,hx:-6,aL:[-15,0],kL:[-16.5,46],kR:[12,124],aR:[14,82],hR:[20,100],bR:1,uaL:-100,faL:-95}]});
 
 
 /* ---------- 3.2 · 24-Wochen-Plan: 3 Stufen à 8 Wochen (Anfänger, Fortgeschritten, Profi), 1 Einheit pro Woche, ca. 15 -> 30 Min.
@@ -4024,6 +4242,68 @@ function yPip(v){const r=S.yrun;if(r.ph==="done"){v.innerHTML=`<div class="pipL"
   const st=yCurStep();const now=Date.now();const left=r.paused?r.left:Math.max(0,(r.end-now)/1000);const tot=r.ph==="prep"?yPrepOf(r):st.sec;const C=2*Math.PI*44;const off=C*(1-Math.max(0,Math.min(1,left/tot)));
   v.innerHTML=`<div class="pipL">${r.paused?"Pausiert":r.ph==="prep"?(st.side===2?"Seite wechseln":"Gleich"):"Halten"}</div><div class="pipRing"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" class="pb"/><circle cx="50" cy="50" r="44" class="pf" stroke-dasharray="${C}" stroke-dashoffset="${off}"/></svg><div class="pipT">${mmss(left)}</div></div><div class="pipS">${esc(YP[st.k].n)}</div><div class="pipS2">${r.i+1}/${r.steps.length}${st.side?" · Seite "+st.side:""}</div>`}
 if(S.yrun&&S.yrun.ph==="done"){/* finished before the app closed: keep the result, just clear the run */S.yrun=null;save()}
+/* ================= 3.4 · Rotation & Auswahl in den Abläufen (@ Joschy) =================
+   Die neuen Haltungen kommen ohne neue Abläufe in die bestehenden:
+   - 24-Wochen-Plan: beim Wiederholen einer Woche werden bis zu 2 Haltungen (Hauptteil) und das Ankommen durch passende
+     Alternativen ersetzt (gleiche Zielregion bei Schulter/Hüfte, Stufe <= Stufe der Woche). Der erste Durchgang bleibt wie bisher.
+   - Schnell-Dehnen und Dehnen nach dem Training: wöchentlich abwechselnd die bisherige und eine neue Variante.
+   - Im laufenden Ablauf: „Andere Haltung“ tauscht die aktuelle Haltung gegen eine passende Alternative (nur für diesen Durchgang).
+   Haltezeiten werden wie bisher über yScale auf die Zieldauer gebracht, die Dauer der Abläufe bleibt gleich. */
+const YROT={
+  /* Schultern (bleibt Schulter) */
+  schulterkreisen:["sitzberg","wandhund"],armquer:["wandhund"],trizeps:["sitzberg"],adlerarm:["wandhund"],wandengel:["sitzberg","wandhund"],brustoeffner:["wandhund"],
+  armeheben:["sitzberg","wandhund"],hund:["wandhund"],welpe:["yogamudra","wandhund"],faden:["wandhund","yogamudra"],kuhgesicht:["yogamudra","demkrieger"],delfin:["yogamudra"],
+  adler:["demkrieger"],delfinkopf:["wandl"],unterarmvor:["unterarmstand","handstand"],
+  /* Hüfte (bleibt Hüfte) */
+  tiefausfall:["reiter","hoherausfall"],figur4:["wiege","feuerholz"],schmetterling:["graetsche","schneidervor","halblotus"],liegschmetterling:["graetsche"],happybaby:["graetsche","schneidervor"],
+  bruecke:["bruecke1"],krieger1:["hoherausfall"],krieger2:["goettinseit"],goettin:["goettinseit"],halbmond:["hoherausfall"],eidechse:["reiter","hoherausfall"],
+  taube:["feuerholz","kuhgesichtsitz","stehtaube"],malasana:["graetsche","schneidervor"],bogen:["bruecke1"],seitausfall:["goettinseit"],baum:["stehtaube"],
+  koenigstaube:["kuhgesichtsitz","lotus"],taenzer:["lotusstand"],echseunter:["feuerholz","lotus"],
+  /* Rücken, Brust, Beine, Ganzkörper */
+  katzekuh:["tiger"],vierfuessler:["tiger","kniebrett"],sphinx:["halbheuschrecke","tiger"],kobra:["halbheuschrecke","superman"],krokodil:["halbheuschrecke"],windloeser:["kniestand"],
+  seitbeuge:["sitzdreh"],sitzseitbeuge:["sitzdreh"],kniebrust:["stab"],ragdoll:["drehvorbeuge"],stuhldreh:["drehausfall","drehvorbeuge"],drehsitz:["marichi3","bharadvaja"],
+  seitwinkel:["drehausfall","graetschseit"],umkrieger:["graetschseit"],heuschrecke:["superman"],robbe:["superman"],hochhund:["superman"],pflug:["ohrendruck"],
+  kamel:["rueckbeuge","achtpunkt"],fisch:["rueckbeuge"],tisch:["achtpunkt"],fersensitz:["loewe"],kraehe:["pfau","waage"],chaturanga:["pfau"],umgbrett:["bogenvoll"],rad:["bogenvoll"],kameltief:["bogenvoll"],
+  beingurt:["liegevishnu","marichi1"],pyramide:["marichi1","kopfkniestand"],sitzvorbeuge:["marichi1","schildkroete"],kopfknie:["marichi1","drehkopfknie"],heldensitz:["liegheld","frosch"],oberschenkel:["liegheld"],
+  zehensitz:["liegheld"],halbspagat:["spagat"],krieger3:["stehspagat","kopfkniestand"],halbmondbal:["stehspagat"],drehhalbmond:["kopfkniestand"],drehdreieck:["reiher"],
+  streckung:["stern","palme"],brett:["unterarmstuetz","kniebrett"],seitstuetz:["seitunterarm"],seitstuetzbein:["seitunterarm"],bootkn:["zehenboot"],bootvoll:["zehenboot"],
+  kopfstand:["halbschulter"],schulterstand:["halbschulter"],
+  /* Ankommen (Aufwärmen) */
+  sukhasana:["wechselatmung","bienenatmung"],feueratem:["wechselatmung"]};
+/* Alternativen einer Haltung in beide Richtungen (die neue Haltung lässt sich auch zurücktauschen) */
+function yRotGroup(k){const g=[k,...(YROT[k]||[])];for(const o in YROT)if(YROT[o].includes(k)&&!g.includes(o))g.push(o);return g.filter(x=>YP[x])}
+function yRound(w){return yS().log.filter(l=>l&&l.week===w&&(l.kind==="plan"||l.kind==="repeat")).length}
+/* Plan: Durchgang 0 = unverändert; ab dem 2. Durchgang einer Woche werden bis zu 2 Hauptteil-Haltungen und das Ankommen rotiert */
+function yRotate(items,stage,r){if(!r)return items;const used=new Set(items.map(x=>x.k));const out=items.map(x=>({...x}));
+  const pick=(x,i)=>{const c=(YROT[x.k]||[]).filter(k=>YP[k]&&YP[k].lv<=stage&&!used.has(k));if(!c.length)return false;const k=c[(r-1+i)%c.length];used.delete(x.k);used.add(k);Object.assign(x,yItem(k,x.part,x.fix));return true};
+  const main=out.filter(x=>x.part==="main"&&(YROT[x.k]||[]).some(k=>YP[k]&&YP[k].lv<=stage));let n=0;
+  for(let j=0;j<main.length&&n<2;j++){const x=main[(2*(r-1)+j)%main.length];if(pick(x,n))n++}
+  for(const x of out)if(x.part==="warm"&&(x.k==="sukhasana"||x.k==="feueratem"||(x.k==="katzekuh"&&r%2===0)))pick(x,0);
+  return out}
+{const _plan=yPlan;yPlan=function(w,round){w=Math.min(YN,Math.max(1,w|0));const P=_plan(w);const r=round!=null?round:yRound(w);if(!r)return P;
+    const st=yStageOf(w);const cool=P.items.filter(x=>x.part==="cool");const items=yScale(yRotate(P.items.filter(x=>x.part!=="cool").map(x=>yItem(x.k,x.part)),st,r).concat(cool.map(x=>yItem(x.k,"cool",1,x.sec))),yTarget(w));
+    const secs=ySecs(items);return{...P,items,secs,min:Math.round(secs/60),round:r}}}
+/* Schnell-Dehnen und Dehnen nach dem Training: wöchentlich abwechselnd (Kalenderwoche gerade/ungerade) */
+const YQUICK2=["schulterkreisen","wandhund","adlerarm","tiger","reiter","wiege","kind"];
+const YPOST2={A:["wandhund","armquer","trizeps","kind","sphinx"],B:["adlerarm","trizeps","seitbeuge","katzekuh","schneidervor"],C:["tiefausfall","wiege","halbevorbeuge","graetsche","kniebrust"]};
+function yAltWeek(){return Math.round(weekStart(new Date()).getTime()/WEEKMS)%2===1}
+{const _q=yQuick;yQuick=function(){if(!yAltWeek())return _q();const items=yScale(YQUICK2.map(k=>yItem(k,"main")),300);return{items,secs:ySecs(items),min:Math.round(ySecs(items)/60)}}
+  const _p=yPost;yPost=function(day){if(!yAltWeek()||!YPOST2[day])return _p(day);const items=yScale(YPOST2[day].map(k=>yItem(k,"main")),300);return{items,secs:ySecs(items),min:Math.round(ySecs(items)/60)}}}
+/* Auswahl im laufenden Ablauf: nächste passende Alternative (Stufe <= Stufe der Plan-Woche bzw. der Haltung), beide Seiten, Haltezeit bleibt */
+function ySwapNext(){const r=S.yrun;if(!r||r.ph==="done")return null;const st=yCurStep();if(!st)return null;const lim=r.kind==="plan"||r.kind==="repeat"?yStageOf(r.week):Math.max(1,YP[st.k].lv);
+  let base=r.orig&&r.orig[r.i];if(!base||!yRotGroup(base).includes(st.k))base=st.k;const g=yRotGroup(base).filter(k=>YP[k].lv<=lim&&(k===st.k||!r.steps.some(s=>s.k===k)));if(g.length<2)return null;const i=g.indexOf(st.k);return g[(i+1)%g.length]}
+function ySwap(){const r=S.yrun;const nk=ySwapNext();if(!nk)return;const st=yCurStep();let base=r.orig&&r.orig[r.i];if(!base||!yRotGroup(base).includes(st.k))base=st.k;
+  let i0=r.i;if(st.side===2&&r.steps[i0-1]&&r.steps[i0-1].k===st.k)i0--;let i1=i0+1;if(r.steps[i0].side===1&&r.steps[i1]&&r.steps[i1].k===st.k&&r.steps[i1].side===2)i1++;
+  const rep=ySteps([{k:nk,sec:st.sec,uni:!!YP[nk].uni,part:st.part}]);r.steps.splice(i0,i1-i0,...rep);
+  /* remember the original pose of the slot (index based), so the group stays the same while cycling */
+  const o=r.orig||{};const shifted={};for(const k in o){const j=+k;shifted[j<i0?j:j>=i1?j-(i1-i0)+rep.length:j]=o[k]}for(let j=i0;j<i0+rep.length;j++)shifted[j]=base;r.orig=shifted;
+  r.swaps=(r.swaps||0)+1;yJump(i0);toast("Andere Haltung: "+YP[nk].n)}
+{const _r=yRender;yRender=function(){_r();const r=S.yrun;if(!r||r.ph==="done")return;const nk=ySwapNext();if(!nk)return;const ab=$("#yAlt");
+    const b=`<button class="btn${ab?"":" block"}" id="ySwap">Andere Haltung: ${esc(YP[nk].n)}</button>`;
+    if(ab){ab.insertAdjacentHTML("beforebegin",`<div class="yalts"></div>`);const w=ab.previousElementSibling;w.appendChild(ab);ab.classList.remove("block");w.insertAdjacentHTML("beforeend",b)}
+    else{const yb=document.querySelector("#yogaInner .ybtns");if(yb)yb.insertAdjacentHTML("afterend",b)}
+    $("#ySwap").onclick=()=>{audio();ySwap()}}}
+{const st=document.createElement("style");st.textContent=`.yalts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}.yalts .btn,#ySwap{white-space:normal;line-height:1.2}`;document.head.appendChild(st)}
 
 /* ================= 3.3 · GRIFFKRAFT & HÄNGEN (@ Joschy) =================
    Ziel: von < 10 s auf 1–2 Minuten frei hängen.
@@ -4318,6 +4598,594 @@ function hgChart(c){if(!c)return;const pts=hgS().tests.map(x=>({t:dT(x.d),v:x.s}
 .hgdots{display:flex;gap:8px;margin-top:4px}.hgdots i{width:12px;height:12px;border-radius:50%;border:1px solid var(--line2)}.hgdots i.on{background:var(--arc);border-color:var(--arc)}.hgdots i.cur{border-color:var(--arc);box-shadow:0 0 6px var(--arc)}
 .hgst{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
 .hgst.cur b{color:var(--arc)}`;document.head.appendChild(st)}
+
+/* ================= KRAFT-BIBLIOTHEK +100 (@ Joschy) =================
+   ~100 neue, verbreitete Kraft- und Körpergewichtsübungen: mit Joschys Geräten (Langhantel, Rack, Bank, Kurzhanteln,
+   Klimmzugstange, Band; Kettlebells wenn aktiv) und viele ohne Geräte bzw. mit Alltagsgegenständen.
+   · Jede Übung: Anleitung (cues), typische Fehler (bad), Atmung (atem), Sicherheit/Schulter-Hüfte (safe, jr), leichtere Variante (easy),
+     Stufe (lvl), Wiederholungsbereich (rr / hr), Muskeln (m, MG_OF), Kategorie/Bewegungsmuster (CAT/SUB), Tag (DAYEX), Geräte (NEEDS), Animation (AN).
+   · Plan: neue Übungen rotieren NUR auf Neben-/Zusatz-Plätzen (nie Hauptübungen, nie Bonus/Griff-Block), passend zum Tag und nur mit
+     aktiven Geräten. Rhythmus: Zyklus 1, 3, 5 … = gewohnter Plan, Zyklus 2, 4 … = bis zu 2 Nebenplätze pro Einheit mit neuen Übungen
+     (wechseln von Zyklus zu Zyklus). Rein aus S.prog.cycle berechnet: kein neuer Zustand, keine Migration, laufende Einheit unberührt.
+   · Die bisherige Geräte-Anpassung (adaptCore) sieht die neuen Übungen nicht: Pläne im Zyklus 1 bleiben exakt wie vorher.
+   · Tauschen: bietet zusätzlich bis zu 2 passende neue Übungen an. */
+const KX_RISK={sh:"Schulter",hip:"Hüfte",knee:"Knie",wrist:"Handgelenk",back:"unterer Rücken"};
+const KXD={
+/* ---------------- BRUST (Tag A) ---------------- */
+bbfloor:{n:"Bodendrücken mit Langhantel",eq:"Langhantel · Rack",m:"Brust · Trizeps",type:"bar",rest:120,inc:2.5,lvl:2,c:"brust",s:"chest",g:"brust",d:"A",nd:[["barbell","rack"]],easy:"dbfloor",
+  cues:["Im Rack auf den Boden legen, Ablagen auf Stangenhöhe bei gestreckten Armen","Knie gebeugt, Füße fest am Boden","Stange zur unteren Brust ablassen, bis die Oberarme den Boden berühren","Kurz ablegen, dann kraftvoll hochdrücken"],
+  bad:["Ellbogen knallen auf den Boden","Ellbogen ganz seitlich abgespreizt"],atem:"Beim Ablassen einatmen, beim Hochdrücken ausatmen.",
+  safe:"Schulter: Der Boden begrenzt die Tiefe, das schont die Schulter. Ellbogen etwa 45° vom Körper."},
+dbfloor:{n:"Kurzhantel-Bodendrücken",eq:"Kurzhanteln · Matte",m:"Brust · Trizeps",type:"db",rest:90,inc:2,lvl:1,c:"brust",s:"chest",g:"brust",d:"A",nd:[["db"]],easy:"pushknee",harder:"dbbench",
+  cues:["Rückenlage, Knie gebeugt, Hanteln über der Brust","Hanteln langsam senken, bis die Oberarme den Boden berühren","Unten kurz ruhen lassen","Gerade nach oben drücken"],
+  bad:["Ellbogen fallen hart auf den Boden","Hanteln kippen nach außen"],atem:"Beim Senken einatmen, beim Drücken ausatmen.",
+  safe:"Schulter: schulterschonend, weil der Boden die Tiefe begrenzt. Hanteln aus den Knien auf die Brust rollen."},
+bbincline:{n:"Schrägbankdrücken mit Langhantel",eq:"Langhantel · Bank · Rack",m:"Obere Brust · Schultern · Trizeps",type:"bar",rest:120,inc:2.5,lvl:2,c:"brust",s:"chest",g:"brust",d:"A",nd:[["barbell","rack","bench"]],easy:"incline",
+  cues:["Bank auf etwa 30° im Rack, Stange knapp über Armlänge","Schulterblätter zurück und nach unten","Stange zur oberen Brust ablassen","Gerade nach oben drücken, Po bleibt auf der Bank"],
+  bad:["Bank zu steil (wird zu Schulterdrücken)","Stange auf der Brust abfedern"],atem:"Beim Ablassen einatmen, beim Drücken ausatmen.",
+  safe:"Schulter: Sicherheitsablagen knapp über der Brust einstellen. Bei Schulterschmerz Bank flacher stellen."},
+squeezepress:{n:"Squeeze Press mit Kurzhanteln",eq:"Kurzhanteln · Bank",m:"Innere Brust · Trizeps",type:"db",rest:75,inc:2,lvl:1,c:"brust",s:"chest",g:"brust",d:"A",nd:[["db","bench"]],easy:"dbfloor",
+  cues:["Rückenlage auf der Bank, Hanteln über der Brust","Hanteln fest gegeneinander drücken, Handflächen zueinander","Gemeinsam zur Brustmitte ablassen","Hochdrücken, ohne den Druck zu lösen"],
+  bad:["Hanteln lösen sich voneinander","Schultern rollen nach vorn"],atem:"Beim Ablassen einatmen, beim Drücken ausatmen.",
+  note:"Leichte Hanteln reichen, die Spannung kommt vom Zusammendrücken."},
+dbpullover:{n:"Kurzhantel-Überzüge",eq:"Kurzhantel · Bank",m:"Brust · Lat · Trizeps",type:"db",rest:75,inc:2,lvl:2,c:"brust",s:"chest",g:"brust",d:"A",nd:[["db","bench"]],easy:"dbfloor",jr:"sh",
+  cues:["Rückenlage auf der Bank, eine Hantel mit beiden Händen über der Brust","Arme fast gestreckt, Ellbogen leicht gebeugt","Hantel im Bogen hinter den Kopf senken","Im gleichen Bogen zurück über die Brust ziehen"],
+  bad:["Zu tief hinter den Kopf","Hohlkreuz beim Senken"],atem:"Beim Senken einatmen, beim Zurückziehen ausatmen.",
+  safe:"Schulter: nur so weit hinter den Kopf, wie es ohne Ziehen in der Schulter geht. Hantel sicher an der Scheibe umgreifen."},
+pushleg:{n:"Einbeinige Liegestütze",eq:"Ohne Gerät · Matte",m:"Brust · Trizeps · Rumpf · Gesäß",type:"bw",rest:75,inc:0,lvl:2,rr:[6,12],c:"brust",s:"chest",g:"brust",d:"A",nd:[],easy:"pushup",
+  cues:["Liegestütz-Position, Hände unter den Schultern","Ein gestrecktes Bein eine Handbreit vom Boden heben","Liegestütz ausführen, Bein bleibt oben, Hüfte gerade","Nach der Hälfte der Wiederholungen Bein wechseln"],
+  bad:["Hüfte dreht auf","Hohlkreuz durch zu hohes Bein"],atem:"Beim Ablassen einatmen, beim Hochdrücken ausatmen."},
+bandchest:{n:"Brustdrücken mit Band stehend",eq:"Widerstandsband · Rack",m:"Brust · Trizeps · Schultern",type:"band",rest:60,inc:0,lvl:1,c:"brust",s:"chest",g:"brust",d:"A",nd:[["band"]],easy:"wallpush",
+  cues:["Band hinter dir auf Brusthöhe am Rack befestigen","Schrittstellung, Bauch fest","Hände von der Brust nach vorn drücken, bis die Arme gestreckt sind","Langsam zurück zur Brust"],
+  bad:["Oberkörper lehnt sich nach vorn","Schultern ziehen zu den Ohren"],atem:"Beim Drücken ausatmen, beim Zurückführen einatmen."},
+plyopush:{n:"Explosive Liegestütze",eq:"Ohne Gerät · Matte",m:"Brust · Trizeps · Schnellkraft",type:"bw",rest:90,inc:0,lvl:3,rr:[4,8],c:"brust",s:"chest",g:"brust",d:"A",nd:[],easy:"pushup",jr:"wrist",
+  cues:["Normale Liegestütz-Position","Kontrolliert ablassen","So explosiv hochdrücken, dass die Hände kurz abheben","Weich mit leicht gebeugten Armen landen"],
+  bad:["Mit gestreckten Armen landen","Hüfte hängt durch"],atem:"Beim Ablassen einatmen, beim Abdrücken kräftig ausatmen.",
+  safe:"Handgelenk und Schulter: nur ausgeruht und aufgewärmt. Bei Schmerz aufhören und normale Liegestütze machen."},
+hindupush:{n:"Hindu-Liegestütze",eq:"Ohne Gerät · Matte",m:"Brust · Schultern · Trizeps · Mobilität",type:"bw",rest:75,inc:0,lvl:2,rr:[6,10],c:"brust",s:"chest",g:"brust",d:"A",nd:[],easy:"pushknee",jr:"sh",
+  cues:["Start im umgekehrten V, Hüfte hoch","Brust im Bogen dicht über dem Boden nach vorn führen","Arme strecken, Brust hoch, Blick nach vorn","Hüfte zurück nach oben schieben"],
+  bad:["Hüfte fällt durch, Hohlkreuz","Schultern zu den Ohren"],atem:"Beim Nach-vorn-Gleiten einatmen, beim Zurückschieben ausatmen.",
+  safe:"Schulter: langsam beginnen, kleiner Bogen. Bei Ziehen in der Schulter auslassen."},
+svend:{n:"Svend Press mit Hantelscheibe",eq:"Hantelscheibe",m:"Innere Brust · Schultern",type:"db",rest:60,inc:1.25,lvl:1,c:"brust",s:"chest",g:"brust",d:"A",nd:[["barbell"]],easy:"bandchest",
+  cues:["Eine Hantelscheibe zwischen beide Handflächen nehmen","Vor der Brust fest zusammendrücken","Langsam nach vorn strecken","Zurück zur Brust, Druck nicht lösen"],
+  bad:["Scheibe rutscht, zu wenig Druck","Schultern ziehen nach oben"],atem:"Beim Strecken ausatmen, beim Zurückführen einatmen.",
+  note:"Mit kleinen Scheiben (5–10 kg) starten."},
+
+/* ---------------- SCHULTER: Drücken & Heben (Tag A) ---------------- */
+dbohpstand:{n:"Kurzhantel-Schulterdrücken stehend",eq:"Kurzhanteln",m:"Schultern · Trizeps · Rumpf",type:"db",rest:90,inc:2,lvl:2,c:"schulter",s:"press",g:"schulter",d:"A",nd:[["db"]],easy:"ohpdb",jr:"sh",
+  cues:["Hanteln auf Schulterhöhe, Handflächen nach vorn oder zueinander","Po und Bauch fest, kein Hohlkreuz","Gerade über den Kopf drücken","Kontrolliert zurück auf Schulterhöhe"],
+  bad:["Starkes Hohlkreuz","Schwung aus den Beinen"],atem:"Beim Drücken ausatmen, beim Ablassen einatmen.",
+  safe:"Schulter: Neutralgriff (Handflächen zueinander) ist meist angenehmer. Nur schmerzfrei nach oben."},
+ohpuni:{n:"Einarmiges Kurzhantel-Drücken",eq:"Kurzhantel",m:"Schultern · Trizeps · seitlicher Rumpf",type:"db",rest:75,inc:2,lvl:2,uni:1,c:"schulter",s:"press",g:"schulter",d:"A",nd:[["db"]],easy:"packpress",jr:"sh",
+  cues:["Eine Hantel auf Schulterhöhe, freie Hand an die Hüfte","Rumpf fest, nicht zur Seite lehnen","Hantel gerade nach oben drücken","Langsam zurück, Seite wechseln"],
+  bad:["Oberkörper kippt zur Seite","Hohlkreuz"],atem:"Beim Drücken ausatmen, beim Ablassen einatmen.",
+  safe:"Schulter: Neutralgriff und leichtes Gewicht. Einseitig lässt sich die Bahn gut an die Schulter anpassen."},
+bbpushpress:{n:"Push Press mit Langhantel",eq:"Langhantel · Rack",m:"Schultern · Trizeps · Beine",type:"bar",rest:120,inc:2.5,lvl:3,c:"schulter",s:"press",g:"schulter",d:"A",nd:[["barbell","rack"]],easy:"ohp",jr:"sh",
+  cues:["Stange vorn auf den Schultern, wie beim Schulterdrücken","Kurz in die Knie (Dip), Oberkörper bleibt senkrecht","Aus den Beinen explosiv strecken und die Stange hochdrücken","Oben Arme gestreckt, kontrolliert zurück auf die Schultern"],
+  bad:["Zu tiefer Dip (wird zur Kniebeuge)","Hohlkreuz oben"],atem:"Vor dem Dip einatmen und Bauch fest, oben ausatmen.",
+  safe:"Schulter: schwerer als normales Drücken, nur mit sauberer Technik. Ablagen auf Schulterhöhe."},
+zpress:{n:"Z-Press",eq:"Kurzhanteln · Boden",m:"Schultern · Trizeps · Rumpf",type:"db",rest:90,inc:2,lvl:3,c:"schulter",s:"press",g:"schulter",d:"A",nd:[["db"]],easy:"ohpdb",jr:"hip",
+  cues:["Aufrecht auf den Boden setzen, Beine gestreckt","Hanteln auf Schulterhöhe","Ohne Lehne gerade nach oben drücken","Oberkörper bleibt senkrecht, kein Zurücklehnen"],
+  bad:["Rücken rundet sich","Nach hinten lehnen"],atem:"Beim Drücken ausatmen, beim Ablassen einatmen.",
+  safe:"Hüfte und Beinrückseite: Bei zu wenig Beweglichkeit Beine leicht grätschen oder auf ein Kissen setzen."},
+landmine:{n:"Landmine-Drücken",eq:"Langhantel · Ecke oder Scheibe als Halt",m:"Obere Brust · Schultern · Rumpf",type:"bar",rest:90,inc:2.5,lvl:2,c:"schulter",s:"press",g:"schulter",d:"A",nd:[["barbell"]],easy:"bandchest",
+  cues:["Ein Stangenende in eine Zimmerecke (Handtuch dazwischen) klemmen","Anderes Ende mit beiden Händen vor die Brust","Schräg nach vorn-oben drücken","Langsam zurück zur Brust"],
+  bad:["Hohlkreuz","Stange rutscht in der Ecke"],atem:"Beim Drücken ausatmen, beim Zurückführen einatmen.",
+  safe:"Schulter: Die schräge Bahn ist für die Schulter angenehmer als Drücken über Kopf."},
+platefront:{n:"Frontheben mit Hantelscheibe",eq:"Hantelscheibe",m:"Vordere Schulter",type:"db",rest:60,inc:1.25,lvl:1,c:"schulter",s:"raise",g:"schulter",d:"A",nd:[["barbell"]],easy:"bottlefront",
+  cues:["Scheibe mit beiden Händen seitlich greifen","Arme fast gestreckt bis auf Augenhöhe heben","Oben kurz halten","Langsam ablassen"],
+  bad:["Schwung aus dem Rücken","Über Kopfhöhe reißen"],atem:"Beim Heben ausatmen, beim Ablassen einatmen."},
+bandlateral:{n:"Seitheben mit Band",eq:"Widerstandsband",m:"Seitliche Schulter",type:"band",rest:60,inc:0,lvl:1,c:"schulter",s:"raise",g:"schulter",d:"A",nd:[["band"]],easy:"bottleraise",
+  cues:["Mit beiden Füßen auf die Bandmitte stellen","Enden seitlich greifen, Ellbogen minimal gebeugt","Arme bis Schulterhöhe heben","Langsam gegen den Zug ablassen"],
+  bad:["Schultern zu den Ohren","Über Schulterhöhe heben"],atem:"Beim Heben ausatmen, beim Ablassen einatmen."},
+uprightrow:{n:"Aufrechtes Rudern mit Kurzhanteln",eq:"Kurzhanteln",m:"Seitliche Schulter · Nacken",type:"db",rest:60,inc:1,lvl:2,c:"schulter",s:"raise",g:"schulter",d:"A",nd:[["db"]],easy:"lateral",jr:"sh",
+  cues:["Hanteln vor den Oberschenkeln, schulterbreit","Ellbogen führen nach oben-außen","Nur bis etwa Brusthöhe ziehen","Langsam ablassen"],
+  bad:["Über Schulterhöhe ziehen","Hanteln zu eng"],atem:"Beim Ziehen ausatmen, beim Ablassen einatmen.",
+  safe:"Schulter: kann die Schulter einklemmen. Nur bis Brusthöhe, leichtes Gewicht. Bei Schulterproblemen lieber Seitheben."},
+
+/* ---------------- SCHULTER hinten & Nacken (Tag B) ---------------- */
+wallslide:{n:"Wandgleiten (Wall Slides)",eq:"Ohne Gerät · Wand",daily:"Wand",m:"Hintere Schulter · Schulterblätter",type:"bw",rest:45,inc:0,lvl:1,rr:[8,12],c:"schulter",s:"rear",g:"schulter",d:"B",nd:[],easy:"ytw",
+  cues:["Rücken, Po und Kopf an die Wand","Unterarme und Handrücken an der Wand, Arme wie ein W","Arme an der Wand nach oben schieben zum Y","Schulterblätter nach unten ziehen und zurück zum W"],
+  bad:["Hohlkreuz, Rücken löst sich","Schultern zu den Ohren"],atem:"Beim Hochschieben ausatmen, beim Zurückführen einatmen.",
+  note:"Ideal für gesunde Schultern und als Aufwärmen vor dem Drücken."},
+bandextrot:{n:"Außenrotation mit Band",eq:"Widerstandsband",m:"Rotatorenmanschette · hintere Schulter",type:"band",rest:45,inc:0,lvl:1,c:"schulter",s:"rear",g:"schulter",d:"B",nd:[["band"]],easy:"wallslide",
+  cues:["Band mit beiden Händen, Ellbogen fest an den Seiten, 90° gebeugt","Unterarme zeigen nach vorn","Hände nach außen drehen, Ellbogen bleiben am Körper","Langsam zurück"],
+  bad:["Ellbogen lösen sich vom Körper","Zu starkes Band"],atem:"Beim Öffnen ausatmen, beim Zurückführen einatmen.",
+  note:"Kleine Muskeln, leichtes Band. Gut für die Schultergesundheit."},
+bandpullapart:{n:"Band Pull-Aparts",eq:"Widerstandsband",m:"Hintere Schulter · oberer Rücken",type:"band",rest:45,inc:0,lvl:1,c:"schulter",s:"rear",g:"schulter",d:"B",nd:[["band"]],easy:"wallslide",
+  cues:["Band schulterbreit vor dem Körper auf Schulterhöhe","Arme fast gestreckt","Band auseinanderziehen, bis es die Brust berührt","Schulterblätter zusammen, langsam zurück"],
+  bad:["Schultern zu den Ohren","Arme stark beugen"],atem:"Beim Auseinanderziehen ausatmen, beim Zurückführen einatmen."},
+inclineyraise:{n:"Y-Heben auf der Schrägbank",eq:"Kurzhanteln · Bank",m:"Untere Trapezmuskeln · hintere Schulter",type:"db",rest:60,inc:1,lvl:2,c:"schulter",s:"rear",g:"schulter",d:"B",nd:[["db","bench"]],easy:"ytw",
+  cues:["Bauchlage auf der schrägen Bank, Arme hängen","Daumen zeigen nach oben","Arme gestreckt schräg nach vorn-oben zum Y heben","Langsam ablassen"],
+  bad:["Zu schwere Hanteln","Kopf in den Nacken"],atem:"Beim Heben ausatmen, beim Ablassen einatmen.",
+  note:"Sehr leichte Hanteln (1–4 kg) reichen völlig."},
+dbshrug:{n:"Kurzhantel-Shrugs",eq:"Kurzhanteln",m:"Nacken · oberer Trapezmuskel",type:"db",rest:60,inc:2,lvl:1,c:"ruecken",s:"trap",g:"ruecken",d:"B",nd:[["db"]],easy:"jughold",
+  cues:["Aufrecht stehen, Hanteln seitlich","Schultern gerade nach oben zu den Ohren ziehen","Oben 1 Sekunde halten","Langsam ganz ablassen"],
+  bad:["Schultern kreisen","Kopf nach vorn schieben"],atem:"Beim Hochziehen ausatmen, beim Ablassen einatmen."},
+bbshrug:{n:"Langhantel-Shrugs",eq:"Langhantel · Rack",m:"Nacken · oberer Trapezmuskel",type:"bar",rest:75,inc:5,lvl:1,c:"ruecken",s:"trap",g:"ruecken",d:"B",nd:[["barbell","rack"]],easy:"dbshrug",
+  cues:["Stange aus dem Rack auf Hüfthöhe nehmen","Schulterbreit greifen, Arme gestreckt","Schultern gerade nach oben ziehen","Oben halten, langsam ablassen"],
+  bad:["Mit den Armen ziehen","Schwung aus den Knien"],atem:"Beim Hochziehen ausatmen, beim Ablassen einatmen."},
+
+/* ---------------- TRIZEPS (Tag A) ---------------- */
+kickback:{n:"Trizeps-Kickbacks",eq:"Kurzhantel · Bank",m:"Trizeps",type:"db",rest:60,inc:1,lvl:1,uni:1,c:"arme",s:"tri",g:"trizeps",d:"A",nd:[["db","bench"]],easy:"walltri",
+  cues:["Hand und Knie auf der Bank, Rücken flach","Oberarm am Körper, parallel zum Boden","Unterarm nach hinten strecken","Langsam zurück, Oberarm bleibt still"],
+  bad:["Oberarm schwingt mit","Zu schweres Gewicht"],atem:"Beim Strecken ausatmen, beim Zurückführen einatmen."},
+bandohext:{n:"Trizepsstrecken über Kopf mit Band",eq:"Widerstandsband",m:"Trizeps (langer Kopf)",type:"band",rest:60,inc:0,lvl:1,c:"arme",s:"tri",g:"trizeps",d:"A",nd:[["band"]],easy:"walltri",jr:"sh",
+  cues:["Ein Fuß hinten auf das Band, Band über den Rücken nach oben","Ellbogen zeigen nach vorn-oben, neben dem Kopf","Arme über dem Kopf strecken","Langsam beugen, Ellbogen bleiben eng"],
+  bad:["Ellbogen gehen weit auseinander","Hohlkreuz"],atem:"Beim Strecken ausatmen, beim Beugen einatmen.",
+  safe:"Schulter: Arme nur so hoch, wie es schmerzfrei geht. Sonst Trizepsdrücken am Band."},
+bbtriext:{n:"Trizepsstrecken an der Stange (Körpergewicht)",eq:"Langhantel · Rack",m:"Trizeps · Rumpf",type:"bw",rest:75,inc:0,lvl:2,rr:[8,12],c:"arme",s:"tri",g:"trizeps",d:"A",nd:[["barbell","rack"]],easy:"walltri",
+  cues:["Stange im Rack auf Hüfthöhe, schulterbreit greifen","Füße zurück, Körper gerade wie beim Liegestütz","Ellbogen beugen, Stirn unter die Stange senken","Ellbogen strecken, Körper bleibt gerade"],
+  bad:["Ellbogen gehen weit auseinander","Hüfte knickt ein"],atem:"Beim Senken einatmen, beim Strecken ausatmen.",
+  note:"Schwerer: Stange tiefer stellen. Leichter: Stange höher."},
+
+/* ---------------- BIZEPS (Tag B) ---------------- */
+concentration:{n:"Konzentrations-Curls",eq:"Kurzhantel · Bank",m:"Bizeps",type:"db",rest:60,inc:1,lvl:1,uni:1,c:"arme",s:"bi",g:"bizeps",d:"B",nd:[["db","bench"]],easy:"curl",
+  cues:["Auf die Bank setzen, Ellbogen an die Innenseite des Oberschenkels","Arm hängt gestreckt","Hantel zur Schulter beugen","Oben anspannen, langsam ablassen"],
+  bad:["Oberkörper schwingt","Ellbogen hebt vom Bein ab"],atem:"Beim Beugen ausatmen, beim Ablassen einatmen."},
+inclinecurl:{n:"Schrägbank-Curls",eq:"Kurzhanteln · Bank",m:"Bizeps (langer Kopf)",type:"db",rest:60,inc:1,lvl:2,c:"arme",s:"bi",g:"bizeps",d:"B",nd:[["db","bench"]],easy:"curl",jr:"sh",
+  cues:["Rückenlage auf der schrägen Bank (etwa 45°)","Arme hängen senkrecht nach unten","Hanteln beugen, Ellbogen bleiben hinten","Langsam ganz strecken"],
+  bad:["Ellbogen wandern nach vorn","Schultern rollen nach vorn"],atem:"Beim Beugen ausatmen, beim Ablassen einatmen.",
+  safe:"Schulter: Die Dehnung vorn in der Schulter ist stark. Bank steiler stellen, wenn es zieht."},
+spidercurl:{n:"Spider Curls",eq:"Kurzhanteln · Bank",m:"Bizeps (kurzer Kopf)",type:"db",rest:60,inc:1,lvl:2,c:"arme",s:"bi",g:"bizeps",d:"B",nd:[["db","bench"]],easy:"curl",
+  cues:["Bauchlage auf der schrägen Bank, Brust an der Kante","Arme hängen senkrecht nach unten","Hanteln zur Schulter beugen, Oberarme bleiben senkrecht","Oben anspannen, langsam ablassen"],
+  bad:["Oberarme schwingen nach vorn","Schwung aus dem Oberkörper"],atem:"Beim Beugen ausatmen, beim Ablassen einatmen."},
+revcurl:{n:"Reverse Curls mit Langhantel",eq:"Langhantel",m:"Unterarme · Bizeps",type:"bar",rest:60,inc:2.5,lvl:1,c:"arme",s:"bi",g:"bizeps",d:"B",nd:[["barbell"]],easy:"hammer",
+  cues:["Stange im Obergriff, schulterbreit","Ellbogen am Körper","Stange zur Brust beugen, Handgelenke gerade","Langsam ablassen"],
+  bad:["Handgelenke knicken ab","Schwung aus der Hüfte"],atem:"Beim Beugen ausatmen, beim Ablassen einatmen.",
+  note:"Kräftigt die Unterarme, hilft auch beim Hängen und Griff."},
+dragcurl:{n:"Drag Curls",eq:"Langhantel",m:"Bizeps",type:"bar",rest:60,inc:2.5,lvl:2,c:"arme",s:"bi",g:"bizeps",d:"B",nd:[["barbell"]],easy:"bbcurl",
+  cues:["Stange im Untergriff vor den Oberschenkeln","Ellbogen nach hinten ziehen, Stange am Körper hochschleifen","Bis zur unteren Brust","Am Körper entlang langsam zurück"],
+  bad:["Stange entfernt sich vom Körper","Schultern rollen nach vorn"],atem:"Beim Hochziehen ausatmen, beim Ablassen einatmen."},
+
+/* ---------------- RÜCKEN (Tag B) ---------------- */
+pendlay:{n:"Pendlay-Rudern",eq:"Langhantel",m:"Oberer Rücken · Lat",type:"bar",rest:120,inc:2.5,lvl:3,c:"ruecken",s:"rowp",g:"ruecken",d:"B",nd:[["barbell"]],easy:"row",jr:"back",
+  cues:["Oberkörper waagerecht, Stange liegt am Boden","Rücken gerade, Bauch fest","Stange explosiv zum unteren Brustbein ziehen","Jede Wiederholung kurz am Boden ablegen"],
+  bad:["Oberkörper richtet sich auf","Runder Rücken"],atem:"Am Boden einatmen und Bauch fest, beim Ziehen ausatmen.",
+  safe:"Unterer Rücken: nur mit sicherer Hüftbeuge. Wird der Rücken rund, Gewicht runter."},
+dbbentrow:{n:"Vorgebeugtes Rudern mit Kurzhanteln",eq:"Kurzhanteln",m:"Oberer Rücken · Lat · Bizeps",type:"db",rest:90,inc:2,lvl:2,c:"ruecken",s:"rowp",g:"ruecken",d:"B",nd:[["db"]],easy:"chestrow",jr:"back",
+  cues:["Hüfte zurück, Oberkörper etwa 45° nach vorn","Hanteln hängen unter den Schultern","Ellbogen eng zur Hüfte ziehen","Langsam strecken"],
+  bad:["Schwung aus dem Oberkörper","Runder Rücken"],atem:"Beim Ziehen ausatmen, beim Ablassen einatmen.",
+  safe:"Unterer Rücken: Bei Rückenproblemen lieber brustgestützt auf der Bank rudern."},
+renegade:{n:"Renegade Rows",eq:"Kurzhanteln",m:"Rücken · Rumpf · Schultern",type:"db",rest:90,inc:1,lvl:3,c:"ruecken",s:"rowp",g:"ruecken",d:"B",nd:[["db"]],easy:"dbrow",jr:"wrist",
+  cues:["Liegestütz-Position auf zwei Hanteln, Füße breit","Hüfte ruhig und gerade","Eine Hantel zur Hüfte ziehen","Absetzen, Seite wechseln"],
+  bad:["Hüfte dreht stark auf","Hanteln kippen"],atem:"Beim Ziehen ausatmen, beim Absetzen einatmen.",
+  safe:"Handgelenk: nur mit stabilen Sechskant-Hanteln. Schulter bleibt über der Hand."},
+bandlat:{n:"Latziehen mit Band kniend",eq:"Widerstandsband · Rack oder Klimmzugstange",m:"Lat · Bizeps",type:"band",rest:60,inc:0,lvl:1,c:"ruecken",s:"vert",g:"ruecken",d:"B",nd:[["band","pullbar"],["band","rack"]],easy:"towellat",
+  cues:["Band oben an Stange oder Rack befestigen","Darunter knien, Arme gestreckt nach oben","Ellbogen nach unten zu den Rippen ziehen","Langsam nach oben zurück"],
+  bad:["Mit dem Oberkörper nach hinten fallen","Schultern zu den Ohren"],atem:"Beim Ziehen ausatmen, beim Zurückführen einatmen.",
+  note:"Gute Vorübung für Klimmzüge."},
+straightarm:{n:"Überzüge am Band (gestreckte Arme)",eq:"Widerstandsband · Rack",m:"Lat · Trizeps (langer Kopf)",type:"band",rest:60,inc:0,lvl:1,c:"ruecken",s:"vert",g:"ruecken",d:"B",nd:[["band"]],easy:"towellat",
+  cues:["Band oben am Rack befestigen, ein Schritt zurück","Leicht vorbeugen, Arme gestreckt nach vorn-oben","Arme gestreckt bis zu den Oberschenkeln ziehen","Langsam zurück nach oben"],
+  bad:["Arme beugen","Oberkörper wippt mit"],atem:"Beim Ziehen ausatmen, beim Zurückführen einatmen."},
+scappull:{n:"Schulterblatt-Züge an der Stange",eq:"Klimmzugstange · Stuhl zum Aufsteigen",m:"Lat · Schulterblätter · Griffkraft",type:"bw",rest:60,inc:0,lvl:1,rr:[6,12],c:"ruecken",s:"vert",g:"ruecken",d:"B",nd:[["pullbar"],["rack"]],easy:"hangsupp",
+  cues:["Frei hängen, Arme gestreckt","Schultern nach unten ziehen, der Körper hebt sich ein paar Zentimeter","Arme bleiben gestreckt","Langsam zurück in den Hang"],
+  bad:["Arme beugen (wird zum Klimmzug)","Schwingen"],atem:"Beim Herunterziehen der Schultern ausatmen, beim Lösen einatmen.",
+  safe:"Schulter: kontrolliert, kein Ruck. Über den Stuhl ein- und aussteigen.",note:"Baut genau die Kraft auf, die du für Klimmzüge und langes Hängen brauchst."},
+kbgorilla:{n:"Gorilla-Rudern mit Kettlebells",eq:"Kettlebells",m:"Rücken · Rumpf",type:"db",rest:75,inc:4,lvl:2,c:"ruecken",s:"rowp",g:"ruecken",d:"B",nd:[["kb"]],easy:"kbrow",jr:"back",
+  cues:["Breiter Stand, zwei Kettlebells zwischen den Füßen","Hüfte zurück, Rücken gerade, Oberkörper fast waagerecht","Abwechselnd eine Kettlebell zur Hüfte ziehen","Andere Hand drückt auf die zweite Kettlebell"],
+  bad:["Runder Rücken","Oberkörper dreht auf"],atem:"Beim Ziehen ausatmen, beim Absetzen einatmen.",
+  safe:"Unterer Rücken: Bauch fest, Hüfte bleibt hinten."},
+invrowfeet:{n:"Rudern im Rack, Füße erhöht",eq:"Langhantel · Rack · Bank",m:"Oberer Rücken · Lat · Bizeps",type:"bw",rest:90,inc:2.5,lvl:3,rr:[6,10],c:"ruecken",s:"rowp",g:"ruecken",d:"B",nd:[["barbell","rack","bench"]],easy:"invrow",
+  cues:["Stange im Rack etwa auf Hüfthöhe, Fersen auf der Bank","Körper gerade von Kopf bis Fuß","Brust zur Stange ziehen","Langsam ablassen"],
+  bad:["Hüfte hängt durch","Kinn reckt zur Stange"],atem:"Beim Ziehen ausatmen, beim Ablassen einatmen."},
+assistpull:{n:"Klimmzüge mit Fußstütze",eq:"Klimmzugstange · Stuhl oder Kiste",m:"Lat · Rücken · Bizeps",type:"bw",rest:90,inc:0,lvl:1,rr:[6,10],c:"ruecken",s:"vert",g:"ruecken",d:"B",nd:[["pullbar"],["rack"]],easy:"towellat",harder:"negpull",
+  cues:["Stuhl unter die Stange, Füße oder Knie darauf","Schulterbreit greifen, erst Schultern nach unten ziehen","Hochziehen, die Beine helfen nur so viel wie nötig","Langsam ablassen"],
+  bad:["Beine machen die ganze Arbeit","Halbe Wiederholungen"],atem:"Beim Hochziehen ausatmen, beim Ablassen einatmen.",
+  note:"Mit der Zeit immer weniger mit den Beinen helfen."},
+
+/* ---------------- BEINE (Tag C) ---------------- */
+zercher:{n:"Zercher-Kniebeuge",eq:"Langhantel · Rack",m:"Beine · Gesäß · Rumpf · oberer Rücken",type:"bar",rest:150,inc:2.5,lvl:3,c:"beine",s:"sq",g:"vorn",d:"C",nd:[["barbell","rack"]],easy:"goblet",
+  cues:["Stange in die Armbeugen legen (Polster oder Handtuch)","Hände vor der Brust verschränken, Ellbogen vorn","Aufrecht tief beugen","Kraftvoll hochdrücken, Oberkörper bleibt aufrecht"],
+  bad:["Rücken rundet sich","Ellbogen fallen nach unten"],atem:"Oben einatmen, Bauch fest, beim Hochdrücken ausatmen.",
+  safe:"Polster um die Stange, Ablagen knapp unter den tiefsten Punkt."},
+boxsquat:{n:"Box-Kniebeuge",eq:"Langhantel · Rack · Bank",m:"Beine · Gesäß · Rumpf",type:"bar",rest:150,inc:5,lvl:2,c:"beine",s:"sq",g:"vorn",d:"C",nd:[["barbell","rack","bench"]],easy:"goblet",jr:"hip",
+  cues:["Bank hinter dir, Stange auf dem oberen Rücken","Hüfte nach hinten, bis der Po die Bank kurz berührt","Spannung halten, nicht absitzen","Aus der Berührung kraftvoll hochdrücken"],
+  bad:["Auf die Bank fallen","Ganz absitzen und locker lassen"],atem:"Oben einatmen und Bauch fest, beim Hochdrücken ausatmen.",
+  safe:"Hüfte: Die Bank gibt eine feste, schmerzfreie Tiefe vor. Bankhöhe passend wählen."},
+sumosquat:{n:"Sumo Squat mit Kurzhantel",eq:"Kurzhantel",m:"Innere Oberschenkel · Gesäß · Beine",type:"db",rest:75,inc:2,lvl:1,c:"beine",s:"sq",g:"vorn",d:"C",nd:[["db"]],easy:"airsquatx",jr:"hip",
+  cues:["Breiter Stand, Fußspitzen nach außen","Eine Hantel senkrecht zwischen den Beinen halten","Tief beugen, Knie zeigen über die Füße","Über die Fersen hochdrücken"],
+  bad:["Knie fallen nach innen","Oberkörper kippt nach vorn"],atem:"Beim Runtergehen einatmen, beim Hochdrücken ausatmen.",
+  safe:"Hüfte: Stand nur so breit, wie es in der Hüfte angenehm ist."},
+splitsquat:{n:"Split Squat mit Kurzhanteln",eq:"Kurzhanteln",m:"Beine · Gesäß",type:"db",rest:75,inc:2,lvl:1,uni:1,c:"beine",s:"uni",g:"vorn",d:"C",nd:[["db"]],easy:"lungebwx",harder:"bss",
+  cues:["Große Schrittstellung, Hanteln seitlich","Beide Füße bleiben am Boden","Senkrecht runter, bis das hintere Knie knapp über dem Boden ist","Über die vordere Ferse hochdrücken"],
+  bad:["Vorderes Knie fällt nach innen","Zu kurzer Schritt"],atem:"Beim Senken einatmen, beim Hochdrücken ausatmen."},
+walklunge:{n:"Gehende Ausfallschritte",eq:"Kurzhanteln",m:"Beine · Gesäß",type:"db",rest:90,inc:2,lvl:2,uni:1,c:"beine",s:"uni",g:"vorn",d:"C",nd:[["db"]],easy:"lungebwx",
+  cues:["Hanteln seitlich, aufrecht","Großer Schritt nach vorn, hinteres Knie zum Boden","Über das vordere Bein aufstehen und das hintere Bein nach vorn holen","Direkt in den nächsten Schritt"],
+  bad:["Vorderes Knie kippt nach innen","Oberkörper fällt nach vorn"],atem:"Beim Senken einatmen, beim Aufstehen ausatmen.",
+  note:"Wenig Platz? Zwei Schritte vor, umdrehen, zurück."},
+curtsy:{n:"Curtsy Lunges (Knicks-Ausfallschritt)",eq:"Ohne Gerät",m:"Gesäß · Beine · Hüfte seitlich",type:"bw",rest:60,inc:0,lvl:2,uni:1,rr:[8,12],c:"beine",s:"uni",g:"vorn",d:"C",nd:[],easy:"lungebwx",jr:"hip",
+  cues:["Hüftbreit stehen, Hände an der Hüfte","Ein Bein diagonal hinter das andere setzen, wie ein Knicks","Tief beugen, vorderes Knie über dem Fuß","Zurück in den Stand"],
+  bad:["Vorderes Knie fällt nach innen","Hüfte dreht stark auf"],atem:"Beim Senken einatmen, beim Aufstehen ausatmen.",
+  safe:"Hüfte: kleiner Kreuzschritt, wenn es außen an der Hüfte zieht."},
+sidelunge:{n:"Seitliche Ausfallschritte",eq:"Ohne Gerät",m:"Beine · Gesäß · Innenseite Oberschenkel",type:"bw",rest:60,inc:0,lvl:1,uni:1,rr:[8,12],c:"beine",s:"uni",g:"vorn",d:"C",nd:[],easy:"airsquatx",harder:"cossack",jr:"hip",
+  cues:["Hüftbreit stehen","Großer Schritt zur Seite, Hüfte nach hinten","Gebeugtes Knie über dem Fuß, anderes Bein gestreckt","Vom gebeugten Bein zurückdrücken"],
+  bad:["Knie fällt nach innen","Rücken rundet sich"],atem:"Beim Schritt einatmen, beim Zurückdrücken ausatmen.",
+  safe:"Hüfte: Schritt nur so breit, wie es angenehm ist."},
+stepdown:{n:"Step-downs von der Bank",eq:"Bank oder Stufe",daily:"Treppenstufe",m:"Oberschenkel vorne · Kniestabilität",type:"bw",rest:60,inc:0,lvl:2,uni:1,rr:[8,12],c:"beine",s:"uni",g:"vorn",d:"C",nd:[],easy:"chairstep",
+  cues:["Mit einem Bein auf die Bank, anderes Bein seitlich daneben in der Luft","Standbein langsam beugen","Ferse des freien Beins tippt kurz auf den Boden","Mit dem Standbein wieder strecken"],
+  bad:["Knie fällt nach innen","Fallen statt langsam senken"],atem:"Beim Senken einatmen, beim Strecken ausatmen.",
+  note:"Ohne Bank: eine Treppenstufe."},
+sissy:{n:"Sissy Squat am Türrahmen",eq:"Ohne Gerät · Türrahmen",daily:"Türrahmen",m:"Oberschenkel vorne",type:"bw",rest:75,inc:0,lvl:3,rr:[6,10],c:"beine",s:"sq",g:"vorn",d:"C",nd:[],easy:"wallsit",jr:"knee",
+  cues:["Mit einer Hand am Türrahmen festhalten","Auf die Fußballen, Knie schieben nach vorn","Oberkörper und Oberschenkel bleiben in einer Linie und lehnen nach hinten","Langsam zurück nach oben"],
+  bad:["In der Hüfte abknicken","Zu tief bei Knieschmerz"],atem:"Beim Senken einatmen, beim Hochkommen ausatmen.",
+  safe:"Knie: nur schmerzfrei und mit kleiner Tiefe beginnen."},
+pistol:{n:"Pistol Squat",eq:"Ohne Gerät",m:"Beine · Gesäß · Gleichgewicht",type:"bw",rest:90,inc:0,lvl:3,uni:1,rr:[3,8],c:"beine",s:"uni",g:"vorn",d:"C",nd:[],easy:"pistolbox",jr:"knee",
+  cues:["Auf einem Bein stehen, anderes Bein gestreckt nach vorn","Arme nach vorn zum Ausbalancieren","Ganz tief auf einem Bein beugen","Über die Ferse hochdrücken"],
+  bad:["Ferse hebt ab","Knie fällt nach innen"],atem:"Beim Senken einatmen, beim Hochdrücken ausatmen.",
+  safe:"Knie und Hüfte: erst die Vorstufe zum Stuhl sicher beherrschen."},
+seatcalf:{n:"Wadenheben sitzend",eq:"Kurzhanteln · Bank",m:"Waden (Schollenmuskel)",type:"db",rest:45,inc:2,lvl:1,c:"beine",s:"calf",g:"waden",d:"C",nd:[["db","bench"]],easy:"calfbw",
+  cues:["Auf die Bank setzen, Fußballen auf eine Scheibe oder ein Buch","Hanteln auf die Oberschenkel nah am Knie","Fersen so hoch wie möglich heben","Langsam tief absenken"],
+  bad:["Wippen ohne Pause","Nur halbe Bewegung"],atem:"Beim Heben ausatmen, beim Senken einatmen."},
+bbcalf:{n:"Wadenheben mit Langhantel",eq:"Langhantel · Rack",m:"Waden",type:"bar",rest:60,inc:5,lvl:2,c:"beine",s:"calf",g:"waden",d:"C",nd:[["barbell","rack"]],easy:"calf",
+  cues:["Stange wie zur Kniebeuge auf den oberen Rücken","Fußballen auf eine Scheibe","Ganz hoch auf die Zehenspitzen","Oben halten, Ferse langsam tief absenken"],
+  bad:["Knie beugen und wippen","Zu schnell"],atem:"Beim Heben ausatmen, beim Senken einatmen.",
+  safe:"Ablagen auf Schulterhöhe einstellen."},
+tibraise:{n:"Schienbein-Heben an der Wand",eq:"Ohne Gerät · Wand",daily:"Wand",m:"Schienbeinmuskel · Kniestabilität",type:"bw",rest:45,inc:0,lvl:2,rr:[12,20],c:"beine",s:"calf",g:"waden",d:"C",nd:[],easy:"calfbw",
+  cues:["Rücken an die Wand, Füße etwa einen Fuß weit vor","Beine gestreckt","Zehenspitzen so hoch wie möglich ziehen","Langsam absenken"],
+  bad:["Po löst sich von der Wand","Wippen"],atem:"Gleichmäßig weiteratmen.",
+  note:"Stärkt die Vorderseite des Unterschenkels, gut für Knie und Sprunggelenk."},
+dbsquat:{n:"Kniebeuge mit Kurzhanteln",eq:"Kurzhanteln",m:"Beine · Gesäß",type:"db",rest:90,inc:2,lvl:1,c:"beine",s:"sq",g:"vorn",d:"C",nd:[["db"]],easy:"airsquatx",
+  cues:["Hanteln seitlich, Füße schulterbreit","Hüfte nach hinten und tief beugen","Brust bleibt oben, Hanteln hängen locker","Über die ganze Fußsohle hochdrücken"],
+  bad:["Fersen heben ab","Hanteln stoßen an die Knie"],atem:"Beim Runtergehen einatmen, beim Hochdrücken ausatmen."},
+assistsquat:{n:"Kniebeuge mit Halt am Türrahmen",eq:"Ohne Gerät · Türrahmen",daily:"Türrahmen",m:"Beine · Gesäß",type:"bw",rest:45,inc:0,lvl:1,rr:[10,15],c:"beine",s:"sq",g:"vorn",d:"C",nd:[],easy:"chairsit",harder:"airsquatx",
+  cues:["Mit beiden Händen am Türrahmen festhalten","Füße schulterbreit, nah am Rahmen","Tief beugen, die Hände geben nur Halt","Aufrichten"],
+  bad:["Mit den Armen hochziehen","Fersen heben ab"],atem:"Beim Runtergehen einatmen, beim Hochkommen ausatmen.",
+  note:"Ideal zum Lernen der tiefen Kniebeuge."},
+chairsit:{n:"Aufstehen vom Stuhl",eq:"Ohne Gerät · Stuhl",daily:"Stuhl",m:"Beine · Gesäß",type:"bw",rest:45,inc:0,lvl:1,rr:[10,15],c:"beine",s:"sq",g:"vorn",d:"C",nd:[],harder:"airsquatx",
+  cues:["Vorn auf die Stuhlkante setzen, Füße hüftbreit","Arme nach vorn, Oberkörper leicht vorlehnen","Ohne Schwung aufstehen","Langsam wieder hinsetzen, nicht fallen lassen"],
+  bad:["Mit Schwung aufstehen","Knie fallen nach innen"],atem:"Beim Aufstehen ausatmen, beim Hinsetzen einatmen.",
+  safe:"Stuhl an die Wand stellen."},
+
+/* ---------------- HÜFTE & PO (Tag C) ---------------- */
+sumodl:{n:"Sumo-Kreuzheben",eq:"Langhantel",m:"Gesäß · Beine · innere Oberschenkel · Rücken",type:"bar",rest:150,inc:5,lvl:2,c:"huefte",s:"hinge",g:"hinten",d:"C",nd:[["barbell"]],easy:"kbdl",jr:"hip",
+  cues:["Breiter Stand, Fußspitzen nach außen, Stange über der Fußmitte","Innerhalb der Knie greifen, Brust raus","Knie nach außen drücken und den Boden wegschieben","Oben Hüfte strecken, kontrolliert ablassen"],
+  bad:["Knie fallen nach innen","Hüfte schießt zuerst hoch"],atem:"Unten einatmen und Bauch fest, oben ausatmen.",
+  safe:"Hüfte: Stand nur so breit, wie es schmerzfrei ist."},
+rackpull:{n:"Rack Pulls (Teil-Kreuzheben)",eq:"Langhantel · Rack",m:"Rücken · Gesäß · Griffkraft",type:"bar",rest:150,inc:5,lvl:2,c:"huefte",s:"hinge",g:"hinten",d:"C",nd:[["barbell","rack"]],easy:"rdlbb",
+  cues:["Stange im Rack knapp unter Kniehöhe ablegen","Hüfte zurück, Rücken gerade, Stange an den Beinen","Hüfte nach vorn strecken und aufrichten","Kontrolliert zurück auf die Ablagen"],
+  bad:["Nach hinten lehnen","Runder Rücken"],atem:"Unten einatmen und Bauch fest, oben ausatmen.",
+  note:"Kürzerer Weg als Kreuzheben: schont den unteren Rücken und stärkt den Griff."},
+dbdl:{n:"Kreuzheben mit Kurzhanteln",eq:"Kurzhanteln",m:"Gesäß · Beine · Rücken",type:"db",rest:120,inc:2,lvl:1,c:"huefte",s:"hinge",g:"hinten",d:"C",nd:[["db"]],easy:"gmbw",
+  cues:["Hanteln seitlich der Füße am Boden","Hüfte zurück, Knie beugen, Rücken gerade","Mit den Beinen den Boden wegdrücken und aufrichten","Kontrolliert zurück zum Boden"],
+  bad:["Runder Rücken","Hanteln weit vor dem Körper"],atem:"Unten einatmen, beim Aufrichten ausatmen."},
+kbdl:{n:"Kettlebell-Kreuzheben",eq:"Kettlebell",m:"Gesäß · Beine · Rücken",type:"db",rest:90,inc:4,lvl:1,c:"huefte",s:"hinge",g:"hinten",d:"C",nd:[["kb"]],easy:"gmbw",
+  cues:["Kettlebell zwischen den Füßen","Hüfte zurück, Rücken gerade, mit beiden Händen greifen","Aufrichten, Hüfte nach vorn","Kontrolliert zurück zum Boden"],
+  bad:["Runder Rücken","Aus den Armen ziehen"],atem:"Unten einatmen, beim Aufrichten ausatmen."},
+sglrdl:{n:"Einbeiniges Rumänisches Kreuzheben",eq:"Kurzhantel",m:"Beinbeuger · Gesäß · Gleichgewicht",type:"db",rest:75,inc:2,lvl:2,uni:1,c:"huefte",s:"hinge",g:"hinten",d:"C",nd:[["db"]],easy:"rdl",jr:"hip",
+  cues:["Auf einem Bein, Knie leicht gebeugt, Hantel in der Gegenhand","Hüfte zurück, freies Bein gestreckt nach hinten","Oberkörper und Bein bilden eine Linie","Über das Gesäß aufrichten"],
+  bad:["Hüfte dreht auf","Rücken rundet sich"],atem:"Beim Vorbeugen einatmen, beim Aufrichten ausatmen.",
+  safe:"Hüfte: Für mehr Halt eine Hand an die Wand. Nur so weit, wie die Hüfte gerade bleibt."},
+sglhipthrust:{n:"Einbeiniger Hip Thrust an der Bank",eq:"Bank",m:"Gesäß · Beinbeuger",type:"bw",rest:60,inc:0,lvl:2,uni:1,rr:[8,12],c:"huefte",s:"hinge",g:"hinten",d:"C",nd:[["bench"]],easy:"glutebridge",
+  cues:["Schulterblätter an der Bankkante","Ein Fuß am Boden, anderes Knie zur Brust","Über die Ferse die Hüfte hochdrücken","Oben Po fest anspannen, langsam ablassen"],
+  bad:["Hohlkreuz statt Hüftstreckung","Becken kippt zur Seite"],atem:"Beim Hochdrücken ausatmen, beim Ablassen einatmen."},
+bbbridge:{n:"Glute Bridge mit Langhantel",eq:"Langhantel · Matte",m:"Gesäß · Beinbeuger",type:"bar",rest:90,inc:5,lvl:2,c:"huefte",s:"hinge",g:"hinten",d:"C",nd:[["barbell"]],easy:"glutebridge",harder:"hipthrust",
+  cues:["Rückenlage, Stange mit Polster über die Hüfte rollen","Füße hüftbreit, nah am Po","Hüfte hochdrücken, bis Knie, Hüfte und Schultern eine Linie bilden","Oben anspannen, langsam ablegen"],
+  bad:["Hohlkreuz","Füße zu weit weg"],atem:"Beim Hochdrücken ausatmen, beim Ablegen einatmen.",
+  safe:"Polster oder gefaltetes Handtuch um die Stange."},
+frogpump:{n:"Frog Pumps",eq:"Ohne Gerät · Matte",m:"Gesäß",type:"bw",rest:45,inc:0,lvl:1,rr:[15,25],c:"huefte",s:"hinge",g:"hinten",d:"C",nd:[],easy:"glutebridge",jr:"hip",
+  cues:["Rückenlage, Fußsohlen aneinander, Knie fallen nach außen","Fersen nah am Po","Hüfte kurz und kräftig hochdrücken","Langsam ablegen"],
+  bad:["Hohlkreuz","Knie ziehen zusammen"],atem:"Beim Hochdrücken ausatmen, beim Ablegen einatmen.",
+  safe:"Hüfte: Knie nur so weit öffnen, wie es angenehm ist."},
+donkeykick:{n:"Donkey Kicks",eq:"Ohne Gerät · Matte",m:"Gesäß",type:"bw",rest:45,inc:0,lvl:1,uni:1,rr:[12,15],c:"huefte",s:"hinge",g:"hinten",d:"C",nd:[],easy:"glutebridge",
+  cues:["Vierfüßlerstand, Hände unter den Schultern","Ein Knie bleibt 90° gebeugt","Fußsohle Richtung Decke drücken, bis der Oberschenkel waagerecht ist","Langsam zurück, Seite wechseln"],
+  bad:["Hohlkreuz","Hüfte dreht auf"],atem:"Beim Hochdrücken ausatmen, beim Senken einatmen."},
+bandkick:{n:"Kickbacks stehend mit Band",eq:"Widerstandsband · Rack",m:"Gesäß",type:"band",rest:45,inc:0,lvl:1,uni:1,c:"huefte",s:"hinge",g:"hinten",d:"C",nd:[["band"]],easy:"donkeykick",
+  cues:["Band unten am Rack und um den Knöchel","Hände am Rack, leicht vorgebeugt","Bein gestreckt nach hinten drücken","Langsam zurück, kein Hohlkreuz"],
+  bad:["Hohlkreuz","Oberkörper kippt nach vorn"],atem:"Beim Kicken ausatmen, beim Zurückführen einatmen."},
+sidelyingabd:{n:"Seitliches Beinheben liegend",eq:"Ohne Gerät · Matte",m:"Hüfte seitlich · Gesäß",type:"bw",rest:45,inc:0,lvl:1,uni:1,rr:[12,20],c:"huefte",s:"abd",g:"hinten",d:"C",nd:[],easy:"glutebridge",
+  cues:["Auf die Seite legen, Kopf auf dem Arm","Oberes Bein gestreckt, Fußspitze zeigt nach vorn","Bein langsam bis etwa 45° heben","Langsam ablassen"],
+  bad:["Becken kippt nach hinten","Bein zu hoch reißen"],atem:"Beim Heben ausatmen, beim Ablassen einatmen.",
+  note:"Kräftigt den seitlichen Gesäßmuskel, gut für Hüfte und Knie."},
+bandwalk:{n:"Seitwärtsgehen mit Band",eq:"Widerstandsband",m:"Hüfte seitlich · Gesäß",type:"time",rest:45,inc:0,lvl:1,hr:[20,40],c:"huefte",s:"abd",g:"hinten",d:"C",nd:[["band"]],easy:"sidelyingabd",
+  cues:["Band um beide Beine knapp über den Knien","Leicht in die Knie, Hüfte zurück","Kleine Schritte zur Seite, Band bleibt gespannt","Nach der Hälfte der Zeit Richtung wechseln"],
+  bad:["Knie fallen nach innen","Oberkörper schwankt"],atem:"Gleichmäßig weiteratmen."},
+bridgewalk:{n:"Bridge Walkouts",eq:"Ohne Gerät · Matte",m:"Beinbeuger · Gesäß · Rumpf",type:"bw",rest:60,inc:0,lvl:2,rr:[5,8],c:"huefte",s:"hamiso",g:"hinten",d:"C",nd:[],easy:"bridgehold",
+  cues:["In die Glute Bridge, Hüfte oben","Mit kleinen Fersenschritten die Füße nach vorn wandern","So weit es geht, Hüfte bleibt oben","Zurückwandern"],
+  bad:["Hüfte sinkt ab","Zu große Schritte"],atem:"Gleichmäßig weiteratmen, nicht pressen."},
+slidecurl:{n:"Beincurls mit Handtuch",eq:"Ohne Gerät · Handtuch · glatter Boden",daily:"Handtuch",m:"Beinbeuger · Gesäß",type:"bw",rest:60,inc:0,lvl:2,rr:[8,12],c:"huefte",s:"hamiso",g:"hinten",d:"C",nd:[],easy:"bridgewalk",harder:"nordicneg",
+  cues:["Rückenlage, Fersen auf ein Handtuch auf glattem Boden","Hüfte hoch in die Brücke","Beine langsam nach vorn strecken, Hüfte bleibt oben","Fersen wieder zum Po ziehen"],
+  bad:["Hüfte sinkt ab","Zu schnell strecken"],atem:"Beim Strecken einatmen, beim Heranziehen ausatmen."},
+pullthrough:{n:"Band Pull-Through",eq:"Widerstandsband · Rack",m:"Gesäß · Beinbeuger",type:"band",rest:60,inc:0,lvl:1,c:"huefte",s:"hinge",g:"hinten",d:"C",nd:[["band"]],easy:"gmbw",
+  cues:["Band unten am Rack, mit dem Rücken zum Rack stehen","Band zwischen den Beinen, mit beiden Händen greifen","Hüfte weit nach hinten schieben","Hüfte kräftig nach vorn strecken, Po anspannen"],
+  bad:["Mit den Armen ziehen","Runder Rücken"],atem:"Beim Vorbeugen einatmen, beim Aufrichten ausatmen."},
+reversehyper:{n:"Reverse Hyperextension auf der Bank",eq:"Bank",m:"Gesäß · unterer Rücken · Beinbeuger",type:"bw",rest:60,inc:0,lvl:2,rr:[10,15],c:"huefte",s:"hinge",g:"hinten",d:"C",nd:[["bench"]],easy:"superman",
+  cues:["Bauchlage auf der Bank, Hüfte an der Kante, Beine hängen","Bank vorn fest greifen","Gestreckte Beine bis zur Waagerechten heben","Langsam senken"],
+  bad:["Beine über die Waagerechte reißen (Hohlkreuz)","Schwung"],atem:"Beim Heben ausatmen, beim Senken einatmen."},
+bridgemarch:{n:"Glute Bridge Marsch",eq:"Ohne Gerät · Matte",m:"Gesäß · Rumpf",type:"bw",rest:45,inc:0,lvl:2,rr:[8,12],c:"huefte",s:"hinge",g:"hinten",d:"C",nd:[],easy:"glutebridge",harder:"sglbridge",
+  cues:["Rückenlage, Hüfte in die Brücke hochdrücken","Ein Knie zur Brust heben, Becken bleibt waagerecht","Fuß absetzen, anderes Knie heben","Hüfte bleibt die ganze Zeit oben"],
+  bad:["Becken kippt zur Seite","Hüfte sinkt ab"],atem:"Gleichmäßig weiteratmen."},
+bridgechair:{n:"Glute Bridge mit Füßen auf dem Stuhl",eq:"Ohne Gerät · Stuhl",daily:"Stuhl",m:"Gesäß · Beinbeuger",type:"bw",rest:60,inc:0,lvl:2,rr:[10,15],c:"huefte",s:"hinge",g:"hinten",d:"C",nd:[],easy:"glutebridge",
+  cues:["Rückenlage, Fersen auf die Sitzfläche","Knie etwa 90° gebeugt","Hüfte hochdrücken, Po fest","Langsam ablegen"],
+  bad:["Hohlkreuz","Stuhl rutscht"],atem:"Beim Hochdrücken ausatmen, beim Ablegen einatmen.",
+  safe:"Stuhl an die Wand stellen."},
+
+/* ---------------- RUMPF (Tag C) ---------------- */
+vup:{n:"V-Ups",eq:"Ohne Gerät · Matte",m:"Bauch · Hüftbeuger",type:"bw",rest:60,inc:0,lvl:3,rr:[6,12],c:"rumpf",s:"core",g:"rumpf",d:"C",nd:[],easy:"crunch",jr:"back",
+  cues:["Rückenlage, Arme gestreckt über dem Kopf","Arme und gestreckte Beine gleichzeitig heben","Hände Richtung Füße, oben ein V","Langsam ablegen"],
+  bad:["Mit Schwung hochreißen","Hohlkreuz beim Ablegen"],atem:"Beim Hochkommen ausatmen, beim Ablegen einatmen.",
+  safe:"Unterer Rücken: Leichter mit gebeugten Knien."},
+bicycle:{n:"Fahrrad-Crunches",eq:"Ohne Gerät · Matte",m:"Schräge Bauchmuskeln · Bauch",type:"bw",rest:45,inc:0,lvl:2,rr:[12,20],c:"rumpf",s:"core",g:"rumpf",d:"C",nd:[],easy:"crunch",
+  cues:["Rückenlage, Hände leicht an den Schläfen","Schultern heben, Beine angehoben","Ellbogen zum gegenüberliegenden Knie drehen, anderes Bein strecken","Langsam die Seite wechseln"],
+  bad:["Am Kopf ziehen","Zu hektisch"],atem:"Beim Drehen ausatmen."},
+revcrunch:{n:"Reverse Crunches",eq:"Ohne Gerät · Matte",m:"Unterer Bauch",type:"bw",rest:45,inc:0,lvl:1,rr:[10,15],c:"rumpf",s:"core",g:"rumpf",d:"C",nd:[],easy:"deadbug",harder:"legraisefloor",
+  cues:["Rückenlage, Knie 90° angewinkelt, Arme neben dem Körper","Knie zur Brust ziehen, das Becken rollt leicht ab","Kurz halten","Langsam zurück"],
+  bad:["Mit Schwung","Kopf und Schultern drücken mit"],atem:"Beim Einrollen ausatmen, beim Zurückführen einatmen."},
+situp:{n:"Sit-ups",eq:"Ohne Gerät · Matte",m:"Bauch · Hüftbeuger",type:"bw",rest:45,inc:0,lvl:2,rr:[10,15],c:"rumpf",s:"core",g:"rumpf",d:"C",nd:[],easy:"crunch",jr:"back",
+  cues:["Rückenlage, Knie gebeugt, Füße am Boden","Arme vor der Brust verschränkt","Wirbel für Wirbel bis zum Sitzen aufrollen","Langsam zurückrollen"],
+  bad:["Mit Schwung","Am Nacken ziehen"],atem:"Beim Aufrollen ausatmen, beim Zurückrollen einatmen.",
+  safe:"Unterer Rücken: Bei Rückenproblemen lieber Crunches."},
+shtap:{n:"Hochstütz mit Schulter-Tippen",eq:"Ohne Gerät · Matte",m:"Rumpf · Schultern",type:"bw",rest:45,inc:0,lvl:2,rr:[16,24],c:"rumpf",s:"core",g:"rumpf",d:"C",nd:[],easy:"kneeplank",jr:"wrist",
+  cues:["Hochstütz, Füße etwas breiter","Eine Hand tippt auf die gegenüberliegende Schulter","Hüfte bleibt ruhig, kein Schaukeln","Hand zurück, Seite wechseln"],
+  bad:["Hüfte schaukelt","Po zu hoch"],atem:"Gleichmäßig weiteratmen."},
+plankupdown:{n:"Plank Up-Downs",eq:"Ohne Gerät · Matte",m:"Rumpf · Trizeps · Schultern",type:"bw",rest:60,inc:0,lvl:2,rr:[8,12],c:"rumpf",s:"core",g:"rumpf",d:"C",nd:[],easy:"plank",jr:"sh",
+  cues:["Unterarmstütz","Eine Hand nach der anderen in den Hochstütz drücken","Wieder Arm für Arm auf die Unterarme","Hüfte bleibt ruhig"],
+  bad:["Hüfte schaukelt stark","Po schiebt nach oben"],atem:"Gleichmäßig weiteratmen.",
+  safe:"Schulter und Handgelenk: langsam, bei Schmerz Unterarmstütz halten."},
+kneeplank:{n:"Unterarmstütz auf den Knien",eq:"Ohne Gerät · Matte",m:"Bauch · Rumpf",type:"time",rest:45,inc:0,lvl:1,hr:[20,40],c:"rumpf",s:"core",g:"rumpf",d:"C",nd:[],harder:"plank",
+  cues:["Unterarme unter den Schultern, Knie am Boden","Gerade Linie von den Knien bis zum Kopf","Po und Bauch fest","Ruhig weiteratmen"],
+  bad:["Po zeigt nach oben","Hohlkreuz"],atem:"Ruhig weiteratmen, nicht pressen.",note:"Der leichte Einstieg in den Unterarmstütz."},
+plankleg:{n:"Unterarmstütz mit Beinheben",eq:"Ohne Gerät · Matte",m:"Rumpf · Gesäß",type:"bw",rest:45,inc:0,lvl:2,rr:[10,16],c:"rumpf",s:"core",g:"rumpf",d:"C",nd:[],easy:"plank",
+  cues:["Unterarmstütz, Körper gerade","Ein gestrecktes Bein eine Handbreit anheben","Kurz halten, Hüfte bleibt ruhig","Absetzen, Seite wechseln"],
+  bad:["Hohlkreuz beim Heben","Hüfte dreht auf"],atem:"Gleichmäßig weiteratmen."},
+pallof:{n:"Pallof Press",eq:"Widerstandsband · Rack",m:"Rumpf · schräge Bauchmuskeln",type:"band",rest:45,inc:0,lvl:1,uni:1,c:"rumpf",s:"core",g:"rumpf",d:"C",nd:[["band"]],easy:"deadbug",
+  cues:["Band seitlich auf Brusthöhe am Rack, seitlich dazu stehen","Griff mit beiden Händen vor der Brust","Arme gerade nach vorn drücken, der Zug will dich drehen","Nicht mitdrehen, langsam zurück"],
+  bad:["Oberkörper dreht mit","Zu weit weg vom Rack"],atem:"Beim Drücken ausatmen, beim Zurückführen einatmen.",
+  note:"Anti-Rotation: schützt den unteren Rücken."},
+woodchop:{n:"Holzhacker mit Band",eq:"Widerstandsband · Rack",m:"Schräge Bauchmuskeln · Rumpf",type:"band",rest:45,inc:0,lvl:2,uni:1,c:"rumpf",s:"core",g:"rumpf",d:"C",nd:[["band"]],easy:"pallof",jr:"back",
+  cues:["Band seitlich oben am Rack befestigen","Mit beiden Händen diagonal nach unten zur anderen Hüfte ziehen","Drehung aus dem Oberkörper, Hüfte und Füße drehen leicht mit","Langsam zurück nach oben"],
+  bad:["Nur aus den Armen ziehen","Runder Rücken"],atem:"Beim Ziehen ausatmen, beim Zurückführen einatmen.",
+  safe:"Unterer Rücken: kontrolliert drehen, keinen Schwung."},
+suitcase:{n:"Koffer-Tragen einseitig",eq:"Kurzhantel",m:"Seitlicher Rumpf · Griffkraft",type:"time",rest:45,inc:2,lvl:1,hr:[30,45],uni:1,c:"rumpf",s:"core",g:"rumpf",d:"C",nd:[["db"]],easy:"farmerhold",
+  cues:["Eine schwere Hantel in einer Hand","Aufrecht gehen, nicht zur Hantel kippen","Schultern gerade, Bauch fest","Nach der Zeit Seite wechseln"],
+  bad:["Oberkörper kippt zur Seite","Schulter hängt"],atem:"Ruhig und gleichmäßig weiteratmen."},
+sidebend:{n:"Seitbeugen mit Kurzhantel",eq:"Kurzhantel",m:"Schräge Bauchmuskeln",type:"db",rest:45,inc:2,lvl:1,uni:1,c:"rumpf",s:"core",g:"rumpf",d:"C",nd:[["db"]],easy:"russtwistbw",
+  cues:["Aufrecht, eine Hantel seitlich","Langsam zur Hantelseite neigen","Über die andere Seite zurück aufrichten","Nicht nach vorn oder hinten kippen"],
+  bad:["Oberkörper dreht","Zu schnell"],atem:"Beim Neigen einatmen, beim Aufrichten ausatmen."},
+toesbar:{n:"Toes to Bar",eq:"Klimmzugstange",m:"Bauch · Hüftbeuger · Griffkraft",type:"bw",rest:90,inc:0,lvl:3,rr:[4,8],c:"rumpf",s:"core",g:"rumpf",d:"C",nd:[["pullbar"],["rack"]],easy:"legraise",jr:"sh",
+  cues:["Frei hängen, Schultern aktiv","Gestreckte Beine bis zur Stange heben","Becken einrollen","Langsam ohne Schwung ablassen"],
+  bad:["Starkes Schwingen","Beine fallen lassen"],atem:"Beim Heben ausatmen, beim Ablassen einatmen.",
+  safe:"Schulter: nur ohne Schwung. Sonst Hängendes Knieheben."},
+stirpot:{n:"Rühren auf dem Gymnastikball",eq:"Gymnastikball",m:"Rumpf · Schultern",type:"time",rest:60,inc:0,lvl:3,hr:[20,30],c:"rumpf",s:"core",g:"rumpf",d:"C",nd:[["gymball"]],easy:"plank",jr:"sh",
+  cues:["Unterarme auf den Ball, Unterarmstütz","Kleine Kreise mit den Unterarmen ziehen","Hüfte bleibt ruhig und gerade","Nach der Hälfte die Richtung wechseln"],
+  bad:["Hüfte hängt durch","Zu große Kreise"],atem:"Ruhig weiteratmen."},
+balljack:{n:"Ball-Klappmesser",eq:"Gymnastikball",m:"Bauch · Rumpf · Schultern",type:"bw",rest:60,inc:0,lvl:2,rr:[8,12],c:"rumpf",s:"core",g:"rumpf",d:"C",nd:[["gymball"]],easy:"climber",
+  cues:["Hochstütz, Schienbeine auf dem Ball","Knie zur Brust ziehen, der Ball rollt mit","Kurz halten","Beine zurück strecken, Hüfte bleibt gerade"],
+  bad:["Hüfte hängt durch","Schultern weit hinter den Händen"],atem:"Beim Heranziehen ausatmen, beim Strecken einatmen."},
+seatedtuck:{n:"Knieheben im Sitzen",eq:"Ohne Gerät · Stuhl",daily:"Stuhl",m:"Bauch · Hüftbeuger",type:"bw",rest:45,inc:0,lvl:1,rr:[10,15],c:"rumpf",s:"core",g:"rumpf",d:"C",nd:[],easy:"deadbug",
+  cues:["Auf die Stuhlkante setzen, Hände greifen seitlich die Sitzfläche","Oberkörper leicht zurücklehnen","Knie zur Brust ziehen","Füße langsam zurück, ohne abzusetzen"],
+  bad:["Rundrücken","Mit Schwung"],atem:"Beim Heranziehen ausatmen."},
+crabwalk:{n:"Krebsgang",eq:"Ohne Gerät",m:"Trizeps · Schultern · Gesäß · Rumpf",type:"time",rest:45,inc:0,lvl:1,hr:[20,30],c:"rumpf",s:"core",g:"rumpf",d:"C",nd:[],easy:"floordip",jr:"wrist",
+  cues:["Hinsetzen, Hände hinter dir, Finger zeigen zum Po","Hüfte anheben","Abwechselnd Hand und Fuß nach vorn setzen","Hüfte bleibt oben"],
+  bad:["Po schleift am Boden","Schultern zu den Ohren"],atem:"Gleichmäßig weiteratmen.",
+  safe:"Handgelenk und Schulter: bei Ziehen vorn in der Schulter auslassen."},
+floordip:{n:"Dips am Boden",eq:"Ohne Gerät · Matte",m:"Trizeps · Schultern",type:"bw",rest:60,inc:0,lvl:1,rr:[10,15],c:"arme",s:"tri",g:"trizeps",d:"A",nd:[],easy:"walltri",harder:"chairdip",jr:"sh",
+  cues:["Hinsetzen, Knie gebeugt, Hände hinter dir","Finger zeigen nach vorn zum Po","Po leicht anheben, Ellbogen nach hinten beugen","Arme wieder strecken"],
+  bad:["Ellbogen gehen weit auseinander","Schultern zu den Ohren"],atem:"Beim Beugen einatmen, beim Strecken ausatmen.",
+  safe:"Schulter: kleiner Bewegungsumfang, wenn vorn in der Schulter etwas zieht."},
+backwidow:{n:"Back Widows",eq:"Ohne Gerät · Matte",m:"Oberer Rücken · Schulterblätter",type:"bw",rest:45,inc:0,lvl:1,rr:[8,12],c:"ruecken",s:"rear",g:"ruecken",d:"B",nd:[],easy:"snowangel",
+  cues:["Rückenlage, Knie gebeugt, Ellbogen 90° neben dem Körper","Ellbogen in den Boden drücken","Der Oberkörper hebt sich leicht vom Boden","Kurz halten, langsam ablegen"],
+  bad:["Mit dem Nacken ziehen","Hohlkreuz"],atem:"Beim Anheben ausatmen, beim Ablegen einatmen.",
+  note:"Rückentraining ganz ohne Geräte."},
+
+/* ---------------- KONDITION (Bonus) ---------------- */
+highknees:{n:"Kniehebelauf auf der Stelle",eq:"Ohne Gerät",m:"Kondition · Hüftbeuger",type:"time",rest:30,inc:0,lvl:1,hr:[20,40],c:"cardio",d:"F",nd:[],easy:"jumpjack",
+  cues:["Auf der Stelle laufen","Knie bis auf Hüfthöhe","Arme schwingen mit","Leise auf den Fußballen landen"],
+  bad:["Zurücklehnen","Laut aufstampfen"],atem:"Gleichmäßig, kräftig atmen."},
+shadowbox:{n:"Schattenboxen",eq:"Ohne Gerät",m:"Kondition · Schultern · Rumpf",type:"time",rest:30,inc:0,lvl:1,hr:[30,60],c:"cardio",d:"F",nd:[],easy:"jumpjack",
+  cues:["Boxstellung, Hände vor dem Kinn","Gerade Schläge in die Luft","Nach jedem Schlag Hand zurück zur Deckung","Locker auf den Fußballen"],
+  bad:["Arm ganz durchschlagen (Ellbogen überstrecken)","Deckung fällt"],atem:"Bei jedem Schlag kurz ausatmen.",
+  safe:"Schulter: Schläge nicht ganz durchstrecken."},
+skater:{n:"Skater-Sprünge",eq:"Ohne Gerät",m:"Kondition · Beine · Gesäß",type:"time",rest:45,inc:0,lvl:2,hr:[20,40],c:"cardio",d:"F",nd:[],easy:"sidelunge",jr:"knee",
+  cues:["Seitlich von einem Bein auf das andere springen","Weich auf dem Ballen landen, Knie gebeugt","Anderes Bein schwingt hinter dem Standbein","Arme schwingen mit"],
+  bad:["Harte Landung mit gestrecktem Knie","Knie fällt nach innen"],atem:"Gleichmäßig weiteratmen.",
+  safe:"Knie: kleine Sprünge, wenn das Knie zwickt."},
+thruster:{n:"Kurzhantel-Thruster",eq:"Kurzhanteln",m:"Beine · Schultern · Kondition",type:"time",rest:60,inc:2,lvl:2,hr:[30,40],c:"cardio",d:"F",nd:[["db"]],easy:"dbsquat",jr:"sh",
+  cues:["Hanteln auf Schulterhöhe","Tief in die Kniebeuge","Aus der Kniebeuge kraftvoll aufstehen und die Hanteln über Kopf drücken","Hanteln zurück auf die Schultern, direkt weiter"],
+  bad:["Hohlkreuz oben","Zu schwere Hanteln"],atem:"Unten einatmen, beim Drücken ausatmen.",
+  safe:"Schulter: leichte Hanteln, nur schmerzfrei über Kopf."},
+dbsnatch:{n:"Kurzhantel-Snatch einarmig",eq:"Kurzhantel",m:"Ganzkörper · Schnellkraft",type:"time",rest:60,inc:2,lvl:3,hr:[30,40],c:"cardio",d:"F",nd:[["db"]],easy:"kbswing",jr:"sh",
+  cues:["Hantel zwischen den Füßen, Hüfte zurück","Explosiv aus Hüfte und Beinen strecken","Hantel nah am Körper nach oben ziehen und über Kopf fangen","Kontrolliert zurück, Seite wechseln"],
+  bad:["Mit dem Arm reißen","Runder Rücken"],atem:"Unten einatmen, bei der Streckung ausatmen.",
+  safe:"Schulter: nur mit sauberer Technik und leichtem Gewicht."},
+
+/* ---------------- GRIFF ---------------- */
+platepinch:{n:"Scheiben-Pinch halten",eq:"Hantelscheiben",m:"Fingerkraft · Griffkraft",type:"time",rest:60,inc:0,lvl:1,hr:[20,40],c:"arme",s:"fore",d:"",nd:[["barbell"]],easy:"farmerhold",wOpt:1,
+  cues:["Je Hand zwei glatte Scheiben aneinanderlegen","Nur mit Fingern und Daumen greifen (Pinch)","Aufrecht stehen, Arme locker seitlich","Bis zur Zeit halten, kontrolliert absetzen"],
+  bad:["Scheiben an den Körper lehnen","Schultern hängen nach vorn"],atem:"Ruhig weiteratmen.",
+  note:"Trainiert den Daumen- und Fingergriff, hilft beim Hängen."}
+};
+
+/* ---------- registrieren: EX, Kategorie, Bewegungsmuster, Muskelgruppe, Tag, Geräte ---------- */
+const KX_KEYS=Object.keys(KXD);
+const KX_FIN={shadowbox:["A"],dbsnatch:["B"],thruster:["C"],highknees:["A","B","C"],skater:["A","B","C"]};
+for(const k of KX_KEYS){const{c,s,g,d,nd,...e}=KXD[k];EX[k]={...e,kx:1};CAT[k]=c;if(s)SUB[k]=s;MG_OF[k]=g||null;if(nd&&nd.length)NEEDS[k]=nd;
+  if(d==="F")for(const D of KX_FIN[k]||DAYS)DAYFIN[D].push(k);else if(d)DAYEX[d].push(k)}
+/* Wiederholungsbereich der neuen Übungen (beim Tauschen/Rotieren); Zeitübungen über hr wie bisher */
+{const _rf=repsFor;repsFor=function(it,k){if(k!==it.ex&&EX[k]&&EX[k].kx&&EX[k].type!=="time"&&EX[k].rr&&EX[it.ex].type!=="time")return{lo:EX[k].rr[0],hi:EX[k].rr[1]};return _rf(it,k)}}
+/* die Geräte-Anpassung (3.1/3.2) bleibt exakt wie vorher: sie sieht die neuen Übungen nicht */
+{const _ac=adaptCore;adaptCore=function(day,items,usage){const sv={};for(const D of DAYS){sv[D]=[DAYEX[D],DAYFIN[D]];DAYEX[D]=DAYEX[D].filter(k=>!(EX[k]&&EX[k].kx));DAYFIN[D]=DAYFIN[D].filter(k=>!(EX[k]&&EX[k].kx))}
+  try{return _ac(day,items,usage)}finally{for(const D of DAYS){DAYEX[D]=sv[D][0];DAYFIN[D]=sv[D][1]}}}}
+
+/* ---------- Plan: Rotation auf Nebenplätzen ---------- */
+const KX_MAINRE=/Kniebeuge|Bankdrück|Kreuzheb|Schulterdrück|Rudern|Klimmz|Chin-up/i;/* Hauptübungen (wie die Prüfung): nie ersetzt, nie eingesetzt */
+const KX_CTX={w:null};
+function kxCycle(){const p=S&&S.prog;return validProg(p)?p.cycle:1}
+function kxRound(){const c=kxCycle();return c%2===0?c/2:0}/* 0 = gewohnter Plan; 1, 2, … = Runde mit neuen Übungen */
+function kxSlotOk(it){return!!it&&!it.fin&&!it.blk&&!it.kb&&it.slot>0&&EX[it.ex]&&!EX[it.ex].kx&&!KX_MAINRE.test(EX[it.ex].n)}
+function kxRotPool(day,it){const isT=EX[it.ex].type==="time";const rear=SUB[it.ex]==="rear"||it.ex==="facepull";const r0=TRANK[EX[it.ex].type]??3;
+  return KX_KEYS.filter(k=>DAYEX[day].includes(k)&&(rear?SUB[k]==="rear":SUB[k]===SUB[it.ex])&&canDo(k)&&!EX[k].jr&&(EX[k].lvl||2)<=2&&!KX_MAINRE.test(EX[k].n)&&(EX[k].type==="time")===isT&&AN[animOf(k)]
+    &&(TRANK[EX[k].type]??3)<=Math.max(r0,1))}/* mit Gewicht bleibt mit Gewicht (Hantel/Langhantel), Band/Körpergewicht dürfen alles */
+/* alle 12 Einheiten einer Runde werden zusammen gewählt: jede neue Übung höchstens 2× pro Zyklus */
+const KX_MEMO={k:null,v:null};
+function kxRoundPlan(r){const key=r+"|"+myGear().slice().sort().join(",")+"|"+kbOn()+"|"+JSON.stringify(S.settings||{});if(KX_MEMO.k===key)return KX_MEMO.v;
+  const res={},use={};
+  for(let w=1;w<=PROGRAM.length;w++)for(const d of DAYS){const out=_kxBase(d,w);const used=new Set(out.map(x=>x.ex));
+    const el=out.map((x,i)=>i).filter(i=>kxSlotOk(out[i])&&kxRotPool(d,out[i]).length);const di=DAYS.indexOf(d);const pick={};let n=0;
+    for(let j=0;j<el.length&&n<2;j++){const i=el[(r+di+w+j)%el.length];if(pick[i])continue;const pool=kxRotPool(d,out[i]).filter(k=>!used.has(k)&&(use[k]||0)<2);if(!pool.length)continue;
+      const k=pool[(r-1+w+j)%pool.length];pick[i]=k;used.add(k);use[k]=(use[k]||0)+1;n++}
+    res[w+d]={base:JSON.stringify(out),pick}}
+  KX_MEMO.k=key;KX_MEMO.v=res;return res}
+function _kxBase(d,w){return _kxKb(d,adaptItems(d,adaptBase(w,d),w))}
+let _kxKb=null;
+function kxMix(day,items,week){const r=kxRound();if(!r||!week)return items;const P=kxRoundPlan(r)[week+day];if(!P||P.base!==JSON.stringify(items))return items;
+  return items.map((it,i)=>{const k=P.pick[i];return k?{...it,ex:k,...repsFor({...it},k),rot:1,orig:it.ex}:{...it}})}
+{const _pi=planItems;planItems=function(day,quick,week){const prev=KX_CTX.w;KX_CTX.w=week||progBlock();try{return _pi(day,quick,week)}finally{KX_CTX.w=prev}}}
+{const _km=kbMix;_kxKb=_km;kbMix=function(day,items){const it=_km(day,items);return KX_CTX.w?kxMix(day,it,KX_CTX.w):it}}
+
+/* ---------- Tauschen: zusätzlich bis zu 2 passende neue Übungen ---------- */
+{const _sp=swapPool;swapPool=function(it,day){const base=_sp(it,day);if(it.hfin||it.blk||it.fin)return base;day=day||(S.session&&S.session.plan)||"A";
+  const used=new Set((S.session&&S.session.items||[]).map(x=>x.ex));const isT=k=>EX[k].type==="time";const sub=SUB[it.ex];const rear=it.ex==="facepull"||sub==="rear";
+  const have=base.filter(k=>EX[k].kx).length;if(have>=2)return base;const lv=k=>EX[k].lvl||2,l0=lv(it.ex);
+  const add_=KX_KEYS.filter(k=>!base.includes(k)&&!used.has(k)&&k!==it.ex&&(DAYEX[day]||[]).includes(k)&&(rear?["rear","rowp"].includes(SUB[k]):SUB[k]===sub)&&isT(k)===isT(it.ex)&&canDo(k)&&AN[animOf(k)])
+    .sort((a,b)=>(!!EX[a].jr)-(!!EX[b].jr)||Math.abs(lv(a)-l0)-Math.abs(lv(b)-l0));
+  return[...base,...add_.slice(0,2-have)]}}
+
+/* ---------- Übungsblatt: Atmung, leichtere Variante, Hinweis für Schulter/Hüfte ---------- */
+{const _os=openExSheet;openExSheet=function(key){_os(key);const e=EX[key];if(!e||!e.kx)return;const sh=$("#sheet");if(!sh)return;
+  const ol=sh.querySelector("ol.cues");const box=ol&&ol.parentElement;if(!box)return;
+  const tl=sh.querySelector(".tagline");if(tl&&e.easy&&EX[e.easy]){const t=document.createElement("span");t.className="tag";t.textContent="Leichter: "+EX[e.easy].n;tl.appendChild(t)}
+  if(tl&&e.jr&&KX_RISK[e.jr]){const t=document.createElement("span");t.className="tag";t.textContent="Achtung: "+KX_RISK[e.jr];tl.appendChild(t)}
+  if(e.atem){const d=document.createElement("div");d.innerHTML=`<div class="label" style="margin-bottom:8px">Atmung</div><p class="muted" style="margin:0;font-size:14px">${esc(e.atem)}</p>`;box.after(d)}}}
+
+/* ---------- Animationen (Motion-Engine wie die bestehenden Übungen; Mann und Frau) ---------- */
+/* eigene Geräte: kband = Band zu einem Gelenk (auch Vorderansicht), lmbar = Landmine-Stange mit Drehpunkt am Boden,
+   fplate = Hantelscheibe in der Vorderansicht (hochkant), kneeband = Miniband um die Knie, towelpad = Handtuch unter der Ferse,
+   rackpin = Rack-Pfosten mit Ablage, fdb = Kurzhantel in der Vorderansicht an einem beliebigen Gelenk */
+if(typeof EXTRA_EQ_LAYER!=="undefined")Object.assign(EXTRA_EQ_LAYER,{kband:"front",lmbar:"front",fplate:"front",kneeband:"front",towelpad:"back",rackpin:"back"});
+{const _d=drawExtraEq;drawExtraEq=function(ctx,e,o,P,R,fl,front){const mini=ctx.canvas.clientWidth<110;const f0=fl!=null?fl:0;
+  const steel=(a,b,w)=>{const A=P(a),B=P(b);ctx.strokeStyle="#7d8a93";ctx.lineWidth=Math.max(1,R(w));ctx.lineCap="round";ctx.beginPath();ctx.moveTo(A[0],A[1]);ctx.lineTo(B[0],B[1]);ctx.stroke();
+    if(!mini){ctx.strokeStyle="rgba(240,246,250,.55)";ctx.lineWidth=Math.max(.6,R(w*.3));ctx.beginPath();ctx.moveTo(A[0],A[1]);ctx.lineTo(B[0],B[1]);ctx.stroke()}};
+  if(e.t==="kband"){const a=typeof e.at==="string"?o[e.at]:e.at;if(!a)return;const EQ=eqKit(ctx,R(1),mini);ctx.save();EQ.band(P(e.from),P(a),1,e.sag!=null?e.sag:.05);if(e.at2&&o[e.at2])EQ.band(P(e.from2||e.from),P(o[e.at2]),1,e.sag!=null?e.sag:.05);ctx.restore();return}
+  if(e.t==="kneeband"){const a=o.kneeR,b=o.kneeL;if(!a||!b)return;const EQ=eqKit(ctx,R(1),mini);ctx.save();EQ.band(P([a[0]-2,a[1]+4]),P([b[0]+2,b[1]+4]),1,.02);ctx.restore();return}
+  if(e.t==="lmbar"){const h=o[e.at||"hand"];if(!h)return;const pv=[e.px,f0+2];const d=norm2(sub(h,pv));const end=add(h,[d[0]*14,d[1]*14]);ctx.save();steel(pv,end,2.6);
+    const EQ=eqKit(ctx,R(1),mini);EQ.plate(P(add(h,[d[0]*9,d[1]*9])),e.r||15,CSS[e.c||"--p10"]||CSS["--accent"],CAM,null,true);ctx.restore();return}
+  if(e.t==="fplate"){const h=o[e.at];if(!h)return;const c=add(h,[0,e.dy||0]);const A=P([c[0]-(e.w||2.6),c[1]+(e.h||15)]);const w=R(2*(e.w||2.6)),hh=R(2*(e.h||15));ctx.save();
+    const g=ctx.createLinearGradient(A[0],0,A[0]+w,0);g.addColorStop(0,"#1b2025");g.addColorStop(.5,CSS[e.c||"--p10"]||"#888");g.addColorStop(1,"#0d1013");ctx.fillStyle=g;ctx.beginPath();ctx.roundRect?ctx.roundRect(A[0],A[1],w,hh,R(1.2)):ctx.rect(A[0],A[1],w,hh);ctx.fill();ctx.restore();return}
+  if(e.t==="towelpad"){const a=o[e.at||"ankle"];if(!a)return;const A=P([a[0]-8,f0+2.6]),B=P([a[0]+9,f0]);ctx.save();ctx.fillStyle="#d9cdb3";ctx.fillRect(A[0],A[1],B[0]-A[0],B[1]-A[1]);ctx.restore();return}
+  if(e.t==="kpad")return;
+  if(e.t==="rackpin"){ctx.save();steel([e.x,f0],[e.x,e.h||190],3.4);steel([e.x-9,e.y],[e.x+9,e.y],2.4);ctx.restore();return}
+  return _d(ctx,e,o,P,R,fl,front)}}
+{const _b=extraBounds;extraBounds=function(e,o,inc){if(e.t==="kband"){inc(e.from,3);if(e.from2)inc(e.from2,3);return}if(e.t==="lmbar"){inc([e.px,0],3);const h=o[e.at||"hand"];if(h)inc(h,(e.r||15)+14);return}
+  if(e.t==="fplate"){const h=o[e.at];if(h)inc(add(h,[0,e.dy||0]),(e.h||15)+1);return}if(e.t==="rackpin"){inc([e.x,e.h||190],4);inc([e.x,0]);return}if(e.t==="kpad"){for(const p of e.pts)inc(p,2);return}if(e.t==="kneeband"||e.t==="towelpad")return;return _b(e,o,inc)}}
+/* Ableitung von einer bestehenden Animation (wie holdAnim): eigene Kopie, Zwischenspeicher der Engine entfernt */
+function kxA(base,o){const b=AN[base];const d={...b,...o,A:{...b.A,...(o.A||{})},B:{...b.B,...(o.B||{})},tempo:(o.tempo||b.tempo).slice(),ph:(o.ph||b.ph).slice()};
+  for(const k of["_pl","_f2","_ff","_pt","_pu","_lt","_tn","_sw","_gm","_bb","_lag","_hum"])delete d[k];for(const k in o)if(o[k]===undefined)delete d[k];return d}
+/* gerader Körper vom Fußgelenk aus (Liegestütz-Linie): Winkel b, Zehen am Boden */
+const kxPl=(b,f)=>({shin:b+180,thigh:b+180,torso:b,foot:f==null?-70:f});
+const kxSh=(b,ay)=>[Math.cos(rad(b))*150,ay+Math.sin(rad(b))*150];
+const DB=a=>({t:"db",at:a||"hand"});
+Object.assign(AN,{
+  /* ---- Brust ---- */
+  bbfloor:kxA("kbfloor",{eq:[{t:"plate",at:"hand",c:"--p20",r:18}],B:{hand:[12,16]}}),
+  dbfloor:kxA("kbfloor",{eq:[DB()]}),
+  bbincline:kxA("incline",{eq:[{t:"bench"},{t:"plate",at:"hand",c:"--p20",r:19}]}),
+  squeezepress:kxA("dbbench",{A:{hand:[3,58]},B:{hand:[14,14]},tempo:[1.8,.4,1.2,.5]}),
+  dbpullover:{anchor:"hip",A:{torso:180,thigh:-20,shin:-95,upper:92,fore:98},B:{torso:180,thigh:-20,shin:-95,upper:168,fore:174},K:[{t:.5,upper:130,fore:138}],eq:[{t:"bench"},DB()],tempo:[2,.4,1.6,.4],ph:["Senken","Zurückziehen"]},
+  pushleg:{anchor:"hand",A:{upper:-90,fore:-90,torso:20,thigh:200,shin:200,thigh2:186,shin2:186,foot:-70,foot2:-80},B:{upper:-165,fore:-55,torso:8,thigh:188,shin:188,thigh2:174,shin2:174,foot:-82,foot2:-74},eq:[],floor:0,tempo:[1.8,.3,1.1,.5],ph:["Ablassen","Drücken"]},
+  plyopush:{anchor:"foot",at:[0,10.3],noBal:1,A:{...kxPl(19.2),handAt:[141,0],bend:-1},B:{...kxPl(7),handAt:[141,0],bend:-1},K2:[{t:.14,...kxPl(22.5),handAt:[141,8]}],eq:[{t:"kpad",pts:[[192,96],[-16,0]]}],floor:0,tempo:[1.1,.2,.55,.6],ph:["Ablassen","Explosiv hoch"]},
+  hindupush:{anchor:"foot",at:[0,8],noBal:1,A:{...kxPl(50,-30),torso:-45,handAt:[141,0],bend:-1,neck:0},B:{...kxPl(10,-45),torso:32,handAt:[141,0],bend:-1,neck:0},K:[{t:.5,...kxPl(16,-40),torso:6,handAt:[141,0]}],eq:[],floor:0,tempo:[2.8,.5,2.8,.5],ph:["Nach vorn gleiten","Hüfte zurück"]},
+  bandchest:{anchor:"foot",A:{...STAND,hand:[10,-14],bend:-1},B:{...STAND,torso:86,hand:[56,-12],bend:-1},eq:[{t:"post",x:-34,w:7,h:180},{t:"band",from:[-31,140]}],floor:0,tempo:[1,.4,1.6,.4],ph:["Drücken","Zurück"]},
+  svend:{anchor:"foot",A:{...STAND,hand:[12,-16],bend:-1},B:{...STAND,torso:87,hand:[50,-14],bend:-1},eq:[{t:"plate",at:"hand",c:"--p10",r:14}],floor:0,tempo:[1.4,.5,1.6,.4],ph:["Strecken","Zurück"]},
+  /* ---- Schulter ---- */
+  dbohpstand:kxA("ohp",{eq:[DB()]}),
+  ohpuni:kxA("ohp",{A:{hand2:[4,-52],bend2:1},B:{hand2:[4,-52],bend2:1},eq:[DB()]}),
+  bbpushpress:kxA("kbpushpress",{eq:[{t:"plate",at:"hand",c:"--p20",r:19}]}),
+  zpress:{anchor:"hip",at:[0,9],A:{torso:90,thigh:0,shin:0,foot:80,hand:[10,2],bend:-1},B:{torso:90,thigh:0,shin:0,foot:80,hand:[-2,60],bend:-1},K:[{t:.25,hand:[9.5,15]},{t:.5,hand:[6,34]}],eq:[DB()],floor:0,tempo:[1.2,.4,1.8,.5],ph:["Drücken","Ablassen"]},
+  landmine:{anchor:"foot",A:{...STAND,thigh2:-110,shin2:-118,foot2:-20,torso:84,hand:[14,-10],bend:-1},B:{...STAND,thigh2:-110,shin2:-118,foot2:-20,torso:80,hand:[44,30],bend:-1},fix2:1,eq:[{t:"lmbar",px:205,r:15}],floor:0,tempo:[1.2,.4,1.8,.5],ph:["Drücken","Zurück"]},
+  platefront:kxA("frontraise",{eq:[{t:"plate",at:"hand",c:"--p10",r:14}],B:{upper:2,fore:8}}),
+  bandlateral:kxA("lateral",{eq:[{t:"kband",from:[13,1],at:"handR"},{t:"kband",from:[-13,1],at:"handL"}]}),
+  uprightrow:{view:"front",A:{yf:1,hR:[8,92],hL:[-8,92],bR:1,bL:-1,s:10},B:{yf:1,hR:[8,134],hL:[-8,134],bR:1,bL:-1,s:10},eq:[{t:"db",at:"handR"},{t:"db",at:"handL"}],floor:0,tempo:[1,.4,1.6,.4],ph:["Ziehen","Ablassen"]},
+  wallslide:{view:"front",A:{yf:1,ua:-12,fa:82,s:10},B:{yf:1,ua:52,fa:66,s:10},eq:[],floor:0,tempo:[1.4,.4,1.6,.4],ph:["Hochschieben","Zurück zum W"]},
+  bandextrot:{view:"front",A:{ua:-88,us:1,fa:-150,fs:.32,s:10},B:{ua:-88,us:1,fa:-8,fs:.95,s:10},eq:[{t:"bandHands"}],floor:0,tempo:[1,.5,1.6,.3],ph:["Nach außen","Zurück"]},
+  inclineyraise:kxA("chestrow",{A:{hand:undefined,upper:-90,fore:-88},B:{hand:undefined,upper:26,fore:28},K:[{t:.5,upper:-30,fore:-28}],eq:[{t:"benchF"},DB()],tempo:[1.2,.5,1.8,.4],ph:["Heben","Ablassen"]}),
+  dbshrug:{anchor:"foot",A:{...STAND,upper:-92,fore:-90,scap:0},B:{...STAND,upper:-92,fore:-90,scap:7},eq:[DB()],floor:0,tempo:[.9,.8,1.4,.4],ph:["Hochziehen","Ablassen"]},
+  bbshrug:{anchor:"foot",A:{...STAND,upper:-90,fore:-88,scap:0},B:{...STAND,upper:-90,fore:-88,scap:7},eq:[{t:"plate",at:"hand",c:"--p20",r:19}],floor:0,tempo:[.9,.8,1.4,.4],ph:["Hochziehen","Ablassen"]},
+  /* ---- Trizeps ---- */
+  kickback:{anchor:"foot",A:{shin:-95,thigh:-72,torso:12,upper:190,fore:-92,upper2:-80,fore2:-80},B:{shin:-95,thigh:-72,torso:12,upper:192,fore:188,upper2:-80,fore2:-80},eq:[{t:"box",x:42,w:54,y:42},DB()],floor:0,tempo:[1,.6,1.6,.4],ph:["Strecken","Zurück"]},
+  bandohext:kxA("ohext",{eq:[{t:"band",from:[-16,2]}]}),
+  bbtriext:{anchor:"foot",at:[0,10],noBal:1,A:{...kxPl(40),handAt:[170,92],bend:-1},B:{...kxPl(31),handAt:[170,92],bend:1},eq:[{t:"rackbar",at:[170,92]}],floor:0,tempo:[1.8,.3,1.2,.5],ph:["Beugen","Strecken"]},
+  /* ---- Bizeps ---- */
+  concentration:{anchor:"hip",at:[0,46],A:{torso:55,thigh:0,shin:-90,upper:-82,fore:-88,hand2:[34,-40],bend2:1},B:{torso:55,thigh:0,shin:-90,upper:-82,fore:62,hand2:[34,-40],bend2:1},K:[{t:.6,fore:10}],eq:[{t:"box",x:-28,w:42,y:38},DB()],floor:"auto",tempo:[1.2,.4,2,.4],ph:["Beugen","Ablassen"]},
+  inclinecurl:{anchor:"hip",A:{torso:135,thigh:-5,shin:-95,upper:-96,fore:-94},B:{torso:135,thigh:-5,shin:-95,upper:-96,fore:62},K:[{t:.6,fore:10}],eq:[{t:"bench"},DB()],tempo:[1.2,.4,2,.4],ph:["Beugen","Ablassen"]},
+  spidercurl:kxA("chestrow",{A:{hand:undefined,upper:-90,fore:-90},B:{hand:undefined,upper:-90,fore:70},K:[{t:.6,fore:12}],eq:[{t:"benchF"},DB()],tempo:[1.2,.4,2,.4],ph:["Beugen","Ablassen"]}),
+  revcurl:kxA("bbcurl",{tempo:[1.2,.5,2.2,.4]}),
+  dragcurl:{anchor:"foot",A:{...STAND,hand:[6,-60],bend:1},B:{...STAND,hand:[9,-16],bend:1},K:[{t:.5,hand:[9,-38]}],eq:[{t:"plate",at:"hand",c:"--p10",r:16}],floor:0,tempo:[1.2,.4,1.8,.4],ph:["Hochziehen","Ablassen"]},
+  /* ---- Rücken ---- */
+  pendlay:{anchor:"foot",A:{shin:-100,thigh:-42,torso:9,hand:[0,-60],bend:-1},B:{shin:-100,thigh:-42,torso:9,hand:[-18,-24],bend:-1},eq:[{t:"plate",at:"hand",c:"--p20",r:21}],floor:0,tempo:[.7,.3,1.4,.6],ph:["Ziehen","Ablegen"]},
+  dbbentrow:kxA("row",{A:{shin:-100,thigh:-50,torso:38,hand:[-4,-58]},B:{shin:-100,thigh:-50,torso:38,hand:[-26,-28]},eq:[DB()]}),
+  renegade:{anchor:"foot",at:[0,10.3],noBal:1,A:{...kxPl(22),handAt:[139,6.5],bend:-1,hand2:[0,-60],bend2:-1},B:{...kxPl(22),handAt:[118,40],bend:-1,hand2:[0,-60],bend2:-1},eq:[DB()],floor:0,tempo:[1,.4,1.4,.5],ph:["Ziehen","Absetzen"]},
+  bandlat:{anchor:"hip",at:[0,50],A:{torso:92,thigh:-90,shin:180,foot:180,hand:[6,58],bend:-1},B:{torso:96,thigh:-90,shin:180,foot:180,hand:[16,6],bend:-1},eq:[{t:"band",from:[6,232]}],floor:0,tempo:[1.1,.5,1.8,.4],ph:["Ziehen","Zurück"]},
+  straightarm:{anchor:"foot",A:{...STAND,torso:76,upper:32,fore:36},B:{...STAND,torso:76,upper:-78,fore:-76},eq:[{t:"post",x:150,w:7,h:205},{t:"band",from:[147,190]}],floor:0,tempo:[1.1,.5,1.7,.4],ph:["Runterziehen","Zurück"]},
+  scappull:kxA("scaphang",{tempo:[.9,.6,1.3,.5],hseg:undefined,ph:["Schultern runter","Lösen"]}),
+  kbgorilla:{anchor:"foot",A:{shin:-100,thigh:-40,torso:12,hand:[0,-60],bend:-1,upper2:-90,fore2:-90},B:{shin:-100,thigh:-40,torso:12,hand:[-26,-26],bend:-1,upper2:-90,fore2:-90},eq:[{t:"kb",at:"hand"}],floor:0,tempo:[1,.4,1.6,.4],ph:["Ziehen","Absetzen"]},
+  invrowfeet:{anchor:"foot",at:[0,44],A:{shin:-5,thigh:-5,torso:175,handAt:[-149,117],bend:1,foot:75},B:{shin:-19,thigh:-19,torso:161,handAt:[-149,117],bend:1,foot:62},eq:[{t:"rackbar",at:[-149,117]},{t:"box",x:-14,w:46,y:40}],floor:0,tempo:[1.1,.5,1.8,.4],ph:["Ziehen","Ablassen"]},
+  assistpull:kxA("hangsupp",{A:{thigh:40,shin:-95,foot:0},B:{upper:-48.6,fore:102.9,torso:92,thigh:40,shin:-95,foot:0,scap:0},K:[{t:.13,upper:86,fore:90}],fixFeet:1,floor:-210,eq:[{t:"bar"},{t:"box",x:14,w:44,y:-134.1},{t:"chairback",x:56,y:-134.1,side:"r",h:40,lean:3}],tempo:[1.4,.4,1.8,.5],ph:["Hochziehen","Ablassen"]}),
+  /* ---- Beine ---- */
+  zercher:kxA("frontsquat",{A:{upper:-70,fore:62},B:{upper:-70,fore:62},eq:[{t:"plate",at:"elbow",c:"--p20",r:19}]}),
+  boxsquat:kxA("squat",{B:{shin:-104,thigh:-6,torso:48},K:undefined,eq:[{t:"box",x:-75,w:46,y:42},{t:"plate",at:"back",c:"--p25",r:19}]}),
+  sumosquat:{view:"front",A:{yf:1,hy:90,aR:[30,0],aL:[-30,0],hR:[3,94],hL:[-3,94],bR:-1,bL:1},B:{yf:1,hy:56,aR:[30,0],aL:[-30,0],kR:[40,42],kL:[-40,42],hR:[3,96],hL:[-3,96],bR:-1,bL:1},eq:[{t:"db",at:"handR"}],floor:0,tempo:[1.8,.3,1.2,.5],ph:["Runter","Hoch"]},
+  splitsquat:kxA("lunge",{A:{shin:-68,thigh:-50,torso:86,thigh2:-125,shin2:-140,foot2:-50},tempo:[2,.4,1.4,.5]}),
+  curtsy:{view:"front",A:{yf:1,hy:91,aR:[10,0],aL:[-10,0],hR:[16,95],hL:[-16,95],bR:1,bL:-1},B:{yf:1,hy:60,hx:-6,aR:[-22,2],kR:[-6,16],aL:[-14,0],kL:[-12,44],hR:[16,95],hL:[-16,95],bR:1,bL:-1},K:[{t:.4,aR:[-6,6]}],eq:[],floor:0,tempo:[1.6,.3,1.2,.5],ph:["Kreuzschritt runter","Zurück"]},
+  sidelunge:{view:"front",A:{yf:1,hy:91,aR:[10,0],aL:[-10,0],hR:[12,108],hL:[-12,108],bR:1,bL:-1},B:{yf:1,hy:58,hx:26,aR:[58,0],kR:[56,36],aL:[-12,0],kL:[-1,46],hR:[12,108],hL:[-12,108],bR:1,bL:-1},K:[{t:.35,aR:[32,7]}],eq:[],floor:0,tempo:[1.6,.3,1.2,.5],ph:["Schritt zur Seite","Zurück"]},
+  stepdown:{anchor:"foot",at:[0,40],noBal:1,A:{...STAND,thigh2:-65,shin2:-85,foot2:-10,hand:[10,-50],bend:1},B:{shin:-132,thigh:-17,torso:76,thigh2:-60,shin2:-80,foot2:-12,hand:[40,-22],bend:1},eq:[{t:"box",x:-64,w:80,y:40}],floor:0,tempo:[2,.3,1.2,.5],ph:["Langsam runter","Hochdrücken"]},
+  sissy:{anchor:"foot",plantToe:1,noBal:1,A:{...STAND,foot:-28,at:[0,8],handAt:[-20,106],bend:1},B:{shin:-140,thigh:-32,torso:142,foot:-46,at:[0,9],handAt:[-20,106],bend:1},eq:[{t:"post",x:-22,w:7}],floor:0,tempo:[2,.3,1.4,.5],ph:["Zurücklehnen","Hoch"]},
+  pistol:kxA("pistolbox",{B:{shin:-126,thigh:0,torso:54,thigh2:8,shin2:6,upper:6,fore:8,foot2:84},eq:[]}),
+  seatcalf:{anchor:"foot",plantToe:1,noBal:1,A:{shin:-90,thigh:0,torso:90,foot:0,at:[0,0],hand:[40,-46],bend:-1},B:{shin:-90,thigh:10,torso:90,foot:-42,at:[0,8],hand:[40,-46],bend:-1},eq:[{t:"box",x:-70,w:46,y:39},DB()],floor:0,tempo:[.9,.8,1.6,.4],ph:["Fersen hoch","Senken"]},
+  bbcalf:kxA("calf",{A:{handTo:"back",bend:1,upper:undefined,fore:undefined},B:{handTo:"back",bend:1,upper:undefined,fore:undefined},eq:[{t:"plate",at:"back",c:"--p25",r:19}]}),
+  tibraise:{anchor:"foot",noBal:1,A:{shin:-75,thigh:-75,torso:100,foot:0,upper:-96,fore:-92},B:{shin:-75,thigh:-75,torso:100,foot:30,upper:-96,fore:-92},eq:[{t:"wall",x:-40}],floor:0,tempo:[.8,.4,1.2,.4],ph:["Zehen hoch","Senken"]},
+  dbsquat:kxA("airsquat",{A:{upper:-90,fore:-90},B:{upper:-80,fore:-82},eq:[DB()]}),
+  assistsquat:kxA("airsquat",{A:{handAt:[44,114],bend:-1,upper:undefined,fore:undefined},B:{handAt:[44,114],bend:-1,upper:undefined,fore:undefined},eq:[{t:"post",x:48,w:7}],noBal:1}),
+  chairsit:{lag:.12,anchor:"foot",noBal:1,A:{...STAND,upper:-80,fore:-70},B:{shin:-100,thigh:-2,torso:62,upper:2,fore:4},eq:[{t:"box",x:-66,w:44,y:40},{t:"chairback",x:-64,y:40,side:"l",h:42,lean:-3}],floor:0,tempo:[1.8,.6,1.2,.6],ph:["Hinsetzen","Aufstehen"]},
+  /* ---- Hüfte ---- */
+  sumodl:kxA("deadlift",{A:{shin:-98,thigh:-38,torso:42}}),
+  rackpull:kxA("deadlift",{A:{shin:-96,thigh:-58,torso:38},eq:[{t:"rackpin",x:-6,y:36},{t:"plate",at:"hand",c:"--p25",r:24}]}),
+  dbdl:kxA("deadlift",{A:{shin:-112,thigh:-8,torso:28},eq:[DB(),DB("hand2")]}),
+  kbdl:kxA("deadlift",{A:{shin:-112,thigh:-8,torso:28},eq:[{t:"kb",at:"hand"}]}),
+  sglrdl:{lag:.1,anchor:"foot",noBal:1,A:{...STAND,thigh2:-96,shin2:-104,foot2:-30,upper:-92,fore:-90},B:{shin:-97,thigh:-78,torso:8,thigh2:-182,shin2:-184,foot2:-95,upper:-92,fore:-90},K:[{t:.3,torso:62,thigh2:-150}],eq:[DB()],tempo:[2.4,.5,2.4,.5],ph:["Vorbeugen","Aufrichten"]},
+  sglhipthrust:kxA("hipthrust",{A:{thigh2:96,shin2:-12},B:{thigh2:70,shin2:-38},fixFeet:undefined,eq:[{t:"box",x:-42,w:40,y:40}]}),
+  bbbridge:kxA("glutebridge",{eq:[{t:"plate",at:"hip",c:"--p20",r:16,dy:9}]}),
+  frogpump:kxA("glutebridge",{A:{thigh:52,shin:-48},B:{thigh:22,shin:-40},tempo:[.7,.5,1,.3]}),
+  donkeykick:kxA("birddog",{A:{thigh2:-90,shin2:180},B:{thigh:-178,shin:94,foot:178,upper:-90,fore:-90},tempo:[1,.6,1.4,.4],ph:["Hochdrücken","Senken"]}),
+  bandkick:{anchor:"foot",noBal:1,A:{...STAND,torso:78,thigh2:-94,shin2:-98,foot2:-10,handAt:[40,110],bend:-1},B:{...STAND,torso:74,thigh2:-128,shin2:-132,foot2:-50,handAt:[40,110],bend:-1},eq:[{t:"post",x:46,w:7},{t:"kband",from:[42,8],at:"ankle2"}],floor:0,tempo:[1,.5,1.4,.4],ph:["Kick","Zurück"]},
+  sidelyingabd:{view:"front",floor:0,eq:[],tempo:[1,.5,1.6,.4],ph:["Heben","Senken"],A:{yf:1,hx:12,hy:14,lean:88,aR:[-76,9],kR:[-34,12],aL:[-80,3],kL:[-36,6],ua:86,fa:160,uaL:-96,faL:-84},B:{yf:1,hx:12,hy:14,lean:88,aR:[-70,48],kR:[-30,32],aL:[-80,3],kL:[-36,6],ua:86,fa:160,uaL:-96,faL:-84}},
+  bandwalk:{view:"front",A:{yf:1,hy:84,hx:-4,aR:[18,0],aL:[-26,0],kR:[16,44],kL:[-20,44],hR:[12,104],hL:[-12,104],bR:1,bL:-1},B:{yf:1,hy:84,hx:4,aR:[26,0],aL:[-18,0],kR:[20,44],kL:[-16,44],hR:[12,104],hL:[-12,104],bR:1,bL:-1},K:[{t:.5,aR:[26,6]}],K2:[{t:.5,aL:[-26,6]}],eq:[{t:"kneeband"}],floor:0,tempo:[.6,.1,.6,.1],ph:["Schritt","Schritt"]},
+  bridgewalk:kxA("glutebridge",{A:{torso:205,thigh:5,shin:-52,neck:-25},B:{torso:196,thigh:-6,shin:-22,neck:-12},tempo:[1.6,.4,1.6,.4],ph:["Füße nach vorn","Zurück"]}),
+  slidecurl:{anchor:"shoulder",at:[0,9],A:{torso:190,thigh:-8,shin:-8,foot:80,upper:-8,fore:-2,neck:-10},B:{torso:205,thigh:20,shin:-75,foot:20,upper:-8,fore:-2,neck:-25},eq:[{t:"towelpad",at:"ankle"}],floor:0,tempo:[1.6,.4,1.2,.5],ph:["Strecken","Heranziehen"]},
+  pullthrough:{anchor:"foot",A:{...STAND,hand:[8,-62],bend:-1},B:{shin:-96,thigh:-65,torso:28,hand:[-30,-46],bend:-1},eq:[{t:"post",x:-110,w:7,h:150},{t:"band",from:[-107,12]}],floor:0,tempo:[1.8,.3,1.2,.5],ph:["Hüfte zurück","Strecken"]},
+  reversehyper:{anchor:"hip",at:[0,50],flip:1,A:{torso:2,thigh:208,shin:208,foot:-100,hand:[30,-34],bend:1,neck:-6},B:{torso:2,thigh:180,shin:180,foot:-90,hand:[30,-34],bend:1,neck:-6},eq:[{t:"box",x:-6,w:74,y:42}],floor:0,tempo:[1,.6,1.6,.4],ph:["Beine heben","Senken"]},
+  bridgemarch:kxA("glutebridge",{A:{torso:205,thigh:5,shin:-52,thigh2:72,shin2:-20,neck:-25},B:{torso:205,thigh:72,shin:-20,thigh2:5,shin2:-52,neck:-25},K:[{t:.5,thigh:5,shin:-52,thigh2:5,shin2:-52}],tempo:[1.4,.4,1.4,.4],fixFeet:undefined,ph:["Knie hoch","Wechseln"]}),
+  bridgechair:{lag:.1,anchor:"shoulder",at:[0,9],fixFeet:1,A:{torso:180,thigh:58,shin:-12,hand:[40,-6],bend:1,neck:0},B:{torso:206,thigh:24,shin:-40,hand:[40,-6],bend:1,neck:-25},eq:[{t:"box",x:108,w:44,y:40},{t:"chairback",x:150,y:40,side:"r",h:40,lean:3}],floor:0,tempo:[1,.8,1.6,.4],ph:["Hüfte hoch","Ablegen"]},
+  /* ---- Rumpf ---- */
+  vup:{anchor:"hip",at:[0,9],A:{torso:180,thigh:2,shin:2,foot:80,upper:182,fore:182,neck:-6},B:{torso:132,thigh:46,shin:46,foot:120,upper:58,fore:54,neck:-14},eq:[],floor:0,tempo:[1,.3,1.4,.5],ph:["Hoch zum V","Ablegen"]},
+  bicycle:{anchor:"hip",at:[0,9],A:{torso:158,thigh:62,shin:-8,thigh2:16,shin2:14,foot:10,foot2:20,hand:[-10,12],bend:1,neck:-12},B:{torso:156,thigh:16,shin:14,thigh2:62,shin2:-8,foot:20,foot2:10,hand:[-8,10],bend:1,neck:-12},eq:[],floor:0,tempo:[.8,.2,.8,.2],ph:["Drehen","Wechseln"]},
+  revcrunch:{anchor:"shoulder",at:[0,9],A:{torso:180,thigh:90,shin:0,foot:10,upper:0,fore:0},B:{torso:198,thigh:128,shin:40,foot:50,upper:-2,fore:0,neck:-20},eq:[],floor:0,tempo:[1,.5,1.4,.4],ph:["Einrollen","Zurück"]},
+  situp:{anchor:"hip",at:[0,9],A:{torso:180,thigh:50,shin:-60,foot:0,hand:[18,-14],bend:1},B:{torso:82,thigh:50,shin:-60,foot:0,hand:[18,-14],bend:1},K:[{t:.45,torso:140}],fixFeet:1,eq:[],floor:0,tempo:[1.2,.4,1.6,.4],ph:["Aufrollen","Zurückrollen"]},
+  shtap:{anchor:"foot",at:[0,10.3],noBal:1,A:{...kxPl(19),handAt:[141,2],bend:-1,hand2:[0,-56],bend2:-1},B:{...kxPl(19),handAt:[150,44],bend:-1,hand2:[0,-56],bend2:-1},eq:[{t:"kpad",pts:[[176,82],[-12,0]]}],floor:0,tempo:[1,.4,1,.4],ph:["Tippen","Zurück"]},
+  plankupdown:{anchor:"foot",at:[0,10.3],noBal:1,A:{...kxPl(8.5),handAt:[178,1.5],bend:1},B:{...kxPl(20),handAt:[141,0],bend:-1},K:[{t:.5,...kxPl(15),handAt:[160,10]}],eq:[],floor:0,tempo:[1,.6,1,.6],ph:["Hoch in den Stütz","Runter auf die Unterarme"]},
+  kneeplank:kxA("plank",{A:{thigh:-24,shin:-2,foot:-10},B:{thigh:-24.6,shin:-2.6,foot:-10}}),
+  plankleg:kxA("plank",{A:{thigh2:-8.8,shin2:-8.8,foot2:-98.8},B:{thigh:-9.4,shin:-9.4,thigh2:6,shin2:6,foot2:-84},tempo:[1,.8,1.2,.4],ph:["Bein heben","Absetzen"]}),
+  pallof:{view:"front",A:{ua:-100,us:1,fa:135,fs:.42,s:12},B:{ua:-120,us:.3,fa:-110,fs:.3,s:12},eq:[{t:"kband",from:[112,136],at:"handR",at2:"handL"}],floor:0,tempo:[1,1,1.4,.4],ph:["Drücken & halten","Zurück"]},
+  woodchop:{view:"front",A:{yf:1,lean:-6,hx:3,ua:52,fa:58,uaL:22,faL:40,s:14},B:{yf:1,lean:10,hx:-4,ua:-150,fa:-142,uaL:-118,faL:-126,s:14},eq:[{t:"kband",from:[118,205],at:"handR"}],floor:0,tempo:[1.2,.4,1.8,.4],ph:["Diagonal ziehen","Zurück"]},
+  suitcase:kxA("farmer",{eq:[DB()]}),
+  sidebend:{view:"front",A:{yf:1,lean:0,ua:-86,fa:-86,s:10},B:{yf:1,lean:-16,ua:-90,fa:-90,s:10},eq:[{t:"db",at:"handR"}],floor:0,tempo:[1.4,.3,1.4,.4],ph:["Neigen","Aufrichten"]},
+  toesbar:kxA("legraise",{tempo:[2.4,.4,2.4,.4],B:{upper:108,fore:110,torso:116,thigh:94,shin:94,foot:70}}),
+  stirpot:{anchor:"foot",at:[0,10.3],noBal:1,A:{...kxPl(33),upper:-76,fore:4},B:{...kxPl(33.5),upper:-102,fore:-4},eq:[{t:"gymball",x:136,y:30,r:30}],floor:0,tempo:[.9,0,.9,0],ph:["Kreisen","Kreisen"]},
+  balljack:{anchor:"hand",A:{upper:-90,fore:-90,torso:-2,thigh:182,shin:182,foot:-70},B:{upper:-96,fore:-92,torso:-20,thigh:-32,shin:178,foot:-170},eq:[{t:"mball",at:"ankle",r:28,dy:-30,c:"gym"}],floor:0,tempo:[1,.5,1.3,.4],ph:["Knie ran","Strecken"]},
+  seatedtuck:{anchor:"hip",at:[0,48],A:{torso:108,thigh:-12,shin:-42,foot:-20,handAt:[6,42],bend:1},B:{torso:112,thigh:46,shin:-58,foot:-40,handAt:[6,42],bend:1},eq:[{t:"box",x:-30,w:44,y:40},{t:"chairback",x:-28,y:40,side:"l",h:42,lean:-3}],floor:0,tempo:[1,.4,1.4,.4],ph:["Knie ran","Strecken"]},
+  crabwalk:{anchor:"hip",at:[0,40],A:{torso:158,thigh:14,shin:-94,thigh2:4,shin2:-98,foot:0,foot2:0,upper:-98,fore:-94,upper2:-92,fore2:-90},B:{torso:158,thigh:4,shin:-98,thigh2:14,shin2:-94,foot:0,foot2:0,upper:-92,fore:-90,upper2:-98,fore2:-94},K:[{t:.5,thigh:12,shin:-90}],K2:[{t:.5,thigh2:12,shin2:-90}],eq:[],floor:0,tempo:[.7,.1,.7,.1],ph:["Schritt","Schritt"]},
+  floordip:{anchor:"hand",at:[-38,0],fixFeet:1,A:{upper:-80,fore:-80,torso:135,thigh:28,shin:-78,foot:8},B:{upper:-122,fore:-58,torso:136,thigh:40,shin:-70,foot:0},eq:[],floor:0,tempo:[1.4,.3,1.1,.5],ph:["Beugen","Strecken"]},
+  backwidow:{anchor:"hip",at:[0,9],A:{torso:180,thigh:50,shin:-60,foot:0,upper:-2,fore:88,neck:0},B:{torso:166,thigh:50,shin:-60,foot:0,upper:-18,fore:84,neck:-6},eq:[],floor:0,tempo:[1,.8,1.4,.4],ph:["Ellbogen drücken","Ablegen"]},
+  /* ---- Kondition ---- */
+  highknees:kxA("march",{A:{thigh:-4,shin:-96,thigh2:-92,shin2:-100,upper:-40,fore:40,upper2:-120,fore2:-90},B:{thigh:-92,shin:-100,thigh2:-4,shin2:-96,upper:-120,fore:-90,upper2:-40,fore2:40},tempo:[.32,0,.32,0]}),
+  shadowbox:kxA("boxing",{eq:[]}),
+  skater:{anchor:"hip",at:[0,84],A:{torso:72,thigh:-70,shin:-112,foot:0,thigh2:-125,shin2:-160,foot2:-70,upper:-40,fore:-10,upper2:-140,fore2:-120},B:{torso:72,thigh:-125,shin:-160,foot:-70,thigh2:-70,shin2:-112,foot2:0,upper:-140,fore:-120,upper2:-40,fore2:-10},eq:[],floor:"auto",tempo:[.5,.15,.5,.15],ph:["Sprung","Sprung"]},
+  thruster:{lag:.12,anchor:"foot",A:{shin:-120,thigh:-10,torso:62,hand:[9,2],bend:-1},B:{...STAND,hand:[-3,60],bend:-1},K:[{t:.5,shin:-96,thigh:-80,torso:84,hand:[9.5,10]}],K2:[{t:.5,shin:-95,thigh:-85,torso:86,hand:[9,4]}],eq:[DB()],floor:0,tempo:[1,.3,1.4,.3],ph:["Hoch & drücken","Runter"]},
+  dbsnatch:{lag:.1,anchor:"foot",A:{shin:-106,thigh:-40,torso:30,upper:-94,fore:-92},B:{...STAND,upper:94,fore:92},K:[{t:.45,shin:-92,thigh:-86,torso:84,upper:-40,fore:-40},{t:.72,upper:30,fore:80}],eq:[DB()],floor:0,tempo:[1,.4,1.3,.4],ph:["Explosiv hoch","Zurück"]},
+  /* ---- Griff ---- */
+  platepinch:{view:"front",A:{ua:-86,fa:-86,s:10},B:{ua:-85.4,fa:-85.4,s:10,br:1},eq:[{t:"fplate",at:"handR",c:"--p10"},{t:"fplate",at:"handL",c:"--p10"}],floor:0,tempo:[2,1,2,1],ph:["Halten","Atmen"]}
+});
+Object.assign(ANIM_OF,{bandpullapart:"pullapart",walklunge:"lunge"});
 
 
 /* ================= DESIGNS (2.3) ================= */

@@ -9,6 +9,7 @@ D=_SHOTS.rstrip('/')
 srv=subprocess.Popen([sys.executable,'-m','http.server','8777','-d',_OUTDIR],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL);time.sleep(1)
 U='http://127.0.0.1:8777/index.html'
 BALLISTIC=['jumpsquat','bearcrawl','beinschere','swimmer',  # 3.2: new explosive/alternating bodyweight moves
+'plyopush','highknees','shadowbox','skater','dbsnatch',  # Kraft-Bibliothek +100: explosive/cardio moves
 'mbslam','boxing','run','walk','jj','kbswing','boxjump','climber','jumprope','kbclean','kbpushpress','rowint','bikeint','cross','march','farmer','armcircle','russtwist']
 async def main():
     async with async_playwright() as p:

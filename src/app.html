@@ -154,6 +154,7 @@ textarea{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
 .stage canvas{display:block;width:100%;height:250px;position:relative}
 .stage .phase{position:absolute;left:14px;top:10px;font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.22em;text-transform:uppercase;color:var(--arc);text-shadow:0 0 10px rgba(var(--ac),.6);z-index:1}
 .stage .phase:not(:empty)::before{content:"▸ "}
+.stage .phase#yph{letter-spacing:.12em}/* yoga: long breathing labels next to the stage label (130 % text) */
 .stage .tempo{position:absolute;right:14px;top:12px;font-family:var(--hud);font-size:10.5px;letter-spacing:.08em;color:var(--muted);z-index:1}
 .stage .readout{position:absolute;left:14px;bottom:9px;font-family:var(--hud);font-size:9.5px;letter-spacing:.14em;color:var(--faint);z-index:1}
 .exname{font-size:34px}
@@ -2742,7 +2743,7 @@ const MOTION={
 };
 for(const k in MOTION){const d=AN[k];if(!d)continue;const m=MOTION[k];for(const f in m){if(f==="A"||f==="B")Object.assign(d[f],m[f]);else d[f]=m[f]}}
 /* ================= 2.1 · HALTE-ÜBUNGEN · KETTLEBELL · GERÄTE-GEWICHTE · BACKUP (@ Joschy) ================= */
-const APP_VER="3.3",BK_VER=5;/* 3.0–3.3 keep backup format 5: all new fields are optional, older apps simply ignore them */
+const APP_VER="3.4",BK_VER=5;/* 3.0–3.4 keep backup format 5: all new fields are optional, older apps simply ignore them */
 /* ---- hold / tempo variants (strength stays the focus: they are alternatives, never forced) ---- */
 Object.assign(EX,{
   pushpause:{n:"Liegestütze mit Halt in der Mitte",eq:"Matte · Griffe optional",m:"Brust · Trizeps · Schultern",type:"bw",rest:90,inc:0,hold:3,holdAt:"auf halber Höhe",base:"pushup",
@@ -3146,6 +3147,7 @@ Object.assign(AN,{
 
 /*YOGA*/
 /*HANG*/
+/*KRAFT*/
 
 /* ================= DESIGNS (2.3) ================= */
 function curTheme(){const t=S&&S.settings&&S.settings.theme;return THEME_KEYS.includes(t)?t:"arc"}

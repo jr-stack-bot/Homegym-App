@@ -18,7 +18,7 @@ async def main():
         r=await pg.evaluate("""()=>{const bad=[];for(const k of YKEYS){const p=YP[k];if(!p.n||!(p.c.length>=2&&p.c.length<=3)||!p.a||!YREG.some(x=>x[0]===p.r)||![1,2,3].includes(p.lv)||!(p.sec>0)||!AN['y_'+k])bad.push(k)}
           const reg={};for(const k of YKEYS)reg[YP[k].r]=(reg[YP[k].r]||0)+1;const lv=[1,2,3].map(l=>YKEYS.filter(k=>YP[k].lv===l).length);
           const names=YKEYS.map(k=>YP[k].n.toLowerCase()).join('|');return{n:YKEYS.length,bad,reg,lv,uni:YKEYS.filter(k=>YP[k].uni).length,names}}""")
-        print('poses',r['n'],r['lv'],r['reg'],'uni',r['uni']);assert 90<=r['n']<=100 and not r['bad'] and all(x>=8 for x in r['lv']),r  # 3.2: ~96 poses
+        print('poses',r['n'],r['lv'],r['reg'],'uni',r['uni']);assert 150<=r['n']<=160 and not r['bad'] and all(x>=8 for x in r['lv']),r  # 3.2: ~96 poses
         assert r['reg']['schulter']>=8 and r['reg']['huefte']>=10 and r['uni']>=15
         for need in ['schulterkreisen','wandengel','katze-kuh','kindshaltung','taube im liegen','schmetterling','hüftkreisen','brustöffner','nackendehnung','adlerarme','ausfallschritt','krieger i','dreieck','hund','kobra','brücke','drehsitz']:
             assert need in r['names'],need

@@ -48,7 +48,7 @@ async def main():
         # 1) all 56 poses x m/f: loop structure, stand at start/end, hold = end pose, smooth, floor, no floating
         r=await pg.evaluate(CHECK)
         bad=[x for x in r if x['bad']];print('loops',len(r),'worst step',max(x['step'] for x in r),'worst snap',max(x['acc'] for x in r),'T',min(x['T'] for x in r),'-',max(x['T'] for x in r))
-        assert len(r)==2*96 and not bad,bad  # 3.2: 96 poses
+        assert len(r)==2*154 and not bad,bad  # 3.4: 154 poses
         # 2) every loop actually renders (both figures, 12 moments), no exceptions
         n=await pg.evaluate("""()=>{const c=document.createElement('canvas');c.style.cssText='position:fixed;left:0;top:0;width:200px;height:220px';document.body.appendChild(c);let n=0,bad=[];
           for(const k of YKEYS)for(const g of['m','f']){attachAnim(c,'y_'+k,{g});RUN.delete(c);c._t0=0;if(!c._loop){bad.push(k);continue}for(let i=0;i<12;i++){renderCanvas(c,i*c._loop.T/12*1000/animSpd());const x=c.getContext('2d').getImageData(0,0,c.width,c.height).data;let px=0;for(let j=3;j<x.length;j+=16)if(x[j]>0)px++;if(px<300)bad.push([k,g,i]);n++}}
@@ -57,7 +57,7 @@ async def main():
         # 3) library minis stay still end poses, the detail sheet shows the loop
         await pg.click('[data-tab=lib]');await pg.wait_for_timeout(200);await pg.click('[data-lm=yoga]');await pg.wait_for_timeout(400)
         lb=await pg.evaluate("()=>{const m=[...document.querySelectorAll('[data-ymini]')];return{n:m.length,still:m.every(c=>c._still&&!c._loop)}}")
-        assert lb['n']==96 and lb['still'],lb  # 3.2: 96 poses
+        assert lb['n']==154 and lb['still'],lb  # 3.4: 154 poses
         await pg.screenshot(path=D+'/library.png')
         await pg.click('[data-ypose="katzekuh"]');await pg.wait_for_timeout(300)
         sh=await pg.evaluate("()=>{const c=document.getElementById('ysc');return{loop:!!c._loop,still:c._still}}");assert sh['loop'] and not sh['still'],sh
