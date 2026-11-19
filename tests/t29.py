@@ -62,8 +62,8 @@ async def page(b,port):
 async def main():
     async with async_playwright() as p:
         b=await p.chromium.launch();pn,en=await page(b,NEW);po,eo=await page(b,OLD)
-        v=await pn.evaluate("[APP_VER,BK_VER,typeof BODY.f.fr.shV]");chk(v==['3.4',5,'number'],'version 3.1 / backup format 5 '+str(v))
-        await pn.evaluate("go('set')");vl=await pn.text_content('#verLine');chk('Version 3.4 · @ Joschy' in vl,vl)
+        v=await pn.evaluate("[APP_VER,BK_VER,typeof BODY.f.fr.shV]");chk(v==['3.5',5,'number'],'version 3.1 / backup format 5 '+str(v))
+        await pn.evaluate("go('set')");vl=await pn.text_content('#verLine');chk('Version 3.5 · @ Joschy' in vl,vl)
         # 1) joints + grip points identical to 3.0 (all strength animations + yoga loops incl. transitions, both figures, 5 moments)
         gn=await pn.evaluate(GEO);go=await po.evaluate(GEO)
         diff=[(k,q) for k in go for q in go[k] if gn.get(k,{}).get(q)!=go[k][q]]

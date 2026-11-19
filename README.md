@@ -2,7 +2,7 @@
 
 ## Download
 
-**[Homegym 3.4 herunterladen (APK, ca. 3 MB)](https://github.com/jr-stack-bot/homegym-app/raw/main/releases/Homegym-3.4.apk)**
+**[Homegym 3.5 herunterladen (APK, ca. 3 MB)](https://github.com/jr-stack-bot/homegym-app/raw/main/releases/Homegym-3.5.apk)**
 
 Auf dem Android-Handy antippen, Datei öffnen und die Installation aus unbekannter Quelle einmalig erlauben. Ab Android 7.
 
@@ -20,6 +20,7 @@ Android-App für Krafttraining zu Hause: geführte Trainings mit animierten Übu
 - **41 neue Übungen ohne Geräte** in den Stufen leicht / mittel / schwer, teils mit Alltagsgegenständen (Wand, Stuhl, Tisch, Handtuch, Rucksack, Wasserflaschen); die Steigerung schlägt die nächst schwerere Variante vor, das Preset „Ohne Geräte“ bietet 12 abwechslungsreiche Einheiten.
 - **Griffkraft & Hängen**: Block am Zieh-Tag in 4 Stufen bis zum Handtuch-Hang (Zeit steigt automatisch), Farmer's Hold am Beintag, Hang-Test alle 4 Wochen mit Kurve (Ziel 1–2 Minuten frei hängen) und freiwillige Hang-Pause an freien Tagen.
 - **Animationstempo** in den Einstellungen anpassbar.
+- **Extras: 19 Kampfsport-Kostüme** für Mann und Frau (mit Kennwort freischaltbar), fest gewählt oder zufällig pro Training; die Figur wirkt dann muskulöser.
 - **8 Designs zur Auswahl** (Arc Blau, Iron Man, Toxic, Cyber, Sunset, Eis, Stealth, Tag): eigene Farbwelt, Hintergrund-Effekt, Rahmenform und Schrift, Figuren in der Akzentfarbe; Status- und Navigationsleiste passen sich an, Effekte pausieren im Training und bei „Bewegung reduzieren“.
 - **Pausen-Timer** mit Benachrichtigung und Bild-in-Bild-Mini-Fenster, auch wenn die App im Hintergrund ist.
 - **Sprachassistent JAI**: sagt Übungen, Sätze, Gewichte, Countdown und Bestwerte an.
@@ -61,7 +62,7 @@ Updates einfach drüber installieren, die Daten bleiben erhalten. **Vor dem Upda
 ## Projektstruktur
 | Ordner | Inhalt |
 |---|---|
-| `src/` | `app.html` (gesamte Web-App: UI, Logik, Renderer, Bewegungs-Engine), `program.js` (4-Wochen-Plan, beim Build über `/*PROGRAM*/` eingesetzt), `yoga.js` (Yoga & Dehnen, über `/*YOGA*/` eingesetzt), `hang.js` (Griffkraft & Hängen, über `/*HANG*/` eingesetzt) und `kraft.js` (100 zusätzliche Kraftübungen, über `/*KRAFT*/` eingesetzt) |
+| `src/` | `app.html` (gesamte Web-App: UI, Logik, Renderer, Bewegungs-Engine), `program.js` (4-Wochen-Plan, beim Build über `/*PROGRAM*/` eingesetzt), `yoga.js` (Yoga & Dehnen, über `/*YOGA*/` eingesetzt), `hang.js` (Griffkraft & Hängen, über `/*HANG*/` eingesetzt) `kraft.js` (100 zusätzliche Kraftübungen, über `/*KRAFT*/` eingesetzt) und `costume.js` (Extras: Kampfsport-Kostüme, über `/*COSTUME*/` eingesetzt) |
 | `java/` | Android-Hülle: `MainActivity` (WebView, Bild-in-Bild, Systemleisten-Farben), `Bridge` (JS-Schnittstelle), `TimerService` (Foreground Service für den Pausen-Timer) |
 | `android/` | apktool-Projekt: Manifest, Ressourcen, `assets/index.html`, `assets/jai/*.mp3`, kompilierte `classes.dex` |
 | `tools/` | `build_html.py`, `build.sh` (kompletter Build) |
@@ -100,6 +101,7 @@ python3 tests/t28.py     # Auswertung: Kraft/1RM, Muskeln, Kalender/Serien, Kör
 python3 tests/t29.py     # Figuren: Vergleich mit 3.0 (Gelenke/Griffpunkte gleich, Kinn, Proportionen, Tempo)
 python3 tests/t30.py     # Yoga in 3 Stufen, 24-Wochen-Plan, Startstufe, Übernahme aus 3.1, Profi-Sicherheit, Übungen ohne Geräte, Hauptübungen wie in 3.1
 python3 tests/t32.py     # Griffkraft & Hängen: Stufen, Hang-Test, Hang-Pause, Farmer's Hold, 60-Minuten-Grenze, Migration, Backup
+HOMEGYM_EXTRAS_PW=… python3 tests/t35.py   # Extras: Freischaltung, Speicherung, Backup inkl. 3.2-Backup, Zufällig pro Training, Vorschau (Kennwort per Umgebungsvariable)
 ```
 
 `t29` vergleicht mit dem eingefrorenen 3.0-Stand in `tests/fixtures/v30/index.html`, `t30` mit dem 3.1-Stand in `tests/fixtures/v31/index.html`, `t32` zusätzlich mit dem 3.2-Stand in `tests/fixtures/v32/index.html` (Details in `tests/fixtures/README.txt`, andere Ordner per `HOMEGYM_V30` / `HOMEGYM_V31` / `HOMEGYM_V32`).
@@ -110,10 +112,11 @@ Screenshots landen in `/tmp/homegym-shots/` (änderbar über `HOMEGYM_SHOTS`).
 JAI („Joschy's AI“) ist eine eigene, mit ElevenLabs entworfene Stimme (keine Nachbildung einer realen Person). Die 276 Ansagen wurden einmalig erzeugt, mit `jai/split.py` geschnitten, mit der Effekt-Kette „leicht“ aus `jai/fx.md` bearbeitet und liegen fertig in `android/assets/jai/`. Die App setzt sie zur Laufzeit zusammen, etwa Zahl + „Komma fünf“ + „Kilo“.
 
 ## Versionen
-Aktuell: **3.4**. Details in [CHANGELOG.md](CHANGELOG.md).
+Aktuell: **3.5**. Details in [CHANGELOG.md](CHANGELOG.md).
 
 | Version | Wichtigste Neuerungen |
 |---|---|
+| 3.5 | Extras: 19 Kampfsport-Kostüme für Mann und Frau (mit Kennwort freischaltbar), muskulöserer Körperbau mit Kostüm, „Zufällig pro Training“; ohne Kostüm unverändert |
 | 3.4 | 58 neue Yoga-Haltungen (154), Rotation beim Wiederholen einer Woche, „Andere Haltung“, Dehn-Abläufe wechseln wöchentlich; 100 neue Kraftübungen (259) auf Nebenplätzen in jedem zweiten Zyklus und bei „Tauschen“, Hauptübungen unverändert; Übungsblatt mit Atmung/Leichter/Achtung; Geräte- und Layout-Fixes |
 | 3.3 | Griffkraft & Hängen: Block am Zieh-Tag in 4 Stufen, Farmer's Hold am Beintag, Hang-Test alle 4 Wochen mit Kurve, Hang-Pause an freien Tagen; Anzeige-Fixes (nichts abgeschnitten, 360 px/große Schrift, Halte-Übungen mit Haltezeit) |
 | 3.2 | Yoga mit 96 Haltungen in drei Stufen (Anfänger/Fortgeschritten/Profi), 24-Wochen-Plan, Startstufe wählbar, Sicherheits-Hinweise und leichtere Variante; 41 neue Übungen ohne Geräte (leicht/mittel/schwer), Preset „Ohne Geräte“ mit 12 abwechslungsreichen Einheiten |

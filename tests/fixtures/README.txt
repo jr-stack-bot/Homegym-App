@@ -25,6 +25,7 @@ v32/index.html  eingefrorener Stand der Version 3.2, byte-gleich zu android/asse
                 Hauptübungen mit gleichen Sätzen. Den 3.1-Stand (v31) nutzt t32 für Migration und Backup.
 
 Neu erzeugen:   git show 7a3ce77:android/assets/index.html > tests/fixtures/v32/index.html
+                t35 (3.5) erzeugt damit ein echtes 3.2-Backup (ohne Feld extras) und spielt es in 3.5 ein.
 Anderer Ordner: Umgebungsvariable HOMEGYM_V32=<ordner mit index.html>
 
 Testdaten für tests/t30.py (3.4)

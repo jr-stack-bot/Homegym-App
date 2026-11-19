@@ -130,7 +130,7 @@ details.tip>div{padding-bottom:16px;color:var(--muted);max-width:62ch}
 details.tip div p{margin:0 0 8px}
 details.tip strong{color:var(--fg)}
 .field{display:flex;flex-direction:column;gap:6px}
-select,input[type=number],input[type=text],textarea{background:rgba(var(--ac),.05);color:var(--fg);border:1px solid var(--line2);border-radius:var(--rb);padding:10px 12px;font:inherit;width:100%}
+select,input[type=number],input[type=text],input[type=password],textarea{background:rgba(var(--ac),.05);color:var(--fg);border:1px solid var(--line2);border-radius:var(--rb);padding:10px 12px;font:inherit;width:100%}
 select option{background:var(--opt)}
 textarea{min-height:110px;font-size:12px;font-family:ui-monospace,monospace}
 .seg{display:flex;border:1px solid var(--line2);border-radius:var(--rb);padding:3px;gap:3px}
@@ -980,8 +980,8 @@ function drawShoe(x,kit,a,t,kn,s,mini,fy){if(drawShoe.bare&&typeof drawFootBare=
   x.strokeStyle="rgba(0,0,0,.22)";x.lineWidth=Math.max(.6,s*.4);x.beginPath();const c0=L(t,-1.9,-1.7),c1=L(t,-1.2,.2),c2=L(t,-1.5,1.6);x.moveTo(c0[0],c0[1]);x.quadraticCurveTo(c1[0],c1[1],c2[0],c2[1]);
   const h0=L(a,-3.25,-1.4),h1=L(a,-2.2,.3),h2=L(a,-3.3,1.6);x.moveTo(h0[0],h0[1]);x.quadraticCurveTo(h1[0],h1[1],h2[0],h2[1]);x.stroke();
   // accent swoosh + laces
-  x.strokeStyle=kit.dimmed?ACol(.25):ACol(.85);x.lineWidth=Math.max(.8,s*.7);x.beginPath();const w0=L(a,-2.4,.6),w1=L(a,1.5,-.4),w2=L(t,-1.5,.2);x.moveTo(w0[0],w0[1]);x.quadraticCurveTo(w1[0],w1[1],w2[0],w2[1]);x.stroke();
-  x.strokeStyle="rgba(230,238,242,.55)";x.lineWidth=Math.max(.6,s*.45);for(const u of[.4,1.6,2.8]){const p0=L(a,u,-3.05+u*.08),p1=L(a,u+.7,-2.2+u*.08);x.beginPath();x.moveTo(p0[0],p0[1]);x.lineTo(p1[0],p1[1]);x.stroke()}}
+  if(!COS){  x.strokeStyle=kit.dimmed?ACol(.25):ACol(.85);x.lineWidth=Math.max(.8,s*.7);x.beginPath();const w0=L(a,-2.4,.6),w1=L(a,1.5,-.4),w2=L(t,-1.5,.2);x.moveTo(w0[0],w0[1]);x.quadraticCurveTo(w1[0],w1[1],w2[0],w2[1]);x.stroke();
+  }x.strokeStyle="rgba(230,238,242,.55)";x.lineWidth=Math.max(.6,s*.45);for(const u of[.4,1.6,2.8]){const p0=L(a,u,-3.05+u*.08),p1=L(a,u+.7,-2.2+u*.08);x.beginPath();x.moveTo(p0[0],p0[1]);x.lineTo(p1[0],p1[1]);x.stroke()}}
 
 /* ---------- equipment (screen space) ---------- */
 const CAM=norm2([.5,.36]); /* projected direction of an axis that points towards the viewer */
@@ -1031,7 +1031,7 @@ function eqKit(ctx,s,mini){
   return{rod,hexHead,dumbbell,plate,band,padSeg,frame,floorShadow,chromeG}}
 
 const KNOWN_EQ=new Set(["plate","db","band","grip","bandHands","bandFront","box","bench","bar","wall","rackbar","benchF","bag","tread","cross"]);
-function drawFig(ctx,def,o,tr,g,time,c){
+function drawFig0(ctx,def,o,tr,g,time,c){
   const W=tr.W,H=tr.H,dpr=tr.dpr;const P=p=>[tr.ox+p[0]*tr.s,tr.oy-p[1]*tr.s];const R=r=>r*tr.s;const B=BODY[g],K=LOOK[g];const s=tr.s;
   const mini=W<110;const fl=tr.floor;const front=!!o.front;drawShoe.bare=!!def.bare;
   const EQ=eqKit(ctx,s,mini);
@@ -1039,6 +1039,7 @@ function drawFig(ctx,def,o,tr,g,time,c){
   let face=1;if(!front){const u0=norm2(sub(o.sh,o.hip));let nF=[u0[1],-u0[0]];if(def.flip)nF=[-nF[0],-nF[1]];face=nF[0]>=0?1:-1}
   const Ls=norm2([.55*face,-.85]);
   const light={lx:Ls[0],ly:Ls[1],gx0:face>0?W*.85:W*.15,gy0:0,gx1:face>0?W*.15:W*.85,gy1:H};
+  if(COS)CX={o,def,P,R,B,g,s,mini,front,fl,dpr};/* 3.5 costume hooks (no-op without a costume) */
   /* floor */
   if(fl!=null){let cx=front?0:(o.ankle[0]+o.ankle2[0])/2;if(tr.fx0!=null&&tr.fx1-tr.fx0>70)cx=Math.max(tr.fx0+28,Math.min(tr.fx1-28,cx));/* 3.3: the dark floor shadow stays inside the fit box (feet at the very edge: plank, push-up) */const F=P([cx,fl]);
     ctx.save();ctx.translate(F[0],F[1]);ctx.scale(1,.16);const rg=ctx.createRadialGradient(0,0,0,0,0,R(85));rg.addColorStop(0,ACol(.13));rg.addColorStop(1,ACol(0));ctx.fillStyle=rg;ctx.beginPath();ctx.arc(0,0,R(85),0,7);ctx.fill();
@@ -1110,7 +1111,7 @@ function drawFig(ctx,def,o,tr,g,time,c){
   /* grip hand stays visible in front of a plate */
   if(!front&&def.eq.some(e=>e.t==="plate"&&(e.at==="hand"||e.at==="back"))){const kit=bodyKit(ctx,tr,g,light,mini,false);const E_=P(o.elbow),H_=P(o.hand);
     const u0=norm2(sub(o.sh,o.hip));let nF=[u0[1],-u0[0]];if(def.flip)nF=[-nF[0],-nF[1]];const n=sideDir(E_,H_,[nF[0],-nF[1]]);
-    const t0=def.eq.some(e=>e.t==="plate"&&e.at==="back")?.0:.45;kit.limb(E_,H_,B.fa,n,K.skin,t0,1);drawFist(ctx,kit,H_,E_,g,s,mini,K.skin)}
+    const t0=def.eq.some(e=>e.t==="plate"&&e.at==="back")?.0:.45;kit.limb(E_,H_,B.fa,n,K.skin,t0,1);if(COS)cosFore(ctx,kit,E_,H_,n,t0);if(!(COS&&cosHand(ctx,kit,H_,E_,{m:"grip"},"hand")))drawFist(ctx,kit,H_,E_,g,s,mini,K.skin)}
   /* 3.1 (@ Joschy): muscle definition for the man (side + front), shading only - the outline stays the build */
   function mLine(x,a,c_,b,al,w){x.strokeStyle=`rgba(0,0,0,${al})`;x.lineWidth=Math.max(.6,s*w);x.lineCap="round";x.beginPath();x.moveTo(a[0],a[1]);x.quadraticCurveTo(c_[0],c_[1],b[0],b[1]);x.stroke()}
   function mGlow(x,p,r,al){const rg=x.createRadialGradient(p[0],p[1],0,p[0],p[1],r);rg.addColorStop(0,`rgba(255,236,214,${al})`);rg.addColorStop(1,"rgba(255,236,214,0)");x.fillStyle=rg;x.beginPath();circ(x,p,r);x.fill()}
@@ -1137,8 +1138,9 @@ function drawFig(ctx,def,o,tr,g,time,c){
       kit.limb(H_,K_,B.th,sd.thigh,K.skin);kit.limb(K_,A_,B.sn,sd.shin,K.skin);kit.cap(K_,R(B.knee),K.skin);
       if(K.botLen<.8){kit.limb(H_,K_,B.th,sd.thigh,K.bot,0,K.botLen,.6)}
       else{kit.limb(H_,K_,B.th,sd.thigh,K.bot,0,1,.45);kit.cap(K_,R(B.knee+.45),K.bot);kit.limb(K_,A_,B.sn,sd.shin,K.bot,0,K.botLen,.35);
-        if(!mini&&!kit.dimmed){x.strokeStyle=ACol(.45);x.lineWidth=Math.max(.6,s*.55);x.lineCap="round";x.beginPath();x.moveTo(H_[0],H_[1]);x.lineTo(K_[0],K_[1]);const e2=lerpP(K_,A_,K.botLen*.95);x.lineTo(e2[0],e2[1]);x.stroke()}}
+        if(!mini&&!kit.dimmed&&!COS){x.strokeStyle=ACol(.45);x.lineWidth=Math.max(.6,s*.55);x.lineCap="round";x.beginPath();x.moveTo(H_[0],H_[1]);x.lineTo(K_[0],K_[1]);const e2=lerpP(K_,A_,K.botLen*.95);x.lineTo(e2[0],e2[1]);x.stroke()}}
       if(g==="m"&&!mini&&!kit.dimmed)muscleLeg(x,kit,H_,K_,sd.thigh,B.th.f,B.th.b);
+      if(COS)cosLeg(x,kit,H_,K_,A_,sd.thigh,sd.shin,B.th,B.sn,!kit.dimmed);
       drawShoe(x,kit,A_,P(t),K_,s,mini,fl!=null?P([0,fl])[1]:null)}
     function arm(x,kit,sh,el,hd,sleeve,hk){const sd=armSides(sh,el,hd);const S_=P(sh),E_=P(el),Hd=P(hd);
       kit.limb(S_,E_,B.ua,sd.ua,K.skin);kit.limb(E_,Hd,B.fa,sd.fa,K.skin);kit.cap(E_,R(B.elbow),K.skin);
@@ -1146,7 +1148,8 @@ function drawFig(ctx,def,o,tr,g,time,c){
       const dc=lerpP(sh,el,.16);kit.blob(circlePts(P(dc),R(B.delt),mini?6:10,.86,Math.atan2(E_[1]-S_[1],E_[0]-S_[0])),K.skin,S_,E_,R(B.delt));
       if(sleeve){kit.limb(S_,E_,B.ua,sd.ua,K.top,0,sleeve,.7);kit.blob(circlePts(P(dc),R(B.delt+.7),mini?6:10,.86,Math.atan2(E_[1]-S_[1],E_[0]-S_[0])),K.top,S_,E_,R(B.delt))}
       if(g==="m"&&!mini&&!kit.dimmed)muscleArm(x,kit,S_,E_,sd.ua);
-      const hm=handMode(hk,el,hd);drawHand(x,kit,Hd,E_,g,s,mini,K.skin,hm.m,hm.d)}
+      if(COS)cosArm(x,kit,S_,E_,Hd,sd.ua,sd.fa,B.ua,!kit.dimmed);
+      const hm=handMode(hk,el,hd);if(!(COS&&cosHand(x,kit,Hd,E_,hm,hk)))drawHand(x,kit,Hd,E_,g,s,mini,K.skin,hm.m,hm.d)}
     // far side (dimmed)
     {const x=offF;const kit=bodyKit(x,tr,g,light,mini,true);kit.dimmed=true;
       leg(x,kit,o.hip,o.knee2,o.ankle2,o.toe2);arm(x,kit,o.sh,o.elbow2,o.hand2,K.sleeve,"hand2");
@@ -1170,8 +1173,9 @@ function drawFig(ctx,def,o,tr,g,time,c){
       x.strokeStyle=g==="m"?"rgba(0,0,0,.1)":"rgba(0,0,0,.22)";x.lineWidth=Math.max(.7,s*.7);const c0=P(add(ax(.66),[nF[0]*B.tf[4]*.95,nF[1]*B.tf[4]*.95])),c1=P(add(ax(.6),[nF[0]*2,nF[1]*2])),c2=P(add(ax(.52),[-nF[0]*2,-nF[1]*2]));
       x.beginPath();x.moveTo(c0[0],c0[1]);x.quadraticCurveTo(c1[0],c1[1],c2[0],c2[1]);x.stroke();
       kit.ao(P(add(o.sh,[-nF[0]*2-u[0]*6,-nF[1]*2-u[1]*6])),R(7),.25)}
+    if(COS)cosTorso(x,kit,{ax,nF,u,tp});
     // neck + head
-    drawHeadSide(x,kit,nF);
+    drawHeadSide(x,kit,nF);if(COS)cosHead(x,kit);
     // near leg (casts occlusion on torso/far parts)
     kit.occlude(()=>{const p=kit.limbPts(P(o.hip),P(o.knee),B.th,legSides(o.hip,o.knee,o.ankle).thigh);smooth(x,p)},R(1.6),.35);
     leg(x,kit,o.hip,o.knee,o.ankle,o.toe);
@@ -1253,6 +1257,7 @@ function drawFig(ctx,def,o,tr,g,time,c){
       kit.limb(H_,K_,thF,nT,K.skin);kit.limb(K_,A_,{f:B.sn.b,b:B.sn.f},nS,K.skin);kit.cap(K_,R(B.knee*.9),K.skin);
       if(K.botLen<.8){kit.limb(H_,K_,thF,nT,K.bot,0,K.botLen,.6);if(g==="m"&&!mini){const Lp=(t,v)=>{const c_=lerpP(H_,K_,t);const w=v>=0?kit.wOf(thF.f,t):kit.wOf(thF.b,t);return[c_[0]+nT[0]*w*v,c_[1]+nT[1]*w*v]};
         x.save();x.globalCompositeOperation="source-atop";mLine(x,Lp(.6,.15),Lp(.8,-.25),Lp(.96,-.7),.26,.6);mLine(x,Lp(.6,.55),Lp(.78,.45),Lp(.92,.15),.14,.5);mGlow(x,Lp(.72,.3),kit.wOf(thF.f,.72)*.55,.14);x.restore()}}else{kit.limb(H_,K_,thF,nT,K.bot,0,1,.45);kit.cap(K_,R(B.knee+.45),K.bot);kit.limb(K_,A_,{f:B.sn.b,b:B.sn.f},nS,K.bot,0,K.botLen,.35)}
+      if(COS)cosLeg(x,kit,H_,K_,A_,nT,nS,thF,{f:B.sn.b,b:B.sn.f},sg>0);
       // shoe seen from the front
       const sh0=[A_[0]+sg*R(2),A_[1]+R(1.2)];if(def.bare){x.beginPath();x.ellipse(sh0[0],sh0[1]+R(.6),R(3.6),R(3),0,0,7);x.fillStyle=kit.base(K.skin);x.fill()}else{x.beginPath();x.ellipse(sh0[0],sh0[1],R(5.4),R(3.4),0,0,7);x.fillStyle=kit.base(K.shoe);x.fill();
       x.beginPath();x.ellipse(sh0[0],sh0[1]+R(2.4),R(5.6),R(1.6),0,0,7);x.fillStyle=K.sole;x.fill()}}
@@ -1273,6 +1278,7 @@ function drawFig(ctx,def,o,tr,g,time,c){
     // neckline
     {const n0=P([-B.neck*1.15,shY+6.5]),n1=P([0,shY+(g==="f"?-1:2.5)]),n2=P([B.neck*1.15,shY+6.5]);x.beginPath();x.moveTo(n0[0],n0[1]);x.quadraticCurveTo(n1[0],n1[1],n2[0],n2[1]);x.lineTo(n2[0],n0[1]-R(3));x.lineTo(n0[0],n0[1]-R(3));x.closePath();x.fillStyle=kit.base(K.skin);x.fill();
       x.strokeStyle="rgba(0,0,0,.25)";x.lineWidth=Math.max(.7,s*.8);x.beginPath();x.moveTo(n0[0],n0[1]);x.quadraticCurveTo(n1[0],n1[1],n2[0],n2[1]);x.stroke()}
+    if(COS)cosTorsoF(x,kit,tor,shY,hipY,G);
     if(o._T&&o._T.tilt){const pn=P([0,shY+6]);x.save();x.translate(pn[0],pn[1]);x.rotate(rad(o._T.tilt));x.translate(-pn[0],-pn[1])}
     const hd=P(Q.head),hr=R(B.head);const fem=g==="f";
     /* 3.1 f: hair pulled back into a ponytail that swings out behind the head on one side (nothing hangs along the jaw) */
@@ -1294,6 +1300,7 @@ function drawFig(ctx,def,o,tr,g,time,c){
       x.strokeStyle=fem?"rgba(60,30,20,.3)":"rgba(60,30,20,.45)";x.lineWidth=Math.max(.6,hr*.06);x.beginPath();x.moveTo(hd[0],hd[1]+hr*.05);x.lineTo(hd[0]-hr*.06,hd[1]+hr*.3);x.lineTo(hd[0]+hr*.06,hd[1]+hr*.32);x.stroke();
       if(fem){x.fillStyle="rgba(165,64,62,.75)";x.beginPath();x.moveTo(hd[0]-hr*.19,hd[1]+hr*.53);x.quadraticCurveTo(hd[0],hd[1]+hr*.47,hd[0]+hr*.19,hd[1]+hr*.53);x.quadraticCurveTo(hd[0],hd[1]+hr*.64,hd[0]-hr*.19,hd[1]+hr*.53);x.fill()}
       else{x.strokeStyle="rgba(40,20,14,.6)";x.beginPath();x.moveTo(hd[0]-hr*.2,hd[1]+hr*.55);x.quadraticCurveTo(hd[0],hd[1]+hr*.62,hd[0]+hr*.2,hd[1]+hr*.55);x.stroke()}}
+    if(COS)cosHeadF(x,kit,hd,hr);
     if(o._T&&o._T.tilt)x.restore();
     // arms
     const us=o._us;
@@ -1302,7 +1309,8 @@ function drawFig(ctx,def,o,tr,g,time,c){
       kit.limb(A_,E_,sc,n1,K.skin);kit.limb(E_,Hd,B.fa,n2,K.skin);kit.cap(E_,R(B.elbow),K.skin);
       const dc=lerpP(Q[a],Q[b],.1);kit.blob(circlePts(P(dc),R(B.delt*.78),mini?6:10,.82,Math.atan2(E_[1]-A_[1],E_[0]-A_[0])),K.sleeve?K.top:K.skin,A_,E_,R(B.delt));
       if(K.sleeve)kit.limb(A_,E_,sc,n1,K.top,0,K.sleeve*(us<.6?.5:1),.35);
-      const hm=handMode(h,Q[b],Q[h]);drawHand(x,kit,Hd,E_,g,s,mini,K.skin,hm.m,hm.d)}
+      if(COS)cosArm(x,kit,A_,E_,Hd,n1,n2,sc,sg>0);
+      const hm=handMode(h,Q[b],Q[h]);if(!(COS&&cosHand(x,kit,Hd,E_,hm,h)))drawHand(x,kit,Hd,E_,g,s,mini,K.skin,hm.m,hm.d)}
     if(o._T)x.restore();
   }
 }
@@ -1524,7 +1532,7 @@ function renderCanvas(c,now){const def=c._def;const dpr=Math.min(window.devicePi
   phaseAt.still=!!c._still;const{o,ph,lbl,dd}=c._loop&&!c._still&&typeof yLoopPose==="function"?yLoopPose(c._loop,time):animPose(def,c._still?def.tempo[0]*.55:time,c._g);phaseAt.still=false;
   /* 3.3 (@ Joschy): the fit box covers the whole loop (c._b) plus the yoga mat; the labels on the stage (phase/tempo on top,
      region/readout at the bottom) get their own bands, so the figure never runs under them. Scale is constant over the loop. */
-  const b=c._b._f||(c._b._f=fitBox(def,c._b));const mini=W<110;const pad=mini?6:18;const ov=c._ovK===W+"x"+H?c._ov:(c._ovK=W+"x"+H,c._ov=ovBands(c));
+  const b=cosFit(c,c._b._f||(c._b._f=fitBox(def,c._b)));/* 3.5: a little more room for costumes (unchanged without) */const mini=W<110;const pad=mini?6:18;const ov=c._ovK===W+"x"+H?c._ov:(c._ovK=W+"x"+H,c._ov=ovBands(c));
   const top=Math.max(mini?6:34,ov.t);const padB=Math.max(pad,ov.b);const s=Math.min((W-2*pad)/(b.x1-b.x0),(H-top-padB)/(b.y1-b.y0));
   const ox=(W-(b.x1-b.x0)*s)/2-b.x0*s;const oy=H-padB+b.y0*s-((H-top-padB)-(b.y1-b.y0)*s)/2;
   drawFig(ctx,dd||def,o,{s,ox,oy,floor:c._fl,bx0:b.bx0,bx1:b.bx1,fx0:b.x0,fx1:b.x1,W,H,dpr},c._g,time,c);
@@ -2634,6 +2642,7 @@ function renderSet(){const st=S.settings;const gearDraft=[...myGear()];gearDraft
    <div class="field"><span class="label">Aufwärmsätze</span><div class="seg"><button data-wsets="1" aria-pressed="${st.warmSets!==false}">An</button><button data-wsets="0" aria-pressed="${st.warmSets===false}">Aus</button></div><span class="muted" style="font-size:12.5px">Vor der ersten Hauptübung mit Gewicht: 40 % × 8, 60 % × 5, 80 % × 3, passend zu deinen Scheiben und Hanteln. Das allgemeine Aufwärmen ist dafür kürzer.</span></div>
    <div class="field"><span class="label">Animierte Figur</span><div class="seg">${[["mix","Abwechselnd"],["m","Mann"],["f","Frau"]].map(([v,l])=>`<button data-fig="${v}" aria-pressed="${(st.fig||"mix")===v}">${l}</button>`).join("")}</div></div>
    <div class="field"><span class="label">Animationstempo</span><div class="seg">${[[.75,"Langsam · 0,75×"],[1,"Normal · 1×"]].map(([v,l])=>`<button data-aspd="${v}" aria-pressed="${animSpd()===v}">${l}</button>`).join("")}</div><span class="muted" style="font-size:12.5px">Wie schnell die Figur die Übungen vormacht. Langsam hilft beim Lernen der Technik.</span></div></div>
+  ${extrasCard()}
   ${hasGear("barbell")?"":"<!--"}<div class="card"><div class="label">Langhantel</div><div class="seg">${[20,15].map(n=>`<button data-bar="${n}" aria-pressed="${+st.bar===n}">${n} kg Stange</button>`).join("")}</div>
    <div class="label">Scheiben pro Seite</div><div class="platecount">${sizes.map(s=>`<label><span><i class="swatch" style="background:${plateColor(+s)}"></i>${s.replace(".",",")} kg</span><input type="number" min="0" max="6" inputmode="numeric" id="pc${s.replace(".","_")}" data-pc="${s}" value="${st.plates[s]||0}"></label>`).join("")}</div>
    <p class="muted" style="font-size:12.5px;margin:0">Anzahl der Scheiben, die du auf <b>eine</b> Seite stecken kannst. Trag hier ein, welche Scheiben du wirklich hast. Danach rechnet der Scheiben-Rechner.</p></div>${hasGear("barbell")?"":"-->"}
@@ -2643,7 +2652,7 @@ function renderSet(){const st=S.settings;const gearDraft=[...myGear()];gearDraft
   <p class="muted" style="font-size:12px;text-align:center;margin:0" id="verLine">Homegym · Version ${APP_VER} · @ Joschy</p>`;
   const wDraft=weightsDraft();bindGear("s",gearDraft,()=>renderWEd(gearDraft,wDraft));
   $("#gearSave").onclick=()=>{S.profile={...(S.profile||{}),gear:[...gearDraft],gearV:2,preset:gearDraft._picked||presetOf(gearDraft),weights:normWeights(wDraft),kbMix:wDraft._kbMix!==false};const ch=adaptSession();save();toast(ch?"Plan an neue Geräte angepasst":"Geräte gespeichert");renderSet()};
-  $("#bkBtn").onclick=openBackup;
+  $("#bkBtn").onclick=openBackup;bindExtras();
   for(const b of document.querySelectorAll("[data-th]"))b.onclick=()=>{st.theme=b.dataset.th;save();applyTheme(st.theme);for(const t of document.querySelectorAll("[data-th]"))t.setAttribute("aria-checked",t.dataset.th===st.theme)};
   for(const b of document.querySelectorAll("[data-goal]"))b.onclick=()=>{st.goal=+b.dataset.goal;save();renderSet()};
   for(const b of document.querySelectorAll("[data-rf]"))b.onclick=()=>{st.restF=+b.dataset.rf;save();renderSet()};
@@ -2743,7 +2752,7 @@ const MOTION={
 };
 for(const k in MOTION){const d=AN[k];if(!d)continue;const m=MOTION[k];for(const f in m){if(f==="A"||f==="B")Object.assign(d[f],m[f]);else d[f]=m[f]}}
 /* ================= 2.1 · HALTE-ÜBUNGEN · KETTLEBELL · GERÄTE-GEWICHTE · BACKUP (@ Joschy) ================= */
-const APP_VER="3.4",BK_VER=5;/* 3.0–3.4 keep backup format 5: all new fields are optional, older apps simply ignore them */
+const APP_VER="3.5",BK_VER=5;/* 3.0–3.4 keep backup format 5: all new fields are optional, older apps simply ignore them */
 /* ---- hold / tempo variants (strength stays the focus: they are alternatives, never forced) ---- */
 Object.assign(EX,{
   pushpause:{n:"Liegestütze mit Halt in der Mitte",eq:"Matte · Griffe optional",m:"Brust · Trizeps · Schultern",type:"bw",rest:90,inc:0,hold:3,holdAt:"auf halber Höhe",base:"pushup",
@@ -2944,6 +2953,7 @@ function sanitize3(st){const obj=v=>!!v&&typeof v==="object"&&!Array.isArray(v);
   const ss=st.session;if(ss){if(ss.wu!=null&&!(obj(ss.wu)&&EX[ss.wu.ex]&&Array.isArray(ss.wu.sets)&&ss.wu.sets.length===WU.length&&ss.wu.sets.every(obj)))delete ss.wu;
     if(ss.wuPrev!=null){ss.wuPrev=Array.isArray(ss.wuPrev)?ss.wuPrev.filter(x=>obj(x)&&EX[x.ex]&&Array.isArray(x.sets)).map(x=>({ex:x.ex,sets:x.sets.filter(s=>obj(s)&&fin(+s.w)&&fin(+s.r))})).filter(x=>x.sets.length):[];if(!ss.wuPrev.length)delete ss.wuPrev}
     for(const l of ss.log)if(l.eff!=null&&!EFF[l.eff])delete l.eff;if(ss.effFor!=null&&!(Number.isInteger(ss.effFor)&&ss.effFor>=0&&ss.effFor<ss.log.length))delete ss.effFor;if(ss.unit==null)ss.unit=!ss.quick}
+  st.extras=exNorm(st.extras);/* 3.5 Extras: tolerant, alte Backups ohne Feld = gesperrt */
   if(st.meas!=null)st.meas=normMeas(st.meas);/* 3.0 Körpermaße: tolerant, kaputte Einträge fallen weg */
   st.prog=validProg(st.prog)?normProg(st.prog):normProg(deriveProg(st));return st}
 function natBk(){try{const A=window.Android;return A&&typeof A.saveBackup==="function"&&typeof A.openBackup==="function"?A:null}catch(e){return null}}
@@ -3148,6 +3158,7 @@ Object.assign(AN,{
 /*YOGA*/
 /*HANG*/
 /*KRAFT*/
+/*COSTUME*/
 
 /* ================= DESIGNS (2.3) ================= */
 function curTheme(){const t=S&&S.settings&&S.settings.theme;return THEME_KEYS.includes(t)?t:"arc"}
@@ -3207,6 +3218,7 @@ new MutationObserver(()=>{FX.hd=true;fxKick()}).observe(document.body,{subtree:t
 /* ================= BOOT ================= */
 normTempo();
 if(S.session&&typeof S.session==="object"&&!Array.isArray(S.session.items)){S.session.items=planItems(S.session.plan||"A",false,S.session.week||1);S.session.warm=WARM}/* very old running session */
+{const e=exNorm(S.extras);if(JSON.stringify(e)!==JSON.stringify(S.extras)){S.extras=e;save()}}/* 3.5 Extras (idempotent) */
 migrate3();/* 3.0: plan position from completed units (idempotent; also runs after a backup import, which reloads) */
 applyTheme(curTheme());
 go("home");

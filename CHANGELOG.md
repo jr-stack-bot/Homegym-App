@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.5
+- **Extras: Kampfsport-Kostüme** (unter Einstellungen › Extras, mit Kennwort freischaltbar):
+  - **19 frei gestaltete Kostüme** für Mann und Frau: Karate, Judo, BJJ, Taekwondo, Boxen, Muay Thai, Kickboxen, Ringen, MMA, Sambo, Kung-Fu, Capoeira, Kendo, Ninja, Samurai, Gladiator, Krav Maga, Fechten und Sumo. Generische Sportkleidung in sportüblichen Farben, ohne Marken, Logos oder Schriftzeichen.
+  - Mit Kostüm wirkt die Figur **muskulöser** (breitere Schultern, kräftigere Arme und Beine). Kleidung, Gürtel, Handschuhe und Helme laufen in allen Kraft-, Yoga- und Hang-Animationen mit.
+  - Getrennte Wahl für **Mann und Frau**: „Kein Kostüm“, ein festes Kostüm oder **„Zufällig pro Training“** (bleibt bis zum Ende der Einheit gleich), mit animierter Vorschau.
+  - Die Freischaltung bleibt gespeichert und ist im **Backup** enthalten (Format unverändert, ältere Backups bleiben lesbar).
+- Ohne Kostüm sieht die Figur **genau so aus wie in 3.4**.
+
 ## 3.4
 - **58 neue Yoga-Haltungen** (jetzt 154):
   - **Rotation nur beim Wiederholen einer Woche**: der erste Durchgang bleibt wie bisher, ab dem zweiten werden bis zu 2 Haltungen im Hauptteil und das Ankommen durch Haltungen derselben Zielregion ersetzt (höchstens die Stufe der Woche).
