@@ -1087,13 +1087,13 @@ const YROT={
   taube:["feuerholz","kuhgesichtsitz","stehtaube"],malasana:["graetsche","schneidervor"],bogen:["bruecke1"],seitausfall:["goettinseit"],baum:["stehtaube"],
   koenigstaube:["kuhgesichtsitz","lotus"],taenzer:["lotusstand"],echseunter:["feuerholz","lotus"],
   /* Rücken, Brust, Beine, Ganzkörper */
-  katzekuh:["tiger"],vierfuessler:["tiger","kniebrett"],sphinx:["halbheuschrecke","tiger"],kobra:["halbheuschrecke","superman"],krokodil:["halbheuschrecke"],windloeser:["kind","kniebrust"],
+  katzekuh:["tiger"],vierfuessler:["tiger","halbheuschrecke"],sphinx:["halbheuschrecke","tiger"],kobra:["halbheuschrecke","superman"],krokodil:["halbheuschrecke"],windloeser:["kind","kniebrust"],
   seitbeuge:["sitzdreh"],sitzseitbeuge:["sitzdreh"],kniebrust:["stab"],ragdoll:["drehvorbeuge"],stuhldreh:["drehausfall","drehvorbeuge"],drehsitz:["marichi3","bharadvaja"],
   seitwinkel:["drehausfall","graetschseit"],umkrieger:["graetschseit"],heuschrecke:["superman"],robbe:["superman"],hochhund:["superman"],pflug:["ohrendruck"],
   kamel:["rueckbeuge","achtpunkt"],fisch:["rueckbeuge"],tisch:["achtpunkt"],fersensitz:["rueckbeuge"],kraehe:["pfau","waage"],chaturanga:["pfau"],umgbrett:["bogenvoll"],rad:["bogenvoll"],kameltief:["bogenvoll"],
-  beingurt:["liegevishnu","marichi1"],pyramide:["marichi1","kopfkniestand"],sitzvorbeuge:["marichi1","schildkroete"],kopfknie:["marichi1","drehkopfknie"],heldensitz:["liegheld","frosch"],oberschenkel:["liegheld"],
+  beingurt:["liegevishnu","marichi1"],pyramide:["marichi1","kopfkniestand"],sitzvorbeuge:["marichi1","beingurt"],kopfknie:["marichi1","liegevishnu"],heldensitz:["liegheld","frosch"],oberschenkel:["liegheld"],
   zehensitz:["liegheld"],halbspagat:["spagat"],krieger3:["stehspagat","kopfkniestand"],halbmondbal:["stehspagat"],drehhalbmond:["kopfkniestand"],drehdreieck:["reiher"],
-  streckung:["stern","palme"],brett:["unterarmstuetz","kniebrett"],seitstuetz:["seitunterarm"],seitstuetzbein:["seitunterarm"],bootkn:["zehenboot"],bootvoll:["zehenboot"],
+  streckung:["stern","palme"],brett:["unterarmstuetz","kniebrett"],seitstuetz:["seitunterarm"],seitstuetzbein:["seitunterarm"],bootkn:["unterarmstuetz"],bootvoll:["seitunterarm"],
   kopfstand:["halbschulter"],schulterstand:["halbschulter"],
   /* Ankommen (Aufwärmen) */
   sukhasana:["wechselatmung","bienenatmung"],feueratem:["wechselatmung"]};

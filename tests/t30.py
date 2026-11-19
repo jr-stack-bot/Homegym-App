@@ -136,12 +136,13 @@ async def main():
             if not same31(a,b2):print('DIFF',[(k,x,y) for k in a for x,y in zip(a[k],b2[k]) if x!=y][:8])
             chk(same31(a,b2) and mains(b2)>=12,f'preset {name}: all 12 sessions as in 3.1, main lifts strict at every position ({mains(b2)} main-lift slots); plus grip block, only assistance/bonus sets may be shortened for the hour')
         a=await pg.evaluate(PLAN,'["db","bench","band"]');b2=await po.evaluate(PLAN,'["db","bench","band"]')
-        # 3.4: Face Pulls brauchen Band + Rack -> bei "Nur Kurzhanteln" ersetzt durch eine Nebenübung (gleiche Sätze), sonst wie 3.1
-        fp=[(k,x[0]) for k in b2 for x,y in zip(a[k],b2[k]) if y[0]=='facepull']
-        a2={k:[(list(y[:1])+list(x[1:4])+[y[4]] if y[0]=='facepull' and not x[4] and x[1]==y[1] and x[0]!='facepull' else x) for x,y in zip(a[k],b2[k])]+a[k][len(b2[k]):] for k in a}
+        # 3.4: Band-am-Rack-Übungen (Face Pulls, Trizepsdrücken am Band) brauchen Band + Rack -> bei "Nur Kurzhanteln" ersetzt durch eine Nebenübung (gleiche Sätze), sonst wie 3.1
+        RB=('facepull','pushdown')
+        fp=[(k,x[0]) for k in b2 for x,y in zip(a[k],b2[k]) if y[0] in RB]
+        a2={k:[(list(y[:1])+list(x[1:4])+[y[4]] if y[0] in RB and not x[4] and x[1]==y[1] and x[0] not in RB else x) for x,y in zip(a[k],b2[k])]+a[k][len(b2[k]):] for k in a}
         def same31fp(a,b2):
-            return a.keys()==b2.keys() and all(len(a[k])==len(b2[k]) and all(x[0]==y[0] and (x[2:4]==y[2:4] or y[0]=='facepull') and x[4]==y[4] and (x[1]==y[1] if y[4] else 1<=x[1]<=y[1]) for x,y in zip(a[k],b2[k])) for k in a)
-        chk(same31fp(a2,b2) and mains(b2)>=12 and fp and all(e!='facepull' for _,e in fp),f'preset Nur Kurzhanteln: all 12 sessions as in 3.1 except Face Pulls (need rack) -> {sorted(set(e for _,e in fp))}, main lifts strict at every position ({mains(b2)} slots); plus grip block')
+            return a.keys()==b2.keys() and all(len(a[k])==len(b2[k]) and all(x[0]==y[0] and (x[2:4]==y[2:4] or y[0] in RB) and x[4]==y[4] and (x[1]==y[1] if y[4] else 1<=x[1]<=y[1]) for x,y in zip(a[k],b2[k])) for k in a)
+        chk(same31fp(a2,b2) and mains(b2)>=12 and fp and all(e not in RB for _,e in fp),f'preset Nur Kurzhanteln: all 12 sessions as in 3.1 except band+rack exercises -> {sorted(set(e for _,e in fp))}, main lifts strict at every position ({mains(b2)} slots); plus grip block')
         await po.close()
         sw=await pg.evaluate("()=>{const it=planItems('A',false,1)[0];const p=swapPool(it,'A');return{p,gear:p.filter(k=>TRANK[EX[k].type]<3).length,bw:p.filter(k=>EX[k].bwx).length}}")
         chk(sw['p'][0]=='bench' and sw['gear']>=2 and sw['bw']>=1,f"swap dialog (Joschy, bench): equipment first, bodyweight options added {sw['p']}")

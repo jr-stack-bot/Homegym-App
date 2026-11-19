@@ -111,7 +111,7 @@ async def main():
             for k in o:
                 if len(a[k])!=len(o[k]):diff.append((k,'len'));continue
                 for x,y in zip(a[k],o[k]):
-                    if g=='["db","bench","band"]' and y[0]=='facepull' and x[0]!='facepull' and not x[4] and x[1]==y[1]:continue  # 3.4: Face Pulls brauchen Rack
+                    if g=='["db","bench","band"]' and y[0] in ('facepull','pushdown') and x[0] not in ('facepull','pushdown') and not x[4] and x[1]==y[1]:continue  # 3.4: Face Pulls/Trizepsdrücken am Band brauchen Rack
                     if x[0]!=y[0] or x[2:]!=y[2:] or (x[4] and x[1]!=y[1]) or x[1]>y[1] or x[1]<min(y[1],2 if not x[5] else 1):diff.append((k,x,y))
             chk(not diff,f'{g}: vs 3.2 before the feature: same exercises, same rep targets, main lifts (all positions) same sets (only assistance/bonus shortened for the hour) {diff[:3]}')
         await po.close()
