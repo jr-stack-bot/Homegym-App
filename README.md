@@ -12,11 +12,11 @@ Android-App für Krafttraining zu Hause: geführte Trainings mit animierten Übu
 
 ## Was die App kann
 - **4-Wochen-Trainingsplan** mit 12 Einheiten, der **nach erledigten Einheiten** weiterläuft (keine Einheit fällt aus, leichter Wiedereinstieg nach 14 Tagen Pause), als Push/Pull/Beine-Split (A Drücken · B Ziehen · C Beine), jede Muskelgruppe mit einer Woche Erholung. Komplett- oder Kurzversion, max. 60 Minuten inkl. Aufwärmen.
-- **259 animierte Kraft-Übungen** (davon 19 Halte-Übungen) mit Technik-Hinweisen; Figuren abwechselnd Mann/Frau mit menschlichen Bewegungsabläufen: weiches Tempo (1 s hoch, 2 s runter), Atmung, Gewichtsverlagerung, Hände mit Fingern und abrollende Füße.
+- **259 animierte Kraft-Übungen** mit Technik-Hinweisen; Figuren abwechselnd Mann/Frau mit menschlichen Bewegungsabläufen: weiches Tempo (1 s hoch, 2 s runter), Atmung, Gewichtsverlagerung, Hände mit Fingern und abrollende Füße.
 - **Halte-Übungen und Bonus-Finisher**: jede Einheit endet mit einer Halte-Übung als Bonus, weiterhin max. 60 Minuten.
 - **Anpassung an die eigenen Geräte** (25 Geräte, Presets inkl. „Joschys Homegym“): Trainings passen sich automatisch an, „Tauschen“ bietet nur machbare Übungen derselben Muskelfunktion.
 - **Geräte-Editor**: Geräte jederzeit ändern, Gewichtslisten je Gerät (Kurzhanteln, Kettlebells, Bänder) für passende Gewichtsvorschläge, Kettlebells wahlweise in den Plan einmischen oder nur als Ersatz.
-- **Yoga & Dehnen** als Zusatz: **154 Haltungen in drei Stufen** (Anfänger, Fortgeschritten, Profi) mit Animation und Atem-Hinweisen, Haltungen wechseln von Einheit zu Einheit, Knopf „Andere Haltung“, jede als ganzer Weg Stehen → Haltung → Stehen; 24-Wochen-Plan mit einer Einheit pro Woche, **Startstufe wählbar** (Profi erst nach Sicherheitsabfrage), bei Profi-Haltungen **Sicherheits-Hinweise** und eine **leichtere Variante** auf Knopfdruck; Schnell-Dehnen und Dehnen nach dem Training.
+- **Yoga & Dehnen** als Zusatz: **154 Haltungen in drei Stufen** (Anfänger, Fortgeschritten, Profi) mit Animation und Atem-Hinweisen, beim Wiederholen einer Woche wechseln Haltungen, Knopf „Andere Haltung“, jede als ganzer Weg Stehen → Haltung → Stehen; 24-Wochen-Plan mit einer Einheit pro Woche, **Startstufe wählbar** (Profi erst nach Sicherheitsabfrage), bei Profi-Haltungen **Sicherheits-Hinweise** und eine **leichtere Variante** auf Knopfdruck; Schnell-Dehnen und Dehnen nach dem Training.
 - **41 neue Übungen ohne Geräte** in den Stufen leicht / mittel / schwer, teils mit Alltagsgegenständen (Wand, Stuhl, Tisch, Handtuch, Rucksack, Wasserflaschen); die Steigerung schlägt die nächst schwerere Variante vor, das Preset „Ohne Geräte“ bietet 12 abwechslungsreiche Einheiten.
 - **Griffkraft & Hängen**: Block am Zieh-Tag in 4 Stufen bis zum Handtuch-Hang (Zeit steigt automatisch), Farmer's Hold am Beintag, Hang-Test alle 4 Wochen mit Kurve (Ziel 1–2 Minuten frei hängen) und freiwillige Hang-Pause an freien Tagen.
 - **Animationstempo** in den Einstellungen anpassbar.
@@ -45,7 +45,7 @@ Android-App für Krafttraining zu Hause: geführte Trainings mit animierten Übu
 
 | Yoga in drei Stufen | Ohne Geräte | Griffkraft & Hängen | Hang-Test |
 |---|---|---|---|
-| <img src="docs/screenshots/12_yoga_stufen.png" width="200" alt="Yoga-Bibliothek mit 96 Haltungen und den Stufen Anfänger, Fortgeschritten, Profi"> | <img src="docs/screenshots/13_ohne_geraete.png" width="200" alt="Training ohne Geräte: Seitheben mit Wasserflaschen"> | <img src="docs/screenshots/14_griffkraft.png" width="200" alt="Training: Hängen mit Fußstütze, Stufe 1 von 4, nur Sekunden"> | <img src="docs/screenshots/15_hang_test.png" width="200" alt="Verlauf: Hang-Test-Kurve mit Ziellinien 1 und 2 Minuten"> |
+| <img src="docs/screenshots/12_yoga_stufen.png" width="200" alt="Yoga-Bibliothek mit 154 Haltungen und den Stufen Anfänger, Fortgeschritten, Profi"> | <img src="docs/screenshots/13_ohne_geraete.png" width="200" alt="Training ohne Geräte: Seitheben mit Wasserflaschen"> | <img src="docs/screenshots/14_griffkraft.png" width="200" alt="Training: Hängen mit Fußstütze, Stufe 1 von 4, nur Sekunden"> | <img src="docs/screenshots/15_hang_test.png" width="200" alt="Verlauf: Hang-Test-Kurve mit Ziellinien 1 und 2 Minuten"> |
 
 **Alle 8 Designs im Vergleich** (Startseite: Arc Blau, Iron Man, Toxic, Cyber, Sunset, Eis, Stealth, Tag):
 
@@ -114,7 +114,7 @@ Aktuell: **3.4**. Details in [CHANGELOG.md](CHANGELOG.md).
 
 | Version | Wichtigste Neuerungen |
 |---|---|
-| 3.4 | 58 neue Yoga-Haltungen (154) mit Rotation und „Andere Haltung“; 100 neue Kraftübungen (259) auf Nebenplätzen in jedem zweiten Zyklus, Hauptübungen unverändert; Übungsblatt mit Atmung/Leichter/Achtung; Layout-Fix bei 130 % Schrift |
+| 3.4 | 58 neue Yoga-Haltungen (154), Rotation beim Wiederholen einer Woche, „Andere Haltung“, Dehn-Abläufe wechseln wöchentlich; 100 neue Kraftübungen (259) auf Nebenplätzen in jedem zweiten Zyklus und bei „Tauschen“, Hauptübungen unverändert; Übungsblatt mit Atmung/Leichter/Achtung; Geräte- und Layout-Fixes |
 | 3.3 | Griffkraft & Hängen: Block am Zieh-Tag in 4 Stufen, Farmer's Hold am Beintag, Hang-Test alle 4 Wochen mit Kurve, Hang-Pause an freien Tagen; Anzeige-Fixes (nichts abgeschnitten, 360 px/große Schrift, Halte-Übungen mit Haltezeit) |
 | 3.2 | Yoga mit 96 Haltungen in drei Stufen (Anfänger/Fortgeschritten/Profi), 24-Wochen-Plan, Startstufe wählbar, Sicherheits-Hinweise und leichtere Variante; 41 neue Übungen ohne Geräte (leicht/mittel/schwer), Preset „Ohne Geräte“ mit 12 abwechslungsreichen Einheiten |
 | 3.1 | Figuren überarbeitet: Frau ohne Kinnschatten, weiblicheres Gesicht und Proportionen, natürlicher Pferdeschwanz; Mann athletischer mit Muskelzeichnung; Bewegungen unverändert |

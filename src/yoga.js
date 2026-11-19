@@ -360,7 +360,7 @@ Object.assign(YP,{
 });
 
 /* ================= 3.4 · YOGA-BIBLIOTHEK ERWEITERT (@ Joschy) =================
-   59 neue Haltungen (Anfänger, Fortgeschritten, Profi). Jede neue Haltung hat eine leichtere Variante (alt); belastende Haltungen
+   58 neue Haltungen (Anfänger, Fortgeschritten, Profi). Jede neue Haltung hat eine leichtere Variante (alt); belastende Haltungen
    für Schulter, Hüfte oder Knie zusätzlich einen Achtung-Hinweis (risk). Animationen über dieselbe Engine (Stand -> Haltung -> Stand). */
 Object.assign(YRISK,{
   shoulder:"Belastet die Schultern: nur so weit gehen, wie es schmerzfrei ist, Schultern weg von den Ohren. Bei Schulterbeschwerden die leichtere Variante nehmen.",
@@ -1078,7 +1078,7 @@ if(S.yrun&&S.yrun.ph==="done"){/* finished before the app closed: keep the resul
    Haltezeiten werden wie bisher über yScale auf die Zieldauer gebracht, die Dauer der Abläufe bleibt gleich. */
 const YROT={
   /* Schultern (bleibt Schulter) */
-  schulterkreisen:["sitzberg","wandhund"],armquer:["wandhund"],trizeps:["sitzberg"],adlerarm:["wandhund"],wandengel:["sitzberg","wandhund"],brustoeffner:["wandhund"],
+  schulterkreisen:["sitzberg","wandhund"],armquer:["wandhund"],trizeps:["sitzberg"],adlerarm:["wandhund"],wandengel:["sitzberg","wandhund"],brustoeffner:["rueckbeuge"],
   armeheben:["sitzberg","wandhund"],hund:["wandhund"],welpe:["yogamudra","wandhund"],faden:["wandhund","yogamudra"],kuhgesicht:["yogamudra","demkrieger"],delfin:["yogamudra"],
   adler:["demkrieger"],delfinkopf:["wandl"],unterarmvor:["unterarmstand","handstand"],
   /* Hüfte (bleibt Hüfte) */
@@ -1087,10 +1087,10 @@ const YROT={
   taube:["feuerholz","kuhgesichtsitz","stehtaube"],malasana:["graetsche","schneidervor"],bogen:["bruecke1"],seitausfall:["goettinseit"],baum:["stehtaube"],
   koenigstaube:["kuhgesichtsitz","lotus"],taenzer:["lotusstand"],echseunter:["feuerholz","lotus"],
   /* Rücken, Brust, Beine, Ganzkörper */
-  katzekuh:["tiger"],vierfuessler:["tiger","kniebrett"],sphinx:["halbheuschrecke","tiger"],kobra:["halbheuschrecke","superman"],krokodil:["halbheuschrecke"],windloeser:["kniestand"],
+  katzekuh:["tiger"],vierfuessler:["tiger","kniebrett"],sphinx:["halbheuschrecke","tiger"],kobra:["halbheuschrecke","superman"],krokodil:["halbheuschrecke"],windloeser:["kind","kniebrust"],
   seitbeuge:["sitzdreh"],sitzseitbeuge:["sitzdreh"],kniebrust:["stab"],ragdoll:["drehvorbeuge"],stuhldreh:["drehausfall","drehvorbeuge"],drehsitz:["marichi3","bharadvaja"],
   seitwinkel:["drehausfall","graetschseit"],umkrieger:["graetschseit"],heuschrecke:["superman"],robbe:["superman"],hochhund:["superman"],pflug:["ohrendruck"],
-  kamel:["rueckbeuge","achtpunkt"],fisch:["rueckbeuge"],tisch:["achtpunkt"],fersensitz:["loewe"],kraehe:["pfau","waage"],chaturanga:["pfau"],umgbrett:["bogenvoll"],rad:["bogenvoll"],kameltief:["bogenvoll"],
+  kamel:["rueckbeuge","achtpunkt"],fisch:["rueckbeuge"],tisch:["achtpunkt"],fersensitz:["rueckbeuge"],kraehe:["pfau","waage"],chaturanga:["pfau"],umgbrett:["bogenvoll"],rad:["bogenvoll"],kameltief:["bogenvoll"],
   beingurt:["liegevishnu","marichi1"],pyramide:["marichi1","kopfkniestand"],sitzvorbeuge:["marichi1","schildkroete"],kopfknie:["marichi1","drehkopfknie"],heldensitz:["liegheld","frosch"],oberschenkel:["liegheld"],
   zehensitz:["liegheld"],halbspagat:["spagat"],krieger3:["stehspagat","kopfkniestand"],halbmondbal:["stehspagat"],drehhalbmond:["kopfkniestand"],drehdreieck:["reiher"],
   streckung:["stern","palme"],brett:["unterarmstuetz","kniebrett"],seitstuetz:["seitunterarm"],seitstuetzbein:["seitunterarm"],bootkn:["zehenboot"],bootvoll:["zehenboot"],

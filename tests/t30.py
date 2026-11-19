@@ -23,8 +23,8 @@ async def main():
         b=await p.chromium.launch();ctx=await b.new_context(viewport={'width':390,'height':844},accept_downloads=True);pg=await ctx.new_page()
         errs=[];pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:errs.append(m.text) if m.type=='error' else None)
         await setup(pg,U)
-        v=await pg.evaluate("[APP_VER,BK_VER]");chk(v==['3.3',5],'version 3.3, backup format 5 '+str(v))
-        await pg.evaluate("go('set')");vl=await pg.text_content('#verLine');chk('Version 3.3 · @ Joschy' in vl,vl)
+        v=await pg.evaluate("[APP_VER,BK_VER]");chk(v==['3.4',5],'version 3.4, backup format 5 '+str(v))
+        await pg.evaluate("go('set')");vl=await pg.text_content('#verLine');chk('Version 3.4 · @ Joschy' in vl,vl)
         # 1) catalogue
         r=await pg.evaluate("""()=>{const lv=[1,2,3].map(l=>YKEYS.filter(k=>YP[k].lv===l).length);const bad=YKEYS.filter(k=>{const p=YP[k];return!p.n||!p.sa&&p.lv>1&&false||!(p.c.length>=2&&p.c.length<=3)||!p.a||!YREG.some(x=>x[0]===p.r)||!(p.sec>0)||!AN['y_'+k]});
           const prof=YKEYS.filter(k=>YP[k].lv===3);const noAlt=prof.filter(k=>!YP[k].alt||!YP[YP[k].alt]||YP[YP[k].alt].lv>=3);
@@ -136,7 +136,12 @@ async def main():
             if not same31(a,b2):print('DIFF',[(k,x,y) for k in a for x,y in zip(a[k],b2[k]) if x!=y][:8])
             chk(same31(a,b2) and mains(b2)>=12,f'preset {name}: all 12 sessions as in 3.1, main lifts strict at every position ({mains(b2)} main-lift slots); plus grip block, only assistance/bonus sets may be shortened for the hour')
         a=await pg.evaluate(PLAN,'["db","bench","band"]');b2=await po.evaluate(PLAN,'["db","bench","band"]')
-        chk(same31(a,b2) and mains(b2)>=12,f'preset Nur Kurzhanteln: all 12 sessions as in 3.1, main lifts strict at every position ({mains(b2)} slots); plus grip block')
+        # 3.4: Face Pulls brauchen Band + Rack -> bei "Nur Kurzhanteln" ersetzt durch eine Nebenübung (gleiche Sätze), sonst wie 3.1
+        fp=[(k,x[0]) for k in b2 for x,y in zip(a[k],b2[k]) if y[0]=='facepull']
+        a2={k:[(list(y[:1])+list(x[1:4])+[y[4]] if y[0]=='facepull' and not x[4] and x[1]==y[1] and x[0]!='facepull' else x) for x,y in zip(a[k],b2[k])]+a[k][len(b2[k]):] for k in a}
+        def same31fp(a,b2):
+            return a.keys()==b2.keys() and all(len(a[k])==len(b2[k]) and all(x[0]==y[0] and (x[2:4]==y[2:4] or y[0]=='facepull') and x[4]==y[4] and (x[1]==y[1] if y[4] else 1<=x[1]<=y[1]) for x,y in zip(a[k],b2[k])) for k in a)
+        chk(same31fp(a2,b2) and mains(b2)>=12 and fp and all(e!='facepull' for _,e in fp),f'preset Nur Kurzhanteln: all 12 sessions as in 3.1 except Face Pulls (need rack) -> {sorted(set(e for _,e in fp))}, main lifts strict at every position ({mains(b2)} slots); plus grip block')
         await po.close()
         sw=await pg.evaluate("()=>{const it=planItems('A',false,1)[0];const p=swapPool(it,'A');return{p,gear:p.filter(k=>TRANK[EX[k].type]<3).length,bw:p.filter(k=>EX[k].bwx).length}}")
         chk(sw['p'][0]=='bench' and sw['gear']>=2 and sw['bw']>=1,f"swap dialog (Joschy, bench): equipment first, bodyweight options added {sw['p']}")

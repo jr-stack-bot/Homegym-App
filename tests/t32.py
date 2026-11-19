@@ -52,7 +52,7 @@ async def main():
         b=await p.chromium.launch()
         f31=await fixture31(b)
         ctx,pg,errs=await page(b)
-        v=await pg.evaluate("[APP_VER,BK_VER]");chk(v==['3.3',5],f'version 3.3, backup format 5 {v}')
+        v=await pg.evaluate("[APP_VER,BK_VER]");chk(v==['3.4',5],f'version 3.4, backup format 5 {v}')
         # 1) exercises, library, details, needs
         r=await pg.evaluate("""()=>({n:HG_ALL.filter(k=>EX[k]&&AN[animOf(k)]&&CAT[k]==='griff').length,cat:CATS.some(c=>c[0]==='griff'),
           need:[canDo('deadhang'),NEEDS.farmerhold,NEEDS.kbfarmhold,!!NEEDS.jughold],safe:HG_ALL.every(k=>/Schmerz/.test(EX[k].safe)),mg:HG_ALL.every(k=>mgOf(k)==null)})""")
@@ -111,6 +111,7 @@ async def main():
             for k in o:
                 if len(a[k])!=len(o[k]):diff.append((k,'len'));continue
                 for x,y in zip(a[k],o[k]):
+                    if g=='["db","bench","band"]' and y[0]=='facepull' and x[0]!='facepull' and not x[4] and x[1]==y[1]:continue  # 3.4: Face Pulls brauchen Rack
                     if x[0]!=y[0] or x[2:]!=y[2:] or (x[4] and x[1]!=y[1]) or x[1]>y[1] or x[1]<min(y[1],2 if not x[5] else 1):diff.append((k,x,y))
             chk(not diff,f'{g}: vs 3.2 before the feature: same exercises, same rep targets, main lifts (all positions) same sets (only assistance/bonus shortened for the hour) {diff[:3]}')
         await po.close()

@@ -1,11 +1,16 @@
 # Changelog
 
 ## 3.4
-- **58 neue Yoga-Haltungen** (jetzt 154): die Haltungen wechseln von Einheit zu Einheit (Rotation), mit dem Knopf **„Andere Haltung“** lässt sich eine Haltung austauschen.
-- **100 neue Kraftübungen** (jetzt 259): kommen nur auf **Nebenplätzen in jedem zweiten Zyklus** dran, die **Hauptübungen bleiben unverändert**, jede Einheit bleibt bei **≤ 59 Minuten**.
+- **58 neue Yoga-Haltungen** (jetzt 154):
+  - **Rotation nur beim Wiederholen einer Woche**: der erste Durchgang bleibt wie bisher, ab dem zweiten werden bis zu 2 Haltungen im Hauptteil und das Ankommen durch Haltungen derselben Zielregion ersetzt (höchstens die Stufe der Woche).
+  - **Schnell-Dehnen und Dehnen nach dem Training** wechseln **wöchentlich** zwischen der bisherigen und einer neuen Variante.
+  - Knopf **„Andere Haltung“** im laufenden Ablauf tauscht die aktuelle Haltung gegen eine passende Alternative.
+- **100 neue Kraftübungen** (jetzt 259):
+  - Im Plan nur auf **Nebenplätzen in jedem zweiten Zyklus**; die **Hauptübungen bleiben unverändert**, jede Einheit bleibt bei **≤ 59 Minuten**.
+  - **„Tauschen“** bietet auch die neuen Übungen an.
 - **Übungsblatt** mit den Abschnitten **Atmung**, **Leichter** und **Achtung**.
-- **Katze-Kuh**: Beschriftung korrigiert.
-- **Layout-Fix** bei 130 % Schriftgröße.
+- **Geräte-Fixes**: Brustdrücken mit Band, Pallof Press und Face Pulls brauchen Band **und Rack** (bei „Nur Kurzhanteln“ nicht mehr im Plan); Zercher-Kniebeuge, Gorilla-Rudern (zwei Kettlebells vom Boden) und Toes to Bar korrekt animiert.
+- **Katze-Kuh**: Beschriftung korrigiert. **Layout-Fix** bei 130 % Schriftgröße.
 
 ## 3.3
 - **Griffkraft & Hängen** (neu, Ziel: 1–2 Minuten frei hängen):
