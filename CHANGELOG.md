@@ -8,6 +8,7 @@
 - **100 neue Kraftübungen** (jetzt 259):
   - Im Plan nur auf **Nebenplätzen in jedem zweiten Zyklus**; die **Hauptübungen bleiben unverändert**, jede Einheit bleibt bei **≤ 59 Minuten**.
   - **„Tauschen“** bietet auch die neuen Übungen an.
+  - Die neuen Übungen kürzen nie eine Hauptübung: Wird eine Einheit zu lang, werden zuerst Neben- und Bonussätze gekürzt, danach kommt eine kürzere neue Übung (oder die gewohnte) auf den Nebenplatz.
 - **Übungsblatt** mit den Abschnitten **Atmung**, **Leichter** und **Achtung**.
 - **Geräte-Fixes**: Brustdrücken mit Band, Pallof Press, Face Pulls, Überzüge am Band, Kickbacks mit Band, Band Pull-Through, Holzhacker mit Band und Trizepsdrücken am Band brauchen Band **und Rack** (bei „Nur Kurzhanteln“ nicht mehr im Plan); Zercher-Kniebeuge, Gorilla-Rudern (zwei Kettlebells vom Boden) und Toes to Bar korrekt animiert.
 - **Katze-Kuh**: Beschriftung korrigiert. **Layout-Fix** bei 130 % Schriftgröße.

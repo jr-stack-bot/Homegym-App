@@ -5029,8 +5029,23 @@ function kxRoundPlan(r){const key=r+"|"+myGear().slice().sort().join(",")+"|"+kb
 function _kxBase(d,w){return _kxKb(d,adaptItems(d,adaptBase(w,d),w))}
 let _kxKb=null;
 function kxMix(day,items,week){const r=kxRound();if(!r||!week)return items;const P=kxRoundPlan(r)[week+day];if(!P||P.base!==JSON.stringify(items))return items;
-  return items.map((it,i)=>{const k=P.pick[i];return k?{...it,ex:k,...repsFor({...it},k),rot:1,orig:it.ex}:{...it}})}
-{const _pi=planItems;planItems=function(day,quick,week){const prev=KX_CTX.w;KX_CTX.w=week||progBlock();try{return _pi(day,quick,week)}finally{KX_CTX.w=prev}}}
+  return items.map((it,i)=>{const k=P.pick[i];return k?{...it,ex:k,...repsFor({...it},k),rot:1,orig:it.ex,lo0:it.lo,hi0:it.hi}:{...it}})}
+{const _pi=planItems;planItems=function(day,quick,week){const prev=KX_CTX.w,pd=KX_CTX.d;KX_CTX.w=week||progBlock();KX_CTX.d=day;try{return _pi(day,quick,week)}finally{KX_CTX.w=prev;KX_CTX.d=pd}}}
+/* 3.4: Die neuen Übungen auf Nebenplätzen dürfen nie Hauptübungen kürzen. Maßstab ist der gewohnte Plan (wie 3.3, gleiche
+   Einstellungen): jede Hauptübung behält mindestens dessen Sätze, die Einheit bleibt <= 59 min. Reicht das Kürzen von Neben-/
+   Bonussätzen nicht, kommt auf den Nebenplatz eine kürzere neue Übung, sonst wieder die gewohnte Übung. */
+{const _fh=fitHour;const isM=x=>x.slot===0||KX_MAINRE.test(EX[x.ex].n);const back=it=>{const{rot:_r,orig:_o,lo0:_l,hi0:_h,...r}=it;return{...r,ex:it.orig,lo:it.lo0??it.lo,hi:it.hi0??it.hi}};
+  fitHour=function(items){if(!items.some(x=>x.rot&&x.orig))return _fh(items);
+    const ref=_fh(items.map(x=>x.rot&&x.orig?back(x):x));const need={};for(const x of ref)if(!x.fin&&isM(x))need[x.ex]=x.sets;
+    const ok=o=>estSecs(o,false)<=3540&&o.every(x=>x.fin||!(x.ex in need)||x.sets>=need[x.ex]);
+    let cur=items.map(x=>({...x}));let out=_fh(cur);const day=KX_CTX.d;const one=it=>estSecs([it],false)-estSecs([],false);
+    for(let g=0;g<8&&!ok(out);g++){const rot=cur.map((x,i)=>i).filter(i=>cur[i].rot&&cur[i].orig&&EX[cur[i].orig]);if(!rot.length)break;let best=null;
+      for(const i of rot.slice().reverse()){const it=cur[i];const base=back(it);const used=new Set(cur.map(x=>x.ex));
+        const pool=day?kxRotPool(day,base).filter(k=>!used.has(k)).map(k=>({...it,ex:k,...repsFor({...base},k)})).filter(c=>one(c)<one(it)).sort((a,b)=>one(a)-one(b)):[];
+        for(const c of pool){const t=cur.map((x,j)=>j===i?c:x);if(ok(_fh(t))){best=t;break}}if(best)break}
+      if(!best){const i=rot[rot.length-1];best=cur.map((x,j)=>j===i?back(x):x)}
+      cur=best;out=_fh(cur)}
+    return out}}
 {const _km=kbMix;_kxKb=_km;kbMix=function(day,items){const it=_km(day,items);return KX_CTX.w?kxMix(day,it,KX_CTX.w):it}}
 
 /* ---------- Tauschen: zusätzlich bis zu 2 passende neue Übungen ---------- */

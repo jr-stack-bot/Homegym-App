@@ -1,16 +1,19 @@
-# Homegym 3.2/3.3 @ Joschy – Yoga in 3 Stufen (96 Haltungen), 24-Wochen-Plan, Startstufe, Migration, Profi-Sicherheit; 41 neue Übungen ohne Geräte
+# Homegym 3.2-3.4 @ Joschy – Yoga in 3 Stufen (96 Haltungen), 24-Wochen-Plan, Startstufe, Migration, Profi-Sicherheit; 41 neue Übungen ohne Geräte
 import os as _os
 _REPO=_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
 _OUTDIR=_os.environ.get('HOMEGYM_OUT',_os.path.join(_REPO,'out'))
 _SHOTS=_os.environ.get('HOMEGYM_SHOTS','/tmp/homegym-shots/');_os.makedirs(_SHOTS,exist_ok=True)
 _V31=_os.environ.get('HOMEGYM_V31',_os.path.join(_REPO,'tests','fixtures','v31'))
 if not _os.path.isfile(_os.path.join(_V31,'index.html')):raise SystemExit('FEHLT: 3.1-Vergleichsstand '+_V31+'/index.html (siehe tests/fixtures/README.txt)')
+_V33=_os.environ.get('HOMEGYM_V33',_os.path.join(_REPO,'tests','fixtures','v33'))
+if not _os.path.isfile(_os.path.join(_V33,'index.html')):raise SystemExit('FEHLT: 3.3-Vergleichsstand '+_V33+'/index.html (siehe tests/fixtures/README.txt)')
 import asyncio,subprocess,time,json,sys,os
 from playwright.async_api import async_playwright
 D=_SHOTS.rstrip('/');_os.makedirs(D+'/shots',exist_ok=True)
 srv=subprocess.Popen([sys.executable,'-m','http.server','8797','-d',_OUTDIR],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+o33=subprocess.Popen([sys.executable,'-m','http.server','8799','-d',_V33],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 old=subprocess.Popen([sys.executable,'-m','http.server','8798','-d',_V31],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL);time.sleep(1)
-U='http://127.0.0.1:8797/index.html';UO='http://127.0.0.1:8798/index.html'
+U='http://127.0.0.1:8797/index.html';UO='http://127.0.0.1:8798/index.html';U33='http://127.0.0.1:8799/index.html'
 CHECK=open(_os.path.join(_REPO,'tests','t30_yck.js'),encoding='utf-8').read()
 fails=[]
 def chk(c,msg):
@@ -162,8 +165,26 @@ async def main():
         await pg.click('[data-lm=kraft]');await pg.wait_for_timeout(200);await pg.evaluate("openExSheet('bsschair')");await pg.wait_for_timeout(500)
         sh=await pg.text_content('#sheet');await pg.screenshot(path=D+'/shots/ex_bsschair.png',full_page=True)
         chk('Alltagsgegenstand: Stuhl' in sh and 'Stufe: mittel' in sh and 'Schwerer: Pistol-Vorstufe zum Stuhl' in sh,'exercise sheet shows everyday item, level and next harder variant')
+        # 13) 3.4: Zyklen 1-8 (gewohnter Plan + Runden mit neuen Übungen), alle Wochen/Tage, voll und kurz, alle Geräte-Einstellungen
+        #     (4 Presets x Kettlebells ein/aus x Pausen kürzer/normal/länger): Hauptübungen nie weniger Sätze/Wdh. als 3.3, keine Einheit > 59 min
+        DUMP=r"""(rfs)=>{const M=/Kniebeuge|Bankdrück|Kreuzheb|Schulterdrück|Rudern|Klimmz|Chin-up/i;const keep=JSON.stringify(S);const o={};
+          const G={joschy:[...JOSCHYGEAR],all:ALLGEAR,dbonly:["db","bench","band"],none:[]};
+          for(const [gn,g] of Object.entries(G))for(const km of [true,false])for(const rf of rfs)for(let c=1;c<=8;c++)for(let w=1;w<=4;w++)for(const d of DAYS)for(const q of [false,true]){
+            S.profile={name:'J',gear:[...g],preset:'x',kbMix:km};S.settings.restF=rf;S.prog={v:1,block:w,done:[],cycle:c,units:0,dlLeft:0,dlAt:4};S.history=[];if(S.hang)S.hang.base=null;
+            const it=planItems(d,q,w);o[[gn,km,rf,c,w,d,q].join('|')]=[estSecs(it,q),it.filter(x=>!x.fin&&(x.slot===0||M.test(EX[x.ex].n))).map(x=>[x.ex,x.sets,x.lo,x.hi])]}
+          S=JSON.parse(keep);save();return o}"""
+        p33=await ctx.new_page();await p33.goto(U33);await p33.wait_for_timeout(300)
+        await p33.evaluate("()=>{S.profile={name:'J',gear:[...JOSCHYGEAR],preset:'x'};S.settings.voiceMode='off';save();location.reload()}");await p33.wait_for_timeout(600)
+        RF=[.8,1,1.2];cur=await pg.evaluate(DUMP,RF);ref=await p33.evaluate(DUMP,RF);await p33.close()
+        long=[(k,round(v[0]/60,1)) for k,v in cur.items() if v[0]>3540];less=[]
+        for k,(sec,mm) in cur.items():
+            g,km,rf,c,w,d,q=k.split('|');r=ref['|'.join([g,km,rf,'1',w,d,q])][1];rd={x[0]:x for x in r}
+            for y in r:
+                x=next((x for x in mm if x[0]==y[0]),None)
+                if x is None or x[1]<y[1] or x[2]<y[2] or x[3]<y[3]:less.append((k,x,y))
+        chk(not long and not less and len(cur)==4608,f'cycles 1-8 x 4 weeks x 3 days x full/quick x 24 gear settings ({len(cur)} units): main lifts never fewer sets/reps than 3.3 {less[:3]}, none over 59 min {long[:3]}')
         chk(not errs,'no JS errors '+str(errs[:3]))
         await b.close()
     print('RESULT',('ALL OK' if not fails else f'{len(fails)} FAILED'))
 try: asyncio.run(main())
-finally: srv.kill();old.kill()
+finally: srv.kill();old.kill();o33.kill()

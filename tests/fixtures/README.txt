@@ -26,3 +26,13 @@ v32/index.html  eingefrorener Stand der Version 3.2, byte-gleich zu android/asse
 
 Neu erzeugen:   git show 7a3ce77:android/assets/index.html > tests/fixtures/v32/index.html
 Anderer Ordner: Umgebungsvariable HOMEGYM_V32=<ordner mit index.html>
+
+Testdaten für tests/t30.py (3.4)
+
+v33/index.html  eingefrorener Stand der Version 3.3, byte-gleich zu android/assets/index.html aus
+                Commit b0555ef (= assets/index.html aus releases/Homegym-3.3.apk). t30 prüft damit für die
+                Zyklen 1-8, dass die Hauptübungen nie weniger Sätze oder Wiederholungen haben als in 3.3
+                und keine Einheit länger als 59 Minuten dauert.
+
+Neu erzeugen:   git show b0555ef:android/assets/index.html > tests/fixtures/v33/index.html
+Anderer Ordner: Umgebungsvariable HOMEGYM_V33=<ordner mit index.html>
