@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.6
+- **JAI sagt die Namen an**: bei Kraft, Aufwärmen, Hang-Block, Yoga und Dehnen nennt JAI zu Beginn jeder Übung bzw. Haltung den Namen.
+- In der **Pause vor der nächsten Übung** kommt „Als Nächstes“ und danach der Name.
+- 317 neue Namens-Clips (alle 259 Übungen und 154 Yoga-Haltungen sind jetzt abgedeckt), gleiche Stimme und gleicher Klang wie bisher.
+- Die Ansagen laufen nacheinander und überlappen nicht; „Halbzeit“ wird nicht mehr abgeschnitten. Die Einstellung „Sprachassistent“ gilt auch hier, Backup-Format unverändert.
+
 ## 3.5
 - **Extras: Kampfsport-Kostüme** (unter Einstellungen › Extras, mit Kennwort freischaltbar):
   - **19 frei gestaltete Kostüme** für Mann und Frau: Karate, Judo, BJJ, Taekwondo, Boxen, Muay Thai, Kickboxen, Ringen, MMA, Sambo, Kung-Fu, Capoeira, Kendo, Ninja, Samurai, Gladiator, Krav Maga, Fechten und Sumo. Generische Sportkleidung in sportüblichen Farben, ohne Marken, Logos oder Schriftzeichen.

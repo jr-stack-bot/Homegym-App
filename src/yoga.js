@@ -898,7 +898,7 @@ function yStart(kind,opt={}){let items,title,week=null,day=null;
   else if(kind==="post"){day=opt.day||null;items=yPost(day).items;title="Dehnen nach dem Training"}
   else{kind="quick";items=yQuick().items;title="Schnell-Dehnen"}
   const now=Date.now();S.yrun={kind,week,day,title,steps:ySteps(items),i:0,ph:"prep",end:now+8000,paused:false,left:0,start:now,ann:-1,half:0};save();
-  if(jaiOn())jaiPreload(["hold","u_sekunden_halten","u_je_seite","cd_1","cd_2","cd_3","done_hold","good","paused","resume","halfway",...new Set(S.yrun.steps.flatMap(s=>jaiNum(s.sec)))]);
+  if(jaiOn())jaiPreload(["hold","u_sekunden_halten","u_je_seite","cd_1","cd_2","cd_3","done_hold","good","paused","resume","halfway","u_als_naechstes",...new Set(S.yrun.steps.flatMap(s=>[...jaiNum(s.sec),...jaiYoga(s.k)]))]);
   yOpen();return true}
 function yOpen(){if(!S.yrun)return;closeSheet();$("#yoga").hidden=false;yRender();clearInterval(yT);yT=setInterval(yTick,250);nativeState(true)}
 function yClose(){clearInterval(yT);yT=null;$("#yoga").hidden=true;nativeState(true);if(TAB==="home")renderHome()}
@@ -910,10 +910,13 @@ function yAdvance(quiet){const r=S.yrun;if(!r||r.ph==="done")return;
   else{r.i++;if(r.i>=r.steps.length){yFinish();return}r.ph="prep";r.end=r.end+yPrepOf(r)*1000}
   if(!quiet)yAnnounce()}
 function yAnnounce(){const r=S.yrun;if(!r||r.ph==="done"||nativeBg())return;const st=yCurStep();const p=YP[st.k];const key=r.i+":"+r.ph;if(r.ann===key)return;r.ann=key;
-  if(r.ph==="hold"){beep(880,.12);vib(80);announce(`${p.n}. ${st.sec} Sekunden halten${st.side===1?", je Seite":""}`,[...jaiNum(st.sec),"u_sekunden_halten",...(st.side===1?["u_je_seite"]:[])])}
-  else if(st.side===2){vib(60);announce("Seite wechseln",[])}/* no JAI clip for this: stays silent */
-  else{announce(`Gleich: ${p.n}`,[])}
-  if(!r.half&&r.i>=r.steps.length/2&&r.steps.length>5){r.half=1;setTimeout(()=>announce("Halbzeit",["halfway"],{interrupt:false}),1600)}}
+  /* 3.6 (@ Joschy): JAI says the pose name – in the pause "Als Nächstes" + name, at the start of the hold the name (not again for side 2).
+     "Halbzeit" goes in front of the same sequence (JAI), so the announcements never overlap or cut each other off. */
+  const half=!r.half&&r.i>=r.steps.length/2&&r.steps.length>5;if(half)r.half=1;const hj=half&&jaiOn()?["halfway"]:[];
+  if(r.ph==="hold"){beep(880,.12);vib(80);announce(`${p.n}. ${st.sec} Sekunden halten${st.side===1?", je Seite":""}`,[...hj,...(st.side===2?[]:jaiYoga(st.k)),...jaiNum(st.sec),"u_sekunden_halten",...(st.side===1?["u_je_seite"]:[])])}
+  else if(st.side===2){vib(60);announce("Seite wechseln",hj)}/* no JAI clip for this: stays silent */
+  else{announce(`Gleich: ${p.n}`,[...hj,"u_als_naechstes",...jaiYoga(st.k)])}
+  if(half&&!hj.length)setTimeout(()=>announce("Halbzeit",["halfway"],{interrupt:false}),1600)}
 function yTick(){const r=S.yrun;if(!r||$("#yoga").hidden)return;if(r.ph==="done"){return}
   const now=Date.now();let changed=false;
   if(!r.paused&&r.end!=null){let n=0;const bg=nativeBg();while(r.ph!=="done"&&now>=r.end&&n<400){const last=now<r.end+1500;yAdvance(bg||!last);n++;changed=true}}

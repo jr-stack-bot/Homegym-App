@@ -1240,6 +1240,1293 @@
     "text": "Systemende.",
     "note": "Nachlaufwort, wird verworfen"
    }
+  ],
+  "namen_36": [
+   {
+    "id": "u_als_naechstes",
+    "text": "Als Nächstes."
+   },
+   {
+    "id": "ex_pushpause",
+    "text": "Liegestütze mit Halt in der Mitte."
+   },
+   {
+    "id": "ex_benchpause",
+    "text": "Bankdrücken mit Pause auf der Brust."
+   },
+   {
+    "id": "ex_lateralhold",
+    "text": "Seitheben mit Halt oben."
+   },
+   {
+    "id": "ex_highplank",
+    "text": "Hochstütz halten."
+   },
+   {
+    "id": "ex_pullhold",
+    "text": "Klimmzüge mit Halt oben."
+   },
+   {
+    "id": "ex_chestrowhold",
+    "text": "Brustgestütztes Rudern mit Halt."
+   },
+   {
+    "id": "ex_invrowhold",
+    "text": "Rudern im Rack mit Halt."
+   },
+   {
+    "id": "ex_curlhold",
+    "text": "Bizeps-Curls mit Halt bei neunzig Grad."
+   },
+   {
+    "id": "ex_supermanhold",
+    "text": "Superman halten."
+   },
+   {
+    "id": "ex_gobletpause",
+    "text": "Goblet Squat mit Halt unten."
+   },
+   {
+    "id": "ex_lungehold",
+    "text": "Ausfallschritt mit Halt unten."
+   },
+   {
+    "id": "ex_bridgehold",
+    "text": "Glute Bridge mit Halt oben."
+   },
+   {
+    "id": "ex_hollow",
+    "text": "Hollo Hold."
+   },
+   {
+    "id": "ex_sideplank",
+    "text": "Seitstütz."
+   },
+   {
+    "id": "ex_kbclean",
+    "text": "Kettlebell Clean."
+   },
+   {
+    "id": "ex_kbfloor",
+    "text": "Kettlebell Floor Press."
+   },
+   {
+    "id": "ex_kbpushpress",
+    "text": "Kettlebell Push Press."
+   },
+   {
+    "id": "ex_wallpush",
+    "text": "Wand-Liegestütze."
+   },
+   {
+    "id": "ex_pushincl",
+    "text": "Liegestütze mit Händen auf dem Stuhl."
+   },
+   {
+    "id": "ex_pushknee",
+    "text": "Liegestütze auf den Knien."
+   },
+   {
+    "id": "ex_pseudoplanche",
+    "text": "Pseudo-Plansch-Liegestütze."
+   },
+   {
+    "id": "ex_packpress",
+    "text": "Schulterdrücken mit Rucksack."
+   },
+   {
+    "id": "ex_kneepike",
+    "text": "Pike-Liegestütze auf den Knien."
+   },
+   {
+    "id": "ex_pikeelev",
+    "text": "Pike-Liegestütze mit erhöhten Füßen."
+   },
+   {
+    "id": "ex_wallhs",
+    "text": "Handstand-Vorstufe an der Wand."
+   },
+   {
+    "id": "ex_chairdipx",
+    "text": "Dips am Stuhl mit gestreckten Beinen."
+   },
+   {
+    "id": "ex_walltri",
+    "text": "Enge Wand-Liegestütze."
+   },
+   {
+    "id": "ex_sphinxpush",
+    "text": "Sphinx-Liegestütze."
+   },
+   {
+    "id": "ex_tablerowkn",
+    "text": "Rudern am Tisch mit gebeugten Knien."
+   },
+   {
+    "id": "ex_towelpost",
+    "text": "Handtuch-Rudern am Pfosten."
+   },
+   {
+    "id": "ex_doorrowuni",
+    "text": "Einarmiges Rudern am Türrahmen."
+   },
+   {
+    "id": "ex_ytw",
+    "text": "Ypsilon-Te-We-Heben."
+   },
+   {
+    "id": "ex_swimmer",
+    "text": "Schwimmer."
+   },
+   {
+    "id": "ex_pronepull",
+    "text": "Superman-Latzug."
+   },
+   {
+    "id": "ex_towellat",
+    "text": "Handtuch-Latzug."
+   },
+   {
+    "id": "ex_packrow",
+    "text": "Rucksack-Rudern vorgebeugt."
+   },
+   {
+    "id": "ex_packcurl",
+    "text": "Rucksack-Curls."
+   },
+   {
+    "id": "ex_tablechin",
+    "text": "Untergriff-Rudern am Tisch."
+   },
+   {
+    "id": "ex_bottlehammer",
+    "text": "Hammer-Curls mit Wasserflaschen."
+   },
+   {
+    "id": "ex_bottleraise",
+    "text": "Seitheben mit Wasserflaschen."
+   },
+   {
+    "id": "ex_bottlefront",
+    "text": "Frontheben mit Wasserflaschen."
+   },
+   {
+    "id": "ex_bottleuni",
+    "text": "Einarmiges Seitheben an der Wand."
+   },
+   {
+    "id": "ex_pistolbox",
+    "text": "Pistol-Vorstufe zum Stuhl."
+   },
+   {
+    "id": "ex_shrimp",
+    "text": "Schrimp Squat."
+   },
+   {
+    "id": "ex_cossack",
+    "text": "Kossack Squat."
+   },
+   {
+    "id": "ex_jumpsquat",
+    "text": "Sprungkniebeugen."
+   },
+   {
+    "id": "ex_bsschair",
+    "text": "Bulgarische Split Squats am Stuhl."
+   },
+   {
+    "id": "ex_chairstep",
+    "text": "Step-ups am Stuhl."
+   },
+   {
+    "id": "ex_wallsitsgl",
+    "text": "Wandsitzen einbeinig."
+   },
+   {
+    "id": "ex_sglbridge",
+    "text": "Einbeinige Glute Bridge."
+   },
+   {
+    "id": "ex_gmbw",
+    "text": "Good Morning ohne Gewicht."
+   },
+   {
+    "id": "ex_nordicneg",
+    "text": "Nordic-Curl-Vorstufe."
+   },
+   {
+    "id": "ex_sglcalf",
+    "text": "Einbeiniges Wadenheben."
+   },
+   {
+    "id": "ex_legraisefloor",
+    "text": "Beinheben liegend."
+   },
+   {
+    "id": "ex_beinschere",
+    "text": "Beinschere."
+   },
+   {
+    "id": "ex_russtwistbw",
+    "text": "Russian Twists ohne Gewicht."
+   },
+   {
+    "id": "ex_bearcrawl",
+    "text": "Bärengang."
+   },
+   {
+    "id": "ex_sideplankhip",
+    "text": "Seitstütz mit Hüftheben."
+   },
+   {
+    "id": "ex_bbfloor",
+    "text": "Bodendrücken mit Langhantel."
+   },
+   {
+    "id": "ex_dbfloor",
+    "text": "Kurzhantel-Bodendrücken."
+   },
+   {
+    "id": "ex_bbincline",
+    "text": "Schrägbankdrücken mit Langhantel."
+   },
+   {
+    "id": "ex_squeezepress",
+    "text": "Skwies Press mit Kurzhanteln."
+   },
+   {
+    "id": "ex_dbpullover",
+    "text": "Kurzhantel-Überzüge."
+   },
+   {
+    "id": "ex_pushleg",
+    "text": "Einbeinige Liegestütze."
+   },
+   {
+    "id": "ex_bandchest",
+    "text": "Brustdrücken mit Band stehend."
+   },
+   {
+    "id": "ex_plyopush",
+    "text": "Explosive Liegestütze."
+   },
+   {
+    "id": "ex_hindupush",
+    "text": "Hindu-Liegestütze."
+   },
+   {
+    "id": "ex_svend",
+    "text": "Swend Press mit Hantelscheibe."
+   },
+   {
+    "id": "ex_dbohpstand",
+    "text": "Kurzhantel-Schulterdrücken stehend."
+   },
+   {
+    "id": "ex_ohpuni",
+    "text": "Einarmiges Kurzhantel-Drücken."
+   },
+   {
+    "id": "ex_bbpushpress",
+    "text": "Push Press mit Langhantel."
+   },
+   {
+    "id": "ex_zpress",
+    "text": "Zett-Press."
+   },
+   {
+    "id": "ex_landmine",
+    "text": "Landmein-Drücken."
+   },
+   {
+    "id": "ex_platefront",
+    "text": "Frontheben mit Hantelscheibe."
+   },
+   {
+    "id": "ex_bandlateral",
+    "text": "Seitheben mit Band."
+   },
+   {
+    "id": "ex_uprightrow",
+    "text": "Aufrechtes Rudern mit Kurzhanteln."
+   },
+   {
+    "id": "ex_wallslide",
+    "text": "Wandgleiten."
+   },
+   {
+    "id": "ex_bandextrot",
+    "text": "Außenrotation mit Band."
+   },
+   {
+    "id": "ex_bandpullapart",
+    "text": "Band Pull-Aparts."
+   },
+   {
+    "id": "ex_inclineyraise",
+    "text": "Ypsilon-Heben auf der Schrägbank."
+   },
+   {
+    "id": "ex_dbshrug",
+    "text": "Kurzhantel-Shrugs."
+   },
+   {
+    "id": "ex_bbshrug",
+    "text": "Langhantel-Shrugs."
+   },
+   {
+    "id": "ex_kickback",
+    "text": "Trizeps-Kickbacks."
+   },
+   {
+    "id": "ex_bandohext",
+    "text": "Trizepsstrecken über Kopf mit Band."
+   },
+   {
+    "id": "ex_bbtriext",
+    "text": "Trizepsstrecken an der Stange."
+   },
+   {
+    "id": "ex_concentration",
+    "text": "Konzentrations-Curls."
+   },
+   {
+    "id": "ex_inclinecurl",
+    "text": "Schrägbank-Curls."
+   },
+   {
+    "id": "ex_spidercurl",
+    "text": "Spider Curls."
+   },
+   {
+    "id": "ex_revcurl",
+    "text": "Reverse Curls mit Langhantel."
+   },
+   {
+    "id": "ex_dragcurl",
+    "text": "Drag Curls."
+   },
+   {
+    "id": "ex_pendlay",
+    "text": "Pendlei-Rudern."
+   },
+   {
+    "id": "ex_dbbentrow",
+    "text": "Vorgebeugtes Rudern mit Kurzhanteln."
+   },
+   {
+    "id": "ex_renegade",
+    "text": "Renegäid Rohs."
+   },
+   {
+    "id": "ex_bandlat",
+    "text": "Latziehen mit Band kniend."
+   },
+   {
+    "id": "ex_straightarm",
+    "text": "Überzüge am Band mit gestreckten Armen."
+   },
+   {
+    "id": "ex_scappull",
+    "text": "Schulterblatt-Züge an der Stange."
+   },
+   {
+    "id": "ex_kbgorilla",
+    "text": "Gorilla-Rudern mit Kettlebells."
+   },
+   {
+    "id": "ex_invrowfeet",
+    "text": "Rudern im Rack mit erhöhten Füßen."
+   },
+   {
+    "id": "ex_assistpull",
+    "text": "Klimmzüge mit Fußstütze."
+   },
+   {
+    "id": "ex_zercher",
+    "text": "Zercher-Kniebeuge."
+   },
+   {
+    "id": "ex_boxsquat",
+    "text": "Box-Kniebeuge."
+   },
+   {
+    "id": "ex_sumosquat",
+    "text": "Sumo Squat mit Kurzhantel."
+   },
+   {
+    "id": "ex_splitsquat",
+    "text": "Split Squat mit Kurzhanteln."
+   },
+   {
+    "id": "ex_walklunge",
+    "text": "Gehende Ausfallschritte."
+   },
+   {
+    "id": "ex_curtsy",
+    "text": "Knicks-Ausfallschritt."
+   },
+   {
+    "id": "ex_sidelunge",
+    "text": "Seitliche Ausfallschritte."
+   },
+   {
+    "id": "ex_stepdown",
+    "text": "Step-downs von der Bank."
+   },
+   {
+    "id": "ex_sissy",
+    "text": "Sissy Squat am Türrahmen."
+   },
+   {
+    "id": "ex_pistol",
+    "text": "Pistol Squat."
+   },
+   {
+    "id": "ex_seatcalf",
+    "text": "Wadenheben sitzend."
+   },
+   {
+    "id": "ex_bbcalf",
+    "text": "Wadenheben mit Langhantel."
+   },
+   {
+    "id": "ex_tibraise",
+    "text": "Schienbein-Heben an der Wand."
+   },
+   {
+    "id": "ex_dbsquat",
+    "text": "Kniebeuge mit Kurzhanteln."
+   },
+   {
+    "id": "ex_assistsquat",
+    "text": "Kniebeuge mit Halt am Türrahmen."
+   },
+   {
+    "id": "ex_chairsit",
+    "text": "Aufstehen vom Stuhl."
+   },
+   {
+    "id": "ex_sumodl",
+    "text": "Sumo-Kreuzheben."
+   },
+   {
+    "id": "ex_rackpull",
+    "text": "Rack Pulls."
+   },
+   {
+    "id": "ex_dbdl",
+    "text": "Kreuzheben mit Kurzhanteln."
+   },
+   {
+    "id": "ex_kbdl",
+    "text": "Kettlebell-Kreuzheben."
+   },
+   {
+    "id": "ex_sglrdl",
+    "text": "Einbeiniges Rumänisches Kreuzheben."
+   },
+   {
+    "id": "ex_sglhipthrust",
+    "text": "Einbeiniger Hip Thrust an der Bank."
+   },
+   {
+    "id": "ex_bbbridge",
+    "text": "Glute Bridge mit Langhantel."
+   },
+   {
+    "id": "ex_frogpump",
+    "text": "Frog Pumps."
+   },
+   {
+    "id": "ex_donkeykick",
+    "text": "Donkey Kicks."
+   },
+   {
+    "id": "ex_bandkick",
+    "text": "Kickbacks stehend mit Band."
+   },
+   {
+    "id": "ex_sidelyingabd",
+    "text": "Seitliches Beinheben liegend."
+   },
+   {
+    "id": "ex_bandwalk",
+    "text": "Seitwärtsgehen mit Band."
+   },
+   {
+    "id": "ex_bridgewalk",
+    "text": "Brücken-Walkouts."
+   },
+   {
+    "id": "ex_slidecurl",
+    "text": "Beincurls mit Handtuch."
+   },
+   {
+    "id": "ex_pullthrough",
+    "text": "Band Pull-Through."
+   },
+   {
+    "id": "ex_reversehyper",
+    "text": "Reverse Hyperextension auf der Bank."
+   },
+   {
+    "id": "ex_bridgemarch",
+    "text": "Glute Bridge Marsch."
+   },
+   {
+    "id": "ex_bridgechair",
+    "text": "Glute Bridge mit Füßen auf dem Stuhl."
+   },
+   {
+    "id": "ex_vup",
+    "text": "Wi-Ups."
+   },
+   {
+    "id": "ex_bicycle",
+    "text": "Fahrrad-Crunches."
+   },
+   {
+    "id": "ex_revcrunch",
+    "text": "Reverse Crunches."
+   },
+   {
+    "id": "ex_situp",
+    "text": "Sit-ups."
+   },
+   {
+    "id": "ex_shtap",
+    "text": "Hochstütz mit Schulter-Tippen."
+   },
+   {
+    "id": "ex_plankupdown",
+    "text": "Plank Ap-Dauns."
+   },
+   {
+    "id": "ex_kneeplank",
+    "text": "Unterarmstütz auf den Knien."
+   },
+   {
+    "id": "ex_plankleg",
+    "text": "Unterarmstütz mit Beinheben."
+   },
+   {
+    "id": "ex_pallof",
+    "text": "Pallof Press."
+   },
+   {
+    "id": "ex_woodchop",
+    "text": "Holzhacker mit Band."
+   },
+   {
+    "id": "ex_suitcase",
+    "text": "Koffer-Tragen einseitig."
+   },
+   {
+    "id": "ex_sidebend",
+    "text": "Seitbeugen mit Kurzhantel."
+   },
+   {
+    "id": "ex_toesbar",
+    "text": "Tohs tu Bahr."
+   },
+   {
+    "id": "ex_stirpot",
+    "text": "Rühren auf dem Gymnastikball."
+   },
+   {
+    "id": "ex_balljack",
+    "text": "Ball-Klappmesser."
+   },
+   {
+    "id": "ex_seatedtuck",
+    "text": "Knieheben im Sitzen."
+   },
+   {
+    "id": "ex_crabwalk",
+    "text": "Krebsgang."
+   },
+   {
+    "id": "ex_floordip",
+    "text": "Dips am Boden."
+   },
+   {
+    "id": "ex_backwidow",
+    "text": "Bäck Widdos."
+   },
+   {
+    "id": "ex_highknees",
+    "text": "Kniehebelauf auf der Stelle."
+   },
+   {
+    "id": "ex_shadowbox",
+    "text": "Schattenboxen."
+   },
+   {
+    "id": "ex_skater",
+    "text": "Skater-Sprünge."
+   },
+   {
+    "id": "ex_thruster",
+    "text": "Kurzhantel-Thraster."
+   },
+   {
+    "id": "ex_dbsnatch",
+    "text": "Kurzhantel-Snatch einarmig."
+   },
+   {
+    "id": "ex_hangsupp",
+    "text": "Hängen mit Fußstütze."
+   },
+   {
+    "id": "ex_scaphang",
+    "text": "Aktives Schulterblatt-Hängen."
+   },
+   {
+    "id": "ex_deadhang",
+    "text": "Freies Hängen."
+   },
+   {
+    "id": "ex_towelhang",
+    "text": "Handtuch-Hang."
+   },
+   {
+    "id": "ex_farmerhold",
+    "text": "Farmer's Hold."
+   },
+   {
+    "id": "ex_kbfarmhold",
+    "text": "Farmer's Hold mit Kettlebells."
+   },
+   {
+    "id": "ex_jughold",
+    "text": "Farmer's Hold mit Taschen."
+   },
+   {
+    "id": "yoga_berg",
+    "text": "Berghaltung."
+   },
+   {
+    "id": "yoga_schulterkreisen",
+    "text": "Schulterkreisen."
+   },
+   {
+    "id": "yoga_nacken",
+    "text": "Nackendehnung seitlich."
+   },
+   {
+    "id": "yoga_kinnbrust",
+    "text": "Nacken lang machen."
+   },
+   {
+    "id": "yoga_armquer",
+    "text": "Arm vor der Brust."
+   },
+   {
+    "id": "yoga_trizeps",
+    "text": "Überkopf-Armdehnung."
+   },
+   {
+    "id": "yoga_adlerarm",
+    "text": "Adlerarme."
+   },
+   {
+    "id": "yoga_brustoeffner",
+    "text": "Brustöffner im Stehen."
+   },
+   {
+    "id": "yoga_wandengel",
+    "text": "Wandengel."
+   },
+   {
+    "id": "yoga_seitbeuge",
+    "text": "Seitbeuge im Stehen."
+   },
+   {
+    "id": "yoga_hueftkreisen",
+    "text": "Hüftkreisen."
+   },
+   {
+    "id": "yoga_katzekuh",
+    "text": "Katze-Kuh."
+   },
+   {
+    "id": "yoga_kind",
+    "text": "Kindshaltung."
+   },
+   {
+    "id": "yoga_kniebrust",
+    "text": "Knie zur Brust."
+   },
+   {
+    "id": "yoga_figur4",
+    "text": "Taube im Liegen."
+   },
+   {
+    "id": "yoga_schmetterling",
+    "text": "Schmetterling."
+   },
+   {
+    "id": "yoga_sphinx",
+    "text": "Sphinx."
+   },
+   {
+    "id": "yoga_bruecke",
+    "text": "Brücke."
+   },
+   {
+    "id": "yoga_savasana",
+    "text": "Endentspannung."
+   },
+   {
+    "id": "yoga_sukhasana",
+    "text": "Bequemer Sitz mit Atmung."
+   },
+   {
+    "id": "yoga_tiefausfall",
+    "text": "Tiefer Ausfallschritt kniend."
+   },
+   {
+    "id": "yoga_streckung",
+    "text": "Ganzkörperstreckung."
+   },
+   {
+    "id": "yoga_sitzseitbeuge",
+    "text": "Seitbeuge im Sitzen."
+   },
+   {
+    "id": "yoga_halbevorbeuge",
+    "text": "Halbe Vorbeuge."
+   },
+   {
+    "id": "yoga_vorbeuge",
+    "text": "Vorbeuge im Stehen."
+   },
+   {
+    "id": "yoga_fersensitz",
+    "text": "Fersensitz mit Brustöffner."
+   },
+   {
+    "id": "yoga_beingurt",
+    "text": "Beinrückseite mit Gurt."
+   },
+   {
+    "id": "yoga_krokodil",
+    "text": "Krokodil."
+   },
+   {
+    "id": "yoga_liegschmetterling",
+    "text": "Liegender Schmetterling."
+   },
+   {
+    "id": "yoga_armeheben",
+    "text": "Arme heben."
+   },
+   {
+    "id": "yoga_ragdoll",
+    "text": "Hängende Vorbeuge."
+   },
+   {
+    "id": "yoga_zehensitz",
+    "text": "Zehensitz."
+   },
+   {
+    "id": "yoga_vierfuessler",
+    "text": "Vierfüßler-Balance."
+   },
+   {
+    "id": "yoga_windloeser",
+    "text": "Windlöser einbeinig."
+   },
+   {
+    "id": "yoga_beinewand",
+    "text": "Beine hoch an der Wand."
+   },
+   {
+    "id": "yoga_oberschenkel",
+    "text": "Stehende Oberschenkeldehnung."
+   },
+   {
+    "id": "yoga_palme",
+    "text": "Palme."
+   },
+   {
+    "id": "yoga_rueckbeuge",
+    "text": "Stehende Rückbeuge."
+   },
+   {
+    "id": "yoga_kniestand",
+    "text": "Knie zur Brust im Stehen."
+   },
+   {
+    "id": "yoga_wandhund",
+    "text": "Halber Hund an der Wand."
+   },
+   {
+    "id": "yoga_reiter",
+    "text": "Reiterhaltung."
+   },
+   {
+    "id": "yoga_loewe",
+    "text": "Löwe."
+   },
+   {
+    "id": "yoga_tiger",
+    "text": "Tiger."
+   },
+   {
+    "id": "yoga_kniebrett",
+    "text": "Brett auf den Knien."
+   },
+   {
+    "id": "yoga_stab",
+    "text": "Stabhaltung."
+   },
+   {
+    "id": "yoga_schneidervor",
+    "text": "Vorbeuge im Schneidersitz."
+   },
+   {
+    "id": "yoga_halbheuschrecke",
+    "text": "Halbe Heuschrecke."
+   },
+   {
+    "id": "yoga_stern",
+    "text": "Fünfzackiger Stern."
+   },
+   {
+    "id": "yoga_sitzberg",
+    "text": "Sitzender Berg."
+   },
+   {
+    "id": "yoga_sitzdreh",
+    "text": "Drehung im Schneidersitz."
+   },
+   {
+    "id": "yoga_graetsche",
+    "text": "Grätsche im Sitzen."
+   },
+   {
+    "id": "yoga_wechselatmung",
+    "text": "Wechselatmung."
+   },
+   {
+    "id": "yoga_bienenatmung",
+    "text": "Bienenatmung."
+   },
+   {
+    "id": "yoga_wiege",
+    "text": "Baby-Wiege."
+   },
+   {
+    "id": "yoga_krieger1",
+    "text": "Krieger eins."
+   },
+   {
+    "id": "yoga_krieger2",
+    "text": "Krieger zwei."
+   },
+   {
+    "id": "yoga_umkrieger",
+    "text": "Umgekehrter Krieger."
+   },
+   {
+    "id": "yoga_dreieck",
+    "text": "Dreieck."
+   },
+   {
+    "id": "yoga_hund",
+    "text": "Herabschauender Hund."
+   },
+   {
+    "id": "yoga_hundpedal",
+    "text": "Hund mit Beinwechsel."
+   },
+   {
+    "id": "yoga_kobra",
+    "text": "Kobra."
+   },
+   {
+    "id": "yoga_drehsitz",
+    "text": "Drehsitz."
+   },
+   {
+    "id": "yoga_malasana",
+    "text": "Tiefe Hocke."
+   },
+   {
+    "id": "yoga_stuhl",
+    "text": "Stuhl."
+   },
+   {
+    "id": "yoga_baum",
+    "text": "Baum."
+   },
+   {
+    "id": "yoga_tisch",
+    "text": "Rückwärtiger Tisch."
+   },
+   {
+    "id": "yoga_heuschrecke",
+    "text": "Heuschrecke."
+   },
+   {
+    "id": "yoga_welpe",
+    "text": "Welpe."
+   },
+   {
+    "id": "yoga_seitausfall",
+    "text": "Seitlicher Ausfallschritt."
+   },
+   {
+    "id": "yoga_goettin",
+    "text": "Göttin."
+   },
+   {
+    "id": "yoga_happybaby",
+    "text": "Glückliches Baby."
+   },
+   {
+    "id": "yoga_faden",
+    "text": "Faden einfädeln."
+   },
+   {
+    "id": "yoga_robbe",
+    "text": "Robbe."
+   },
+   {
+    "id": "yoga_stuhldreh",
+    "text": "Gedrehter Stuhl."
+   },
+   {
+    "id": "yoga_adler",
+    "text": "Adler."
+   },
+   {
+    "id": "yoga_brett",
+    "text": "Brett."
+   },
+   {
+    "id": "yoga_kopfknie",
+    "text": "Kopf-zum-Knie-Haltung."
+   },
+   {
+    "id": "yoga_bootkn",
+    "text": "Halbes Boot."
+   },
+   {
+    "id": "yoga_hund3",
+    "text": "Dreibeiniger Hund."
+   },
+   {
+    "id": "yoga_heldensitz",
+    "text": "Heldensitz."
+   },
+   {
+    "id": "yoga_hoherausfall",
+    "text": "Hoher Ausfallschritt."
+   },
+   {
+    "id": "yoga_demkrieger",
+    "text": "Demütiger Krieger."
+   },
+   {
+    "id": "yoga_drehausfall",
+    "text": "Gedrehter Ausfallschritt."
+   },
+   {
+    "id": "yoga_achtpunkt",
+    "text": "Acht-Punkt-Haltung."
+   },
+   {
+    "id": "yoga_marichi1",
+    "text": "Maritschi-Vorbeuge."
+   },
+   {
+    "id": "yoga_marichi3",
+    "text": "Maritschi-Drehsitz."
+   },
+   {
+    "id": "yoga_bharadvaja",
+    "text": "Bharadwadscha-Drehsitz."
+   },
+   {
+    "id": "yoga_liegheld",
+    "text": "Liegender Held."
+   },
+   {
+    "id": "yoga_bruecke1",
+    "text": "Einbeinige Brücke."
+   },
+   {
+    "id": "yoga_drehvorbeuge",
+    "text": "Gedrehte Vorbeuge."
+   },
+   {
+    "id": "yoga_halblotus",
+    "text": "Halber Lotus."
+   },
+   {
+    "id": "yoga_kuhgesichtsitz",
+    "text": "Kuhgesicht."
+   },
+   {
+    "id": "yoga_feuerholz",
+    "text": "Feuerholz."
+   },
+   {
+    "id": "yoga_drehkopfknie",
+    "text": "Gedrehtes Kopf-zum-Knie."
+   },
+   {
+    "id": "yoga_graetschseit",
+    "text": "Seitbeuge im Grätschsitz."
+   },
+   {
+    "id": "yoga_seitunterarm",
+    "text": "Seitstütz auf dem Unterarm."
+   },
+   {
+    "id": "yoga_liegevishnu",
+    "text": "Wischnus Liegehaltung."
+   },
+   {
+    "id": "yoga_goettinseit",
+    "text": "Seitbeuge in der Göttin."
+   },
+   {
+    "id": "yoga_stehtaube",
+    "text": "Stehende Taube."
+   },
+   {
+    "id": "yoga_yogamudra",
+    "text": "Joga-Mudra."
+   },
+   {
+    "id": "yoga_taube",
+    "text": "Taube."
+   },
+   {
+    "id": "yoga_kamel",
+    "text": "Kamel sanft."
+   },
+   {
+    "id": "yoga_eidechse",
+    "text": "Eidechse."
+   },
+   {
+    "id": "yoga_delfin",
+    "text": "Delfin."
+   },
+   {
+    "id": "yoga_fisch",
+    "text": "Gestützter Fisch."
+   },
+   {
+    "id": "yoga_kuhgesicht",
+    "text": "Kuhgesicht-Arme."
+   },
+   {
+    "id": "yoga_halbmond",
+    "text": "Halbmond-Ausfallschritt."
+   },
+   {
+    "id": "yoga_seitwinkel",
+    "text": "Gestreckter Seitwinkel."
+   },
+   {
+    "id": "yoga_pyramide",
+    "text": "Pyramide."
+   },
+   {
+    "id": "yoga_sitzvorbeuge",
+    "text": "Sitzende Vorbeuge."
+   },
+   {
+    "id": "yoga_bogen",
+    "text": "Halber Bogen."
+   },
+   {
+    "id": "yoga_kraehe",
+    "text": "Krähe."
+   },
+   {
+    "id": "yoga_umgbrett",
+    "text": "Umgekehrtes Brett."
+   },
+   {
+    "id": "yoga_delfinkopf",
+    "text": "Delfin-Kopfstand-Vorbereitung."
+   },
+   {
+    "id": "yoga_kopfstand",
+    "text": "Kopfstand."
+   },
+   {
+    "id": "yoga_unterarmvor",
+    "text": "Unterarmstand-Vorbereitung."
+   },
+   {
+    "id": "yoga_schulterstand",
+    "text": "Schulterstand."
+   },
+   {
+    "id": "yoga_pflug",
+    "text": "Pflug."
+   },
+   {
+    "id": "yoga_rad",
+    "text": "Rad."
+   },
+   {
+    "id": "yoga_kameltief",
+    "text": "Kamel tief."
+   },
+   {
+    "id": "yoga_taenzer",
+    "text": "Tänzer."
+   },
+   {
+    "id": "yoga_krieger3",
+    "text": "Krieger drei."
+   },
+   {
+    "id": "yoga_halbmondbal",
+    "text": "Halbmond."
+   },
+   {
+    "id": "yoga_drehhalbmond",
+    "text": "Gedrehter Halbmond."
+   },
+   {
+    "id": "yoga_drehdreieck",
+    "text": "Gedrehtes Dreieck."
+   },
+   {
+    "id": "yoga_koenigstaube",
+    "text": "Königstaube-Vorstufe."
+   },
+   {
+    "id": "yoga_halbspagat",
+    "text": "Spagat-Vorbereitung."
+   },
+   {
+    "id": "yoga_echseunter",
+    "text": "Echse auf den Unterarmen."
+   },
+   {
+    "id": "yoga_bootvoll",
+    "text": "Boot."
+   },
+   {
+    "id": "yoga_seitstuetzbein",
+    "text": "Seitstütz mit gehobenem Bein."
+   },
+   {
+    "id": "yoga_chaturanga",
+    "text": "Tschaturanga."
+   },
+   {
+    "id": "yoga_hochhund",
+    "text": "Heraufschauender Hund."
+   },
+   {
+    "id": "yoga_feueratem",
+    "text": "Feueratem im Sitz."
+   },
+   {
+    "id": "yoga_stehspagat",
+    "text": "Stehender Spagat."
+   },
+   {
+    "id": "yoga_bogenvoll",
+    "text": "Bogen."
+   },
+   {
+    "id": "yoga_frosch",
+    "text": "Frosch."
+   },
+   {
+    "id": "yoga_spagat",
+    "text": "Spagat."
+   },
+   {
+    "id": "yoga_ohrendruck",
+    "text": "Ohrendruck."
+   },
+   {
+    "id": "yoga_halbschulter",
+    "text": "Halber Schulterstand."
+   },
+   {
+    "id": "yoga_schildkroete",
+    "text": "Schildkröte."
+   },
+   {
+    "id": "yoga_reiher",
+    "text": "Reiher."
+   },
+   {
+    "id": "yoga_zehenboot",
+    "text": "Zehen-Boot."
+   },
+   {
+    "id": "yoga_pfau",
+    "text": "Pfau."
+   },
+   {
+    "id": "yoga_handstand",
+    "text": "Handstand."
+   },
+   {
+    "id": "yoga_unterarmstand",
+    "text": "Unterarmstand."
+   },
+   {
+    "id": "yoga_kopfkniestand",
+    "text": "Kopf-zum-Knie im Stand."
+   },
+   {
+    "id": "yoga_lotus",
+    "text": "Lotus."
+   },
+   {
+    "id": "yoga_lotusstand",
+    "text": "Halber Lotus im Stand."
+   },
+   {
+    "id": "yoga_handzeh",
+    "text": "Hand zum großen Zeh."
+   },
+   {
+    "id": "yoga_waage",
+    "text": "Waage."
+   },
+   {
+    "id": "yoga_wandl",
+    "text": "El-Handstand an der Wand."
+   },
+   {
+    "id": "ex_platepinch",
+    "text": "Scheiben-Pintsch halten."
+   }
+  ],
+  "namen_36_alias": [
+   {
+    "id": "yoga_seitstuetz",
+    "text": "Seitstütz.",
+    "clip": "ex_sideplank"
+   },
+   {
+    "id": "yoga_unterarmstuetz",
+    "text": "Unterarmstütz.",
+    "clip": "ex_plank"
+   },
+   {
+    "id": "yoga_superman",
+    "text": "Superman.",
+    "clip": "ex_superman"
+   }
   ]
  },
  "batches": {
@@ -2242,6 +3529,766 @@
    "credits": 238.5,
    "takes": 1,
    "duration_s": 45.0
+  },
+  "batch_09": {
+   "chars": 990,
+   "order": [
+    "u_als_naechstes",
+    "ex_pushpause",
+    "ex_benchpause",
+    "ex_lateralhold",
+    "ex_highplank",
+    "ex_pullhold",
+    "ex_chestrowhold",
+    "ex_invrowhold",
+    "ex_curlhold",
+    "ex_supermanhold",
+    "ex_gobletpause",
+    "ex_lungehold",
+    "ex_bridgehold",
+    "ex_hollow",
+    "ex_sideplank",
+    "ex_kbclean",
+    "ex_kbfloor",
+    "ex_kbpushpress",
+    "ex_wallpush",
+    "ex_pushincl",
+    "ex_pushknee",
+    "ex_pseudoplanche",
+    "ex_packpress",
+    "ex_kneepike",
+    "ex_pikeelev",
+    "ex_wallhs",
+    "ex_chairdipx",
+    "ex_walltri",
+    "ex_sphinxpush",
+    "ex_tablerowkn",
+    "ex_towelpost",
+    "ex_doorrowuni"
+   ],
+   "audio_order": [
+    "u_als_naechstes",
+    "ex_pushpause",
+    "ex_benchpause",
+    "ex_lateralhold",
+    "ex_highplank",
+    "ex_pullhold",
+    "ex_chestrowhold",
+    "ex_invrowhold",
+    "ex_curlhold",
+    "ex_supermanhold",
+    "ex_gobletpause",
+    "ex_lungehold",
+    "ex_bridgehold",
+    "ex_hollow",
+    "ex_sideplank",
+    "ex_kbclean",
+    "ex_kbfloor",
+    "ex_kbpushpress",
+    "ex_wallpush",
+    "ex_pushincl",
+    "ex_pushknee",
+    "ex_pseudoplanche",
+    "ex_packpress",
+    "ex_kneepike",
+    "ex_pikeelev",
+    "ex_wallhs",
+    "ex_chairdipx",
+    "ex_walltri",
+    "ex_sphinxpush",
+    "ex_tablerowkn",
+    "ex_towelpost",
+    "ex_doorrowuni"
+   ],
+   "discard_first": true,
+   "discard_last": true,
+   "separator": "Eintrag + ' …' + Leerzeile",
+   "generated": false,
+   "label": "JAI_batch_09",
+   "credits": 495.0,
+   "raw": "raw/batch_09.mp3"
+  },
+  "batch_10": {
+   "chars": 984,
+   "order": [
+    "ex_ytw",
+    "ex_swimmer",
+    "ex_pronepull",
+    "ex_towellat",
+    "ex_packrow",
+    "ex_packcurl",
+    "ex_tablechin",
+    "ex_bottlehammer",
+    "ex_bottleraise",
+    "ex_bottlefront",
+    "ex_bottleuni",
+    "ex_pistolbox",
+    "ex_shrimp",
+    "ex_cossack",
+    "ex_jumpsquat",
+    "ex_bsschair",
+    "ex_chairstep",
+    "ex_wallsitsgl",
+    "ex_sglbridge",
+    "ex_gmbw",
+    "ex_nordicneg",
+    "ex_sglcalf",
+    "ex_legraisefloor",
+    "ex_beinschere",
+    "ex_russtwistbw",
+    "ex_bearcrawl",
+    "ex_sideplankhip",
+    "ex_bbfloor",
+    "ex_dbfloor",
+    "ex_bbincline",
+    "ex_squeezepress",
+    "ex_dbpullover",
+    "ex_pushleg",
+    "ex_bandchest",
+    "ex_plyopush",
+    "ex_hindupush"
+   ],
+   "audio_order": [
+    "ex_ytw",
+    "ex_swimmer",
+    "ex_pronepull",
+    "ex_towellat",
+    "ex_packrow",
+    "ex_packcurl",
+    "ex_tablechin",
+    "ex_bottlehammer",
+    "ex_bottleraise",
+    "ex_bottlefront",
+    "ex_bottleuni",
+    "ex_pistolbox",
+    "ex_shrimp",
+    "ex_cossack",
+    "ex_jumpsquat",
+    "ex_bsschair",
+    "ex_chairstep",
+    "ex_wallsitsgl",
+    "ex_sglbridge",
+    "ex_gmbw",
+    "ex_nordicneg",
+    "ex_sglcalf",
+    "ex_legraisefloor",
+    "ex_beinschere",
+    "ex_russtwistbw",
+    "ex_bearcrawl",
+    "ex_sideplankhip",
+    "ex_bbfloor",
+    "ex_dbfloor",
+    "ex_bbincline",
+    "ex_squeezepress",
+    "ex_dbpullover",
+    "ex_pushleg",
+    "ex_bandchest",
+    "ex_plyopush",
+    "ex_hindupush"
+   ],
+   "discard_first": true,
+   "discard_last": true,
+   "separator": "Eintrag + ' …' + Leerzeile",
+   "generated": false,
+   "label": "JAI_batch_10",
+   "credits": 492.0,
+   "raw": "raw/batch_10.mp3"
+  },
+  "batch_11": {
+   "chars": 975,
+   "order": [
+    "ex_svend",
+    "ex_dbohpstand",
+    "ex_ohpuni",
+    "ex_bbpushpress",
+    "ex_zpress",
+    "ex_landmine",
+    "ex_platefront",
+    "ex_bandlateral",
+    "ex_uprightrow",
+    "ex_wallslide",
+    "ex_bandextrot",
+    "ex_bandpullapart",
+    "ex_inclineyraise",
+    "ex_dbshrug",
+    "ex_bbshrug",
+    "ex_kickback",
+    "ex_bandohext",
+    "ex_bbtriext",
+    "ex_concentration",
+    "ex_inclinecurl",
+    "ex_spidercurl",
+    "ex_revcurl",
+    "ex_dragcurl",
+    "ex_pendlay",
+    "ex_dbbentrow",
+    "ex_renegade",
+    "ex_bandlat",
+    "ex_straightarm",
+    "ex_scappull",
+    "ex_kbgorilla",
+    "ex_invrowfeet",
+    "ex_assistpull",
+    "ex_zercher",
+    "ex_boxsquat"
+   ],
+   "audio_order": [
+    "ex_svend",
+    "ex_dbohpstand",
+    "ex_ohpuni",
+    "ex_bbpushpress",
+    "ex_zpress",
+    "ex_landmine",
+    "ex_platefront",
+    "ex_bandlateral",
+    "ex_uprightrow",
+    "ex_wallslide",
+    "ex_bandextrot",
+    "ex_bandpullapart",
+    "ex_inclineyraise",
+    "ex_dbshrug",
+    "ex_bbshrug",
+    "ex_kickback",
+    "ex_bandohext",
+    "ex_bbtriext",
+    "ex_concentration",
+    "ex_inclinecurl",
+    "ex_spidercurl",
+    "ex_revcurl",
+    "ex_dragcurl",
+    "ex_pendlay",
+    "ex_dbbentrow",
+    "ex_renegade",
+    "ex_bandlat",
+    "ex_straightarm",
+    "ex_scappull",
+    "ex_kbgorilla",
+    "ex_invrowfeet",
+    "ex_assistpull",
+    "ex_zercher",
+    "ex_boxsquat"
+   ],
+   "discard_first": true,
+   "discard_last": true,
+   "separator": "Eintrag + ' …' + Leerzeile",
+   "generated": false,
+   "label": "JAI_batch_11",
+   "credits": 487.5,
+   "raw": "raw/batch_11.mp3"
+  },
+  "batch_12": {
+   "chars": 991,
+   "order": [
+    "ex_sumosquat",
+    "ex_splitsquat",
+    "ex_walklunge",
+    "ex_curtsy",
+    "ex_sidelunge",
+    "ex_stepdown",
+    "ex_sissy",
+    "ex_pistol",
+    "ex_seatcalf",
+    "ex_bbcalf",
+    "ex_tibraise",
+    "ex_dbsquat",
+    "ex_assistsquat",
+    "ex_chairsit",
+    "ex_sumodl",
+    "ex_rackpull",
+    "ex_dbdl",
+    "ex_kbdl",
+    "ex_sglrdl",
+    "ex_sglhipthrust",
+    "ex_bbbridge",
+    "ex_frogpump",
+    "ex_donkeykick",
+    "ex_bandkick",
+    "ex_sidelyingabd",
+    "ex_bandwalk",
+    "ex_bridgewalk",
+    "ex_slidecurl",
+    "ex_pullthrough",
+    "ex_reversehyper",
+    "ex_bridgemarch",
+    "ex_bridgechair",
+    "ex_vup",
+    "ex_bicycle",
+    "ex_revcrunch",
+    "ex_situp"
+   ],
+   "audio_order": [
+    "ex_sumosquat",
+    "ex_splitsquat",
+    "ex_walklunge",
+    "ex_curtsy",
+    "ex_sidelunge",
+    "ex_stepdown",
+    "ex_sissy",
+    "ex_pistol",
+    "ex_seatcalf",
+    "ex_bbcalf",
+    "ex_tibraise",
+    "ex_dbsquat",
+    "ex_assistsquat",
+    "ex_chairsit",
+    "ex_sumodl",
+    "ex_rackpull",
+    "ex_dbdl",
+    "ex_kbdl",
+    "ex_sglrdl",
+    "ex_sglhipthrust",
+    "ex_bbbridge",
+    "ex_frogpump",
+    "ex_donkeykick",
+    "ex_bandkick",
+    "ex_sidelyingabd",
+    "ex_bandwalk",
+    "ex_bridgewalk",
+    "ex_slidecurl",
+    "ex_pullthrough",
+    "ex_reversehyper",
+    "ex_bridgemarch",
+    "ex_bridgechair",
+    "ex_vup",
+    "ex_bicycle",
+    "ex_revcrunch",
+    "ex_situp"
+   ],
+   "discard_first": true,
+   "discard_last": true,
+   "separator": "Eintrag + ' …' + Leerzeile",
+   "generated": false,
+   "label": "JAI_batch_12",
+   "credits": 495.5,
+   "raw": "raw/batch_12.mp3"
+  },
+  "batch_13": {
+   "chars": 688,
+   "order": [
+    "ex_shtap",
+    "ex_plankupdown",
+    "ex_kneeplank",
+    "ex_plankleg",
+    "ex_pallof",
+    "ex_woodchop",
+    "ex_suitcase",
+    "ex_sidebend",
+    "ex_toesbar",
+    "ex_stirpot",
+    "ex_balljack",
+    "ex_seatedtuck",
+    "ex_crabwalk",
+    "ex_floordip",
+    "ex_backwidow",
+    "ex_highknees",
+    "ex_shadowbox",
+    "ex_skater",
+    "ex_thruster",
+    "ex_dbsnatch",
+    "ex_hangsupp",
+    "ex_scaphang",
+    "ex_deadhang",
+    "ex_towelhang",
+    "ex_farmerhold",
+    "ex_kbfarmhold",
+    "ex_jughold"
+   ],
+   "audio_order": [
+    "ex_shtap",
+    "ex_plankupdown",
+    "ex_kneeplank",
+    "ex_plankleg",
+    "ex_pallof",
+    "ex_woodchop",
+    "ex_suitcase",
+    "ex_sidebend",
+    "ex_toesbar",
+    "ex_stirpot",
+    "ex_balljack",
+    "ex_seatedtuck",
+    "ex_crabwalk",
+    "ex_floordip",
+    "ex_backwidow",
+    "ex_highknees",
+    "ex_shadowbox",
+    "ex_skater",
+    "ex_thruster",
+    "ex_dbsnatch",
+    "ex_hangsupp",
+    "ex_scaphang",
+    "ex_deadhang",
+    "ex_towelhang",
+    "ex_farmerhold",
+    "ex_kbfarmhold",
+    "ex_jughold"
+   ],
+   "discard_first": true,
+   "discard_last": true,
+   "separator": "Eintrag + ' …' + Leerzeile",
+   "generated": false,
+   "label": "JAI_batch_13",
+   "credits": 344.0,
+   "raw": "raw/batch_13.mp3"
+  },
+  "batch_14": {
+   "chars": 990,
+   "order": [
+    "yoga_berg",
+    "yoga_schulterkreisen",
+    "yoga_nacken",
+    "yoga_kinnbrust",
+    "yoga_armquer",
+    "yoga_trizeps",
+    "yoga_adlerarm",
+    "yoga_brustoeffner",
+    "yoga_wandengel",
+    "yoga_seitbeuge",
+    "yoga_hueftkreisen",
+    "yoga_katzekuh",
+    "yoga_kind",
+    "yoga_kniebrust",
+    "yoga_figur4",
+    "yoga_schmetterling",
+    "yoga_sphinx",
+    "yoga_bruecke",
+    "yoga_savasana",
+    "yoga_sukhasana",
+    "yoga_tiefausfall",
+    "yoga_streckung",
+    "yoga_sitzseitbeuge",
+    "yoga_halbevorbeuge",
+    "yoga_vorbeuge",
+    "yoga_fersensitz",
+    "yoga_beingurt",
+    "yoga_krokodil",
+    "yoga_liegschmetterling",
+    "yoga_armeheben",
+    "yoga_ragdoll",
+    "yoga_zehensitz",
+    "yoga_vierfuessler",
+    "yoga_windloeser",
+    "yoga_beinewand",
+    "yoga_oberschenkel",
+    "yoga_palme",
+    "yoga_rueckbeuge",
+    "yoga_kniestand",
+    "yoga_wandhund",
+    "yoga_reiter",
+    "yoga_loewe",
+    "yoga_tiger",
+    "yoga_kniebrett",
+    "yoga_stab",
+    "yoga_schneidervor"
+   ],
+   "audio_order": [
+    "yoga_berg",
+    "yoga_schulterkreisen",
+    "yoga_nacken",
+    "yoga_kinnbrust",
+    "yoga_armquer",
+    "yoga_trizeps",
+    "yoga_adlerarm",
+    "yoga_brustoeffner",
+    "yoga_wandengel",
+    "yoga_seitbeuge",
+    "yoga_hueftkreisen",
+    "yoga_katzekuh",
+    "yoga_kind",
+    "yoga_kniebrust",
+    "yoga_figur4",
+    "yoga_schmetterling",
+    "yoga_sphinx",
+    "yoga_bruecke",
+    "yoga_savasana",
+    "yoga_sukhasana",
+    "yoga_tiefausfall",
+    "yoga_streckung",
+    "yoga_sitzseitbeuge",
+    "yoga_halbevorbeuge",
+    "yoga_vorbeuge",
+    "yoga_fersensitz",
+    "yoga_beingurt",
+    "yoga_krokodil",
+    "yoga_liegschmetterling",
+    "yoga_armeheben",
+    "yoga_ragdoll",
+    "yoga_zehensitz",
+    "yoga_vierfuessler",
+    "yoga_windloeser",
+    "yoga_beinewand",
+    "yoga_oberschenkel",
+    "yoga_palme",
+    "yoga_rueckbeuge",
+    "yoga_kniestand",
+    "yoga_wandhund",
+    "yoga_reiter",
+    "yoga_loewe",
+    "yoga_tiger",
+    "yoga_kniebrett",
+    "yoga_stab",
+    "yoga_schneidervor"
+   ],
+   "discard_first": true,
+   "discard_last": true,
+   "separator": "Eintrag + ' …' + Leerzeile",
+   "generated": false,
+   "label": "JAI_batch_14",
+   "credits": 495.0,
+   "raw": "raw/batch_14.mp3"
+  },
+  "batch_15": {
+   "chars": 971,
+   "order": [
+    "yoga_halbheuschrecke",
+    "yoga_stern",
+    "yoga_sitzberg",
+    "yoga_sitzdreh",
+    "yoga_graetsche",
+    "yoga_wechselatmung",
+    "yoga_bienenatmung",
+    "yoga_wiege",
+    "yoga_krieger1",
+    "yoga_krieger2",
+    "yoga_umkrieger",
+    "yoga_dreieck",
+    "yoga_hund",
+    "yoga_hundpedal",
+    "yoga_kobra",
+    "yoga_drehsitz",
+    "yoga_malasana",
+    "yoga_stuhl",
+    "yoga_baum",
+    "yoga_tisch",
+    "yoga_heuschrecke",
+    "yoga_welpe",
+    "yoga_seitausfall",
+    "yoga_goettin",
+    "yoga_happybaby",
+    "yoga_faden",
+    "yoga_robbe",
+    "yoga_stuhldreh",
+    "yoga_adler",
+    "yoga_brett",
+    "yoga_kopfknie",
+    "yoga_bootkn",
+    "yoga_hund3",
+    "yoga_heldensitz",
+    "yoga_hoherausfall",
+    "yoga_demkrieger",
+    "yoga_drehausfall",
+    "yoga_achtpunkt",
+    "yoga_marichi1",
+    "yoga_marichi3",
+    "yoga_bharadvaja",
+    "yoga_liegheld",
+    "yoga_bruecke1",
+    "yoga_drehvorbeuge",
+    "yoga_halblotus",
+    "yoga_kuhgesichtsitz",
+    "yoga_feuerholz",
+    "yoga_drehkopfknie",
+    "yoga_graetschseit"
+   ],
+   "audio_order": [
+    "yoga_halbheuschrecke",
+    "yoga_stern",
+    "yoga_sitzberg",
+    "yoga_sitzdreh",
+    "yoga_graetsche",
+    "yoga_wechselatmung",
+    "yoga_bienenatmung",
+    "yoga_wiege",
+    "yoga_krieger1",
+    "yoga_krieger2",
+    "yoga_umkrieger",
+    "yoga_dreieck",
+    "yoga_hund",
+    "yoga_hundpedal",
+    "yoga_kobra",
+    "yoga_drehsitz",
+    "yoga_malasana",
+    "yoga_stuhl",
+    "yoga_baum",
+    "yoga_tisch",
+    "yoga_heuschrecke",
+    "yoga_welpe",
+    "yoga_seitausfall",
+    "yoga_goettin",
+    "yoga_happybaby",
+    "yoga_faden",
+    "yoga_robbe",
+    "yoga_stuhldreh",
+    "yoga_adler",
+    "yoga_brett",
+    "yoga_kopfknie",
+    "yoga_bootkn",
+    "yoga_hund3",
+    "yoga_heldensitz",
+    "yoga_hoherausfall",
+    "yoga_demkrieger",
+    "yoga_drehausfall",
+    "yoga_achtpunkt",
+    "yoga_marichi1",
+    "yoga_marichi3",
+    "yoga_bharadvaja",
+    "yoga_liegheld",
+    "yoga_bruecke1",
+    "yoga_drehvorbeuge",
+    "yoga_halblotus",
+    "yoga_kuhgesichtsitz",
+    "yoga_feuerholz",
+    "yoga_drehkopfknie",
+    "yoga_graetschseit"
+   ],
+   "discard_first": true,
+   "discard_last": true,
+   "separator": "Eintrag + ' …' + Leerzeile",
+   "generated": false,
+   "label": "JAI_batch_15",
+   "credits": 485.5,
+   "raw": "raw/batch_15.mp3"
+  },
+  "batch_16": {
+   "chars": 992,
+   "order": [
+    "yoga_seitunterarm",
+    "yoga_liegevishnu",
+    "yoga_goettinseit",
+    "yoga_stehtaube",
+    "yoga_yogamudra",
+    "yoga_taube",
+    "yoga_kamel",
+    "yoga_eidechse",
+    "yoga_delfin",
+    "yoga_fisch",
+    "yoga_kuhgesicht",
+    "yoga_halbmond",
+    "yoga_seitwinkel",
+    "yoga_pyramide",
+    "yoga_sitzvorbeuge",
+    "yoga_bogen",
+    "yoga_kraehe",
+    "yoga_umgbrett",
+    "yoga_delfinkopf",
+    "yoga_kopfstand",
+    "yoga_unterarmvor",
+    "yoga_schulterstand",
+    "yoga_pflug",
+    "yoga_rad",
+    "yoga_kameltief",
+    "yoga_taenzer",
+    "yoga_krieger3",
+    "yoga_halbmondbal",
+    "yoga_drehhalbmond",
+    "yoga_drehdreieck",
+    "yoga_koenigstaube",
+    "yoga_halbspagat",
+    "yoga_echseunter",
+    "yoga_bootvoll",
+    "yoga_seitstuetzbein",
+    "yoga_chaturanga",
+    "yoga_hochhund",
+    "yoga_feueratem",
+    "yoga_stehspagat",
+    "yoga_bogenvoll",
+    "yoga_frosch",
+    "yoga_spagat",
+    "yoga_ohrendruck",
+    "yoga_halbschulter",
+    "yoga_schildkroete",
+    "yoga_reiher",
+    "yoga_zehenboot",
+    "yoga_pfau",
+    "yoga_handstand",
+    "yoga_unterarmstand",
+    "yoga_kopfkniestand",
+    "yoga_lotus"
+   ],
+   "audio_order": [
+    "yoga_seitunterarm",
+    "yoga_liegevishnu",
+    "yoga_goettinseit",
+    "yoga_stehtaube",
+    "yoga_yogamudra",
+    "yoga_taube",
+    "yoga_kamel",
+    "yoga_eidechse",
+    "yoga_delfin",
+    "yoga_fisch",
+    "yoga_kuhgesicht",
+    "yoga_halbmond",
+    "yoga_seitwinkel",
+    "yoga_pyramide",
+    "yoga_sitzvorbeuge",
+    "yoga_bogen",
+    "yoga_kraehe",
+    "yoga_umgbrett",
+    "yoga_delfinkopf",
+    "yoga_kopfstand",
+    "yoga_unterarmvor",
+    "yoga_schulterstand",
+    "yoga_pflug",
+    "yoga_rad",
+    "yoga_kameltief",
+    "yoga_taenzer",
+    "yoga_krieger3",
+    "yoga_halbmondbal",
+    "yoga_drehhalbmond",
+    "yoga_drehdreieck",
+    "yoga_koenigstaube",
+    "yoga_halbspagat",
+    "yoga_echseunter",
+    "yoga_bootvoll",
+    "yoga_seitstuetzbein",
+    "yoga_chaturanga",
+    "yoga_hochhund",
+    "yoga_feueratem",
+    "yoga_stehspagat",
+    "yoga_bogenvoll",
+    "yoga_frosch",
+    "yoga_spagat",
+    "yoga_ohrendruck",
+    "yoga_halbschulter",
+    "yoga_schildkroete",
+    "yoga_reiher",
+    "yoga_zehenboot",
+    "yoga_pfau",
+    "yoga_handstand",
+    "yoga_unterarmstand",
+    "yoga_kopfkniestand",
+    "yoga_lotus"
+   ],
+   "discard_first": true,
+   "discard_last": true,
+   "separator": "Eintrag + ' …' + Leerzeile",
+   "generated": false,
+   "label": "JAI_batch_16",
+   "credits": 496.0,
+   "raw": "raw/batch_16.mp3"
+  },
+  "batch_17": {
+   "chars": 146,
+   "order": [
+    "yoga_lotusstand",
+    "yoga_handzeh",
+    "yoga_waage",
+    "yoga_wandl",
+    "ex_platepinch"
+   ],
+   "audio_order": [
+    "yoga_lotusstand",
+    "yoga_handzeh",
+    "yoga_waage",
+    "yoga_wandl",
+    "ex_platepinch"
+   ],
+   "discard_first": true,
+   "discard_last": true,
+   "separator": "Eintrag + ' …' + Leerzeile",
+   "generated": false,
+   "label": "JAI_batch_17",
+   "credits": 73.0,
+   "raw": "raw/batch_17.mp3"
   }
  },
  "total_chars": 5042,

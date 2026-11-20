@@ -26,8 +26,8 @@ async def main():
         b=await p.chromium.launch();ctx=await b.new_context(viewport={'width':390,'height':844},accept_downloads=True);pg=await ctx.new_page()
         errs=[];pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:errs.append(m.text) if m.type=='error' else None)
         await setup(pg,U)
-        v=await pg.evaluate("[APP_VER,BK_VER]");chk(v==['3.5',5],'version 3.5, backup format 5 '+str(v))
-        await pg.evaluate("go('set')");vl=await pg.text_content('#verLine');chk('Version 3.5 · @ Joschy' in vl,vl)
+        v=await pg.evaluate("[APP_VER,BK_VER]");chk(v==['3.6',5],'version 3.6, backup format 5 '+str(v))
+        await pg.evaluate("go('set')");vl=await pg.text_content('#verLine');chk('Version 3.6 · @ Joschy' in vl,vl)
         # 1) catalogue
         r=await pg.evaluate("""()=>{const lv=[1,2,3].map(l=>YKEYS.filter(k=>YP[k].lv===l).length);const bad=YKEYS.filter(k=>{const p=YP[k];return!p.n||!p.sa&&p.lv>1&&false||!(p.c.length>=2&&p.c.length<=3)||!p.a||!YREG.some(x=>x[0]===p.r)||!(p.sec>0)||!AN['y_'+k]});
           const prof=YKEYS.filter(k=>YP[k].lv===3);const noAlt=prof.filter(k=>!YP[k].alt||!YP[YP[k].alt]||YP[YP[k].alt].lv>=3);

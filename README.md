@@ -2,7 +2,7 @@
 
 ## Download
 
-**[Homegym 3.5 herunterladen (APK, ca. 3 MB)](https://github.com/jr-stack-bot/homegym-app/raw/main/releases/Homegym-3.5.apk)**
+**[Homegym 3.6 herunterladen (APK, ca. 7 MB)](https://github.com/jr-stack-bot/homegym-app/raw/main/releases/Homegym-3.6.apk)**
 
 Auf dem Android-Handy antippen, Datei öffnen und die Installation aus unbekannter Quelle einmalig erlauben. Ab Android 7.
 
@@ -53,7 +53,7 @@ Android-App für Krafttraining zu Hause: geführte Trainings mit animierten Übu
 ![Startseite in allen 8 Designs nebeneinander](docs/screenshots/08_designs_vergleich.png)
 
 ## Installation
-1. Die APK über den [Download-Link ganz oben](https://github.com/jr-stack-bot/homegym-app/raw/main/releases/Homegym-3.5.apk) laden (aktuell Version 3.5; ältere Versionen liegen im Ordner [`releases/`](releases/)).
+1. Die APK über den [Download-Link ganz oben](https://github.com/jr-stack-bot/homegym-app/raw/main/releases/Homegym-3.6.apk) laden (aktuell Version 3.6; ältere Versionen liegen im Ordner [`releases/`](releases/)).
 2. Auf dem Handy öffnen und „Installation aus unbekannten Quellen“ erlauben.
 3. Beim ersten Training die Benachrichtigungen zulassen.
 
@@ -112,10 +112,11 @@ Screenshots landen in `/tmp/homegym-shots/` (änderbar über `HOMEGYM_SHOTS`).
 JAI („Joschy's AI“) ist eine eigene, mit ElevenLabs entworfene Stimme (keine Nachbildung einer realen Person). Die 276 Ansagen wurden einmalig erzeugt, mit `jai/split.py` geschnitten, mit der Effekt-Kette „leicht“ aus `jai/fx.md` bearbeitet und liegen fertig in `android/assets/jai/`. Die App setzt sie zur Laufzeit zusammen, etwa Zahl + „Komma fünf“ + „Kilo“.
 
 ## Versionen
-Aktuell: **3.5**. Details in [CHANGELOG.md](CHANGELOG.md).
+Aktuell: **3.6**. Details in [CHANGELOG.md](CHANGELOG.md).
 
 | Version | Wichtigste Neuerungen |
 |---|---|
+| 3.6 | JAI sagt die Namen aller Übungen und Yoga-Haltungen an, in der Pause „Als Nächstes“ + Name |
 | 3.5 | Extras: 19 Kampfsport-Kostüme für Mann und Frau (mit Kennwort freischaltbar), muskulöserer Körperbau mit Kostüm, „Zufällig pro Training“; ohne Kostüm unverändert |
 | 3.4 | 58 neue Yoga-Haltungen (154), Rotation beim Wiederholen einer Woche, „Andere Haltung“, Dehn-Abläufe wechseln wöchentlich; 100 neue Kraftübungen (259) auf Nebenplätzen in jedem zweiten Zyklus und bei „Tauschen“, Hauptübungen unverändert; Übungsblatt mit Atmung/Leichter/Achtung; Geräte- und Layout-Fixes |
 | 3.3 | Griffkraft & Hängen: Block am Zieh-Tag in 4 Stufen, Farmer's Hold am Beintag, Hang-Test alle 4 Wochen mit Kurve, Hang-Pause an freien Tagen; Anzeige-Fixes (nichts abgeschnitten, 360 px/große Schrift, Halte-Übungen mit Haltezeit) |

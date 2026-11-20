@@ -43,7 +43,7 @@ async def main():
     await ctx.close();chk(bk32['ver']=='3.2' and '"extras"' not in bk32['t'],f"Fixture: Backup vom echten 3.2-Stand erzeugt (ohne Feld extras)")
     ctx,pg,errs=await page(b)
     r=await pg.evaluate("()=>({ver:APP_VER,bk:BK_VER,ex:JSON.parse(localStorage.getItem(KEY)).extras,pick:[cosPick(null,'m'),cosPick(null,'f')],n:COS_IDS.length,names:COS_IDS.map(k=>COSD[k].n)})")
-    chk(r['ver']=='3.5' and r['bk']==5,f"Version 3.5, Backup-Format bleibt v{r['bk']}")
+    chk(r['ver']=='3.6' and r['bk']==5,f"Version 3.6, Backup-Format bleibt v{r['bk']}")
     chk(r['ex']=={'u':0,'m':'none','f':'none'} and r['pick']==[None,None],f"Neuer Stand: Extras gesperrt, kein Kostüm {r['ex']}")
     chk(r['n']==19 and len(set(r['names']))==19,f"19 Kostüme: {', '.join(r['names'])}")
     # ---- Einstellungen: Extras gesperrt, falsches Kennwort ----
