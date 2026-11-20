@@ -36,7 +36,7 @@ const COSL=[
  ["samurai","Samurai",{top:"#3a4049",bot:"#2c323a",sl:1,fsl:.6,bl:.98,wide:2.6,hakama:1,armor:"samurai",ac:"#2b2521",ac2:"#8c7244",skirt:{c:"#2b2521",len:.46,add:2.6,n:4,plate:1},sode:1,head:{t:"kabuto",c:"#2b2521",c2:"#8c7244"},glove:{t:"kote",c:"#2b2521",c2:"#3a4049"},shoe:"#2b2521",sole:"#3b3029"}],
  ["glad","Gladiator",{top:"skin",bot:"#e4dac4",bl:.24,wide:1,armor:"glad",ac:"#6a4529",ac2:"#a7adb2",skirt:{c:"#6a4529",len:.3,add:1.5,n:5},manica:"#a7adb2",greave:"#a7adb2",head:{t:"galea",c:"#a7adb2"},glove:{t:"wrap",c:"#8a6a4b"},bare:1},{top:"#6a4529",sl:0}],
  ["krav","Krav Maga",{top:"#1a1c1f",bot:"#555a60",sl:.45,bl:.96,wide:1.1,shoe:"#1a1c1f",sole:"#e9eef1",glove:{t:"mma",c:"#2b2e33"}}],
- ["fecht","Fechten",{top:"#f2f3f1",bot:"#f2f3f1",sl:1,fsl:1,bl:.96,wide:.7,jline:1,knee:1,head:{t:"mask",c:"#1b1e22"},glove:{t:"fence",c:"#e6e7e3"},gl1:1,shoe:"#f2f3f1",sole:"#d5d9dd"}],
+ ["fecht","Fechten",{top:"#f2f3f1",bot:"#f2f3f1",sl:1,fsl:1,bl:.96,wide:.7,jline:1,knee:1,head:{t:"mask",c:"#1b1e22"},noTail:1,glove:{t:"fence",c:"#e6e7e3"},gl1:1,shoe:"#f2f3f1",sole:"#d5d9dd"}],
  ["sumo","Sumo",{top:"skin",bot:"skin",sl:0,bl:.02,mawashi:"#1d2026",bare:1},{top:"#4b535d",bot:"#4b535d",sl:.32,bl:.34,wide:0,body:1}]
 ];
 const COSD={};for(const[id,n,m,f]of COSL)COSD[id]={id,n,m,f:Object.assign({},m,f||{})};
@@ -172,7 +172,11 @@ function cHeadDraw(x,kit,H,at,hr,fr){const X=CX,mini=X.mini,col=T3(H.c),K=LOOK[X
     const sl=fr?[at(-.66,.2),at(.66,.2),at(.6,-.17),at(-.6,-.17)]:[at(.42,.3),at(1.13,.3),at(1.16,-.02),at(.42,-.02)];x.beginPath();smooth(x,sl);x.fillStyle=kit.base(K.skin);x.fill();
     if(fr){eye(-.34,.02);eye(.34,.02)}else eye(.66,.14);return}
   if(H.t==="mask"){const mesh=fr?cEll(at(0,.02),hr*1.0,hr*1.22,0,16):[at(.22,1.06),at(.86,.82),at(1.32,.2),at(1.32,-.48),at(1.02,-1.02),at(.42,-1.16),at(.2,-.55)];
-    if(fr){ln(at(-1,.6),at(1,.6),H.c,hr*.2)}else ln(at(.25,1.0),at(-.92,.55),H.c,hr*.22);
+    /* hood (Haube) over the back of the head and the nape: hair and ponytail are tucked in */
+    if(fr)cPoly(x,kit,cEll(at(0,-.02),hr*1.12,hr*1.34,0,16),"#e9ebe8",true);
+    else{cPoly(x,kit,[at(.3,1.12),at(-.35,1.36),at(-1.12,1.0),at(-1.3,.2),at(-1.22,-.65),at(-.9,-1.25),at(-.2,-1.5),at(.35,-1.2),at(.3,-.4)],"#e9ebe8",true);
+      if(!mini){ln(at(-.95,.75),at(-1.1,-.9),"#000000",hr*.05,.18);ln(at(-.3,1.3),at(-1.2,.0),"#000000",hr*.05,.12)}}
+    ln(fr?at(-1,.6):at(.25,1.0),fr?at(1,.6):at(-.92,.55),H.c,hr*(fr?.2:.22));
     const bib=fr?[at(-.75,-.95),at(.75,-.95),at(.62,-1.55),at(-.62,-1.55)]:[at(.42,-1.08),at(1.08,-.95),at(1.0,-1.48),at(.25,-1.52)];cPoly(x,kit,bib,"#eef0ef",true);
     x.save();x.globalAlpha=.55;cPoly(x,kit,mesh,H.c,true);x.restore();
     if(!mini){x.save();x.beginPath();smooth(x,mesh);x.clip();x.strokeStyle="rgba(170,180,190,.35)";x.lineWidth=Math.max(.4,hr*.035);x.beginPath();for(let i=-6;i<=6;i++){const a=at(i*.2,1.4),b=at(i*.2,-1.4),c=at(-1.5,i*.22),d=at(1.5,i*.22);x.moveTo(a[0],a[1]);x.lineTo(b[0],b[1]);x.moveTo(c[0],c[1]);x.lineTo(d[0],d[1])}x.stroke();x.restore();

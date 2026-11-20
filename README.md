@@ -53,7 +53,7 @@ Android-App für Krafttraining zu Hause: geführte Trainings mit animierten Übu
 ![Startseite in allen 8 Designs nebeneinander](docs/screenshots/08_designs_vergleich.png)
 
 ## Installation
-1. Die APK über den [Download-Link ganz oben](https://github.com/jr-stack-bot/homegym-app/raw/main/releases/Homegym-3.4.apk) laden (aktuell Version 3.4; ältere Versionen liegen im Ordner [`releases/`](releases/)).
+1. Die APK über den [Download-Link ganz oben](https://github.com/jr-stack-bot/homegym-app/raw/main/releases/Homegym-3.5.apk) laden (aktuell Version 3.5; ältere Versionen liegen im Ordner [`releases/`](releases/)).
 2. Auf dem Handy öffnen und „Installation aus unbekannten Quellen“ erlauben.
 3. Beim ersten Training die Benachrichtigungen zulassen.
 

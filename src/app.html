@@ -1134,27 +1134,28 @@ function drawFig0(ctx,def,o,tr,g,time,c){
       const q=ok?norm2(toS(off)):toS(nF);return{thigh:sideDir(P(h),P(k),q),shin:sideDir(P(k),P(a),[-q[0],-q[1]])}};
     const armSides=(sh,el,hd)=>{const mid=lerpP(sh,hd,.5);const off=sub(el,mid);const ok=Math.hypot(off[0],off[1])>2.5;
       const q=ok?norm2(toS([-off[0],-off[1]])):toS(nF);return{ua:sideDir(P(sh),P(el),q),fa:sideDir(P(el),P(hd),q)}};
-    function leg(x,kit,h,k,a,t,kn){const sd=legSides(h,k,a);const H_=P(h),K_=P(k),A_=P(a);
+    function leg(x,kit,h,k,a,t,kn){const sd=legSides(h,k,a);const H_=P(h),K_=P(k),A_=P(a);if(COS)cFloor(x);
       kit.limb(H_,K_,B.th,sd.thigh,K.skin);kit.limb(K_,A_,B.sn,sd.shin,K.skin);kit.cap(K_,R(B.knee),K.skin);
       if(K.botLen<.8){kit.limb(H_,K_,B.th,sd.thigh,K.bot,0,K.botLen,.6)}
       else{kit.limb(H_,K_,B.th,sd.thigh,K.bot,0,1,.45);kit.cap(K_,R(B.knee+.45),K.bot);kit.limb(K_,A_,B.sn,sd.shin,K.bot,0,K.botLen,.35);
         if(!mini&&!kit.dimmed&&!COS){x.strokeStyle=ACol(.45);x.lineWidth=Math.max(.6,s*.55);x.lineCap="round";x.beginPath();x.moveTo(H_[0],H_[1]);x.lineTo(K_[0],K_[1]);const e2=lerpP(K_,A_,K.botLen*.95);x.lineTo(e2[0],e2[1]);x.stroke()}}
       if(g==="m"&&!mini&&!kit.dimmed)muscleLeg(x,kit,H_,K_,sd.thigh,B.th.f,B.th.b);
-      if(COS)cosLeg(x,kit,H_,K_,A_,sd.thigh,sd.shin,B.th,B.sn,!kit.dimmed);
+      if(COS){cosLeg(x,kit,H_,K_,A_,sd.thigh,sd.shin,B.th,B.sn,!kit.dimmed);x.restore()}
       drawShoe(x,kit,A_,P(t),K_,s,mini,fl!=null?P([0,fl])[1]:null)}
-    function arm(x,kit,sh,el,hd,sleeve,hk){const sd=armSides(sh,el,hd);const S_=P(sh),E_=P(el),Hd=P(hd);
+    function arm(x,kit,sh,el,hd,sleeve,hk){const sd=armSides(sh,el,hd);const S_=P(sh),E_=P(el),Hd=P(hd);if(COS)cFloor(x);
       kit.limb(S_,E_,B.ua,sd.ua,K.skin);kit.limb(E_,Hd,B.fa,sd.fa,K.skin);kit.cap(E_,R(B.elbow),K.skin);
       // deltoid
       const dc=lerpP(sh,el,.16);kit.blob(circlePts(P(dc),R(B.delt),mini?6:10,.86,Math.atan2(E_[1]-S_[1],E_[0]-S_[0])),K.skin,S_,E_,R(B.delt));
       if(sleeve){kit.limb(S_,E_,B.ua,sd.ua,K.top,0,sleeve,.7);kit.blob(circlePts(P(dc),R(B.delt+.7),mini?6:10,.86,Math.atan2(E_[1]-S_[1],E_[0]-S_[0])),K.top,S_,E_,R(B.delt))}
       if(g==="m"&&!mini&&!kit.dimmed)muscleArm(x,kit,S_,E_,sd.ua);
       if(COS)cosArm(x,kit,S_,E_,Hd,sd.ua,sd.fa,B.ua,!kit.dimmed);
-      const hm=handMode(hk,el,hd);if(!(COS&&cosHand(x,kit,Hd,E_,hm,hk)))drawHand(x,kit,Hd,E_,g,s,mini,K.skin,hm.m,hm.d)}
+      const hm=handMode(hk,el,hd);if(!(COS&&cosHand(x,kit,Hd,E_,hm,hk)))drawHand(x,kit,Hd,E_,g,s,mini,K.skin,hm.m,hm.d);if(COS)x.restore()}
     // far side (dimmed)
     {const x=offF;const kit=bodyKit(x,tr,g,light,mini,true);kit.dimmed=true;
       leg(x,kit,o.hip,o.knee2,o.ankle2,o.toe2);arm(x,kit,o.sh,o.elbow2,o.hand2,K.sleeve,"hand2");
 }
     const x=offB;const kit=bodyKit(x,tr,g,light,mini,false);
+    if(COS)cFloor(x);/* 3.5: costume figure lies on the floor, never in it (feet excluded) */
     // torso
     const brc=(o._br||0)*.75,BRF=[0,0,0,.15,.55,.85,.6,.1];/* 2.2: chest expands with the breath */
     const tp=[];B.tt.forEach((t,i)=>{const w=B.tf[i]+brc*BRF[i];tp.push(P(add(ax(t),[nF[0]*w,nF[1]*w])))});
@@ -1175,7 +1176,7 @@ function drawFig0(ctx,def,o,tr,g,time,c){
       kit.ao(P(add(o.sh,[-nF[0]*2-u[0]*6,-nF[1]*2-u[1]*6])),R(7),.25)}
     if(COS)cosTorso(x,kit,{ax,nF,u,tp});
     // neck + head
-    drawHeadSide(x,kit,nF);if(COS)cosHead(x,kit);
+    drawHeadSide(x,kit,nF);if(COS){cosHead(x,kit);x.restore()}
     // near leg (casts occlusion on torso/far parts)
     kit.occlude(()=>{const p=kit.limbPts(P(o.hip),P(o.knee),B.th,legSides(o.hip,o.knee,o.ankle).thigh);smooth(x,p)},R(1.6),.35);
     leg(x,kit,o.hip,o.knee,o.ankle,o.toe);
@@ -1219,7 +1220,7 @@ function drawFig0(ctx,def,o,tr,g,time,c){
     // neck (3.1 f: slimmer, tapers to the skull)
     {const N0=P(add(o.sh,[-hF[0]*1.2,-hF[1]*1.2])),N1=at(-.08,-.55);kit.limb(N0,N1,fem?{f:[B.neck*1.05,B.neck*.86,0,.5,.3],b:[B.neck*1.1,B.neck*.84,0,.5,.3]}:{f:[B.neck,B.neck*.9,0,.5,.3],b:[B.neck*1.05,B.neck*.85,0,.5,.3]},norm2([hF[0],-hF[1]]),K.skin)}
     // ponytail (f): lies against the back of the neck, hangs with gravity, swings slightly
-    if(fem){const d0=norm2([-hF[0]*.92+hu[0]*.06,-hF[1]*.92+hu[1]*.06]);drawTail(x,kit,tailChain(W_(-.84,.62),d0,r,false),r,P)}
+    if(fem&&!(COS&&COS.noTail)){const d0=norm2([-hF[0]*.92+hu[0]*.06,-hF[1]*.92+hu[1]*.06]);drawTail(x,kit,tailChain(W_(-.84,.62),d0,r,false),r,P)}
     // 3.1 f: the shadow under the jaw falls on the neck only (drawn before the face, so the chin stays clean)
     if(fem)kit.ao(at(.15,-.98),R(r*.5),.14);
     // skull + face profile as one smooth outline (f: smaller nose, soft narrow chin, higher jaw line)
@@ -1253,15 +1254,16 @@ function drawFig0(ctx,def,o,tr,g,time,c){
   function drawFront(x){const kit=bodyKit(x,tr,g,light,mini,false);const G=B.fr;const hipY=92,shY=o.shY;const Q=o.L||o;
     // legs
     for(const[h,k,a,sg]of[["hipL","kneeL","ankL",-1],["hipR","kneeR","ankR",1]]){const H_=P(o[h]),K_=P(o[k]),A_=P(o[a]);const out=[sg,0];
-      const nT=sideDir(H_,K_,out),nS=sideDir(K_,A_,out);const thF={f:[B.th.b[0]*.78,B.th.b[1],B.th.b[2],B.th.b[3],B.th.b[4]],b:[B.th.f[0]*.72,B.th.f[1],B.th.f[2]*.6,B.th.f[3],B.th.f[4]]};
+      const nT=sideDir(H_,K_,out),nS=sideDir(K_,A_,out);if(COS)cFloor(x);const thF={f:[B.th.b[0]*.78,B.th.b[1],B.th.b[2],B.th.b[3],B.th.b[4]],b:[B.th.f[0]*.72,B.th.f[1],B.th.f[2]*.6,B.th.f[3],B.th.f[4]]};
       kit.limb(H_,K_,thF,nT,K.skin);kit.limb(K_,A_,{f:B.sn.b,b:B.sn.f},nS,K.skin);kit.cap(K_,R(B.knee*.9),K.skin);
       if(K.botLen<.8){kit.limb(H_,K_,thF,nT,K.bot,0,K.botLen,.6);if(g==="m"&&!mini){const Lp=(t,v)=>{const c_=lerpP(H_,K_,t);const w=v>=0?kit.wOf(thF.f,t):kit.wOf(thF.b,t);return[c_[0]+nT[0]*w*v,c_[1]+nT[1]*w*v]};
         x.save();x.globalCompositeOperation="source-atop";mLine(x,Lp(.6,.15),Lp(.8,-.25),Lp(.96,-.7),.26,.6);mLine(x,Lp(.6,.55),Lp(.78,.45),Lp(.92,.15),.14,.5);mGlow(x,Lp(.72,.3),kit.wOf(thF.f,.72)*.55,.14);x.restore()}}else{kit.limb(H_,K_,thF,nT,K.bot,0,1,.45);kit.cap(K_,R(B.knee+.45),K.bot);kit.limb(K_,A_,{f:B.sn.b,b:B.sn.f},nS,K.bot,0,K.botLen,.35)}
-      if(COS)cosLeg(x,kit,H_,K_,A_,nT,nS,thF,{f:B.sn.b,b:B.sn.f},sg>0);
+      if(COS){cosLeg(x,kit,H_,K_,A_,nT,nS,thF,{f:B.sn.b,b:B.sn.f},sg>0);x.restore()}
       // shoe seen from the front
       const sh0=[A_[0]+sg*R(2),A_[1]+R(1.2)];if(def.bare){x.beginPath();x.ellipse(sh0[0],sh0[1]+R(.6),R(3.6),R(3),0,0,7);x.fillStyle=kit.base(K.skin);x.fill()}else{x.beginPath();x.ellipse(sh0[0],sh0[1],R(5.4),R(3.4),0,0,7);x.fillStyle=kit.base(K.shoe);x.fill();
       x.beginPath();x.ellipse(sh0[0],sh0[1]+R(2.4),R(5.6),R(1.6),0,0,7);x.fillStyle=K.sole;x.fill()}}
     if(o._T){const T=o._T;const pt=P([T.hx,T.hy]),pc=P([0,92]);x.save();x.translate(pt[0],pt[1]);x.rotate(rad(T.lean||0));x.translate(-pc[0],-pc[1])}
+    if(COS)cFloor(x);
     kit.limb(P([0,shY-4]),P(Q.neck),{f:[B.neck,B.neck*.9,0,.5,.3],b:[B.neck,B.neck*.9,0,.5,.3]},[1,0],K.skin);
     // torso
     const bx=(o._br||0)*.4;const shV=G.shV||G.sh;const fw=g==="f";const tor=[[shV+1,shY+2],[G.ch+1+bx,shY-12],...(fw?[[G.ch-.6,shY-19],[G.wa,shY-30],[G.wa+.3,shY-37]]:[[G.ch-1.4,shY-19],[G.wa,shY-31],[G.wa+.8,shY-38]]),[G.hi,hipY+6],[G.hi+1,hipY-6],[G.hi-4,hipY-12],[0,hipY-13],[-(G.hi-4),hipY-12],[-(G.hi+1),hipY-6],[-G.hi,hipY+6],...(fw?[[-(G.wa+.3),shY-37],[-G.wa,shY-30],[-(G.ch-.6),shY-19]]:[[-(G.wa+.8),shY-38],[-G.wa,shY-31],[-(G.ch-1.4),shY-19]]),[-(G.ch+1+bx),shY-12],[-(shV+1),shY+2],[-6,shY+7],[6,shY+7]].map(P);
@@ -1282,7 +1284,7 @@ function drawFig0(ctx,def,o,tr,g,time,c){
     if(o._T&&o._T.tilt){const pn=P([0,shY+6]);x.save();x.translate(pn[0],pn[1]);x.rotate(rad(o._T.tilt));x.translate(-pn[0],-pn[1])}
     const hd=P(Q.head),hr=R(B.head);const fem=g==="f";
     /* 3.1 f: hair pulled back into a ponytail that swings out behind the head on one side (nothing hangs along the jaw) */
-    if(fem){const rt=[Q.head[0]+.32*B.head,Q.head[1]+.62*B.head];const th=rad(o._T?(o._T.lean||0)+(o._T.tilt||0):0);/* local frame is rotated by lean+tilt: world gravity in local units */
+    if(fem&&!(COS&&COS.noTail)){const rt=[Q.head[0]+.32*B.head,Q.head[1]+.62*B.head];const th=rad(o._T?(o._T.lean||0)+(o._T.tilt||0):0);/* local frame is rotated by lean+tilt: world gravity in local units */
       const pts=tailChain(rt,norm2([.95,-.05]),B.head*1.02,true,[Math.sin(th),-Math.cos(th)]);drawTail(x,kit,pts,B.head*.95,P)}
     x.fillStyle=kit.base(K.skin);for(const sx of[-1,1]){x.beginPath();x.ellipse(hd[0]+sx*hr*(fem?.86:.92),hd[1]+hr*.05,hr*(fem?.14:.18),hr*(fem?.22:.28),0,0,7);x.fill()}
     const fpts=fem?[[0,-1.08],[.8,-.72],[.83,.1],[.64,.55],[.32,.9],[0,1.01],[-.32,.9],[-.64,.55],[-.83,.1],[-.8,-.72]]:[[0,-1.08],[.82,-.7],[.86,.2],[.6,.8],[0,1.12],[-.6,.8],[-.86,.2],[-.82,-.7]];
@@ -1311,6 +1313,7 @@ function drawFig0(ctx,def,o,tr,g,time,c){
       if(K.sleeve)kit.limb(A_,E_,sc,n1,K.top,0,K.sleeve*(us<.6?.5:1),.35);
       if(COS)cosArm(x,kit,A_,E_,Hd,n1,n2,sc,sg>0);
       const hm=handMode(h,Q[b],Q[h]);if(!(COS&&cosHand(x,kit,Hd,E_,hm,h)))drawHand(x,kit,Hd,E_,g,s,mini,K.skin,hm.m,hm.d)}
+    if(COS)x.restore();
     if(o._T)x.restore();
   }
 }
