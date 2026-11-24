@@ -2,7 +2,8 @@
 # 1) Raum vorhanden (Betonwand, Gummiboden, Spot, Rack mit Figur aus dem Icon, Hantelablage + Scheibenständer als Canvas-Bilder,
 #    Chromglanz auf 8 Griffen, Boxsack, Kreidestaub, Schriftzug HOMEGYM), App ist darunter schon aufgebaut
 # 2) Dauer höchstens 1,7 s (alle Splash-Animationen enden bis 1,5 s), Tippen überspringt, Neuladen zeigt sie nicht noch einmal
-# 3) prefers-reduced-motion: stark verkürzt, kein Flackern, keine Partikel
+# 3) Laufband, Crosstrainer, Bank und Lichtkegel vorhanden und ganz im Bild (nichts angeschnitten), Ladezeit grob
+# 4) prefers-reduced-motion: stark verkürzt, kein Flackern, keine Partikel
 # Aufruf: python3 -I tests/t39.py  (HOMEGYM_OUT = Ordner mit index.html, Standard out/)
 import os as _os
 _REPO=_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
@@ -21,7 +22,14 @@ ROOM="""()=>{const s=document.getElementById('splash'),r=s&&s.querySelector('.sp
  const end=Math.max(0,...an.map(a=>{const t=a.effect.getTiming();return (t.delay||0)+(+t.duration||0)}));
  return{icon:!!r.querySelector('svg #hgUpper'),img:r.querySelectorAll('image').length,gl:r.querySelectorAll('.splGl').length,dust:r.querySelectorAll('.splDust').length,
   bag:!!r.querySelector('.splBag'),txt:(r.querySelector('.splTxt')||{}).textContent,dark:!!r.querySelector('.splDark'),end,splT:SPL_T,app:!!document.querySelector('#v-home').innerHTML,
-  vb:r.getAttribute('viewBox'),w:s.getBoundingClientRect().width}}"""
+  vb:r.getAttribute('viewBox'),w:s.getBoundingClientRect().width,
+  parts:Object.fromEntries(['splTread','splCross','splBench','splCone'].map(c=>{const e=r.querySelector('.'+c);if(!e)return[c,null];const b=e.getBoundingClientRect();
+    return[c,{x0:Math.round(b.left),x1:Math.round(b.right),w:Math.round(b.width),h:Math.round(b.height),y0:Math.round(b.top),y1:Math.round(b.bottom)}]})),
+  imgs:[...r.querySelectorAll('image')].map(e=>{const b=e.getBoundingClientRect();return[Math.round(b.left),Math.round(b.right)]}),
+  run:window.__r}}"""
+# Aufbau der Szene: splashRoom auf einer Kopie des Icons, Dauer in ms
+BUILD="""()=>{const d=document.createElement('div');d.innerHTML='<div class="spl-in"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108"></svg></div>';
+ document.body.appendChild(d);const t=performance.now();splashRoom(d,false);const dt=performance.now()-t;d.remove();return dt}"""
 async def main():
     async with async_playwright() as p:
         b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox'])
@@ -33,11 +41,18 @@ async def main():
             await q.wait_for_selector('#splash',state='detached',timeout=3000);dt=await q.evaluate("(window.__g-window.__r)/1000")
             chk(r and r['icon'] and r['img']==2 and r['gl']==8 and r['dust']>=8 and r['bag'] and r['txt']=='HOMEGYM' and r['dark'] and r['app'] and r['w']==w,f'{w}x{h}: Gym-Raum mit Rack/Figur, Geräten, Glanz, Staub, Schriftzug {r}')
             chk(r and r['splT']<=1500 and r['end']<=1500 and dt<=1.7,f'{w}x{h}: Dauer {r and r["end"]:.0f} ms Animation, {dt:.2f} s bis weg ab Start (Soll ≤ 1,7 s)')
+            pa=r['parts'] if r else {}
+            ok=all(pa.get(k) and pa[k]['w']>8 and pa[k]['h']>8 for k in pa) and len(pa)==4
+            inside=all(pa[k]['x0']>=0 and pa[k]['x1']<=w for k in('splTread','splCross','splBench')) and all(a>=-1 and b<=w+1 for a,b in r['imgs'])
+            chk(ok and (inside or w>900) and pa['splCone']['w']>w*.3,f'{w}x{h}: Laufband, Crosstrainer, Bank, Lichtkegel sichtbar, nichts angeschnitten {pa} {r["imgs"]}')
+            chk(r['run']<1500,f'{w}x{h}: Start-Animation läuft {r["run"]:.0f} ms nach dem Seitenstart')
             chk(not e,f'{w}x{h}: keine JS-Fehler {e[:2]}')
             if w==360:
                 async with q.expect_navigation():await q.evaluate("location.reload()")
                 await q.wait_for_timeout(150);chk(await q.evaluate("!document.getElementById('splash')"),'nach Neuladen keine zweite Start-Animation')
             await c.close()
+        c,q,e=await fresh();await q.goto(UR+'?nosplash=1');await q.wait_for_timeout(300);bt=min([await q.evaluate(BUILD) for _ in range(3)])
+        chk(bt<120 and not e,f'Ladezeit: Aufbau des Raums {bt:.0f} ms (ohne Drosselung, Soll < 120 ms)');await c.close()
         c,q,e=await fresh();await q.goto(UR);await q.wait_for_selector('#splash.run');await q.wait_for_timeout(200);t0=time.time();await q.mouse.click(180,400)
         await q.wait_for_selector('#splash',state='detached',timeout=1000);chk(time.time()-t0<.5 and not e,f'Tippen überspringt ({time.time()-t0:.2f} s)');await c.close()
         c,q,e=await fresh(reduced_motion='reduce');await q.goto(UR);await q.wait_for_selector('#splash.still',timeout=2000);t0=time.time()

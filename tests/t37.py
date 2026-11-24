@@ -125,7 +125,7 @@ async def main():
         c,q,e=await fresh();t0=time.time();await q.goto(UR);await q.wait_for_selector('#splash.run',timeout=2000)
         vis=await q.evaluate("()=>{const s=document.getElementById('splash');const r=s.getBoundingClientRect();return{w:r.width,h:r.height,svg:!!s.querySelector('#hgUpper'),fl:s.querySelectorAll('.splSweep').length*10+s.querySelectorAll('.splStar').length,app:!!document.querySelector('#v-home').innerHTML}}")
         await q.wait_for_selector('#splash',state='detached',timeout=3000);dt=time.time()-t0
-        chk(vis['w']==390 and vis['svg'] and vis['fl']==12 and vis['app'] and dt<2.6,f'Start-Animation: Icon groß über der schon fertigen App, nach {dt:.2f} s weg {vis}')
+        chk(vis['w']==390 and vis['svg'] and vis['fl']==12 and vis['app'] and dt<2.5,f'Start-Animation: Icon groß über der schon fertigen App, nach {dt:.2f} s weg {vis}')
         async with q.expect_navigation():await q.evaluate("location.reload()")
         await q.wait_for_timeout(150);chk(await q.evaluate("!document.getElementById('splash')"),'nach einem Neuladen (z. B. Backup) keine zweite Start-Animation');await c.close()
         c,q,e=await fresh();await q.goto(UR);await q.wait_for_selector('#splash.run');t0=time.time();await q.mouse.click(195,420)
