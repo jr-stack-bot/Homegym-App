@@ -58,10 +58,10 @@ async def main():
         await pg.click('[data-sgear=kb]');await pg.wait_for_timeout(100)
         chips=await pg.eval_on_selector_all('[data-wdel=kb]','e=>e.map(x=>+x.dataset.v)');assert chips==[8,12,16],chips
         await pg.fill('#wIn-kb','20');await pg.click('[data-wadd=kb]');await pg.click('[data-wdel=kb][data-v="8"]')
-        await pg.fill('#wIn-db','10 12,5 15');await pg.click('[data-wadd=db]')  # 3.7: Joschys Liste ist schon das Set Gummi PRO (Migration), die Werte gibt es bereits -> keine Doppelten
+        await pg.fill('#wIn-db','10 22,5');await pg.click('[data-wadd=db]')  # 3.7: Joschys Liste ist schon das Set Gummi PRO; 22,5 ist neu, 10 gibt es schon (keine Doppelten)
         await pg.click('[data-sgear=barbell]');await pg.click('#gearSave');await pg.wait_for_timeout(200)
         r=await pg.evaluate("()=>({w:S.profile.weights,g:S.profile.gear.includes('kb')&&!S.profile.gear.includes('barbell'),a:planItems('A',false,1).map(x=>x.ex),c:planItems('C',false,1).map(x=>x.ex),b:planItems('B',false,1).map(x=>x.ex)})")
-        print('gear',r);assert r['w']['kb']==[12,16,20] and r['w']['db']==[2.5,5,7.5,10,12.5,15,17.5,20] and r['g']
+        print('gear',r);assert r['w']['kb']==[12,16,20] and r['w']['db']==[2.5,5,7.5,10,12.5,15,17.5,20,22.5] and r['g']
         assert 'bench' not in r['a'] and 'squat' not in r['c'] and 'kbpushpress' in r['a'] and 'kbswing' in r['c'] and ('kbrow' in r['b'] or 'kbclean' in r['b'])
         s=await pg.evaluate("""()=>{const it={ex:'kbswing',sets:3,lo:12,hi:15};const a=startW('kbswing',suggest(it));
           S.history.push({date:new Date(Date.now()-864e5*3).toISOString(),plan:'C',day:'C',week:1,dur:3000,log:[{ex:'kbswing',sets:[{w:12,r:15,done:true},{w:12,r:15,done:true},{w:12,r:15,done:true}]},{ex:'goblet',sets:[{w:11,r:8,done:true}]}]});

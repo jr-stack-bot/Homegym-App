@@ -5,8 +5,8 @@
 - **Gewichtsvorschläge nur mit vorhandenen Paaren**: erst die Wiederholungen voll machen (bei großen Sprüngen 2 Extra-Wdh.), dann genau ein Paar weiter; 20 kg ist das Maximum, danach geht es über Wiederholungen, Tempo oder einen Satz mehr.
 - **Einmalige Umstellung** gespeicherter Daten: Joschys Kurzhantel-Liste wird auf das neue Set gesetzt, offene Sätze springen aufs nächste Paar (im Zweifel leichter). Andere Presets bleiben unverändert, Backup-Format bleibt v5, alte Backups bleiben lesbar.
 - **Neues App-Icon** (Power Rack, goldene Langhantel, Athlet) als Adaptive Icon mit Monochrom-Ebene für Android 13.
-- **Start-Animation** (ca. 1 s, Tippen überspringt, bei „Bewegung reduzieren“ stark verkürzt) und ein kurzer **Gold-Glanz** im App-Kopf nach einem Training.
-- **Fix**: In der Pause kommt „Als Nächstes“ + Name, beim Start der Übung wird der Name nicht noch einmal angesagt.
+- **Start-Animation** (ca. 1 s: Kniebeuge, Glanzstreifen und Funkeln über den Goldscheiben; Tippen überspringt, bei „Bewegung reduzieren“ stark verkürzt) und ein kurzer **Gold-Glanz** im App-Kopf nach einem Training.
+- **Fix Ansagen**: In der Pause kommt einmal „Als Nächstes“ + Name, beim Start jeder Übung der Name mit Sätzen und Gewicht; die doppelte Zusatz-Ansage „Nächste Übung“ entfällt, auch wenn die Pause im Hintergrund endet.
 - Hauptübungen und Plan unverändert, jede Einheit ≤ 59 Minuten.
 
 ## 3.6

@@ -332,12 +332,16 @@ input[type=date]{background:rgba(var(--ac),.05);color:var(--fg);border:1px solid
 #splash.run .spl-in{animation:splIn .2s ease-out both}
 #splash.run #hgLegs{transform-box:fill-box;transform-origin:50% 100%;animation:splLegs .64s .14s cubic-bezier(.45,0,.3,1) both}
 #splash.run #hgUpper{animation:splUp .64s .14s cubic-bezier(.45,0,.3,1) both}
-#splash .splFlash{opacity:0}
-#splash.run .splFlash{animation:splFlash .34s .5s ease-out both}
+#splash .splSweep{opacity:0}
+#splash.run .splSweep{animation:splSweep .6s .4s cubic-bezier(.45,0,.25,1) both}
+#splash .splStar{opacity:0;transform-box:fill-box;transform-origin:50% 50%}
+#splash.run .splStar{animation:splStar .5s .62s ease-out both}
+#splash.run .splStar.s2{animation-delay:.74s}
 @keyframes splIn{from{transform:scale(.84);opacity:0}to{transform:none;opacity:1}}
 @keyframes splLegs{0%{transform:none}42%{transform:scale(1.12,.6)}100%{transform:none}}
 @keyframes splUp{0%{transform:none}42%{transform:translateY(5.6px)}78%{transform:translateY(-1.6px)}100%{transform:none}}
-@keyframes splFlash{0%{opacity:0}30%{opacity:1}100%{opacity:0}}
+@keyframes splSweep{0%{transform:translateX(0);opacity:0}12%{opacity:1}88%{opacity:1}100%{transform:translateX(100px);opacity:0}}
+@keyframes splStar{0%{opacity:0;transform:scale(.1) rotate(0)}45%{opacity:1;transform:scale(1.15) rotate(40deg)}100%{opacity:0;transform:scale(.3) rotate(90deg)}}
 .hello{position:relative}
 .hgMark{position:absolute;top:-2px;right:0;width:66px;height:26px;overflow:visible}
 .hgMark .hgSweep{transform:translateX(-30px);opacity:0}
@@ -353,6 +357,7 @@ input[type=date]{background:rgba(var(--ac),.05);color:var(--fg);border:1px solid
  <radialGradient id="hgBg" cx="54" cy="50" r="72" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4b5059"/><stop offset=".45" stop-color="#2a2e35"/><stop offset="1" stop-color="#111316"/></radialGradient>
  <linearGradient id="hgRed" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8e0c13"/><stop offset=".22" stop-color="#ff5a48"/><stop offset=".45" stop-color="#e3241f"/><stop offset=".8" stop-color="#b3141a"/><stop offset="1" stop-color="#6a070c"/></linearGradient>
  <linearGradient id="hgRedH" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff6a58"/><stop offset=".35" stop-color="#e8261f"/><stop offset="1" stop-color="#8a0b12"/></linearGradient>
+ <linearGradient id="hgHook" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7b8490"/><stop offset=".3" stop-color="#2c3138"/><stop offset=".7" stop-color="#111317"/><stop offset="1" stop-color="#454b54"/></linearGradient>
  <linearGradient id="hgSteel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#c3cad3"/><stop offset="1" stop-color="#6b7480"/></linearGradient>
  <linearGradient id="hgGoldBar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6cf"/><stop offset=".3" stop-color="#ffd54a"/><stop offset=".62" stop-color="#c8920f"/><stop offset="1" stop-color="#7a5306"/></linearGradient>
  <linearGradient id="hgGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3b8"/><stop offset=".28" stop-color="#f6c63b"/><stop offset=".55" stop-color="#b98209"/><stop offset=".78" stop-color="#f2c84a"/><stop offset="1" stop-color="#8a5d05"/></linearGradient>
@@ -368,68 +373,76 @@ input[type=date]{background:rgba(var(--ac),.05);color:var(--fg);border:1px solid
  <filter id="hgShadow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.2"/></filter>
 </defs>
 <g id="hgBack"><rect width="108" height="108" fill="url(#hgBg)"/><rect width="108" height="108" fill="url(#hgGlow)"/></g>
-<g id="hgFore" transform="translate(54 54) scale(.86) translate(-54 -52.6)">
+<g id="hgFore" transform="translate(54 54) scale(.93) translate(-54 -52.9)">
  <ellipse cx="54" cy="83.6" rx="27" ry="2.6" fill="#000" opacity=".45" filter="url(#hgShadow)"/>
  <g id="hgRack">
-  <rect x="24.5" y="80.4" width="16" height="3.2" rx="1.1" fill="url(#hgRedH)"/>
-  <rect x="67.5" y="80.4" width="16" height="3.2" rx="1.1" fill="url(#hgRedH)"/>
-  <rect x="30" y="21.6" width="5" height="60" rx=".7" fill="url(#hgRed)"/>
-  <rect x="73" y="21.6" width="5" height="60" rx=".7" fill="url(#hgRed)"/>
-  <rect x="30" y="21.6" width="48" height="4.2" rx=".8" fill="url(#hgRedH)"/>
-  <rect x="30.4" y="21.95" width="47.2" height=".55" rx=".27" fill="#ffd8cf" opacity=".9"/>
-  <rect x="30.55" y="23.6" width=".6" height="57.4" rx=".3" fill="#ffc2b5" opacity=".75"/>
-  <rect x="73.55" y="23.6" width=".6" height="57.4" rx=".3" fill="#ffc2b5" opacity=".75"/>
-  <rect x="25" y="80.75" width="15" height=".45" rx=".22" fill="#ffc2b5" opacity=".75"/>
-  <rect x="68" y="80.75" width="15" height=".45" rx=".22" fill="#ffc2b5" opacity=".75"/>
-  <g fill="#3a0407"><rect x="31.65" y="31.00" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="34.10" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="37.20" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="40.30" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="43.40" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="55.80" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="58.90" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="62.00" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="65.10" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="68.20" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="71.30" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="74.40" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="77.50" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="31.00" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="34.10" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="37.20" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="40.30" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="43.40" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="55.80" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="58.90" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="62.00" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="65.10" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="68.20" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="71.30" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="74.40" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="77.50" width="1.7" height="1.7" rx=".45"/></g>
-  <g fill="#ff8b7a" opacity=".35" transform="translate(0 1.15)"><rect x="31.65" y="31.00" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="34.10" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="37.20" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="40.30" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="43.40" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="55.80" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="58.90" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="62.00" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="65.10" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="68.20" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="71.30" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="74.40" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="77.50" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="31.00" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="34.10" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="37.20" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="40.30" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="43.40" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="55.80" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="58.90" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="62.00" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="65.10" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="68.20" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="71.30" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="74.40" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="77.50" width="1.7" height="1.7" rx=".45"/></g>
+  <rect x="30.4" y="79.8" width="8.8" height="3.4" rx="1.4" fill="url(#hgRedH)" stroke="#4a0408" stroke-width=".3"/>
+  <rect x="68.8" y="79.8" width="8.8" height="3.4" rx="1.4" fill="url(#hgRedH)" stroke="#4a0408" stroke-width=".3"/>
+  <rect x="32.5" y="22.6" width="4" height="58.2" rx=".6" fill="url(#hgRed)" stroke="#4a0408" stroke-width=".3"/>
+  <rect x="71.5" y="22.6" width="4" height="58.2" rx=".6" fill="url(#hgRed)" stroke="#4a0408" stroke-width=".3"/>
+  <rect x="32.5" y="22.6" width="43" height="3.7" rx="1.2" fill="url(#hgRedH)" stroke="#4a0408" stroke-width=".3"/>
+  <rect x="33.6" y="22.95" width="40.8" height=".5" rx=".25" fill="#ffe1d9" opacity=".95"/>
+  <rect x="36" y="23.1" width="22" height="1.3" rx=".65" fill="#fff" opacity=".35" filter="url(#hgSoft)"/>
+  <rect x="33" y="24.4" width=".5" height="55.6" rx=".25" fill="#ffd0c4" opacity=".85"/>
+  <rect x="72" y="24.4" width=".5" height="55.6" rx=".25" fill="#ffd0c4" opacity=".85"/>
+  <rect x="33.5" y="27" width="1" height="20" rx=".5" fill="#fff" opacity=".4" filter="url(#hgSoft)"/>
+  <rect x="72.5" y="27" width="1" height="20" rx=".5" fill="#fff" opacity=".4" filter="url(#hgSoft)"/>
+  <rect x="31" y="80.15" width="7.6" height=".45" rx=".22" fill="#ffd0c4" opacity=".8"/>
+  <rect x="69.4" y="80.15" width="7.6" height=".45" rx=".22" fill="#ffd0c4" opacity=".8"/>
+  <g fill="#3a0407"><rect x="33.65" y="29.40" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="32.50" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="35.60" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="38.70" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="54.20" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="57.30" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="60.40" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="63.50" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="66.60" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="69.70" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="72.80" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="75.90" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="79.00" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="29.40" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="32.50" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="35.60" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="38.70" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="54.20" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="57.30" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="60.40" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="63.50" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="66.60" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="69.70" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="72.80" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="75.90" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="79.00" width="1.7" height="1.7" rx=".45"/></g>
+  <g fill="#ff8b7a" opacity=".35" transform="translate(0 1.15)"><rect x="33.65" y="29.40" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="32.50" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="35.60" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="38.70" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="54.20" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="57.30" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="60.40" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="63.50" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="66.60" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="69.70" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="72.80" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="75.90" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="79.00" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="29.40" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="32.50" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="35.60" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="38.70" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="54.20" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="57.30" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="60.40" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="63.50" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="66.60" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="69.70" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="72.80" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="75.90" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="79.00" width="1.7" height="1.7" rx=".45"/></g>
  </g>
  <g id="hgHooks">
   <g id="hgHookL">
-   <rect x="29.2" y="47.6" width="6.6" height="6.8" rx=".7" fill="url(#hgSteel)" stroke="#3d434b" stroke-width=".35"/>
-   <circle cx="31.1" cy="49.5" r=".45" fill="#4b525c"/><circle cx="31.1" cy="52.5" r=".45" fill="#4b525c"/>
-   <path d="M35.6 51.2h2.3v-3.3h1.7v4.9c0 .8-.5 1.3-1.3 1.3h-2.7z" fill="url(#hgSteel)" stroke="#3d434b" stroke-width=".35" stroke-linejoin="round"/>
-   <rect x="29.6" y="47.95" width="5.8" height=".4" rx=".2" fill="#fff"/>
-   <rect x="38.05" y="48.2" width=".45" height="3.4" rx=".2" fill="#fff" opacity=".85"/>
+   <rect x="31.7" y="44.2" width="5.6" height="8.6" rx=".9" fill="url(#hgHook)" stroke="#000" stroke-width=".3"/>
+   <rect x="32.2" y="44.7" width=".5" height="7.6" rx=".25" fill="#fff" opacity=".55"/>
+   <circle cx="34.5" cy="50.9" r=".5" fill="#9aa3ad"/>
   </g>
   <use href="#hgHookL" transform="matrix(-1 0 0 1 108 0)"/>
  </g>
  <g id="hgFig">
   <g id="hgLegs">
    <g id="hgLegL">
-    <path d="M46.2 68.8c-1 2.4-1 4.8-.2 6.8-.2 1.8.2 3.2.6 4.4h3.4c.2-1.4.6-3 .4-4.4 1-2 2.2-4.6 3-6.8z" fill="url(#hgSkin)"/>
-    <path d="M47.2 70.4c-.5 1.5-.4 2.9.2 4.1" stroke="#3a1a07" stroke-width=".55" fill="none" opacity=".5" filter="url(#hgSoft)"/>
-    <path d="M50.2 70.6c-.6 1.5-1.2 2.7-1.9 3.6" stroke="#3a1a07" stroke-width=".5" fill="none" opacity=".4" filter="url(#hgSoft)"/>
+    <path d="M46.2 68.8c-1 2.4-1 4.8-.2 6.8-.2 1.8.2 3.2.6 4.4h3.4c.2-1.4.6-3 .4-4.4 1-2 2.2-4.6 3-6.8z" fill="url(#hgSkin)" stroke="#2b1206" stroke-width=".3" stroke-linejoin="round"/>
+    <path d="M47.2 70.4c-.5 1.5-.4 2.9.2 4.1" stroke="#2a1003" stroke-width=".7" fill="none" opacity=".7" filter="url(#hgSoft)"/>
+    <path d="M50.2 70.6c-.6 1.5-1.2 2.7-1.9 3.6" stroke="#2a1003" stroke-width=".6" fill="none" opacity=".6" filter="url(#hgSoft)"/>
     <ellipse cx="48.6" cy="71.4" rx=".75" ry="1.7" fill="#f0b07a" opacity=".4"/>
     <ellipse cx="48" cy="75.8" rx=".9" ry=".6" fill="#f0b07a" opacity=".35"/>
-    <path d="M44.6 81.6c0-1.8 1.4-2.4 2.8-2.4h2.4c1 0 1.6.6 1.6 1.6v.8z" fill="url(#hgShoe)"/>
+    <path d="M46.3 76.4c-.3 1-.2 2 .2 2.8M49.9 76.6c.2.9.1 1.8-.2 2.6" stroke="#2a1003" stroke-width=".45" fill="none" opacity=".55" filter="url(#hgSoft)"/>
+    <ellipse cx="47.2" cy="77.4" rx=".45" ry="1" fill="#ffd2a8" opacity=".35"/>
+    <path d="M44.6 81.6c0-1.8 1.4-2.4 2.8-2.4h2.4c1 0 1.6.6 1.6 1.6v.8z" fill="url(#hgShoe)" stroke="#2b1206" stroke-width=".3" stroke-linejoin="round"/>
     <path d="M46.6 80.2l1.6-.6M47.4 80.9l1.6-.6" stroke="#9aa3ae" stroke-width=".3" stroke-linecap="round"/>
     <rect x="44.3" y="81.3" width="7.4" height="1.6" rx=".65" fill="url(#hgGoldBar)"/>
    </g>
    <use href="#hgLegL" transform="matrix(-1 0 0 1 108 0)"/>
   </g>
   <g id="hgUpper">
-   <path d="M46.8 60.6h14.4l1.6 8.8-7.6.2-1.2-3.4-1.2 3.4-7.6-.2z" fill="url(#hgShorts)"/>
+   <path d="M46.8 60.6h14.4l1.6 8.8-7.6.2-1.2-3.4-1.2 3.4-7.6-.2z" fill="url(#hgShorts)" stroke="#2b1206" stroke-width=".3" stroke-linejoin="round"/>
    <path d="M46.9 61.5l-1.6 7.9h1.1l1.5-7.9zM61.1 61.5l1.6 7.9h-1.1l-1.5-7.9z" fill="url(#hgGoldBar)"/>
    <rect x="46.7" y="60.3" width="14.6" height="1.3" rx=".45" fill="#1d1d22"/>
-   <path d="M50.4 43.1c-2.4 1.8-5.4 3-7.6 3.7-3 .8-4.2 2.8-4 4.8.2 2 1.8 3.2 3.6 3.4l2.8.2c1.4 2.3 2.4 4.2 3.2 6h11.2c.8-1.8 1.8-3.7 3.2-6l2.8-.2c1.8-.2 3.4-1.4 3.6-3.4.2-2-1-4-4-4.8-2.2-.7-5.2-1.9-7.6-3.7z" fill="url(#hgSkin)"/>
-   <path d="M48.2 45.6l2.4-.3c.6 3.1 1.8 5.1 3.4 5.1s2.8-2 3.4-5.1l2.4.3c-.2 4 1.2 7.4 2.8 9.8-1.2 1.8-2.2 3.8-2.9 6H48.3c-.7-2.2-1.7-4.2-2.9-6 1.6-2.4 3-5.8 2.8-9.8z" fill="url(#hgTank)"/>
+   <path d="M50.4 43.1c-2.4 1.8-5.4 3-7.6 3.7-3 .8-4.2 2.8-4 4.8.2 2 1.8 3.2 3.6 3.4l2.8.2c1.4 2.3 2.4 4.2 3.2 6h11.2c.8-1.8 1.8-3.7 3.2-6l2.8-.2c1.8-.2 3.4-1.4 3.6-3.4.2-2-1-4-4-4.8-2.2-.7-5.2-1.9-7.6-3.7z" fill="url(#hgSkin)" stroke="#2b1206" stroke-width=".3" stroke-linejoin="round"/>
+   <path d="M48.2 45.6l2.4-.3c.6 3.1 1.8 5.1 3.4 5.1s2.8-2 3.4-5.1l2.4.3c-.2 4 1.2 7.4 2.8 9.8-1.2 1.8-2.2 3.8-2.9 6H48.3c-.7-2.2-1.7-4.2-2.9-6 1.6-2.4 3-5.8 2.8-9.8z" fill="url(#hgTank)" stroke="#2b1206" stroke-width=".3" stroke-linejoin="round"/>
    <path d="M48.9 53.3c1.7 1.2 3.5 1.4 4.7.8M59.1 53.3c-1.7 1.2-3.5 1.4-4.7.8" stroke="#6d0910" stroke-width=".6" fill="none" opacity=".8" filter="url(#hgSoft)"/>
    <path d="M54 55.2v5.4M51.8 57.4h4.4M52 59.3h4" stroke="#7d0a10" stroke-width=".45" fill="none" opacity=".55" filter="url(#hgSoft)"/>
    <path d="M49.3 48.4c.5 1.6 1.4 2.6 2.6 3.1M58.7 48.4c-.5 1.6-1.4 2.6-2.6 3.1" stroke="#ff9a88" stroke-width=".45" fill="none" opacity=".75" stroke-linecap="round"/>
    <ellipse cx="41.7" cy="49.6" rx="1.9" ry="1.1" fill="#f4b884" opacity=".5" transform="rotate(-30 41.7 49.6)"/>
    <ellipse cx="66.3" cy="49.6" rx="1.9" ry="1.1" fill="#f4b884" opacity=".5" transform="rotate(30 66.3 49.6)"/>
    <path d="M45.1 47.3c1.6-.4 3-.9 4.2-1.5M62.9 47.3c-1.6-.4-3-.9-4.2-1.5" stroke="#e8a36b" stroke-width=".4" fill="none" opacity=".55" stroke-linecap="round"/>
+   <path d="M40.6 48.6c-.9 1.3-1.2 2.9-1 4.4M67.4 48.6c.9 1.3 1.2 2.9 1 4.4" stroke="#2a1003" stroke-width=".55" fill="none" opacity=".55" filter="url(#hgSoft)"/>
+   <path d="M45.2 47.6c1 .8 1.6 2 1.8 3.3M62.8 47.6c-1 .8-1.6 2-1.8 3.3" stroke="#2a1003" stroke-width=".5" fill="none" opacity=".5" filter="url(#hgSoft)"/>
    <g id="hgArmL">
-    <path d="M39 51c-1.8 1.6-2.8 4-2.6 6.2.2 1.4 1.6 2 2.8 1.4 1.4-.8 3-2.4 4.4-4l-.8-2.8z" fill="url(#hgSkin)"/>
-    <path d="M36.6 57.4c-.2-3.4.8-6.8 3-9.8l3 .8c-1.4 3-2 6-2.2 9.2-.4 1.6-3.4 1.6-3.8-.2z" fill="url(#hgSkin)"/>
-    <path d="M37.6 55.6c.2-2 .8-3.8 1.8-5.6" stroke="#f4b884" stroke-width=".5" fill="none" opacity=".55" stroke-linecap="round"/>
-    <path d="M40.4 56.8c.8-.8 1.6-1.6 2.2-2.4" stroke="#3a1a07" stroke-width=".45" fill="none" opacity=".45" filter="url(#hgSoft)"/>
+    <path d="M39 51c-1.8 1.6-2.8 4-2.6 6.2.2 1.4 1.6 2 2.8 1.4 1.4-.8 3-2.4 4.4-4l-.8-2.8z" fill="url(#hgSkin)" stroke="#2b1206" stroke-width=".3" stroke-linejoin="round"/>
+    <path d="M36.6 57.4c-.2-3.4.8-6.8 3-9.8l3 .8c-1.4 3-2 6-2.2 9.2-.4 1.6-3.4 1.6-3.8-.2z" fill="url(#hgSkin)" stroke="#2b1206" stroke-width=".3" stroke-linejoin="round"/>
+    <path d="M37.6 55.6c.2-2 .8-3.8 1.8-5.6" stroke="#ffd2a8" stroke-width=".6" fill="none" opacity=".7" stroke-linecap="round"/>
+    <path d="M37.4 57.6c.9-.3 1.8-1 2.6-1.9" stroke="#2a1003" stroke-width=".55" fill="none" opacity=".6" filter="url(#hgSoft)"/>
+    <ellipse cx="38.6" cy="53.6" rx=".7" ry="1.6" fill="#ffd2a8" opacity=".35" transform="rotate(25 38.6 53.6)" filter="url(#hgSoft)"/>
+    <path d="M40.4 56.8c.8-.8 1.6-1.6 2.2-2.4" stroke="#2a1003" stroke-width=".6" fill="none" opacity=".65" filter="url(#hgSoft)"/>
    </g>
    <use href="#hgArmL" transform="matrix(-1 0 0 1 108 0)"/>
    <g id="hgBar">
     <rect x="18.8" y="44.6" width="70.4" height="2.2" rx="1.1" fill="url(#hgGoldBar)"/>
     <rect x="19.6" y="44.9" width="68.8" height=".42" rx=".21" fill="#fffbe6" opacity=".95"/>
+    <rect x="46" y="44.7" width="16" height=".9" rx=".45" fill="#fff" opacity=".5" filter="url(#hgSoft)"/>
     <g id="hgPlates">
      <g id="hgPL">
       <rect x="18.4" y="44.05" width="12.6" height="3.3" rx="1.2" fill="url(#hgGoldBar)"/>
@@ -440,6 +453,7 @@ input[type=date]{background:rgba(var(--ac),.05);color:var(--fg);border:1px solid
       <ellipse cx="25.9" cy="45.4" rx="2.75" ry="8.2" fill="none" stroke="#fff3b5" stroke-width=".45" opacity=".9"/>
       <ellipse cx="26.1" cy="45.7" rx="1.15" ry="2.5" fill="#8a5d05"/>
       <path d="M24 38.2c.6-1.5 1.5-2.3 2.2-2.3" stroke="#fffbe6" stroke-width=".6" fill="none" stroke-linecap="round"/>
+      <ellipse cx="25" cy="41.5" rx="1" ry="3.4" fill="#fff" opacity=".45" filter="url(#hgSoft)"/>
       <ellipse cx="21.9" cy="45.7" rx="2.9" ry="7.2" fill="#6e4a05"/>
       <ellipse cx="21.1" cy="45.7" rx="2.9" ry="7.2" fill="url(#hgGold)"/>
       <ellipse cx="21.1" cy="45.7" rx="2.9" ry="7.2" fill="none" stroke="url(#hgGoldRim)" stroke-width=".6"/>
@@ -451,13 +465,13 @@ input[type=date]{background:rgba(var(--ac),.05);color:var(--fg);border:1px solid
      <use href="#hgPL" transform="matrix(-1 0 0 1 108 0)"/>
     </g>
    </g>
-   <path d="M50.7 41.2h6.6v5.9c-1.1.9-2.2 1.3-3.3 1.3s-2.2-.4-3.3-1.3z" fill="url(#hgSkin)"/>
+   <path d="M50.7 41.2h6.6v5.9c-1.1.9-2.2 1.3-3.3 1.3s-2.2-.4-3.3-1.3z" fill="url(#hgSkin)" stroke="#2b1206" stroke-width=".3" stroke-linejoin="round"/>
    <path d="M50.9 42.4c.6 1.4.6 3 .2 4.4M57.1 42.4c-.6 1.4-.6 3-.2 4.4" stroke="#3a1a07" stroke-width=".4" fill="none" opacity=".35" filter="url(#hgSoft)"/>
    <path d="M51.4 46.2c1.6.9 3.6.9 5.2 0" stroke="#3a1a07" stroke-width=".45" fill="none" opacity=".5"/>
    <g id="hgHead">
     <ellipse cx="48.3" cy="36.3" rx="1.2" ry="1.75" fill="#7e4420"/>
     <ellipse cx="59.7" cy="36.3" rx="1.2" ry="1.75" fill="#7e4420"/>
-    <path d="M48.4 35.5c0-4.2 2.5-6.4 5.6-6.4s5.6 2.2 5.6 6.4c0 4.4-2.4 7.4-5.6 7.4s-5.6-3-5.6-7.4z" fill="url(#hgFace)"/>
+    <path d="M48.4 35.5c0-4.2 2.5-6.4 5.6-6.4s5.6 2.2 5.6 6.4c0 4.4-2.4 7.4-5.6 7.4s-5.6-3-5.6-7.4z" fill="url(#hgFace)" stroke="#2b1206" stroke-width=".3"/>
     <path d="M48.1 34.9c-.4-3.8 1.3-6.6 3.9-7.4 2.2-.7 5-.5 6.8.6 1.4.9 1.8 2.6 1.3 4.3l-.4 2.3c-.4-1.6-1.1-2.7-2.1-3.3-2.2.7-5 .5-7-.5-1.2.9-2 2.2-2.5 4z" fill="url(#hgHair)"/>
     <path d="M50.7 28.4c1.8-1 4.4-1.2 6.4-.4" stroke="#a9b2bf" stroke-width=".65" fill="none" stroke-linecap="round"/>
     <path d="M51.8 29.5c1.1-.4 2.3-.5 3.4-.3" stroke="#e2e8f0" stroke-width=".35" fill="none" stroke-linecap="round" opacity=".85"/>
@@ -477,14 +491,21 @@ input[type=date]{background:rgba(var(--ac),.05);color:var(--fg);border:1px solid
     <ellipse cx="57.4" cy="33.6" rx=".9" ry=".45" fill="#f5c08c" opacity=".35"/>
    </g>
    <g id="hgHands">
-    <g id="hgHandL">
-     <path d="M39.4 44c0-1 .8-1.6 1.8-1.6h1.4c1 0 1.6.6 1.6 1.6v3.6c0 1-.8 1.6-1.8 1.6h-1.2c-1 0-1.8-.6-1.8-1.6z" fill="url(#hgSkin)"/>
+    <g id="hgHandL" transform="translate(1 0)">
+     <path d="M39.4 44c0-1 .8-1.6 1.8-1.6h1.4c1 0 1.6.6 1.6 1.6v3.6c0 1-.8 1.6-1.8 1.6h-1.2c-1 0-1.8-.6-1.8-1.6z" fill="url(#hgSkin)" stroke="#2b1206" stroke-width=".3" stroke-linejoin="round"/>
      <path d="M40.5 43.4v4.4M41.6 43.2v4.6M42.7 43.4v4.4" stroke="#3a1a07" stroke-width=".3" opacity=".55"/>
      <path d="M39.9 43.3c.7-.5 1.8-.6 2.8-.3" stroke="#f4b884" stroke-width=".35" fill="none" opacity=".75" stroke-linecap="round"/>
     </g>
     <use href="#hgHandL" transform="matrix(-1 0 0 1 108 0)"/>
    </g>
   </g>
+ </g>
+ <g id="hgHookFront">
+  <g id="hgLipL">
+   <path d="M36.9 47.1h1.9v-4.2a.7 .7 0 0 1 1.4 0v5.5a2 2 0 0 1-2 2h-1.3z" fill="url(#hgHook)" stroke="#000" stroke-width=".3" stroke-linejoin="round"/>
+   <path d="M37.5 49.6h.9a1.3 1.3 0 0 0 1.3-1.3M39.15 43v4.4" stroke="#fff" stroke-width=".3" fill="none" opacity=".7" stroke-linecap="round"/>
+  </g>
+  <use href="#hgLipL" transform="matrix(-1 0 0 1 108 0)"/>
  </g>
 </g>
 </svg></div></div>
@@ -708,10 +729,10 @@ function jaiGreet(){const h=new Date().getHours();return jaiNamed(h<11?"greet_mo
 function jaiWarmId(w){const k=/kurz/.test(w.n);const m={cross:k?"warm_cross_kurz":"warm_cross",rowint:k?"warm_rower_kurz":"warm_rower",bikeint:k?"warm_bike_kurz":"warm_bike",walk:k?"warm_tread_kurz":"warm_tread",
   jumprope:"warm_rope",march:"warm_march",jj:"ex_jumpjack",armcircle:"warm_armcircle",pullapart:"warm_pullapart",armopen:"warm_armopen",airsquat:"ex_airsquatx",lungebw:"ex_lungebwx"};return m[w.anim]||null}
 function jaiWarmSeq(w){const id=jaiWarmId(w);const s=id?[id]:[];if(w.reps){const n=parseInt(w.reps,10);if(n>0)s.push(...jaiNum(n),"u_mal");if(/je Seite/.test(w.reps))s.push("u_je_seite")}return s}
-/* 3.7: named = the pause before already said "Als Nächstes" + name, so the start leaves out "Nächste Übung" + name (no double name) */
-function jaiExSeq(it,lg,first,named){const e=EX[it.ex];const w=+lg.sets[0].w;const s=[];
-  if(it.fin)s.push("finisher");else if(!first&&!named)s.push("next_ex");
-  s.push(...(named?[]:jaiEx(it.ex)),...jaiNum(it.sets),"u_saetze",...jaiReps(it));
+/* 3.7: start of every exercise = name + sets/reps/kg. The pause before says "Als Nächstes" + name; the old extra "Nächste Übung" is gone */
+function jaiExSeq(it,lg){const e=EX[it.ex];const w=+lg.sets[0].w;const s=[];
+  if(it.fin)s.push("finisher");
+  s.push(...jaiEx(it.ex),...jaiNum(it.sets),"u_saetze",...jaiReps(it));
   if(w>0&&e.type!=="band"&&e.type!=="time")s.push(...jaiKg(w));return s}
 function jaiSetSeq(ss,it,st){const e=EX[it.ex];const w=+st.w;const last=ss.si===it.sets-1;const s=last?["last_set"]:["go","u_satz",...jaiNum(ss.si+1)];
   if(w>0&&e.type!=="band"&&e.type!=="time")s.push(...jaiKg(w));return s}
@@ -1860,7 +1881,7 @@ function startSession(plan,opt){opt=opt||{};const quick=!!S.settings.quick;const
     log:items.map(it=>{const sg=suggest(it);const sets=initSets(it,sg);if(opt.re)for(const x of sets)if(+x.w>0)x.w=Math.max(EX[it.ex].type==="bar"?(+S.settings.bar||20):0,wFloor(it.ex,x.w*.9));return{ex:it.ex,sets}})};
   if(ws)S.session.wu={ex:items[0].ex,sets:WU.map(()=>({w:null,done:false})),skip:false};
   save();openTrain()}
-function openTrain(){if(S.session&&S.session.wu&&Array.isArray(S.session.items)&&S.session.items[0]&&S.session.wu.ex!==S.session.items[0].ex&&wuSync(S.session))save();if(S.session&&jaiOn()){const ss=S.session;jaiPreload([jaiGreet(),"plan_"+String(ss.plan||"a").toLowerCase(),"warm_start","go","u_satz","u_kilo","u_saetze","u_bis","u_wiederholungen","ten_left","cd_3","cd_2","cd_1","last_set","next_ex","u_als_naechstes",...(ss.items||[]).flatMap(it=>jaiEx(it.ex))])}$("#train").hidden=false;renderTrain()}
+function openTrain(){if(S.session&&S.session.wu&&Array.isArray(S.session.items)&&S.session.items[0]&&S.session.wu.ex!==S.session.items[0].ex&&wuSync(S.session))save();if(S.session&&jaiOn()){const ss=S.session;jaiPreload([jaiGreet(),"plan_"+String(ss.plan||"a").toLowerCase(),"warm_start","go","u_satz","u_kilo","u_saetze","u_bis","u_wiederholungen","ten_left","cd_3","cd_2","cd_1","last_set","u_als_naechstes",...(ss.items||[]).flatMap(it=>jaiEx(it.ex))])}$("#train").hidden=false;renderTrain()}
 function closeTrain(){$("#train").hidden=true;$("#rest").hidden=true;stopTimers();if(typeof nativeState==="function")nativeState(true);go("home")}
 let clockT=null,holdT=null;
 function stopTimers(){clearInterval(clockT);clearInterval(holdT);clearInterval(restT);clearInterval(wuT);holdT=null}
@@ -1890,7 +1911,7 @@ function nativeState(force){const A=nat();if(!A)return;const ss=S.session;let o;
     const setTxt=it&&e?`Satz ${Math.min(ss.si+1,it.sets)} von ${it.sets} · ${e.n}${kg}`:"";
     o={active:true,pip:S.settings.pip!==false,notif:S.settings.notif!==false,jai:jaiOn(),sound:S.settings.sound!==false,start:ss.start};
     if(ss.restEnd&&!$("#rest").hidden&&it&&e){o.phase="rest";o.endTime=ss.restEnd;o.title=ss.restNewEx?"Pause · gleich: "+e.n:"Pause";o.text=setTxt;o.alert=`Satz ${ss.si+1} · ${e.n}${kg}`;
-      o.endSeq=jaiOn()?(ss.restNewEx?["next_ex",...(ss.annNext===ss.ei?[]:jaiEx(it.ex))]:jaiSetSeq(ss,it,st)).filter(id=>JAI_IDS.has(id)):[]}
+      o.endSeq=jaiOn()?(ss.restNewEx?jaiExSeq(it,ss.log[ss.ei]):jaiSetSeq(ss,it,st)).filter(id=>JAI_IDS.has(id)):[]}/* 3.7: Pausenende im Hintergrund wie der Start: Name + Sätze */
     else if(ss.phase==="warm"){o.phase="warm";o.title="Aufwärmen";o.text=(ss.warm&&ss.warm[ss.wi]&&ss.warm[ss.wi].n)||""}
     else if(ss.phase==="done"){o.phase="done";o.title="Training geschafft";o.text="Tippen zum Speichern"}
     else{o.phase="set";o.title=`Training läuft · Block ${ss.week||1} · ${ss.plan}`;o.text=setTxt}}
@@ -1966,7 +1987,7 @@ function workView(){const ss=S.session;const it=curItem();const e=EX[it.ex];cons
 function bindWork(){const ss=S.session;const it=curItem();const e=EX[it.ex];const lg=ss.log[ss.ei];
   attachAnim($("#cv"),animOf(it.ex),{phaseEl:$("#ph")});
   if(ss.annEi!==ss.ei&&!lg.sets.some(x=>x.done)){ss.annEi=ss.ei;const w=+lg.sets[0].w;save();const first=ss.ei===0;if(first&&!ss.annIntro){ss.annIntro=1;save()}
-    const wu=wuActive(ss);const ei0=ss.ei;const named=!first&&ss.annNext===ss.ei;setTimeout(()=>{const s2=S.session;if(!s2||s2.phase!=="work"||s2.ei!==ei0)return;/* exercise already finished: no stale announcement */announce(`${named?"":e.n+". "}${it.sets} Sätze, ${repSpeak(it)}.${w>0&&e.type!=="band"?` ${fmtKg(w)} Kilo.`:""}${wu?" Zuerst Aufwärmsätze.":""}`,[...jaiExSeq(it,lg,first,named),...(wu?["warmup_sets"]:[])],{pling:true})},400)}
+    const wu=wuActive(ss);const ei0=ss.ei;setTimeout(()=>{const s2=S.session;if(!s2||s2.phase!=="work"||s2.ei!==ei0)return;/* exercise already finished: no stale announcement */announce(`${e.n}. ${it.sets} Sätze, ${repSpeak(it)}.${w>0&&e.type!=="band"?` ${fmtKg(w)} Kilo.`:""}${wu?" Zuerst Aufwärmsätze.":""}`,[...jaiExSeq(it,lg),...(wu?["warmup_sets"]:[])],{pling:true})},400)}
   const st=()=>lg.sets[ss.si];
   const sw=$("#swapBtn");if(sw)sw.onclick=()=>openSwap();
   const step=e.type==="bar"?2.5:e.type==="db"?(it.ex==="lateral"||it.ex==="curl"?1:2):e.type==="time"?0:2.5;
@@ -2459,7 +2480,7 @@ let restT=null;
 function startRest(sec,newEx){const ss=S.session;
   let half=false;{const tot=ss.log.reduce((a,l)=>a+l.sets.length,0),dn=ss.log.reduce((a,l)=>a+l.sets.filter(x=>x.done).length,0);if(!ss.annHalf&&tot>6&&dn>=Math.ceil(tot/2)){ss.annHalf=1;half=true}}ss.restEnd=Date.now()+sec*1000;ss.restTotal=sec;ss.restNewEx=newEx;save();$("#rest").hidden=false;renderRest();nativeState();
   /* 3.6: in the pause before a new exercise "Als Nächstes" + name; one sequence together with "Halbzeit", so nothing overlaps or is cut off */
-  const nx=newEx?curItem():null;const ne=nx&&EX[nx.ex];if(ne&&!(typeof nativeBg==="function"&&nativeBg())&&voiceMode()!=="off"){ss.annNext=ss.ei;save()}/* 3.7: name said here, the start skips it */if(half||ne)announce([half?"Halbzeit erreicht.":"",ne?"Als Nächstes: "+ne.n:""].filter(Boolean).join(" "),[...(half?["halfway"]:[]),...(ne?["u_als_naechstes",...jaiEx(nx.ex)]:[])])}
+  const nx=newEx?curItem():null;const ne=nx&&EX[nx.ex];if(half||ne)announce([half?"Halbzeit erreicht.":"",ne?"Als Nächstes: "+ne.n:""].filter(Boolean).join(" "),[...(half?["halfway"]:[]),...(ne?["u_als_naechstes",...jaiEx(nx.ex)]:[])])}
 function renderRest(){const ss=S.session;const it=curItem();const e=EX[it.ex];const st=ss.log[ss.ei].sets[ss.si];const C=2*Math.PI*90;
   const tip=REST_TIPS[Math.floor(Math.random()*REST_TIPS.length)];
   $("#restInner").innerHTML=`<div class="tbar"><span class="label">Pause</span><span class="label">Block ${ss.week||1} · ${ss.plan}</span></div>
@@ -2474,7 +2495,7 @@ function renderRest(){const ss=S.session;const it=curItem();const e=EX[it.ex];co
   let lastS=null;const tick=()=>{const left=(ss.restEnd-Date.now())/1000;const rt=$("#rt");if(!rt)return;rt.textContent=mmss(left);
     const rc=$("#rc");if(rc)rc.style.strokeDashoffset=String(C*(1-Math.max(0,left)/ss.restTotal));
     const sNow=Math.ceil(left);if(sNow!==lastS){lastS=sNow;if(sNow<=3&&sNow>0){if(jaiOn())jaiPlay(["cd_"+sNow]);else beep(660,.1)}if(sNow===10&&ss.restTotal>20){beep(520,.08);announce("Noch zehn Sekunden",["ten_left"])}}
-    if(left<=0){if(nativeBg())return;if(nativePlayed(ss.restEnd)){endRest();return}beep(990,.45);vib(600);if(!ss.restNewEx){const w=+st.w;announce(`Los geht's. Satz ${ss.si+1}.${w>0&&e.type!=="band"?` ${fmtKg(w)} Kilo.`:""}`,jaiSetSeq(ss,it,st),{interrupt:true})}endRest()}};
+    if(left<=0){if(nativeBg())return;if(nativePlayed(ss.restEnd)){if(ss.restNewEx)ss.annEi=ss.ei;/* 3.7: Start-Ansage kam schon nativ */endRest();return}beep(990,.45);vib(600);if(!ss.restNewEx){const w=+st.w;announce(`Los geht's. Satz ${ss.si+1}.${w>0&&e.type!=="band"?` ${fmtKg(w)} Kilo.`:""}`,jaiSetSeq(ss,it,st),{interrupt:true})}endRest()}};
   clearInterval(restT);restT=setInterval(tick,200);tick();nativeState()}
 function endRest(){clearInterval(restT);const ss=S.session;if(ss){ss.restEnd=null;save()}$("#rest").hidden=true;renderTrain()}
 
@@ -5743,9 +5764,16 @@ function splashRun(){const sp=document.getElementById("splash");if(!sp)return;le
   const done=()=>{if(sp.isConnected)sp.remove()};if(skip){done();return}
   try{sessionStorage.setItem("hgSplash","1")}catch(e){}
   const red=matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const pl=sp.querySelector("#hgPlates");if(pl&&!red){const NS="http://www.w3.org/2000/svg";/* direkt in #hgPlates (nicht ins gespiegelte <use>), damit das CSS greift */
-    for(const m of[0,1])for(const[cx,rx,ry]of[[26.1,5.6,12.4],[21.1,4,8.6]]){const e=document.createElementNS(NS,"ellipse");e.setAttribute("class","splFlash");for(const[k,v]of Object.entries({cx:m?108-cx:cx,cy:45.7,rx,ry,fill:"#fff6cf"}))e.setAttribute(k,v);e.style.mixBlendMode="screen";pl.appendChild(e)}
-    for(const m of[0,1]){const st=document.createElementNS(NS,"path");st.setAttribute("class","splFlash");st.setAttribute("fill","#fff");st.setAttribute("d","M24.6 33.2l1 3.2 3.2 1-3.2 1-1 3.2-1-3.2-3.2-1 3.2-1z");if(m)st.setAttribute("transform","matrix(-1 0 0 1 108 0)");pl.appendChild(st)}}
+  /* Blitz der Goldscheiben: ein schräger Glanzstreifen läuft über alle vier Scheiben (auf die Scheiben zugeschnitten), dazu zwei Funkel-Sterne.
+     Direkt in #hgPlates (nicht in das gespiegelte <use>), damit das CSS greift. */
+  const pl=sp.querySelector("#hgPlates"),svg=sp.querySelector("svg");if(pl&&svg&&!red){const NS="http://www.w3.org/2000/svg";
+    const mk=(tag,at,par)=>{const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(at))e.setAttribute(k,v);if(par)par.appendChild(e);return e};
+    const defs=svg.querySelector("defs")||mk("defs",{},svg);
+    const g=mk("linearGradient",{id:"splSG",x1:"0",y1:"0",x2:"1",y2:"0"},defs);for(const[o,c,a]of[[0,"#fff",0],[.5,"#fffdf0",.95],[1,"#fff",0]])mk("stop",{offset:o,"stop-color":c,"stop-opacity":a},g);
+    const cp=mk("clipPath",{id:"splSC"},defs);for(const[cx,rx,ry]of[[26.1,4.3,10.8],[21.1,2.9,7.2],[81.9,4.3,10.8],[86.9,2.9,7.2]])mk("ellipse",{cx,cy:45.7,rx,ry},cp);
+    const cg=mk("g",{"clip-path":"url(#splSC)"},pl);const sk=mk("g",{transform:"skewX(-22)"},cg);
+    mk("rect",{class:"splSweep",x:"19",y:"30",width:"7",height:"32",fill:"url(#splSG)"},sk);
+    for(const[x,y,c]of[[24.4,36.2,""],[83.4,37.4," s2"]])mk("path",{class:"splStar"+c,fill:"#fffbe6",d:`M${x} ${y-2.6}l.7 1.9 1.9.7-1.9.7-.7 1.9-.7-1.9-1.9-.7 1.9-.7z`},pl)}
   let gone=false;const hide=ms=>{if(gone)return;gone=true;sp.classList.add("out");setTimeout(done,ms)};
   sp.classList.add(red?"still":"run");const t=setTimeout(()=>hide(red?0:240),red?280:860);
   sp.addEventListener("pointerdown",e=>{e.preventDefault();clearTimeout(t);hide(red?0:130)},{once:true})}

@@ -123,9 +123,9 @@ async def main():
         async def fresh(**kw):
             c=await b.new_context(viewport={'width':390,'height':844},**kw);q=await c.new_page();e=[];q.on('pageerror',lambda x:e.append(str(x)));return c,q,e
         c,q,e=await fresh();t0=time.time();await q.goto(UR);await q.wait_for_selector('#splash.run',timeout=2000)
-        vis=await q.evaluate("()=>{const s=document.getElementById('splash');const r=s.getBoundingClientRect();return{w:r.width,h:r.height,svg:!!s.querySelector('#hgUpper'),fl:s.querySelectorAll('.splFlash').length,app:!!document.querySelector('#v-home').innerHTML}}")
+        vis=await q.evaluate("()=>{const s=document.getElementById('splash');const r=s.getBoundingClientRect();return{w:r.width,h:r.height,svg:!!s.querySelector('#hgUpper'),fl:s.querySelectorAll('.splSweep').length*10+s.querySelectorAll('.splStar').length,app:!!document.querySelector('#v-home').innerHTML}}")
         await q.wait_for_selector('#splash',state='detached',timeout=3000);dt=time.time()-t0
-        chk(vis['w']==390 and vis['svg'] and vis['fl']==6 and vis['app'] and dt<2.0,f'Start-Animation: Icon groß über der schon fertigen App, nach {dt:.2f} s weg {vis}')
+        chk(vis['w']==390 and vis['svg'] and vis['fl']==12 and vis['app'] and dt<2.0,f'Start-Animation: Icon groß über der schon fertigen App, nach {dt:.2f} s weg {vis}')
         async with q.expect_navigation():await q.evaluate("location.reload()")
         await q.wait_for_timeout(150);chk(await q.evaluate("!document.getElementById('splash')"),'nach einem Neuladen (z. B. Backup) keine zweite Start-Animation');await c.close()
         c,q,e=await fresh();await q.goto(UR);await q.wait_for_selector('#splash.run');t0=time.time();await q.mouse.click(195,420)

@@ -74,14 +74,18 @@ async def main():
         played=await pg.evaluate("window.__played.slice()");ov=await pg.evaluate("window.__overlap.slice()")
         print('Kraft-Ansagen:');[print('  ',s) for s in log if any(x.startswith('ex_') or x=='u_als_naechstes' for x in s)]
         starts=[s for s in log if 'u_saetze' in s];nexts=[s for s in log if 'u_als_naechstes' in s]
-        chk(len(starts)==len(items) and starts[0].count(items[0])==1 and sum(x.startswith('ex_') for x in starts[0])==1,f"Kraft: die erste Übung sagt beim Start ihren Namen genau einmal")
-        # 3.7: nach "Als Nächstes" + Name in der Pause kommt der Name beim Start nicht noch einmal (auch kein "Nächste Übung")
-        chk(all(not any(x.startswith('ex_') for x in s) and 'next_ex' not in s for s in starts[1:]),f"Kraft 3.7: Start nach der Pause ohne Namen und ohne 'Nächste Übung' {starts[1:3]}")
-        chk(not any('next_ex' in s for s in log),"Kraft 3.7: 'Nächste Übung' kommt nicht mehr zusätzlich")
-        chk(len(nexts)==len(items)-1 and all(s[s.index('u_als_naechstes')+1:]==[it] for s,it in zip(nexts,items[1:])),"Kraft: in jeder Pause vor einer neuen Übung 'Als Nächstes' + Name")
+        # 3.7: Start JEDER Übung = Name, danach Sätze/Wdh./Gewicht; Pause = einmal "Als Nächstes" + Name; nie "Nächste Übung"
+        chk(len(starts)==len(items) and all(s.count(it)==1 and sum(x.startswith('ex_') for x in s)==1 and s.index(it)<s.index('u_saetze') for s,it in zip(starts,items)),f"Kraft: jede der {len(items)} Übungen sagt beim Start ihren Namen genau einmal, danach Sätze/Gewicht")
+        chk(not any('next_ex' in s for s in log),"Kraft 3.7: nie 'Nächste Übung'")
+        chk(len(nexts)==len(items)-1 and all(s.count('u_als_naechstes')==1 and s[s.index('u_als_naechstes')+1:]==[it] for s,it in zip(nexts,items[1:])),"Kraft: in jeder Pause vor einer neuen Übung einmal 'Als Nächstes' + Name")
         order=[x for x in played if x=='u_als_naechstes' or x in items]
-        exp=[items[0]]+[y for it in items[1:] for y in ('u_als_naechstes',it)]
-        chk(order==exp,'Kraft 3.7: Abspielreihenfolge Name → Als Nächstes + Name, jeder Name nur einmal '+str(order[:6]))
+        exp=[items[0]]+[y for it in items[1:] for y in ('u_als_naechstes',it,it)]
+        chk(order==exp and 'next_ex' not in played,'Kraft: Abspielreihenfolge Name (Start) → Als Nächstes + Name (Pause) → Name (Start) '+str(order[:7]))
+        # Pausenende im Hintergrund (native Ansage): wie der Start, Name + Sätze, kein nacktes "Nächste Übung"
+        r=await pg.evaluate("""()=>{const ss=S.session;const keep=[ss.ei,ss.si,ss.restEnd,ss.restNewEx];const o=[];let A_=window.Android;
+          window.Android={trainingState:j=>o.push(JSON.parse(j)),isVisible:()=>true};$('#rest').hidden=false;ss.ei=1;ss.si=0;ss.restEnd=Date.now()+30000;ss.restNewEx=true;nativeState(true);
+          ss.ei=keep[0];ss.si=keep[1];ss.restEnd=keep[2];ss.restNewEx=keep[3];$('#rest').hidden=true;window.Android=A_;return{seq:o.length?o[o.length-1].endSeq:null,ex:'ex_'+ss.items[1].ex}}""")
+        chk(r['seq'] and r['seq'][0]==r['ex'] and 'u_saetze' in r['seq'] and 'next_ex' not in r['seq'],f"Pausenende im Hintergrund: Name + Sätze wie beim Start {r}")
         chk(not ov,f"Kraft: keine überlappenden Ansagen {ov[:3]}")
         chk(any(s[:1]==['halfway'] and 'u_als_naechstes' in s for s in log) or any(s==['halfway'] for s in log),'Kraft: Halbzeit kommt in derselben Sequenz (wird nicht abgeschnitten)')
         await pg.click('#saveS');await pg.wait_for_timeout(300)
@@ -90,7 +94,7 @@ async def main():
         await run_kraft(pg,'B',True)
         log=await pg.evaluate("window.__jaiLog.slice()");it=await pg.evaluate("S.session.items.map(x=>({id:'ex_'+x.ex,blk:!!x.blk}))");ov=await pg.evaluate("window.__overlap.slice()")
         hb=[x['id'] for x in it if x['blk']];print('Hang-Block:',hb);[print('  ',s) for s in log if any(x in hb for x in s)]
-        chk(hb and all(any(s[-2:]==['u_als_naechstes',h] for s in log) and sum(s.count(h) for s in log)==1 for h in hb),'Hang-Block 3.7: Als Nächstes + Name in der Pause, Name nur einmal')
+        chk(hb and all(any(s[-2:]==['u_als_naechstes',h] and s.count('u_als_naechstes')==1 for s in log) and any('u_saetze' in s and h in s and s.index(h)<s.index('u_saetze') for s in log) for h in hb) and not any('next_ex' in s for s in log),'Hang-Block: Als Nächstes + Name in der Pause, Name beim Start, nie Nächste Übung')
         chk(not ov,f"Hang: keine überlappenden Ansagen {ov[:3]}")
         await pg.click('#saveS');await pg.wait_for_timeout(300)
         # ---------- 2c) Yoga (Schnell-Dehnen + Plan-Einheit) ----------
@@ -111,6 +115,7 @@ async def main():
             np_=[st for st in steps[1:] if st['side']!=2]  # erste Haltung: keine Pause davor
             chk(len(prep)==len(np_) and all(s[-2:]==['u_als_naechstes',st['c']] for s,st in zip(prep,np_)),f"Yoga {kind}: in der Pause 'Als Nächstes' + Name")
             chk(not ov,f"Yoga {kind}: keine überlappenden Ansagen {ov[:3]}")
+            chk(not any('next_ex' in s for s in log) and all(s.count('u_als_naechstes')==1 for s in prep),f"Yoga {kind}: 'Als Nächstes' je Pause einmal, nie 'Nächste Übung'")
             chk(sum(s.count('halfway') for s in log)<=1,f"Yoga {kind}: Halbzeit höchstens einmal")
             await pg.evaluate("(()=>{if(S.yrun){S.yrun=null;save()}yClose()})()")
         # ---------- 3) JAI aus / Handy-Stimme / fehlender Clip ----------

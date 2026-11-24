@@ -41,7 +41,7 @@ async def fixture31(b):
       add(16,'C',1,[{ex:'squat',sets:T.sets(80,[8,8,7,6])},{ex:'plank',sets:T.sets(0,[30,30])}]);
       add(13,'A',2,[{ex:'ohp',sets:T.sets(35,[8,8,7,7])}]);
       S.history=H;S.yoga={start:weekStart(new Date(Date.now()-21*864e5)).getTime(),done:{1:T.ago(19),2:T.ago(12)},log:[{date:T.ago(19),kind:'plan',week:1,dur:900,n:8}]};
-      S.prog={v:1,block:2,done:['A'],cycle:1,units:4,dlLeft:0,dlAt:4};save();startSession('B');S.session.phase='work';S.session.log[0].sets[0].done=true;save();
+      S.prog={v:1,block:2,done:['A'],cycle:1,units:4,dlLeft:0,dlAt:4};delete S.profile.db37;S.profile.weights={db:[],kb:[8,12,16],band:[]};/* echter 3.1-Stand: verstellbare Kurzhanteln */save();startSession('B');S.session.items.forEach((it,i)=>{if(EX[it.ex].type==='db')S.session.log[i].sets.forEach(x=>{if(!x.done)x.w=8.75})});S.session.phase='work';S.session.log[0].sets[0].done=true;save();
       return{ver:APP_VER,state:JSON.parse(localStorage.getItem(KEY)),backup:backupText()}}""")
     json.dump(st['state'],open(FX+'/v31_state.json','w'));open(FX+'/v31_backup.json','w').write(st['backup'])
     chk(st['ver']=='3.1' and not errs,f"fixture: state + backup written by the real 3.1 app ({len(st['state']['history'])} units, running session B) {errs[:2]}")
@@ -200,9 +200,18 @@ async def main():
             await pg.evaluate("st=>{window.__hgLock=true;localStorage.setItem(KEY,JSON.stringify(st));location.reload()}",f31['state'])
         await pg.wait_for_timeout(500)
         s1=await pg.evaluate("localStorage.getItem(KEY)");n=json.loads(s1)
-        p31={k:v for k,v in n['profile'].items() if k not in ('db37','weights')};w31=(n['profile'].get('weights') or {}).get('db')  # 3.7: Joschys Kurzhanteln -> Set Gummi PRO (Migration, siehe t37)
-        keep=all(n[k]==f31['state'][k] for k in ['history','prog','session','settings']) and p31=={k:v for k,v in f31['state']['profile'].items() if k not in ('db37','weights')} and w31 in ([2.5,5,7.5,10,12.5,15,17.5,20],(f31['state']['profile'].get('weights') or {}).get('db')) and all(n['yoga'][k]==f31['state']['yoga'][k] for k in ['start','done','log'])  # yoga v/startLv = existing 3.2 yoga migration
-        chk(keep and n['hang']=={'v':1,'tests':[],'pauses':[],'base':None},'3.1 state: S.hang added, history/plan position/running session/yoga/profile unchanged')
+        # 3.7: Joschys 3.1-Profil wird umgestellt: weights exakt {db: Set Gummi PRO, kb/band unverändert}, Marke db37; offene Kurzhantel-Sätze 8,75 -> 7,5 (Gleichstand: leichter)
+        SET=[2.5,5,7.5,10,12.5,15,17.5,20];o31=f31['state']['profile']
+        prof_ok=n['profile']=={**o31,'weights':{'db':SET,'kb':[8,12,16],'band':[]},'db37':1}
+        dbi=await pg.evaluate("(its)=>its.map(it=>EX[it.ex].type==='db'&&(NEEDS[it.ex]||[]).flat().includes('db')&&!(NEEDS[it.ex]||[]).flat().includes('kb'))",f31['state']['session']['items'])
+        exp=json.loads(json.dumps(f31['state']['session']))
+        for i,isdb in enumerate(dbi):
+            if isdb:
+                for x in exp['log'][i]['sets']:
+                    if not x['done'] and x['w']==8.75:x['w']=7.5
+        print('db-Übungen in der laufenden 3.1-Einheit:',[it['ex'] for it,d in zip(exp['items'],dbi) if d])
+        keep=all(n[k]==f31['state'][k] for k in ['history','prog','settings']) and n['session']==exp and any(dbi) and prof_ok and all(n['yoga'][k]==f31['state']['yoga'][k] for k in ['start','done','log'])  # yoga v/startLv = existing 3.2 yoga migration
+        chk(keep and n['hang']=={'v':1,'tests':[],'pauses':[],'base':None},f'3.1 state: S.hang added, history/plan position/yoga unchanged; weights exakt umgestellt {n["profile"].get("weights")}, offene Kurzhantel-Sätze aufs Paar')
         await pg.reload();await pg.wait_for_timeout(500);s2=await pg.evaluate("localStorage.getItem(KEY)")
         chk(s1==s2,'migration idempotent: second start leaves the stored state byte-identical')
         r=await pg.evaluate("()=>{openTrain();return[S.session.plan,S.session.items.length,S.session.log[0].sets[0].done,S.session.items.some(x=>x.blk),hangState().stage,planItems('B',false,2).some(x=>x.blk)]}")
@@ -210,6 +219,9 @@ async def main():
         await pg.evaluate("closeTrain()")
         r=await pg.evaluate("t=>{const p=parseBackup(t);return[p.n,p.st.hang===undefined,JSON.stringify(p.st.prog)]}",f31['backup'])
         chk(r[0]==4 and r[1] and json.loads(r[2])['block']==2,f'3.1 backup readable, plan position kept {r}')
+        async with pg.expect_navigation():await pg.evaluate("t=>applyBackup(parseBackup(t).st)",f31['backup'])
+        await pg.wait_for_timeout(500);r=await pg.evaluate("()=>{const p=JSON.parse(localStorage.getItem(KEY)).profile;return{w:p.weights,f:p.db37,bk:JSON.parse(backupText()).v}}")
+        chk(r=={'w':{'db':[2.5,5,7.5,10,12.5,15,17.5,20],'kb':[8,12,16],'band':[]},'f':1,'bk':5},f'3.1 backup eingespielt: weights exakt (db = Set Gummi PRO, kb/band unverändert), Backup bleibt v5 {r}')
         chk(not errs,f'no JS errors (migration) {errs[:3]}')
         await ctx.close()
         # 12) animations of the new exercises: never at the canvas edge / under a label, all places, 3 viewports, man + woman

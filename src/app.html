@@ -326,12 +326,16 @@ input[type=date]{background:rgba(var(--ac),.05);color:var(--fg);border:1px solid
 #splash.run .spl-in{animation:splIn .2s ease-out both}
 #splash.run #hgLegs{transform-box:fill-box;transform-origin:50% 100%;animation:splLegs .64s .14s cubic-bezier(.45,0,.3,1) both}
 #splash.run #hgUpper{animation:splUp .64s .14s cubic-bezier(.45,0,.3,1) both}
-#splash .splFlash{opacity:0}
-#splash.run .splFlash{animation:splFlash .34s .5s ease-out both}
+#splash .splSweep{opacity:0}
+#splash.run .splSweep{animation:splSweep .6s .4s cubic-bezier(.45,0,.25,1) both}
+#splash .splStar{opacity:0;transform-box:fill-box;transform-origin:50% 50%}
+#splash.run .splStar{animation:splStar .5s .62s ease-out both}
+#splash.run .splStar.s2{animation-delay:.74s}
 @keyframes splIn{from{transform:scale(.84);opacity:0}to{transform:none;opacity:1}}
 @keyframes splLegs{0%{transform:none}42%{transform:scale(1.12,.6)}100%{transform:none}}
 @keyframes splUp{0%{transform:none}42%{transform:translateY(5.6px)}78%{transform:translateY(-1.6px)}100%{transform:none}}
-@keyframes splFlash{0%{opacity:0}30%{opacity:1}100%{opacity:0}}
+@keyframes splSweep{0%{transform:translateX(0);opacity:0}12%{opacity:1}88%{opacity:1}100%{transform:translateX(100px);opacity:0}}
+@keyframes splStar{0%{opacity:0;transform:scale(.1) rotate(0)}45%{opacity:1;transform:scale(1.15) rotate(40deg)}100%{opacity:0;transform:scale(.3) rotate(90deg)}}
 .hello{position:relative}
 .hgMark{position:absolute;top:-2px;right:0;width:66px;height:26px;overflow:visible}
 .hgMark .hgSweep{transform:translateX(-30px);opacity:0}
@@ -562,10 +566,10 @@ function jaiGreet(){const h=new Date().getHours();return jaiNamed(h<11?"greet_mo
 function jaiWarmId(w){const k=/kurz/.test(w.n);const m={cross:k?"warm_cross_kurz":"warm_cross",rowint:k?"warm_rower_kurz":"warm_rower",bikeint:k?"warm_bike_kurz":"warm_bike",walk:k?"warm_tread_kurz":"warm_tread",
   jumprope:"warm_rope",march:"warm_march",jj:"ex_jumpjack",armcircle:"warm_armcircle",pullapart:"warm_pullapart",armopen:"warm_armopen",airsquat:"ex_airsquatx",lungebw:"ex_lungebwx"};return m[w.anim]||null}
 function jaiWarmSeq(w){const id=jaiWarmId(w);const s=id?[id]:[];if(w.reps){const n=parseInt(w.reps,10);if(n>0)s.push(...jaiNum(n),"u_mal");if(/je Seite/.test(w.reps))s.push("u_je_seite")}return s}
-/* 3.7: named = the pause before already said "Als Nächstes" + name, so the start leaves out "Nächste Übung" + name (no double name) */
-function jaiExSeq(it,lg,first,named){const e=EX[it.ex];const w=+lg.sets[0].w;const s=[];
-  if(it.fin)s.push("finisher");else if(!first&&!named)s.push("next_ex");
-  s.push(...(named?[]:jaiEx(it.ex)),...jaiNum(it.sets),"u_saetze",...jaiReps(it));
+/* 3.7: start of every exercise = name + sets/reps/kg. The pause before says "Als Nächstes" + name; the old extra "Nächste Übung" is gone */
+function jaiExSeq(it,lg){const e=EX[it.ex];const w=+lg.sets[0].w;const s=[];
+  if(it.fin)s.push("finisher");
+  s.push(...jaiEx(it.ex),...jaiNum(it.sets),"u_saetze",...jaiReps(it));
   if(w>0&&e.type!=="band"&&e.type!=="time")s.push(...jaiKg(w));return s}
 function jaiSetSeq(ss,it,st){const e=EX[it.ex];const w=+st.w;const last=ss.si===it.sets-1;const s=last?["last_set"]:["go","u_satz",...jaiNum(ss.si+1)];
   if(w>0&&e.type!=="band"&&e.type!=="time")s.push(...jaiKg(w));return s}
@@ -1694,7 +1698,7 @@ function startSession(plan,opt){opt=opt||{};const quick=!!S.settings.quick;const
     log:items.map(it=>{const sg=suggest(it);const sets=initSets(it,sg);if(opt.re)for(const x of sets)if(+x.w>0)x.w=Math.max(EX[it.ex].type==="bar"?(+S.settings.bar||20):0,wFloor(it.ex,x.w*.9));return{ex:it.ex,sets}})};
   if(ws)S.session.wu={ex:items[0].ex,sets:WU.map(()=>({w:null,done:false})),skip:false};
   save();openTrain()}
-function openTrain(){if(S.session&&S.session.wu&&Array.isArray(S.session.items)&&S.session.items[0]&&S.session.wu.ex!==S.session.items[0].ex&&wuSync(S.session))save();if(S.session&&jaiOn()){const ss=S.session;jaiPreload([jaiGreet(),"plan_"+String(ss.plan||"a").toLowerCase(),"warm_start","go","u_satz","u_kilo","u_saetze","u_bis","u_wiederholungen","ten_left","cd_3","cd_2","cd_1","last_set","next_ex","u_als_naechstes",...(ss.items||[]).flatMap(it=>jaiEx(it.ex))])}$("#train").hidden=false;renderTrain()}
+function openTrain(){if(S.session&&S.session.wu&&Array.isArray(S.session.items)&&S.session.items[0]&&S.session.wu.ex!==S.session.items[0].ex&&wuSync(S.session))save();if(S.session&&jaiOn()){const ss=S.session;jaiPreload([jaiGreet(),"plan_"+String(ss.plan||"a").toLowerCase(),"warm_start","go","u_satz","u_kilo","u_saetze","u_bis","u_wiederholungen","ten_left","cd_3","cd_2","cd_1","last_set","u_als_naechstes",...(ss.items||[]).flatMap(it=>jaiEx(it.ex))])}$("#train").hidden=false;renderTrain()}
 function closeTrain(){$("#train").hidden=true;$("#rest").hidden=true;stopTimers();if(typeof nativeState==="function")nativeState(true);go("home")}
 let clockT=null,holdT=null;
 function stopTimers(){clearInterval(clockT);clearInterval(holdT);clearInterval(restT);clearInterval(wuT);holdT=null}
@@ -1724,7 +1728,7 @@ function nativeState(force){const A=nat();if(!A)return;const ss=S.session;let o;
     const setTxt=it&&e?`Satz ${Math.min(ss.si+1,it.sets)} von ${it.sets} · ${e.n}${kg}`:"";
     o={active:true,pip:S.settings.pip!==false,notif:S.settings.notif!==false,jai:jaiOn(),sound:S.settings.sound!==false,start:ss.start};
     if(ss.restEnd&&!$("#rest").hidden&&it&&e){o.phase="rest";o.endTime=ss.restEnd;o.title=ss.restNewEx?"Pause · gleich: "+e.n:"Pause";o.text=setTxt;o.alert=`Satz ${ss.si+1} · ${e.n}${kg}`;
-      o.endSeq=jaiOn()?(ss.restNewEx?["next_ex",...(ss.annNext===ss.ei?[]:jaiEx(it.ex))]:jaiSetSeq(ss,it,st)).filter(id=>JAI_IDS.has(id)):[]}
+      o.endSeq=jaiOn()?(ss.restNewEx?jaiExSeq(it,ss.log[ss.ei]):jaiSetSeq(ss,it,st)).filter(id=>JAI_IDS.has(id)):[]}/* 3.7: Pausenende im Hintergrund wie der Start: Name + Sätze */
     else if(ss.phase==="warm"){o.phase="warm";o.title="Aufwärmen";o.text=(ss.warm&&ss.warm[ss.wi]&&ss.warm[ss.wi].n)||""}
     else if(ss.phase==="done"){o.phase="done";o.title="Training geschafft";o.text="Tippen zum Speichern"}
     else{o.phase="set";o.title=`Training läuft · Block ${ss.week||1} · ${ss.plan}`;o.text=setTxt}}
@@ -1800,7 +1804,7 @@ function workView(){const ss=S.session;const it=curItem();const e=EX[it.ex];cons
 function bindWork(){const ss=S.session;const it=curItem();const e=EX[it.ex];const lg=ss.log[ss.ei];
   attachAnim($("#cv"),animOf(it.ex),{phaseEl:$("#ph")});
   if(ss.annEi!==ss.ei&&!lg.sets.some(x=>x.done)){ss.annEi=ss.ei;const w=+lg.sets[0].w;save();const first=ss.ei===0;if(first&&!ss.annIntro){ss.annIntro=1;save()}
-    const wu=wuActive(ss);const ei0=ss.ei;const named=!first&&ss.annNext===ss.ei;setTimeout(()=>{const s2=S.session;if(!s2||s2.phase!=="work"||s2.ei!==ei0)return;/* exercise already finished: no stale announcement */announce(`${named?"":e.n+". "}${it.sets} Sätze, ${repSpeak(it)}.${w>0&&e.type!=="band"?` ${fmtKg(w)} Kilo.`:""}${wu?" Zuerst Aufwärmsätze.":""}`,[...jaiExSeq(it,lg,first,named),...(wu?["warmup_sets"]:[])],{pling:true})},400)}
+    const wu=wuActive(ss);const ei0=ss.ei;setTimeout(()=>{const s2=S.session;if(!s2||s2.phase!=="work"||s2.ei!==ei0)return;/* exercise already finished: no stale announcement */announce(`${e.n}. ${it.sets} Sätze, ${repSpeak(it)}.${w>0&&e.type!=="band"?` ${fmtKg(w)} Kilo.`:""}${wu?" Zuerst Aufwärmsätze.":""}`,[...jaiExSeq(it,lg),...(wu?["warmup_sets"]:[])],{pling:true})},400)}
   const st=()=>lg.sets[ss.si];
   const sw=$("#swapBtn");if(sw)sw.onclick=()=>openSwap();
   const step=e.type==="bar"?2.5:e.type==="db"?(it.ex==="lateral"||it.ex==="curl"?1:2):e.type==="time"?0:2.5;
@@ -2293,7 +2297,7 @@ let restT=null;
 function startRest(sec,newEx){const ss=S.session;
   let half=false;{const tot=ss.log.reduce((a,l)=>a+l.sets.length,0),dn=ss.log.reduce((a,l)=>a+l.sets.filter(x=>x.done).length,0);if(!ss.annHalf&&tot>6&&dn>=Math.ceil(tot/2)){ss.annHalf=1;half=true}}ss.restEnd=Date.now()+sec*1000;ss.restTotal=sec;ss.restNewEx=newEx;save();$("#rest").hidden=false;renderRest();nativeState();
   /* 3.6: in the pause before a new exercise "Als Nächstes" + name; one sequence together with "Halbzeit", so nothing overlaps or is cut off */
-  const nx=newEx?curItem():null;const ne=nx&&EX[nx.ex];if(ne&&!(typeof nativeBg==="function"&&nativeBg())&&voiceMode()!=="off"){ss.annNext=ss.ei;save()}/* 3.7: name said here, the start skips it */if(half||ne)announce([half?"Halbzeit erreicht.":"",ne?"Als Nächstes: "+ne.n:""].filter(Boolean).join(" "),[...(half?["halfway"]:[]),...(ne?["u_als_naechstes",...jaiEx(nx.ex)]:[])])}
+  const nx=newEx?curItem():null;const ne=nx&&EX[nx.ex];if(half||ne)announce([half?"Halbzeit erreicht.":"",ne?"Als Nächstes: "+ne.n:""].filter(Boolean).join(" "),[...(half?["halfway"]:[]),...(ne?["u_als_naechstes",...jaiEx(nx.ex)]:[])])}
 function renderRest(){const ss=S.session;const it=curItem();const e=EX[it.ex];const st=ss.log[ss.ei].sets[ss.si];const C=2*Math.PI*90;
   const tip=REST_TIPS[Math.floor(Math.random()*REST_TIPS.length)];
   $("#restInner").innerHTML=`<div class="tbar"><span class="label">Pause</span><span class="label">Block ${ss.week||1} · ${ss.plan}</span></div>
@@ -2308,7 +2312,7 @@ function renderRest(){const ss=S.session;const it=curItem();const e=EX[it.ex];co
   let lastS=null;const tick=()=>{const left=(ss.restEnd-Date.now())/1000;const rt=$("#rt");if(!rt)return;rt.textContent=mmss(left);
     const rc=$("#rc");if(rc)rc.style.strokeDashoffset=String(C*(1-Math.max(0,left)/ss.restTotal));
     const sNow=Math.ceil(left);if(sNow!==lastS){lastS=sNow;if(sNow<=3&&sNow>0){if(jaiOn())jaiPlay(["cd_"+sNow]);else beep(660,.1)}if(sNow===10&&ss.restTotal>20){beep(520,.08);announce("Noch zehn Sekunden",["ten_left"])}}
-    if(left<=0){if(nativeBg())return;if(nativePlayed(ss.restEnd)){endRest();return}beep(990,.45);vib(600);if(!ss.restNewEx){const w=+st.w;announce(`Los geht's. Satz ${ss.si+1}.${w>0&&e.type!=="band"?` ${fmtKg(w)} Kilo.`:""}`,jaiSetSeq(ss,it,st),{interrupt:true})}endRest()}};
+    if(left<=0){if(nativeBg())return;if(nativePlayed(ss.restEnd)){if(ss.restNewEx)ss.annEi=ss.ei;/* 3.7: Start-Ansage kam schon nativ */endRest();return}beep(990,.45);vib(600);if(!ss.restNewEx){const w=+st.w;announce(`Los geht's. Satz ${ss.si+1}.${w>0&&e.type!=="band"?` ${fmtKg(w)} Kilo.`:""}`,jaiSetSeq(ss,it,st),{interrupt:true})}endRest()}};
   clearInterval(restT);restT=setInterval(tick,200);tick();nativeState()}
 function endRest(){clearInterval(restT);const ss=S.session;if(ss){ss.restEnd=null;save()}$("#rest").hidden=true;renderTrain()}
 
@@ -3307,9 +3311,16 @@ function splashRun(){const sp=document.getElementById("splash");if(!sp)return;le
   const done=()=>{if(sp.isConnected)sp.remove()};if(skip){done();return}
   try{sessionStorage.setItem("hgSplash","1")}catch(e){}
   const red=matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const pl=sp.querySelector("#hgPlates");if(pl&&!red){const NS="http://www.w3.org/2000/svg";/* direkt in #hgPlates (nicht ins gespiegelte <use>), damit das CSS greift */
-    for(const m of[0,1])for(const[cx,rx,ry]of[[26.1,5.6,12.4],[21.1,4,8.6]]){const e=document.createElementNS(NS,"ellipse");e.setAttribute("class","splFlash");for(const[k,v]of Object.entries({cx:m?108-cx:cx,cy:45.7,rx,ry,fill:"#fff6cf"}))e.setAttribute(k,v);e.style.mixBlendMode="screen";pl.appendChild(e)}
-    for(const m of[0,1]){const st=document.createElementNS(NS,"path");st.setAttribute("class","splFlash");st.setAttribute("fill","#fff");st.setAttribute("d","M24.6 33.2l1 3.2 3.2 1-3.2 1-1 3.2-1-3.2-3.2-1 3.2-1z");if(m)st.setAttribute("transform","matrix(-1 0 0 1 108 0)");pl.appendChild(st)}}
+  /* Blitz der Goldscheiben: ein schräger Glanzstreifen läuft über alle vier Scheiben (auf die Scheiben zugeschnitten), dazu zwei Funkel-Sterne.
+     Direkt in #hgPlates (nicht in das gespiegelte <use>), damit das CSS greift. */
+  const pl=sp.querySelector("#hgPlates"),svg=sp.querySelector("svg");if(pl&&svg&&!red){const NS="http://www.w3.org/2000/svg";
+    const mk=(tag,at,par)=>{const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(at))e.setAttribute(k,v);if(par)par.appendChild(e);return e};
+    const defs=svg.querySelector("defs")||mk("defs",{},svg);
+    const g=mk("linearGradient",{id:"splSG",x1:"0",y1:"0",x2:"1",y2:"0"},defs);for(const[o,c,a]of[[0,"#fff",0],[.5,"#fffdf0",.95],[1,"#fff",0]])mk("stop",{offset:o,"stop-color":c,"stop-opacity":a},g);
+    const cp=mk("clipPath",{id:"splSC"},defs);for(const[cx,rx,ry]of[[26.1,4.3,10.8],[21.1,2.9,7.2],[81.9,4.3,10.8],[86.9,2.9,7.2]])mk("ellipse",{cx,cy:45.7,rx,ry},cp);
+    const cg=mk("g",{"clip-path":"url(#splSC)"},pl);const sk=mk("g",{transform:"skewX(-22)"},cg);
+    mk("rect",{class:"splSweep",x:"19",y:"30",width:"7",height:"32",fill:"url(#splSG)"},sk);
+    for(const[x,y,c]of[[24.4,36.2,""],[83.4,37.4," s2"]])mk("path",{class:"splStar"+c,fill:"#fffbe6",d:`M${x} ${y-2.6}l.7 1.9 1.9.7-1.9.7-.7 1.9-.7-1.9-1.9-.7 1.9-.7z`},pl)}
   let gone=false;const hide=ms=>{if(gone)return;gone=true;sp.classList.add("out");setTimeout(done,ms)};
   sp.classList.add(red?"still":"run");const t=setTimeout(()=>hide(red?0:240),red?280:860);
   sp.addEventListener("pointerdown",e=>{e.preventDefault();clearTimeout(t);hide(red?0:130)},{once:true})}

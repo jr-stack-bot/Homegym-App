@@ -116,7 +116,7 @@ python3 tests/t28.py     # Auswertung: Kraft/1RM, Muskeln, Kalender/Serien, Kör
 python3 tests/t29.py     # Figuren: Vergleich mit 3.0 (Gelenke/Griffpunkte gleich, Kinn, Proportionen, Tempo)
 python3 tests/t30.py     # Yoga in 3 Stufen, 24-Wochen-Plan, Startstufe, Übernahme aus 3.1, Profi-Sicherheit, Übungen ohne Geräte, Hauptübungen wie in 3.1
 python3 tests/t32.py     # Griffkraft & Hängen: Stufen, Hang-Test, Hang-Pause, Farmer's Hold, 60-Minuten-Grenze, Migration, Backup
-python3 tests/t36.py     # JAI: Namen der Übungen/Haltungen, Name nur einmal (Pause „Als Nächstes“, Start ohne Namen)
+python3 tests/t36.py     # JAI: Namen der Übungen/Haltungen: Pause einmal „Als Nächstes“ + Name, Start mit Name, nie „Nächste Übung“
 python3 tests/t37.py     # Kurzhantel-Set: Migration, Rundung auf vorhandene Paare, max. 20 kg, Plan wie 3.6; Start-Animation, Gold-Glanz
 HOMEGYM_EXTRAS_PW=… python3 tests/t35.py   # Extras: Freischaltung, Speicherung, Backup inkl. 3.2-Backup, Zufällig pro Training, Vorschau (Kennwort per Umgebungsvariable)
 ```
@@ -133,7 +133,7 @@ Aktuell: **3.7**. Details in [CHANGELOG.md](CHANGELOG.md).
 
 | Version | Wichtigste Neuerungen |
 |---|---|
-| 3.7 | Neues App-Icon (Adaptive + Monochrom), Start-Animation, Kurzhantel-Set Gummi PRO (2,5–20 kg) mit Migration und Steigerung über feste Paare, Name in der Pause nur einmal |
+| 3.7 | Neues App-Icon (Adaptive + Monochrom), Start-Animation, Kurzhantel-Set Gummi PRO (2,5–20 kg) mit Migration und Steigerung über feste Paare, ohne doppelte „Nächste Übung“-Ansage |
 | 3.6 | JAI sagt die Namen aller Übungen und Yoga-Haltungen an, in der Pause „Als Nächstes“ + Name |
 | 3.5 | Extras: 19 Kampfsport-Kostüme für Mann und Frau (mit Kennwort freischaltbar), muskulöserer Körperbau mit Kostüm, „Zufällig pro Training“; ohne Kostüm unverändert |
 | 3.4 | 58 neue Yoga-Haltungen (154), Rotation beim Wiederholen einer Woche, „Andere Haltung“, Dehn-Abläufe wechseln wöchentlich; 100 neue Kraftübungen (259) auf Nebenplätzen in jedem zweiten Zyklus und bei „Tauschen“, Hauptübungen unverändert; Übungsblatt mit Atmung/Leichter/Achtung; Geräte- und Layout-Fixes |
