@@ -7,7 +7,7 @@ import asyncio,subprocess,time,json,sys,os
 from playwright.async_api import async_playwright
 D=_SHOTS.rstrip('/')
 srv=subprocess.Popen([sys.executable,'-m','http.server','8781','-d',_OUTDIR],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL);time.sleep(1)
-U='http://127.0.0.1:8781/index.html'
+U='http://127.0.0.1:8781/index.html?nosplash=1'
 CHECK=r"""()=>{const R={hip:7,sh:6,head:8.5,knee:4,knee2:4,elbow:3,elbow2:3,toe:0,toe2:0,ankle:0,ankle2:0,hand:0,hand2:0};
   const pts=o=>{const m={};for(const q in o){const v=o[q];if(Array.isArray(v)&&v.length===2&&typeof v[0]==='number')m[q]=v}return m};
   const same=(a,b)=>{let d=0;for(const q in a)if(b[q])d=Math.max(d,Math.hypot(a[q][0]-b[q][0],a[q][1]-b[q][1]));return d};
@@ -81,7 +81,7 @@ async def main():
           S.settings.animSpd=1;const b=mk();renderCanvas(b,4500);const B=px(b);const c2=mk();renderCanvas(c2,6000);const C=px(c2);let dAB=0,dAC=0;for(let i=0;i<A.length;i++){dAB+=Math.abs(A[i]-B[i]);dAC+=Math.abs(A[i]-C[i])}a.remove();b.remove();c2.remove();return{dAB,dAC}}""")
         print('speed',sp);assert sp['dAB']==0 and sp['dAC']>1000,sp
         # 6) version + footer
-        await pg.click('[data-tab=set]');await pg.wait_for_timeout(200);v=await pg.text_content('#verLine');assert 'Version 3.5' in v and '@ Joschy' in v,v
+        await pg.click('[data-tab=set]');await pg.wait_for_timeout(200);v=await pg.text_content('#verLine');assert 'Version 3.7' in v and '@ Joschy' in v,v
         print('errors',errs);assert not errs
         await b.close()
     print('ALL OK')

@@ -15,7 +15,7 @@ D=_os.path.join(_SHOTS,'t32');SH=D+'/shots';FX=D+'/fixtures';os.makedirs(SH,exis
 srv=subprocess.Popen([sys.executable,'-m','http.server','8835','-d',_OUTDIR],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 old=subprocess.Popen([sys.executable,'-m','http.server','8836','-d',_V31],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 pre=subprocess.Popen([sys.executable,'-m','http.server','8838','-d',_V32],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL);time.sleep(1)
-U='http://127.0.0.1:8835/index.html';UO='http://127.0.0.1:8836/index.html';UP='http://127.0.0.1:8838/index.html'
+U='http://127.0.0.1:8835/index.html?nosplash=1';UO='http://127.0.0.1:8836/index.html?nosplash=1';UP='http://127.0.0.1:8838/index.html?nosplash=1'
 EDGE=open(_os.path.join(_REPO,'tests','t32_edge.js'),encoding='utf-8').read()
 fails=[]
 def chk(c,msg):
@@ -24,7 +24,7 @@ HELP="""()=>{window.T={ago:d=>new Date(Date.now()-d*864e5).toISOString(),sets:(w
  rec:(date,plan,week,log,x)=>Object.assign({date,plan,day:plan,week,dur:3000,log},x||{}),
  hang:(d,ex,rs,eff,x)=>T.rec(T.ago(d),'B',1,[{ex:'pullup',sets:T.sets(0,[6,6,5])},{ex,sets:T.sets(0,rs),...(eff?{eff}:{})}],x),
  farm:(d,ex,w,rs,eff)=>T.rec(T.ago(d),'C',1,[{ex,sets:T.sets(w,rs),...(eff?{eff}:{})}])}}"""
-PROFILE="(th)=>{localStorage.clear();S=JSON.parse(JSON.stringify(DEF));S.profile={name:'Joschy',gear:[...JOSCHYGEAR],gearV:2,preset:'joschy'};S.settings.voiceMode='off';S.settings.theme=th||'arc';S.body=[{d:'2026-11-01',kg:70}];save();location.reload()}"
+PROFILE="(th)=>{localStorage.clear();S=JSON.parse(JSON.stringify(DEF));S.profile={name:'Joschy',gear:[...JOSCHYGEAR],gearV:2,preset:'joschy',db37:1};/* 3.7: Kurzhantel-Umstellung schon erledigt (prüft t37), hier frei */S.settings.voiceMode='off';S.settings.theme=th||'arc';S.body=[{d:'2026-11-01',kg:70}];save();location.reload()}"
 async def page(b,url=U,th='arc',w=412,h=915):
     ctx=await b.new_context(viewport={'width':w,'height':h},device_scale_factor=2,is_mobile=True,has_touch=True);pg=await ctx.new_page()
     errs=[];pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:errs.append(m.text) if m.type=='error' and 'jai/' not in m.text and 'Failed to load' not in m.text else None)
@@ -52,7 +52,7 @@ async def main():
         b=await p.chromium.launch()
         f31=await fixture31(b)
         ctx,pg,errs=await page(b)
-        v=await pg.evaluate("[APP_VER,BK_VER]");chk(v==['3.5',5],f'version 3.5, backup format 5 {v}')
+        v=await pg.evaluate("[APP_VER,BK_VER]");chk(v==['3.7',5],f'version 3.7, backup format 5 {v}')
         # 1) exercises, library, details, needs
         r=await pg.evaluate("""()=>({n:HG_ALL.filter(k=>EX[k]&&AN[animOf(k)]&&CAT[k]==='griff').length,cat:CATS.some(c=>c[0]==='griff'),
           need:[canDo('deadhang'),NEEDS.farmerhold,NEEDS.kbfarmhold,!!NEEDS.jughold],safe:HG_ALL.every(k=>/Schmerz/.test(EX[k].safe)),mg:HG_ALL.every(k=>mgOf(k)==null)})""")
@@ -105,7 +105,7 @@ async def main():
         chk(r['max']<=60 and not r['bad'],f"<= 60 min: {r['n']} unit estimates (4 gear presets, rest x1/x1.2, every stage at its longest time, farmer at 60 s) max {r['max']:.1f} min, main lift sets unchanged {r['bad'][:3]}")
         # 5b) vs. the 3.2 build before this feature: every exercise and rep target identical; only assistance/bonus sets may be shortened, block added
         po=await ctx.new_page();await po.goto(UP);await po.wait_for_timeout(300)
-        PL="(g)=>{S.profile={name:'Joschy',gear:eval(g),preset:'x'};const o={};for(let w=1;w<=4;w++)for(const d of DAYS)o[w+d]=planItems(d,false,w).filter(x=>!x.blk).map(x=>[x.ex,x.sets,x.lo,x.hi,x.slot===0||/Kniebeuge|Bankdrück|Kreuzheb|Schulterdrück|Rudern|Klimmz|Chin-up/i.test(EX[x.ex].n),!!x.fin]);return o}"
+        PL="(g)=>{S.profile={name:'Joschy',gear:eval(g),preset:'x',db37:1};const o={};for(let w=1;w<=4;w++)for(const d of DAYS)o[w+d]=planItems(d,false,w).filter(x=>!x.blk).map(x=>[x.ex,x.sets,x.lo,x.hi,x.slot===0||/Kniebeuge|Bankdrück|Kreuzheb|Schulterdrück|Rudern|Klimmz|Chin-up/i.test(EX[x.ex].n),!!x.fin]);return o}"
         for g in ['[...JOSCHYGEAR]','ALLGEAR','["db","bench","band"]','[]']:
             a=await pg.evaluate(PL,g);o=await po.evaluate(PL,g);diff=[]
             for k in o:
@@ -200,7 +200,8 @@ async def main():
             await pg.evaluate("st=>{window.__hgLock=true;localStorage.setItem(KEY,JSON.stringify(st));location.reload()}",f31['state'])
         await pg.wait_for_timeout(500)
         s1=await pg.evaluate("localStorage.getItem(KEY)");n=json.loads(s1)
-        keep=all(n[k]==f31['state'][k] for k in ['history','prog','session','profile','settings']) and all(n['yoga'][k]==f31['state']['yoga'][k] for k in ['start','done','log'])  # yoga v/startLv = existing 3.2 yoga migration
+        p31={k:v for k,v in n['profile'].items() if k not in ('db37','weights')};w31=(n['profile'].get('weights') or {}).get('db')  # 3.7: Joschys Kurzhanteln -> Set Gummi PRO (Migration, siehe t37)
+        keep=all(n[k]==f31['state'][k] for k in ['history','prog','session','settings']) and p31=={k:v for k,v in f31['state']['profile'].items() if k not in ('db37','weights')} and w31 in ([2.5,5,7.5,10,12.5,15,17.5,20],(f31['state']['profile'].get('weights') or {}).get('db')) and all(n['yoga'][k]==f31['state']['yoga'][k] for k in ['start','done','log'])  # yoga v/startLv = existing 3.2 yoga migration
         chk(keep and n['hang']=={'v':1,'tests':[],'pauses':[],'base':None},'3.1 state: S.hang added, history/plan position/running session/yoga/profile unchanged')
         await pg.reload();await pg.wait_for_timeout(500);s2=await pg.evaluate("localStorage.getItem(KEY)")
         chk(s1==s2,'migration idempotent: second start leaves the stored state byte-identical')

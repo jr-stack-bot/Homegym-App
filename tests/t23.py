@@ -7,7 +7,7 @@ import asyncio,subprocess,time,json,sys,os
 from playwright.async_api import async_playwright
 D=_SHOTS.rstrip('/')
 srv=subprocess.Popen([sys.executable,'-m','http.server','8777','-d',_OUTDIR],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL);time.sleep(1)
-U='http://127.0.0.1:8777/index.html'
+U='http://127.0.0.1:8777/index.html?nosplash=1'
 BALLISTIC=['jumpsquat','bearcrawl','beinschere','swimmer',  # 3.2: new explosive/alternating bodyweight moves
 'plyopush','highknees','shadowbox','skater','dbsnatch',  # Kraft-Bibliothek +100: explosive/cardio moves
 'mbslam','boxing','run','walk','jj','kbswing','boxjump','climber','jumprope','kbclean','kbpushpress','rowint','bikeint','cross','march','farmer','armcircle','russtwist']
@@ -68,7 +68,7 @@ async def main():
         print('hands',hd);assert all(hd.values()),hd
         # 7) animation speed setting: settings UI, persisted, real effect on the animation, in the backup
         await pg.click('[data-tab=set]');await pg.wait_for_timeout(250)
-        v=await pg.text_content('#verLine');assert 'Version 3.5 · @ Joschy' in v,v
+        v=await pg.text_content('#verLine');assert 'Version 3.7 · @ Joschy' in v,v
         assert await pg.locator('[data-aspd]').count()==2
         await pg.click('[data-aspd="0.75"]');await pg.wait_for_timeout(150)
         st=await pg.evaluate("()=>({s:S.settings.animSpd,f:animSpd(),ls:JSON.parse(localStorage.getItem(KEY)).settings.animSpd,p:document.querySelector('[data-aspd=\"0.75\"]').getAttribute('aria-pressed')})")
@@ -80,7 +80,7 @@ async def main():
           let dAB=0,dAC=0;for(let i=0;i<A.length;i++){dAB+=Math.abs(A[i]-B[i]);dAC+=Math.abs(A[i]-C[i])}a.remove();b.remove();c2.remove();return{dAB,dAC}}""")
         print('speed check',eq);assert eq['dAB']==0 and eq['dAC']>1000,eq
         bk=await pg.evaluate("()=>{const t=backupText();const d=JSON.parse(t);const r=parseBackup(t);return{v:d.appVer,s:d.state.settings.animSpd,rt:r.st.settings.animSpd}}")
-        print('backup',bk);assert bk=={'v':'3.5','s':.75,'rt':.75},bk
+        print('backup',bk);assert bk=={'v':'3.7','s':.75,'rt':.75},bk
         # restore a backup with normal speed -> setting comes back
         await pg.evaluate("()=>{const d=JSON.parse(backupText());d.state.settings.animSpd=1;window.__bk=JSON.stringify(d)}")
         await pg.evaluate("()=>applyBackup(parseBackup(window.__bk).st)");await pg.wait_for_timeout(1200)

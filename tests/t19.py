@@ -5,7 +5,7 @@ _SHOTS=_os.environ.get('HOMEGYM_SHOTS','/tmp/homegym-shots/');_os.makedirs(_SHOT
 import asyncio,subprocess,time,json,sys
 from playwright.async_api import async_playwright
 srv=subprocess.Popen([sys.executable,'-m','http.server','8765','-d',_OUTDIR],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL);time.sleep(1)
-U='http://127.0.0.1:8765/index.html'
+U='http://127.0.0.1:8765/index.html?nosplash=1'
 async def onboard(pg,name):
     await pg.goto(U);await pg.wait_for_timeout(500)
     await pg.evaluate("""(n)=>{S.profile={name:n,gear:GEAR.map(g=>g.id)};S.settings.voiceMode='jai';save();location.reload()}""",name)

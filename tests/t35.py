@@ -12,7 +12,7 @@ from playwright.async_api import async_playwright
 SH=_os.path.join(_SHOTS,'t35');_os.makedirs(SH,exist_ok=True)
 srv=subprocess.Popen([sys.executable,'-m','http.server','8851','-d',_OUTDIR],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 old=subprocess.Popen([sys.executable,'-m','http.server','8852','-d',_V32],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL);time.sleep(1)
-U='http://127.0.0.1:8851/index.html';UO='http://127.0.0.1:8852/index.html'
+U='http://127.0.0.1:8851/index.html?nosplash=1';UO='http://127.0.0.1:8852/index.html?nosplash=1'
 PW=_os.environ.get('HOMEGYM_EXTRAS_PW','')  # Kennwort nicht im Repo: per Umgebungsvariable übergeben
 if not PW:raise SystemExit('FEHLT: Umgebungsvariable HOMEGYM_EXTRAS_PW (Extras-Kennwort)')
 fails=[]
@@ -43,7 +43,7 @@ async def main():
     await ctx.close();chk(bk32['ver']=='3.2' and '"extras"' not in bk32['t'],f"Fixture: Backup vom echten 3.2-Stand erzeugt (ohne Feld extras)")
     ctx,pg,errs=await page(b)
     r=await pg.evaluate("()=>({ver:APP_VER,bk:BK_VER,ex:JSON.parse(localStorage.getItem(KEY)).extras,pick:[cosPick(null,'m'),cosPick(null,'f')],n:COS_IDS.length,names:COS_IDS.map(k=>COSD[k].n)})")
-    chk(r['ver']=='3.6' and r['bk']==5,f"Version 3.6, Backup-Format bleibt v{r['bk']}")
+    chk(r['ver']=='3.7' and r['bk']==5,f"Version 3.7, Backup-Format bleibt v{r['bk']}")
     chk(r['ex']=={'u':0,'m':'none','f':'none'} and r['pick']==[None,None],f"Neuer Stand: Extras gesperrt, kein Kostüm {r['ex']}")
     chk(r['n']==19 and len(set(r['names']))==19,f"19 Kostüme: {', '.join(r['names'])}")
     # ---- Einstellungen: Extras gesperrt, falsches Kennwort ----

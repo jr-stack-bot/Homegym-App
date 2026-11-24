@@ -13,7 +13,7 @@ D=_SHOTS.rstrip('/');_os.makedirs(D+'/shots',exist_ok=True)
 srv=subprocess.Popen([sys.executable,'-m','http.server','8797','-d',_OUTDIR],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 o33=subprocess.Popen([sys.executable,'-m','http.server','8799','-d',_V33],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 old=subprocess.Popen([sys.executable,'-m','http.server','8798','-d',_V31],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL);time.sleep(1)
-U='http://127.0.0.1:8797/index.html';UO='http://127.0.0.1:8798/index.html';U33='http://127.0.0.1:8799/index.html'
+U='http://127.0.0.1:8797/index.html?nosplash=1';UO='http://127.0.0.1:8798/index.html?nosplash=1';U33='http://127.0.0.1:8799/index.html?nosplash=1'
 CHECK=open(_os.path.join(_REPO,'tests','t30_yck.js'),encoding='utf-8').read()
 fails=[]
 def chk(c,msg):
@@ -26,8 +26,8 @@ async def main():
         b=await p.chromium.launch();ctx=await b.new_context(viewport={'width':390,'height':844},accept_downloads=True);pg=await ctx.new_page()
         errs=[];pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:errs.append(m.text) if m.type=='error' else None)
         await setup(pg,U)
-        v=await pg.evaluate("[APP_VER,BK_VER]");chk(v==['3.6',5],'version 3.6, backup format 5 '+str(v))
-        await pg.evaluate("go('set')");vl=await pg.text_content('#verLine');chk('Version 3.6 · @ Joschy' in vl,vl)
+        v=await pg.evaluate("[APP_VER,BK_VER]");chk(v==['3.7',5],'version 3.7, backup format 5 '+str(v))
+        await pg.evaluate("go('set')");vl=await pg.text_content('#verLine');chk('Version 3.7 · @ Joschy' in vl,vl)
         # 1) catalogue
         r=await pg.evaluate("""()=>{const lv=[1,2,3].map(l=>YKEYS.filter(k=>YP[k].lv===l).length);const bad=YKEYS.filter(k=>{const p=YP[k];return!p.n||!p.sa&&p.lv>1&&false||!(p.c.length>=2&&p.c.length<=3)||!p.a||!YREG.some(x=>x[0]===p.r)||!(p.sec>0)||!AN['y_'+k]});
           const prof=YKEYS.filter(k=>YP[k].lv===3);const noAlt=prof.filter(k=>!YP[k].alt||!YP[YP[k].alt]||YP[YP[k].alt].lv>=3);

@@ -9,7 +9,7 @@ _OUTDIR=_os.environ.get('HOMEGYM_OUT',_os.path.join(_REPO,'out'))
 import asyncio,subprocess,time,sys
 from playwright.async_api import async_playwright
 srv=subprocess.Popen([sys.executable,'-m','http.server','8836','-d',_OUTDIR],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL);time.sleep(1)
-U='http://127.0.0.1:8836/index.html'
+U='http://127.0.0.1:8836/index.html?nosplash=1'
 fails=[]
 def chk(c,msg):
     print(('ok   ' if c else 'FAIL ')+msg);(None if c else fails.append(msg))
@@ -51,7 +51,7 @@ async def main():
     async with async_playwright() as p:
         b=await p.chromium.launch(args=['--autoplay-policy=no-user-gesture-required'])
         pg,errs=await page(b)
-        v=await pg.evaluate("[APP_VER,BK_VER]");chk(v==['3.6',5],'Version 3.6, Backup-Format bleibt 5 '+str(v))
+        v=await pg.evaluate("[APP_VER,BK_VER]");chk(v==['3.7',5],'Version 3.7, Backup-Format bleibt 5 '+str(v))
         # ---------- 1) coverage ----------
         r=await pg.evaluate("""async()=>{const exMiss=Object.keys(EX).filter(k=>!jaiEx(k).length),yMiss=Object.keys(YP).filter(k=>!jaiYoga(k).length);
           const prog=[...new Set(PROGRAM.flatMap(b=>b.days.flatMap(d=>[...d.items.map(x=>x[0]),d.fin[0]])))].filter(k=>!jaiEx(k).length);
@@ -74,11 +74,14 @@ async def main():
         played=await pg.evaluate("window.__played.slice()");ov=await pg.evaluate("window.__overlap.slice()")
         print('Kraft-Ansagen:');[print('  ',s) for s in log if any(x.startswith('ex_') or x=='u_als_naechstes' for x in s)]
         starts=[s for s in log if 'u_saetze' in s];nexts=[s for s in log if 'u_als_naechstes' in s]
-        chk(len(starts)==len(items) and all(s.count(it)==1 and sum(x.startswith('ex_') for x in s)==1 for s,it in zip(starts,items)),f"Kraft: jede der {len(items)} Übungen sagt beim Start ihren Namen genau einmal")
+        chk(len(starts)==len(items) and starts[0].count(items[0])==1 and sum(x.startswith('ex_') for x in starts[0])==1,f"Kraft: die erste Übung sagt beim Start ihren Namen genau einmal")
+        # 3.7: nach "Als Nächstes" + Name in der Pause kommt der Name beim Start nicht noch einmal (auch kein "Nächste Übung")
+        chk(all(not any(x.startswith('ex_') for x in s) and 'next_ex' not in s for s in starts[1:]),f"Kraft 3.7: Start nach der Pause ohne Namen und ohne 'Nächste Übung' {starts[1:3]}")
+        chk(not any('next_ex' in s for s in log),"Kraft 3.7: 'Nächste Übung' kommt nicht mehr zusätzlich")
         chk(len(nexts)==len(items)-1 and all(s[s.index('u_als_naechstes')+1:]==[it] for s,it in zip(nexts,items[1:])),"Kraft: in jeder Pause vor einer neuen Übung 'Als Nächstes' + Name")
         order=[x for x in played if x=='u_als_naechstes' or x in items]
-        exp=[items[0]]+[y for it in items[1:] for y in ('u_als_naechstes',it,it)]
-        chk(order==exp,'Kraft: Abspielreihenfolge Name → Als Nächstes → Name (Start) stimmt')
+        exp=[items[0]]+[y for it in items[1:] for y in ('u_als_naechstes',it)]
+        chk(order==exp,'Kraft 3.7: Abspielreihenfolge Name → Als Nächstes + Name, jeder Name nur einmal '+str(order[:6]))
         chk(not ov,f"Kraft: keine überlappenden Ansagen {ov[:3]}")
         chk(any(s[:1]==['halfway'] and 'u_als_naechstes' in s for s in log) or any(s==['halfway'] for s in log),'Kraft: Halbzeit kommt in derselben Sequenz (wird nicht abgeschnitten)')
         await pg.click('#saveS');await pg.wait_for_timeout(300)
@@ -87,7 +90,7 @@ async def main():
         await run_kraft(pg,'B',True)
         log=await pg.evaluate("window.__jaiLog.slice()");it=await pg.evaluate("S.session.items.map(x=>({id:'ex_'+x.ex,blk:!!x.blk}))");ov=await pg.evaluate("window.__overlap.slice()")
         hb=[x['id'] for x in it if x['blk']];print('Hang-Block:',hb);[print('  ',s) for s in log if any(x in hb for x in s)]
-        chk(hb and all(any(s[-2:]==['u_als_naechstes',h] for s in log) and any('u_saetze' in s and h in s for s in log) for h in hb),'Hang-Block: Als Nächstes + Name in der Pause, Name beim Start')
+        chk(hb and all(any(s[-2:]==['u_als_naechstes',h] for s in log) and sum(s.count(h) for s in log)==1 for h in hb),'Hang-Block 3.7: Als Nächstes + Name in der Pause, Name nur einmal')
         chk(not ov,f"Hang: keine überlappenden Ansagen {ov[:3]}")
         await pg.click('#saveS');await pg.wait_for_timeout(300)
         # ---------- 2c) Yoga (Schnell-Dehnen + Plan-Einheit) ----------

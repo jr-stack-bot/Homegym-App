@@ -7,7 +7,7 @@ import asyncio,subprocess,time,json,sys,os
 from playwright.async_api import async_playwright
 D=_SHOTS.rstrip('/')
 srv=subprocess.Popen([sys.executable,'-m','http.server','8773','-d',_OUTDIR],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL);time.sleep(1)
-U='http://127.0.0.1:8773/index.html'
+U='http://127.0.0.1:8773/index.html?nosplash=1'
 async def main():
     async with async_playwright() as p:
         b=await p.chromium.launch();ctx=await b.new_context(viewport={'width':390,'height':844},accept_downloads=True);pg=await ctx.new_page()
@@ -152,7 +152,7 @@ async def main():
         await pg.wait_for_timeout(500)
         y=await pg.evaluate("[Object.keys(S.yoga.done).sort(),S.yoga.log.length,S.yoga.start,yCur().week]");print('restored',y);assert y[0]==['1','2'] and y[1]==1 and y[2] and y[3]>=3
         # 10) version + footer
-        await pg.click('[data-tab=set]');await pg.wait_for_timeout(200);v=await pg.text_content('#verLine');assert 'Version 3.5' in v and '@ Joschy' in v
+        await pg.click('[data-tab=set]');await pg.wait_for_timeout(200);v=await pg.text_content('#verLine');assert 'Version 3.7' in v and '@ Joschy' in v
         print('errors',errs);assert not errs
         await b.close()
     srv.kill();print('ALL OK')

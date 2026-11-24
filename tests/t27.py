@@ -7,7 +7,7 @@ import asyncio,subprocess,time,json,sys,os
 from playwright.async_api import async_playwright
 D=_SHOTS.rstrip('/')
 srv=subprocess.Popen([sys.executable,'-m','http.server','8781','-d',_OUTDIR],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL);time.sleep(1)
-U='http://127.0.0.1:8781/index.html'
+U='http://127.0.0.1:8781/index.html?nosplash=1'
 FAIL=[]
 def chk(c,m):
     print(('ok   ' if c else 'FAIL ')+m)
@@ -17,7 +17,7 @@ HELP="""()=>{window.T={
  ago:d=>new Date(Date.now()-d*864e5).toISOString(),
  ws:()=>weekStart(new Date()).getTime(),
  sets:(w,rs)=>rs.map(r=>({w,r,done:true})),
- prof:()=>({name:'Joschy',gear:[...JOSCHYGEAR],gearV:2,preset:'joschy',weights:{db:[],kb:[8,12,16],band:[]}}),
+ prof:()=>({name:'Joschy',gear:[...JOSCHYGEAR],gearV:2,preset:'joschy',db37:1,weights:{db:[],kb:[8,12,16],band:[]}}),/* 3.7: db37 = Kurzhantel-Umstellung schon erledigt (die prüft t37), hier frei verstellbare Kurzhanteln */
  base:()=>({settings:{...DEF.settings,voiceMode:'off'},history:[],next:0,session:null,protein:{d:'',g:0,log:[]},body:[{d:'2026-01-01',kg:80}],profile:T.prof()}),
  rec:(date,plan,week,log)=>({date,plan,day:plan,week,dur:3000,log}),
  put:st=>{window.__hgLock=true;localStorage.setItem(KEY,JSON.stringify(st));sessionStorage.setItem('__before',JSON.stringify(st));location.reload()},
@@ -34,7 +34,7 @@ async def main():
         b=await p.chromium.launch();ctx=await b.new_context(viewport={'width':390,'height':844},accept_downloads=True);pg=await ctx.new_page()
         errs=[];pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:errs.append(m.text) if m.type=='error' else None)
         await pg.goto(U);await boot(pg)
-        r=await pg.evaluate("[APP_VER,BK_VER]");chk(r==['3.5',5],'version 3.1, backup format stays 5 '+str(r))
+        r=await pg.evaluate("[APP_VER,BK_VER]");chk(r==['3.7',5],'version 3.1, backup format stays 5 '+str(r))
 
         # ===== 1) MIGRATION from realistic 2.3 states =====
         # 1a fresh 2.3 state in the middle of week 2: last week A,B,C (week 1), this week A (week 2)
@@ -273,7 +273,7 @@ async def main():
         print('7 tolerant',r)
         chk(r['prog'] and not r['eff'] and not r['wu'] and r['rr']=={'bench':[6,8]} and r['plat']=={'lateral':{}} and not r['ws'] and r['ss'] and not r['swu'] and not r['seff'],'7 parseBackup validates new fields tolerantly, history kept')
 
-        await pg.click('[data-tab=set]');await pg.wait_for_timeout(150);v=await pg.text_content('#verLine');chk('Version 3.5 · @ Joschy' in v,v)
+        await pg.click('[data-tab=set]');await pg.wait_for_timeout(150);v=await pg.text_content('#verLine');chk('Version 3.7 · @ Joschy' in v,v)
         # ===== 8) Abnahme-Fixes 3.0 =====
         # 8a warm-up sets follow a swapped first main lift (swap sheet, plateau "Variante", gear change); bodyweight -> no card
         await put(pg,"()=>T.base()")

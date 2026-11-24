@@ -1,0 +1,141 @@
+<!-- Homegym App-Icon @ Joschy -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" width="108" height="108">
+<defs>
+ <radialGradient id="hgBg" cx="54" cy="50" r="72" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4b5059"/><stop offset=".45" stop-color="#2a2e35"/><stop offset="1" stop-color="#111316"/></radialGradient>
+ <linearGradient id="hgRed" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8e0c13"/><stop offset=".22" stop-color="#ff5a48"/><stop offset=".45" stop-color="#e3241f"/><stop offset=".8" stop-color="#b3141a"/><stop offset="1" stop-color="#6a070c"/></linearGradient>
+ <linearGradient id="hgRedH" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff6a58"/><stop offset=".35" stop-color="#e8261f"/><stop offset="1" stop-color="#8a0b12"/></linearGradient>
+ <linearGradient id="hgSteel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#c3cad3"/><stop offset="1" stop-color="#6b7480"/></linearGradient>
+ <linearGradient id="hgGoldBar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6cf"/><stop offset=".3" stop-color="#ffd54a"/><stop offset=".62" stop-color="#c8920f"/><stop offset="1" stop-color="#7a5306"/></linearGradient>
+ <linearGradient id="hgGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3b8"/><stop offset=".28" stop-color="#f6c63b"/><stop offset=".55" stop-color="#b98209"/><stop offset=".78" stop-color="#f2c84a"/><stop offset="1" stop-color="#8a5d05"/></linearGradient>
+ <linearGradient id="hgGoldRim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a5d05"/><stop offset=".5" stop-color="#fff0a8"/><stop offset="1" stop-color="#7a5106"/></linearGradient>
+ <linearGradient id="hgSkin" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4a230c"/><stop offset=".3" stop-color="#9b5a2c"/><stop offset=".5" stop-color="#b8743f"/><stop offset=".75" stop-color="#8a4c22"/><stop offset="1" stop-color="#46210b"/></linearGradient>
+ <radialGradient id="hgFace" cx=".42" cy=".38" r=".7"><stop offset="0" stop-color="#c07a45"/><stop offset=".55" stop-color="#9a5a2d"/><stop offset="1" stop-color="#5e2f12"/></radialGradient>
+ <linearGradient id="hgTank" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8f0d14"/><stop offset=".35" stop-color="#ef3427"/><stop offset=".55" stop-color="#d8211d"/><stop offset="1" stop-color="#7a0a10"/></linearGradient>
+ <linearGradient id="hgShorts" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#050506"/><stop offset=".45" stop-color="#2b2c31"/><stop offset="1" stop-color="#050506"/></linearGradient>
+ <linearGradient id="hgHair" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a3d44"/><stop offset=".4" stop-color="#121316"/><stop offset="1" stop-color="#000"/></linearGradient>
+ <linearGradient id="hgShoe" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#c9ced6"/></linearGradient>
+ <radialGradient id="hgGlow" cx="54" cy="47" r="36" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ffd54a" stop-opacity=".16"/><stop offset="1" stop-color="#ffd54a" stop-opacity="0"/></radialGradient>
+ <filter id="hgSoft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation=".45"/></filter>
+ <filter id="hgShadow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.2"/></filter>
+</defs>
+<g id="hgBack"><rect width="108" height="108" fill="url(#hgBg)"/><rect width="108" height="108" fill="url(#hgGlow)"/></g>
+<g id="hgFore" transform="translate(54 54) scale(.86) translate(-54 -52.6)">
+ <ellipse cx="54" cy="83.6" rx="27" ry="2.6" fill="#000" opacity=".45" filter="url(#hgShadow)"/>
+ <g id="hgRack">
+  <rect x="24.5" y="80.4" width="16" height="3.2" rx="1.1" fill="url(#hgRedH)"/>
+  <rect x="67.5" y="80.4" width="16" height="3.2" rx="1.1" fill="url(#hgRedH)"/>
+  <rect x="30" y="21.6" width="5" height="60" rx=".7" fill="url(#hgRed)"/>
+  <rect x="73" y="21.6" width="5" height="60" rx=".7" fill="url(#hgRed)"/>
+  <rect x="30" y="21.6" width="48" height="4.2" rx=".8" fill="url(#hgRedH)"/>
+  <rect x="30.4" y="21.95" width="47.2" height=".55" rx=".27" fill="#ffd8cf" opacity=".9"/>
+  <rect x="30.55" y="23.6" width=".6" height="57.4" rx=".3" fill="#ffc2b5" opacity=".75"/>
+  <rect x="73.55" y="23.6" width=".6" height="57.4" rx=".3" fill="#ffc2b5" opacity=".75"/>
+  <rect x="25" y="80.75" width="15" height=".45" rx=".22" fill="#ffc2b5" opacity=".75"/>
+  <rect x="68" y="80.75" width="15" height=".45" rx=".22" fill="#ffc2b5" opacity=".75"/>
+  <g fill="#3a0407"><rect x="31.65" y="31.00" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="34.10" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="37.20" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="40.30" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="43.40" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="55.80" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="58.90" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="62.00" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="65.10" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="68.20" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="71.30" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="74.40" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="77.50" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="31.00" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="34.10" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="37.20" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="40.30" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="43.40" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="55.80" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="58.90" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="62.00" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="65.10" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="68.20" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="71.30" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="74.40" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="77.50" width="1.7" height="1.7" rx=".45"/></g>
+  <g fill="#ff8b7a" opacity=".35" transform="translate(0 1.15)"><rect x="31.65" y="31.00" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="34.10" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="37.20" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="40.30" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="43.40" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="55.80" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="58.90" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="62.00" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="65.10" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="68.20" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="71.30" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="74.40" width="1.7" height="1.7" rx=".45"/><rect x="31.65" y="77.50" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="31.00" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="34.10" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="37.20" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="40.30" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="43.40" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="55.80" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="58.90" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="62.00" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="65.10" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="68.20" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="71.30" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="74.40" width="1.7" height="1.7" rx=".45"/><rect x="74.65" y="77.50" width="1.7" height="1.7" rx=".45"/></g>
+ </g>
+ <g id="hgHooks">
+  <g id="hgHookL">
+   <rect x="29.2" y="47.6" width="6.6" height="6.8" rx=".7" fill="url(#hgSteel)" stroke="#3d434b" stroke-width=".35"/>
+   <circle cx="31.1" cy="49.5" r=".45" fill="#4b525c"/><circle cx="31.1" cy="52.5" r=".45" fill="#4b525c"/>
+   <path d="M35.6 51.2h2.3v-3.3h1.7v4.9c0 .8-.5 1.3-1.3 1.3h-2.7z" fill="url(#hgSteel)" stroke="#3d434b" stroke-width=".35" stroke-linejoin="round"/>
+   <rect x="29.6" y="47.95" width="5.8" height=".4" rx=".2" fill="#fff"/>
+   <rect x="38.05" y="48.2" width=".45" height="3.4" rx=".2" fill="#fff" opacity=".85"/>
+  </g>
+  <use href="#hgHookL" transform="matrix(-1 0 0 1 108 0)"/>
+ </g>
+ <g id="hgFig">
+  <g id="hgLegs">
+   <g id="hgLegL">
+    <path d="M46.2 68.8c-1 2.4-1 4.8-.2 6.8-.2 1.8.2 3.2.6 4.4h3.4c.2-1.4.6-3 .4-4.4 1-2 2.2-4.6 3-6.8z" fill="url(#hgSkin)"/>
+    <path d="M47.2 70.4c-.5 1.5-.4 2.9.2 4.1" stroke="#3a1a07" stroke-width=".55" fill="none" opacity=".5" filter="url(#hgSoft)"/>
+    <path d="M50.2 70.6c-.6 1.5-1.2 2.7-1.9 3.6" stroke="#3a1a07" stroke-width=".5" fill="none" opacity=".4" filter="url(#hgSoft)"/>
+    <ellipse cx="48.6" cy="71.4" rx=".75" ry="1.7" fill="#f0b07a" opacity=".4"/>
+    <ellipse cx="48" cy="75.8" rx=".9" ry=".6" fill="#f0b07a" opacity=".35"/>
+    <path d="M44.6 81.6c0-1.8 1.4-2.4 2.8-2.4h2.4c1 0 1.6.6 1.6 1.6v.8z" fill="url(#hgShoe)"/>
+    <path d="M46.6 80.2l1.6-.6M47.4 80.9l1.6-.6" stroke="#9aa3ae" stroke-width=".3" stroke-linecap="round"/>
+    <rect x="44.3" y="81.3" width="7.4" height="1.6" rx=".65" fill="url(#hgGoldBar)"/>
+   </g>
+   <use href="#hgLegL" transform="matrix(-1 0 0 1 108 0)"/>
+  </g>
+  <g id="hgUpper">
+   <path d="M46.8 60.6h14.4l1.6 8.8-7.6.2-1.2-3.4-1.2 3.4-7.6-.2z" fill="url(#hgShorts)"/>
+   <path d="M46.9 61.5l-1.6 7.9h1.1l1.5-7.9zM61.1 61.5l1.6 7.9h-1.1l-1.5-7.9z" fill="url(#hgGoldBar)"/>
+   <rect x="46.7" y="60.3" width="14.6" height="1.3" rx=".45" fill="#1d1d22"/>
+   <path d="M50.4 43.1c-2.4 1.8-5.4 3-7.6 3.7-3 .8-4.2 2.8-4 4.8.2 2 1.8 3.2 3.6 3.4l2.8.2c1.4 2.3 2.4 4.2 3.2 6h11.2c.8-1.8 1.8-3.7 3.2-6l2.8-.2c1.8-.2 3.4-1.4 3.6-3.4.2-2-1-4-4-4.8-2.2-.7-5.2-1.9-7.6-3.7z" fill="url(#hgSkin)"/>
+   <path d="M48.2 45.6l2.4-.3c.6 3.1 1.8 5.1 3.4 5.1s2.8-2 3.4-5.1l2.4.3c-.2 4 1.2 7.4 2.8 9.8-1.2 1.8-2.2 3.8-2.9 6H48.3c-.7-2.2-1.7-4.2-2.9-6 1.6-2.4 3-5.8 2.8-9.8z" fill="url(#hgTank)"/>
+   <path d="M48.9 53.3c1.7 1.2 3.5 1.4 4.7.8M59.1 53.3c-1.7 1.2-3.5 1.4-4.7.8" stroke="#6d0910" stroke-width=".6" fill="none" opacity=".8" filter="url(#hgSoft)"/>
+   <path d="M54 55.2v5.4M51.8 57.4h4.4M52 59.3h4" stroke="#7d0a10" stroke-width=".45" fill="none" opacity=".55" filter="url(#hgSoft)"/>
+   <path d="M49.3 48.4c.5 1.6 1.4 2.6 2.6 3.1M58.7 48.4c-.5 1.6-1.4 2.6-2.6 3.1" stroke="#ff9a88" stroke-width=".45" fill="none" opacity=".75" stroke-linecap="round"/>
+   <ellipse cx="41.7" cy="49.6" rx="1.9" ry="1.1" fill="#f4b884" opacity=".5" transform="rotate(-30 41.7 49.6)"/>
+   <ellipse cx="66.3" cy="49.6" rx="1.9" ry="1.1" fill="#f4b884" opacity=".5" transform="rotate(30 66.3 49.6)"/>
+   <path d="M45.1 47.3c1.6-.4 3-.9 4.2-1.5M62.9 47.3c-1.6-.4-3-.9-4.2-1.5" stroke="#e8a36b" stroke-width=".4" fill="none" opacity=".55" stroke-linecap="round"/>
+   <g id="hgArmL">
+    <path d="M39 51c-1.8 1.6-2.8 4-2.6 6.2.2 1.4 1.6 2 2.8 1.4 1.4-.8 3-2.4 4.4-4l-.8-2.8z" fill="url(#hgSkin)"/>
+    <path d="M36.6 57.4c-.2-3.4.8-6.8 3-9.8l3 .8c-1.4 3-2 6-2.2 9.2-.4 1.6-3.4 1.6-3.8-.2z" fill="url(#hgSkin)"/>
+    <path d="M37.6 55.6c.2-2 .8-3.8 1.8-5.6" stroke="#f4b884" stroke-width=".5" fill="none" opacity=".55" stroke-linecap="round"/>
+    <path d="M40.4 56.8c.8-.8 1.6-1.6 2.2-2.4" stroke="#3a1a07" stroke-width=".45" fill="none" opacity=".45" filter="url(#hgSoft)"/>
+   </g>
+   <use href="#hgArmL" transform="matrix(-1 0 0 1 108 0)"/>
+   <g id="hgBar">
+    <rect x="18.8" y="44.6" width="70.4" height="2.2" rx="1.1" fill="url(#hgGoldBar)"/>
+    <rect x="19.6" y="44.9" width="68.8" height=".42" rx=".21" fill="#fffbe6" opacity=".95"/>
+    <g id="hgPlates">
+     <g id="hgPL">
+      <rect x="18.4" y="44.05" width="12.6" height="3.3" rx="1.2" fill="url(#hgGoldBar)"/>
+      <ellipse cx="27.1" cy="45.7" rx="4.3" ry="10.8" fill="#6e4a05"/>
+      <ellipse cx="26.1" cy="45.7" rx="4.3" ry="10.8" fill="url(#hgGold)"/>
+      <ellipse cx="26.1" cy="45.7" rx="4.3" ry="10.8" fill="none" stroke="url(#hgGoldRim)" stroke-width=".75"/>
+      <ellipse cx="26.1" cy="45.7" rx="3.1" ry="8.7" fill="none" stroke="#7a5106" stroke-width=".6" opacity=".85"/>
+      <ellipse cx="25.9" cy="45.4" rx="2.75" ry="8.2" fill="none" stroke="#fff3b5" stroke-width=".45" opacity=".9"/>
+      <ellipse cx="26.1" cy="45.7" rx="1.15" ry="2.5" fill="#8a5d05"/>
+      <path d="M24 38.2c.6-1.5 1.5-2.3 2.2-2.3" stroke="#fffbe6" stroke-width=".6" fill="none" stroke-linecap="round"/>
+      <ellipse cx="21.9" cy="45.7" rx="2.9" ry="7.2" fill="#6e4a05"/>
+      <ellipse cx="21.1" cy="45.7" rx="2.9" ry="7.2" fill="url(#hgGold)"/>
+      <ellipse cx="21.1" cy="45.7" rx="2.9" ry="7.2" fill="none" stroke="url(#hgGoldRim)" stroke-width=".6"/>
+      <ellipse cx="21.1" cy="45.7" rx="2" ry="5.6" fill="none" stroke="#7a5106" stroke-width=".5" opacity=".85"/>
+      <ellipse cx="21" cy="45.5" rx="1.75" ry="5.2" fill="none" stroke="#fff3b5" stroke-width=".38" opacity=".9"/>
+      <ellipse cx="21.1" cy="45.7" rx=".8" ry="1.8" fill="#8a5d05"/>
+      <path d="M19.7 40.8c.4-1 1-1.6 1.5-1.6" stroke="#fffbe6" stroke-width=".5" fill="none" stroke-linecap="round"/>
+     </g>
+     <use href="#hgPL" transform="matrix(-1 0 0 1 108 0)"/>
+    </g>
+   </g>
+   <path d="M50.7 41.2h6.6v5.9c-1.1.9-2.2 1.3-3.3 1.3s-2.2-.4-3.3-1.3z" fill="url(#hgSkin)"/>
+   <path d="M50.9 42.4c.6 1.4.6 3 .2 4.4M57.1 42.4c-.6 1.4-.6 3-.2 4.4" stroke="#3a1a07" stroke-width=".4" fill="none" opacity=".35" filter="url(#hgSoft)"/>
+   <path d="M51.4 46.2c1.6.9 3.6.9 5.2 0" stroke="#3a1a07" stroke-width=".45" fill="none" opacity=".5"/>
+   <g id="hgHead">
+    <ellipse cx="48.3" cy="36.3" rx="1.2" ry="1.75" fill="#7e4420"/>
+    <ellipse cx="59.7" cy="36.3" rx="1.2" ry="1.75" fill="#7e4420"/>
+    <path d="M48.4 35.5c0-4.2 2.5-6.4 5.6-6.4s5.6 2.2 5.6 6.4c0 4.4-2.4 7.4-5.6 7.4s-5.6-3-5.6-7.4z" fill="url(#hgFace)"/>
+    <path d="M48.1 34.9c-.4-3.8 1.3-6.6 3.9-7.4 2.2-.7 5-.5 6.8.6 1.4.9 1.8 2.6 1.3 4.3l-.4 2.3c-.4-1.6-1.1-2.7-2.1-3.3-2.2.7-5 .5-7-.5-1.2.9-2 2.2-2.5 4z" fill="url(#hgHair)"/>
+    <path d="M50.7 28.4c1.8-1 4.4-1.2 6.4-.4" stroke="#a9b2bf" stroke-width=".65" fill="none" stroke-linecap="round"/>
+    <path d="M51.8 29.5c1.1-.4 2.3-.5 3.4-.3" stroke="#e2e8f0" stroke-width=".35" fill="none" stroke-linecap="round" opacity=".85"/>
+    <path class="hgCut" d="M49.9 33.4c.8-.5 1.8-.6 2.7-.2M55.4 33.2c.9-.4 1.9-.3 2.7.2" stroke="#160b05" stroke-width=".6" fill="none" stroke-linecap="round"/>
+    <ellipse class="hgCut" cx="51.6" cy="35.5" rx="1.08" ry="1.18" fill="#fff"/>
+    <ellipse class="hgCut" cx="56.4" cy="35.5" rx="1.08" ry="1.18" fill="#fff"/>
+    <circle cx="51.75" cy="35.65" r=".8" fill="#2a1408"/>
+    <circle cx="56.25" cy="35.65" r=".8" fill="#2a1408"/>
+    <circle cx="51.42" cy="35.28" r=".3" fill="#fff"/>
+    <circle cx="55.92" cy="35.28" r=".3" fill="#fff"/>
+    <path d="M53.7 36.4c-.2.9-.2 1.4.4 1.6.4.1.8 0 1-.3" stroke="#5a2a10" stroke-width=".38" fill="none" stroke-linecap="round" opacity=".8"/>
+    <ellipse cx="50.4" cy="38.2" rx="1.1" ry=".65" fill="#ff5f5a" opacity=".38"/>
+    <ellipse cx="57.6" cy="38.2" rx="1.1" ry=".65" fill="#ff5f5a" opacity=".38"/>
+    <path class="hgCut" d="M51.4 39c1.7.5 3.5.5 5.2 0-.3 1.4-1.3 2.3-2.6 2.3s-2.3-.9-2.6-2.3z" fill="#5d1414"/>
+    <path d="M51.65 39.12c1.6.45 3.1.45 4.7 0l-.25.82c-1.4.36-2.8.36-4.2 0z" fill="#fff"/>
+    <path d="M53 40.75c.7.3 1.3.3 2 0" stroke="#e46a6a" stroke-width=".42" fill="none" stroke-linecap="round" opacity=".85"/>
+    <ellipse cx="57.4" cy="33.6" rx=".9" ry=".45" fill="#f5c08c" opacity=".35"/>
+   </g>
+   <g id="hgHands">
+    <g id="hgHandL">
+     <path d="M39.4 44c0-1 .8-1.6 1.8-1.6h1.4c1 0 1.6.6 1.6 1.6v3.6c0 1-.8 1.6-1.8 1.6h-1.2c-1 0-1.8-.6-1.8-1.6z" fill="url(#hgSkin)"/>
+     <path d="M40.5 43.4v4.4M41.6 43.2v4.6M42.7 43.4v4.4" stroke="#3a1a07" stroke-width=".3" opacity=".55"/>
+     <path d="M39.9 43.3c.7-.5 1.8-.6 2.8-.3" stroke="#f4b884" stroke-width=".35" fill="none" opacity=".75" stroke-linecap="round"/>
+    </g>
+    <use href="#hgHandL" transform="matrix(-1 0 0 1 108 0)"/>
+   </g>
+  </g>
+ </g>
+</g>
+</svg>

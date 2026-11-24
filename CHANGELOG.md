@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.7
+- **Neue Kurzhanteln**: Joschys Geräte („Joschy Gym“ und „Zubehör“) mit dem Set **Gummi PRO** (feste Paare 2,5 · 5 · 7,5 · 10 · 12,5 · 15 · 17,5 · 20 kg) und der Hantelablage; die verstellbaren Kurzhanteln sind raus.
+- **Gewichtsvorschläge nur mit vorhandenen Paaren**: erst die Wiederholungen voll machen (bei großen Sprüngen 2 Extra-Wdh.), dann genau ein Paar weiter; 20 kg ist das Maximum, danach geht es über Wiederholungen, Tempo oder einen Satz mehr.
+- **Einmalige Umstellung** gespeicherter Daten: Joschys Kurzhantel-Liste wird auf das neue Set gesetzt, offene Sätze springen aufs nächste Paar (im Zweifel leichter). Andere Presets bleiben unverändert, Backup-Format bleibt v5, alte Backups bleiben lesbar.
+- **Neues App-Icon** (Power Rack, goldene Langhantel, Athlet) als Adaptive Icon mit Monochrom-Ebene für Android 13.
+- **Start-Animation** (ca. 1 s, Tippen überspringt, bei „Bewegung reduzieren“ stark verkürzt) und ein kurzer **Gold-Glanz** im App-Kopf nach einem Training.
+- **Fix**: In der Pause kommt „Als Nächstes“ + Name, beim Start der Übung wird der Name nicht noch einmal angesagt.
+- Hauptübungen und Plan unverändert, jede Einheit ≤ 59 Minuten.
+
 ## 3.6
 - **JAI sagt die Namen an**: bei Kraft, Aufwärmen, Hang-Block, Yoga und Dehnen nennt JAI zu Beginn jeder Übung bzw. Haltung den Namen.
 - In der **Pause vor der nächsten Übung** kommt „Als Nächstes“ und danach der Name.

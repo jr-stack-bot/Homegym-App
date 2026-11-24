@@ -7,7 +7,7 @@ import asyncio,subprocess,time,json,sys,os
 from playwright.async_api import async_playwright
 D=_SHOTS.rstrip('/')
 srv=subprocess.Popen([sys.executable,'-m','http.server','8795','-d',_OUTDIR],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL);time.sleep(1)
-U='http://127.0.0.1:8795/index.html'
+U='http://127.0.0.1:8795/index.html?nosplash=1'
 THEMES=['arc','ironman','toxic','cyber','sunset','ice','stealth','day']
 SEED="""()=>{const n=Date.now();S.profile={name:'Joschy',gear:[...JOSCHYGEAR],preset:'joschy'};S.settings.voiceMode='off';
  S.history=[];for(let i=0;i<4;i++)S.history.push({date:new Date(n-864e5*(12-i*3)).toISOString(),plan:'ABC'[i%3],day:'ABC'[i%3],week:1,dur:3000,log:[{ex:'squat',sets:[{w:50+i*2.5,r:8,done:true}]}]});
@@ -39,7 +39,7 @@ async def main():
         await pg.goto(U);await pg.wait_for_timeout(400)
         # 0) defaults: fresh state -> arc, version 2.3
         r=await pg.evaluate("[S.settings.theme,document.documentElement.dataset.theme,APP_VER,THEME_KEYS.join()]");print('default',r)
-        chk(r[0]=='arc' and r[1]=='arc' and r[2]=='3.5' and r[3]=='arc,ironman,toxic,cyber,sunset,ice,stealth,day','default theme/version '+str(r))
+        chk(r[0]=='arc' and r[1]=='arc' and r[2]=='3.7' and r[3]=='arc,ironman,toxic,cyber,sunset,ice,stealth,day','default theme/version '+str(r))
         await pg.evaluate(SEED);await pg.wait_for_timeout(700)
         # 1) every design over all main screens: no JS errors, no horizontal overflow, tiles + live preview
         acc={};contrast={};
@@ -97,7 +97,7 @@ async def main():
         chk(i_s<i_st<i_app and 'data-theme' in html[i_s:i_st],'early theme script before the stylesheet')
         async def strip(route):
             resp=await route.fetch();t=await resp.text();k=t.index('<script>\n"use strict";');await route.fulfill(response=resp,body=t[:k]+'</body></html>')
-        p2=await ctx.new_page();await p2.route('**/index.html',strip);await p2.goto(U);await p2.wait_for_timeout(200)
+        p2=await ctx.new_page();await p2.route('**/index.html*',strip);await p2.goto(U);await p2.wait_for_timeout(200)
         r=await p2.evaluate("[document.documentElement.dataset.theme,getComputedStyle(document.documentElement).backgroundColor,getComputedStyle(document.body).backgroundColor,typeof S]");print('early (app script removed)',r)
         chk(r[0]=='ice' and r[1]=='rgb(12, 15, 19)' and r[3]=='undefined','design applied without the app script '+str(r));await p2.close()
         # unknown value in local storage -> arc
@@ -108,7 +108,7 @@ async def main():
         r=await pg.evaluate("""()=>{const t=backupText();const d=JSON.parse(t);const p=parseBackup(t);const bad=JSON.parse(t);bad.state.settings.theme='<script>';const q=parseBackup(JSON.stringify(bad));
            const nos=JSON.parse(t);delete nos.state.settings.theme;const q2=parseBackup(JSON.stringify(nos));const arr=JSON.parse(t);arr.state.settings=[1];const q3=parseBackup(JSON.stringify(arr));
            return{appVer:d.appVer,inBk:d.state.settings.theme,rt:p.st.settings.theme,bad:q.st.settings.theme,missing:q2.st.settings.theme,arr:q3.st.settings.theme}}""");print('backup',r)
-        chk(r=={'appVer':'3.5','inBk':'cyber','rt':'cyber','bad':'arc','missing':'arc','arr':'arc'},'backup theme '+str(r))
+        chk(r=={'appVer':'3.7','inBk':'cyber','rt':'cyber','bad':'arc','missing':'arc','arr':'arc'},'backup theme '+str(r))
         bk=await pg.evaluate("backupText()")
         await pg.evaluate("go('set')");await pg.click('[data-th="day"]');await pg.wait_for_timeout(100)
         await pg.evaluate("(t)=>importBackupText(t)",bk);await pg.wait_for_timeout(200);await pg.click('#cOk');await pg.wait_for_timeout(1200)
@@ -129,7 +129,7 @@ async def main():
         for th,r in perf['figMsPerFrame'].items():chk(max(r.values())<perf['figMsPerFrame']['arc'][max(r,key=r.get)]*1.5+1.5,f'figure frame time {th} {r}')
         chk(max(perf['fxMsPerFrame'].values())<1.5,'effect frame too expensive '+str(perf['fxMsPerFrame']))
         # 8) footer
-        await pg.evaluate("go('set')");v=await pg.text_content('#verLine');chk('Version 3.5 · @ Joschy' in v,v)
+        await pg.evaluate("go('set')");v=await pg.text_content('#verLine');chk('Version 3.7 · @ Joschy' in v,v)
         await pg.screenshot(path=D+'/settings.png')
         chk(not errs,'JS errors '+str(errs[:5]))
         await b.close()

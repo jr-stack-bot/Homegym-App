@@ -6,7 +6,7 @@ import asyncio,subprocess,time,json,sys,os
 from playwright.async_api import async_playwright
 
 srv=subprocess.Popen([sys.executable,'-m','http.server','8766','-d',_OUTDIR],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL);time.sleep(1)
-U='http://127.0.0.1:8766/index.html'
+U='http://127.0.0.1:8766/index.html?nosplash=1'
 MOCK="""window.__natLog=[];window.__vis=true;window.__played=0;window.__svcEnd=0;
 window.Android={trainingState:function(j){},isVisible:function(){return window.__vis},wasPlayed:function(e){return +e===window.__played},restEnd:function(){return String(window.__svcEnd)},vibrate:function(){},speak:function(){},exit:function(){}};"""
 async def main():

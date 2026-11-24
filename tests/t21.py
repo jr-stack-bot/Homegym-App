@@ -7,7 +7,7 @@ import asyncio,subprocess,time,json,sys,os
 from playwright.async_api import async_playwright
 D=_SHOTS.rstrip('/')
 srv=subprocess.Popen([sys.executable,'-m','http.server','8769','-d',_OUTDIR],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL);time.sleep(1)
-U='http://127.0.0.1:8769/index.html'
+U='http://127.0.0.1:8769/index.html?nosplash=1'
 async def main():
     async with async_playwright() as p:
         b=await p.chromium.launch();ctx=await b.new_context(viewport={'width':390,'height':844},accept_downloads=True);pg=await ctx.new_page()
@@ -54,14 +54,14 @@ async def main():
         assert not any(k in r['A:bench'] for k in ['highplank','plank']),'no pure hold for main lift'
         # 4) gear editor changes plan + kettlebell weights flow into suggestions
         await pg.click('[data-tab=set]');await pg.wait_for_timeout(300)
-        assert 'joschys geräte' in (await pg.inner_text('#gearCard')).lower() and 'Version 3.5' in await pg.inner_text('#verLine') and '@ Joschy' in await pg.inner_text('#verLine')
+        assert 'joschys geräte' in (await pg.inner_text('#gearCard')).lower() and 'Version 3.7' in await pg.inner_text('#verLine') and '@ Joschy' in await pg.inner_text('#verLine')
         await pg.click('[data-sgear=kb]');await pg.wait_for_timeout(100)
         chips=await pg.eval_on_selector_all('[data-wdel=kb]','e=>e.map(x=>+x.dataset.v)');assert chips==[8,12,16],chips
         await pg.fill('#wIn-kb','20');await pg.click('[data-wadd=kb]');await pg.click('[data-wdel=kb][data-v="8"]')
-        await pg.fill('#wIn-db','10 12,5 15');await pg.click('[data-wadd=db]')
+        await pg.fill('#wIn-db','10 12,5 15');await pg.click('[data-wadd=db]')  # 3.7: Joschys Liste ist schon das Set Gummi PRO (Migration), die Werte gibt es bereits -> keine Doppelten
         await pg.click('[data-sgear=barbell]');await pg.click('#gearSave');await pg.wait_for_timeout(200)
         r=await pg.evaluate("()=>({w:S.profile.weights,g:S.profile.gear.includes('kb')&&!S.profile.gear.includes('barbell'),a:planItems('A',false,1).map(x=>x.ex),c:planItems('C',false,1).map(x=>x.ex),b:planItems('B',false,1).map(x=>x.ex)})")
-        print('gear',r);assert r['w']['kb']==[12,16,20] and r['w']['db']==[10,12.5,15] and r['g']
+        print('gear',r);assert r['w']['kb']==[12,16,20] and r['w']['db']==[2.5,5,7.5,10,12.5,15,17.5,20] and r['g']
         assert 'bench' not in r['a'] and 'squat' not in r['c'] and 'kbpushpress' in r['a'] and 'kbswing' in r['c'] and ('kbrow' in r['b'] or 'kbclean' in r['b'])
         s=await pg.evaluate("""()=>{const it={ex:'kbswing',sets:3,lo:12,hi:15};const a=startW('kbswing',suggest(it));
           S.history.push({date:new Date(Date.now()-864e5*3).toISOString(),plan:'C',day:'C',week:1,dur:3000,log:[{ex:'kbswing',sets:[{w:12,r:15,done:true},{w:12,r:15,done:true},{w:12,r:15,done:true}]},{ex:'goblet',sets:[{w:11,r:8,done:true}]}]});

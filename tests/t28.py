@@ -10,7 +10,7 @@ from playwright.async_api import async_playwright
 D=_SHOTS.rstrip('/')
 PORT=8793
 srv=subprocess.Popen([sys.executable,'-m','http.server',str(PORT),'-d',_OUTDIR],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL);time.sleep(1)
-U=f'http://127.0.0.1:{PORT}/index.html'
+U=f'http://127.0.0.1:{PORT}/index.html?nosplash=1'
 TZ=ZoneInfo('Europe/Berlin')
 THEMES=['arc','ironman','toxic','cyber','sunset','ice','stealth','day']
 FAIL=[]
@@ -221,7 +221,7 @@ async def main():
         b=await p.chromium.launch();ctx=await b.new_context(viewport={'width':390,'height':844},timezone_id='Europe/Berlin',locale='de-DE');pg=await ctx.new_page()
         errs=[];pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:errs.append(m.text) if m.type=='error' else None)
         await pg.goto(U);await boot(pg)
-        r=await pg.evaluate("[APP_VER,BK_VER,document.querySelector('#verLine')?1:0]");chk(r[:2]==['3.5',5],'version 3.1 / backup format 5 '+str(r))
+        r=await pg.evaluate("[APP_VER,BK_VER,document.querySelector('#verLine')?1:0]");chk(r[:2]==['3.7',5],'version 3.1 / backup format 5 '+str(r))
 
         # ===== 0) empty state =====
         await put(pg,await pg.evaluate("T.base()"))
