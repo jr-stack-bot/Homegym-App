@@ -52,7 +52,7 @@ async def main():
         b=await p.chromium.launch()
         f31=await fixture31(b)
         ctx,pg,errs=await page(b)
-        v=await pg.evaluate("[APP_VER,BK_VER]");chk(v==['3.7',5],f'version 3.7, backup format 5 {v}')
+        v=await pg.evaluate("[APP_VER,BK_VER]");chk(v==['3.8',5],f'version 3.8, backup format 5 {v}')
         # 1) exercises, library, details, needs
         r=await pg.evaluate("""()=>({n:HG_ALL.filter(k=>EX[k]&&AN[animOf(k)]&&CAT[k]==='griff').length,cat:CATS.some(c=>c[0]==='griff'),
           need:[canDo('deadhang'),NEEDS.farmerhold,NEEDS.kbfarmhold,!!NEEDS.jughold],safe:HG_ALL.every(k=>/Schmerz/.test(EX[k].safe)),mg:HG_ALL.every(k=>mgOf(k)==null)})""")
@@ -210,7 +210,7 @@ async def main():
                 for x in exp['log'][i]['sets']:
                     if not x['done'] and x['w']==8.75:x['w']=7.5
         print('db-Übungen in der laufenden 3.1-Einheit:',[it['ex'] for it,d in zip(exp['items'],dbi) if d])
-        keep=all(n[k]==f31['state'][k] for k in ['history','prog','settings']) and n['session']==exp and any(dbi) and prof_ok and all(n['yoga'][k]==f31['state']['yoga'][k] for k in ['start','done','log'])  # yoga v/startLv = existing 3.2 yoga migration
+        keep=all(n[k]==f31['state'][k] for k in ['history','prog']) and n['settings']=={**f31['state']['settings'],'barCol':'alt'} and n['session']==exp  # 3.8: Stangenfarbe 'Abwechselnd' ergänzt and any(dbi) and prof_ok and all(n['yoga'][k]==f31['state']['yoga'][k] for k in ['start','done','log'])  # yoga v/startLv = existing 3.2 yoga migration
         chk(keep and n['hang']=={'v':1,'tests':[],'pauses':[],'base':None},f'3.1 state: S.hang added, history/plan position/yoga unchanged; weights exakt umgestellt {n["profile"].get("weights")}, offene Kurzhantel-Sätze aufs Paar')
         await pg.reload();await pg.wait_for_timeout(500);s2=await pg.evaluate("localStorage.getItem(KEY)")
         chk(s1==s2,'migration idempotent: second start leaves the stored state byte-identical')

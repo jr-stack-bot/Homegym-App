@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.8
+- **Kurzhanteln wie Joschys Set Gummi PRO**: runde schwarze Gummiköpfe, Chrom-Griff mit Rändel, Chrom-Ring und rot-schwarze Gewichtsplakette mit der Zahl. Jedes Gewicht von 2,5 bis 20 kg hat seine eigene Größe nach Herstellermaßen; die Animation zeigt das Gewicht des aktuellen Satzes (sonst zuletzt benutzt, sonst 10 kg).
+- **Langhantel**: die beiden Olympia-Stangen (20 kg) in **Silber oder Gold** mit dicken Hülsen. Wahl unter Einstellungen › Langhantel: Silber, Gold oder **Abwechselnd pro Training** (Standard, innerhalb einer Einheit gleich).
+- **Richtige Scheiben**: die Animationen zeigen genau die Scheiben aus dem Scheiben-Rechner (größte innen) in Bumper-Farben: 25 rot, 20 blau, 15 gelb, 10 grün, 5 weiß, kleinere schwarz; voller Durchmesser ab 10 kg. Die Farbe jeder Scheibe ist einstellbar. Ohne Gewicht: 60 kg.
+- Kurzhanteln sitzen in allen Animationen in der Hand, bei 20 kg ganz im Bild und nicht im Boden (Renegade Rows leicht angepasst); vor dem Gesicht werden sie ausgespart.
+- **Icon**: Scheiben, Rack-Ecken und Rack-Füße ganz in der Safe-Zone. **Start-Animation**: zweiter Stern früher, Funkeln kräftiger.
+- Einstellungen kommen ins Backup (Format v5 bleibt), alte Stände und Backups werden einmalig ergänzt.
+- Neuer Test t38, t36 prüft zusätzlich: nach nativer Ansage am Pausenende keine zweite Ansage in der App.
+
 ## 3.7
 - **Neue Kurzhanteln**: Joschys Geräte („Joschy Gym“ und „Zubehör“) mit dem Set **Gummi PRO** (feste Paare 2,5 · 5 · 7,5 · 10 · 12,5 · 15 · 17,5 · 20 kg) und der Hantelablage; die verstellbaren Kurzhanteln sind raus.
 - **Gewichtsvorschläge nur mit vorhandenen Paaren**: erst die Wiederholungen voll machen (bei großen Sprüngen 2 Extra-Wdh.), dann genau ein Paar weiter; 20 kg ist das Maximum, danach geht es über Wiederholungen, Tempo oder einen Satz mehr.

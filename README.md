@@ -2,7 +2,7 @@
 
 ## Download
 
-**[Homegym 3.7 herunterladen (APK, ca. 7 MB)](https://github.com/jr-stack-bot/homegym-app/raw/main/releases/Homegym-3.7.apk)**
+**[Homegym 3.8 herunterladen (APK, ca. 7 MB)](https://github.com/jr-stack-bot/homegym-app/raw/main/releases/Homegym-3.8.apk)**
 
 Auf dem Android-Handy antippen, Datei öffnen und die Installation aus unbekannter Quelle einmalig erlauben. Ab Android 7.
 
@@ -72,7 +72,7 @@ Android-App für Krafttraining zu Hause: geführte Trainings mit animierten Übu
 - Boxsack, Gymnastikball, Faszienrolle, Yogamatte
 
 ## Installation
-1. Die APK über den [Download-Link ganz oben](https://github.com/jr-stack-bot/homegym-app/raw/main/releases/Homegym-3.7.apk) laden (aktuell Version 3.7; ältere Versionen liegen im Ordner [`releases/`](releases/)).
+1. Die APK über den [Download-Link ganz oben](https://github.com/jr-stack-bot/homegym-app/raw/main/releases/Homegym-3.8.apk) laden (aktuell Version 3.8; ältere Versionen liegen im Ordner [`releases/`](releases/)).
 2. Auf dem Handy öffnen und „Installation aus unbekannten Quellen“ erlauben.
 3. Beim ersten Training die Benachrichtigungen zulassen.
 
@@ -133,10 +133,11 @@ Screenshots landen in `/tmp/homegym-shots/` (änderbar über `HOMEGYM_SHOTS`).
 JAI („Joschy's AI“) ist eine eigene, mit ElevenLabs entworfene Stimme (keine Nachbildung einer realen Person). Die 276 Ansagen wurden einmalig erzeugt, mit `jai/split.py` geschnitten, mit der Effekt-Kette „leicht“ aus `jai/fx.md` bearbeitet und liegen fertig in `android/assets/jai/`. Die App setzt sie zur Laufzeit zusammen, etwa Zahl + „Komma fünf“ + „Kilo“.
 
 ## Versionen
-Aktuell: **3.7**. Details in [CHANGELOG.md](CHANGELOG.md).
+Aktuell: **3.8**. Details in [CHANGELOG.md](CHANGELOG.md).
 
 | Version | Wichtigste Neuerungen |
 |---|---|
+| 3.8 | Kurzhanteln wie das Set Gummi PRO (je Gewicht eigene Größe, rot-schwarze Plakette), Olympia-Stange Silber/Gold (abwechselnd pro Training), Scheiben in Bumper-Farben laut Scheiben-Rechner, Icon in der Safe-Zone |
 | 3.7 | Neues App-Icon (Adaptive + Monochrom), Start-Animation, Kurzhantel-Set Gummi PRO (2,5–20 kg) mit Migration und Steigerung über feste Paare, ohne doppelte „Nächste Übung“-Ansage |
 | 3.6 | JAI sagt die Namen aller Übungen und Yoga-Haltungen an, in der Pause „Als Nächstes“ + Name |
 | 3.5 | Extras: 19 Kampfsport-Kostüme für Mann und Frau (mit Kennwort freischaltbar), muskulöserer Körperbau mit Kostüm, „Zufällig pro Training“; ohne Kostüm unverändert |

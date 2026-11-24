@@ -51,7 +51,7 @@ async def main():
     async with async_playwright() as p:
         b=await p.chromium.launch(args=['--autoplay-policy=no-user-gesture-required'])
         pg,errs=await page(b)
-        v=await pg.evaluate("[APP_VER,BK_VER]");chk(v==['3.7',5],'Version 3.7, Backup-Format bleibt 5 '+str(v))
+        v=await pg.evaluate("[APP_VER,BK_VER]");chk(v==['3.8',5],'Version 3.8, Backup-Format bleibt 5 '+str(v))
         # ---------- 1) coverage ----------
         r=await pg.evaluate("""async()=>{const exMiss=Object.keys(EX).filter(k=>!jaiEx(k).length),yMiss=Object.keys(YP).filter(k=>!jaiYoga(k).length);
           const prog=[...new Set(PROGRAM.flatMap(b=>b.days.flatMap(d=>[...d.items.map(x=>x[0]),d.fin[0]])))].filter(k=>!jaiEx(k).length);
@@ -89,6 +89,33 @@ async def main():
         chk(not ov,f"Kraft: keine überlappenden Ansagen {ov[:3]}")
         chk(any(s[:1]==['halfway'] and 'u_als_naechstes' in s for s in log) or any(s==['halfway'] for s in log),'Kraft: Halbzeit kommt in derselben Sequenz (wird nicht abgeschnitten)')
         await pg.click('#saveS');await pg.wait_for_timeout(300)
+        # ---------- 2a') 3.8: native Ansage am Pausenende, danach Rückkehr in die App -> keine zweite Ansage (annEi-Pfad) ----------
+        async def rest_newex(pg):
+            await pg.evaluate("(()=>{startSession('A');openTrain()})()");await pg.wait_for_timeout(500);await settle(pg)
+            await pg.click('#wSkipAll');await pg.wait_for_timeout(300);await settle(pg)
+            await pg.evaluate("(()=>{const ss=S.session;ss.items=ss.items.map(x=>({...x,sets:1}));ss.log.forEach(l=>l.sets=l.sets.slice(0,1));save();renderTrain()})()")
+            await pg.wait_for_timeout(300);await settle(pg);await pg.click('#doneSet');await pg.wait_for_timeout(500)
+            for _ in range(6):
+                if await pg.is_visible('#sheetBg'):
+                    c=await pg.query_selector('#sheet [data-close], #hStop')
+                    if c:await c.click();await pg.wait_for_timeout(200)
+            await settle(pg)
+            return await pg.evaluate("(()=>{const ss=S.session;return{rest:!$('#rest').hidden,newEx:!!ss.restNewEx,ei:ss.ei,ex:'ex_'+ss.items[ss.ei].ex}})()")
+        for played in (True,False):
+            st=await rest_newex(pg)
+            chk(st['rest'] and st['newEx'],f"Pause vor neuer Übung erreicht ({'nativ angesagt' if played else 'Kontrolle ohne native Ansage'}) {st}")
+            await pg.evaluate("""(pl)=>{window.__vis=false;window.Android={trainingState:()=>{},isVisible:()=>window.__vis,wasPlayed:()=>pl,restEnd:()=>S.session.restEnd};S.session.restEnd=Date.now()+150;save()}""",played)
+            await pg.wait_for_timeout(700)
+            bg=await pg.evaluate("!$('#rest').hidden")
+            await pg.evaluate("window.__jaiLog.length=0;window.__vis=true;window.appResume&&window.appResume()");await pg.wait_for_timeout(1200);await settle(pg)
+            r=await pg.evaluate("(()=>{const ss=S.session;return{rest:!$('#rest').hidden,annEi:ss.annEi,ei:ss.ei,log:window.__jaiLog.slice()}})()")
+            named=[q for q in r['log'] if st['ex'] in q]
+            if played:
+                chk(bg and not r['rest'] and r['annEi']==r['ei']==st['ei'] and not named and not any('u_saetze' in q for q in r['log']),f"nach nativer Ansage + Rückkehr: Pause endet, annEi gesetzt, keine zweite Ansage {r}")
+            else:
+                chk(not r['rest'] and len(named)==1,f"Kontrolle ohne native Ansage: Name genau einmal beim Start {named}")
+            await pg.evaluate("window.Android=undefined;delete window.Android");await pg.click('#saveS') if await pg.is_visible('#saveS') else None
+            await pg.evaluate("(()=>{S.session=null;save()})()");await pg.wait_for_timeout(200)
         # ---------- 2b) Hang-Block (Plan B) ----------
         await pg.evaluate("window.__jaiLog.length=0;window.__played.length=0;window.__overlap.length=0")
         await run_kraft(pg,'B',True)

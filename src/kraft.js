@@ -472,7 +472,7 @@ if(typeof EXTRA_EQ_LAYER!=="undefined")Object.assign(EXTRA_EQ_LAYER,{kband:"fron
     if(!mini){ctx.strokeStyle="rgba(240,246,250,.55)";ctx.lineWidth=Math.max(.6,R(w*.3));ctx.beginPath();ctx.moveTo(A[0],A[1]);ctx.lineTo(B[0],B[1]);ctx.stroke()}};
   if(e.t==="kband"){const a=typeof e.at==="string"?o[e.at]:e.at;if(!a)return;const EQ=eqKit(ctx,R(1),mini);ctx.save();EQ.band(P(e.from),P(a),1,e.sag!=null?e.sag:.05);if(e.at2&&o[e.at2])EQ.band(P(e.from2||e.from),P(o[e.at2]),1,e.sag!=null?e.sag:.05);ctx.restore();return}
   if(e.t==="kneeband"){const a=o.kneeR,b=o.kneeL;if(!a||!b)return;const EQ=eqKit(ctx,R(1),mini);ctx.save();EQ.band(P([a[0]-2,a[1]+4]),P([b[0]+2,b[1]+4]),1,.02);ctx.restore();return}
-  if(e.t==="lmbar"){const h=o[e.at||"hand"];if(!h)return;const pv=[e.px,f0+2];const d=norm2(sub(h,pv));const end=add(h,[d[0]*14,d[1]*14]);ctx.save();steel(pv,end,2.6);
+  if(e.t==="lmbar"){const h=o[e.at||"hand"];if(!h)return;const pv=[e.px,f0+2];const d=norm2(sub(h,pv));const end=add(h,[d[0]*14,d[1]*14]);ctx.save();/* 3.8: Stange in Joschys Farbe (Silber/Gold) */if(typeof ANW!=="undefined"&&ANW.gold)eqKit(ctx,R(1),mini).rod(P(pv),P(end),Math.max(1,R(2.6)),false,true);else steel(pv,end,2.6);
     const EQ=eqKit(ctx,R(1),mini);EQ.plate(P(add(h,[d[0]*9,d[1]*9])),e.r||15,CSS[e.c||"--p10"]||CSS["--accent"],CAM,null,true);ctx.restore();return}
   if(e.t==="fplate"){const h=o[e.at];if(!h)return;const c=add(h,[0,e.dy||0]);const A=P([c[0]-(e.w||2.6),c[1]+(e.h||15)]);const w=R(2*(e.w||2.6)),hh=R(2*(e.h||15));ctx.save();
     const g=ctx.createLinearGradient(A[0],0,A[0]+w,0);g.addColorStop(0,"#1b2025");g.addColorStop(.5,CSS[e.c||"--p10"]||"#888");g.addColorStop(1,"#0d1013");ctx.fillStyle=g;ctx.beginPath();ctx.roundRect?ctx.roundRect(A[0],A[1],w,hh,R(1.2)):ctx.rect(A[0],A[1],w,hh);ctx.fill();ctx.restore();return}
@@ -528,7 +528,7 @@ Object.assign(AN,{
   /* ---- Rücken ---- */
   pendlay:{anchor:"foot",A:{shin:-100,thigh:-42,torso:9,hand:[0,-60],bend:-1},B:{shin:-100,thigh:-42,torso:9,hand:[-18,-24],bend:-1},eq:[{t:"plate",at:"hand",c:"--p20",r:21}],floor:0,tempo:[.7,.3,1.4,.6],ph:["Ziehen","Ablegen"]},
   dbbentrow:kxA("row",{A:{shin:-100,thigh:-50,torso:38,hand:[-4,-58]},B:{shin:-100,thigh:-50,torso:38,hand:[-26,-28]},eq:[DB()]}),
-  renegade:{anchor:"foot",at:[0,10.3],noBal:1,A:{...kxPl(22),handAt:[139,6.5],bend:-1,hand2:[0,-60],bend2:-1},B:{...kxPl(22),handAt:[118,40],bend:-1,hand2:[0,-60],bend2:-1},eq:[DB()],floor:0,tempo:[1,.4,1.4,.5],ph:["Ziehen","Absetzen"]},
+  renegade:{anchor:"foot",at:[0,10.3],noBal:1,A:{...kxPl(22),handAt:[139,9.5],bend:-1,hand2:[0,-60],bend2:-1},B:{...kxPl(22),handAt:[118,40],bend:-1,hand2:[0,-60],bend2:-1},eq:[{t:"db",at:"hand",dir:[1,.22]}]/* 3.8: Hantel liegt quer am Boden, große Köpfe bleiben über dem Boden */,floor:0,tempo:[1,.4,1.4,.5],ph:["Ziehen","Absetzen"]},
   bandlat:{anchor:"hip",at:[0,50],A:{torso:92,thigh:-90,shin:180,foot:180,hand:[6,58],bend:-1},B:{torso:96,thigh:-90,shin:180,foot:180,hand:[16,6],bend:-1},eq:[{t:"band",from:[6,232]}],floor:0,tempo:[1.1,.5,1.8,.4],ph:["Ziehen","Zurück"]},
   straightarm:{anchor:"foot",A:{...STAND,torso:76,upper:32,fore:36},B:{...STAND,torso:76,upper:-78,fore:-76},eq:[{t:"post",x:150,w:7,h:205},{t:"band",from:[147,190]}],floor:0,tempo:[1.1,.5,1.7,.4],ph:["Runterziehen","Zurück"]},
   scappull:kxA("scaphang",{tempo:[.9,.6,1.3,.5],hseg:undefined,ph:["Schultern runter","Lösen"]}),

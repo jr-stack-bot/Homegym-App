@@ -334,14 +334,15 @@ input[type=date]{background:rgba(var(--ac),.05);color:var(--fg);border:1px solid
 #splash.run #hgUpper{animation:splUp .64s .14s cubic-bezier(.45,0,.3,1) both}
 #splash .splSweep{opacity:0}
 #splash.run .splSweep{animation:splSweep .6s .4s cubic-bezier(.45,0,.25,1) both}
-#splash .splStar{opacity:0;transform-box:fill-box;transform-origin:50% 50%}
-#splash.run .splStar{animation:splStar .5s .62s ease-out both}
-#splash.run .splStar.s2{animation-delay:.74s}
+#splash .splStar{opacity:0;transform-box:fill-box;transform-origin:50% 50%;filter:drop-shadow(0 0 1.2px #fffbe6) drop-shadow(0 0 2.6px #ffd54a)}
+#splash.run .splStar{animation:splStar .5s .5s ease-out both}
+/* 3.8: zweiter Stern früher, damit er vor dem Ausblenden (ab 0,86 s) sichtbar ist */
+#splash.run .splStar.s2{animation-delay:.58s}
 @keyframes splIn{from{transform:scale(.84);opacity:0}to{transform:none;opacity:1}}
 @keyframes splLegs{0%{transform:none}42%{transform:scale(1.12,.6)}100%{transform:none}}
 @keyframes splUp{0%{transform:none}42%{transform:translateY(5.6px)}78%{transform:translateY(-1.6px)}100%{transform:none}}
 @keyframes splSweep{0%{transform:translateX(0);opacity:0}12%{opacity:1}88%{opacity:1}100%{transform:translateX(100px);opacity:0}}
-@keyframes splStar{0%{opacity:0;transform:scale(.1) rotate(0)}45%{opacity:1;transform:scale(1.15) rotate(40deg)}100%{opacity:0;transform:scale(.3) rotate(90deg)}}
+@keyframes splStar{0%{opacity:0;transform:scale(.1) rotate(0)}40%{opacity:1;transform:scale(1.55) rotate(40deg)}100%{opacity:0;transform:scale(.4) rotate(90deg)}}
 .hello{position:relative}
 .hgMark{position:absolute;top:-2px;right:0;width:66px;height:26px;overflow:visible}
 .hgMark .hgSweep{transform:translateX(-30px);opacity:0}
@@ -374,23 +375,23 @@ input[type=date]{background:rgba(var(--ac),.05);color:var(--fg);border:1px solid
 </defs>
 <g id="hgBack"><rect width="108" height="108" fill="url(#hgBg)"/><rect width="108" height="108" fill="url(#hgGlow)"/></g>
 <g id="hgFore" transform="translate(54 54) scale(.93) translate(-54 -52.9)">
- <ellipse cx="54" cy="83.6" rx="27" ry="2.6" fill="#000" opacity=".45" filter="url(#hgShadow)"/>
+ <ellipse cx="54" cy="82.4" rx="19" ry="2.1" fill="#000" opacity=".45" filter="url(#hgShadow)"/>
  <g id="hgRack">
-  <rect x="30.4" y="79.8" width="8.8" height="3.4" rx="1.4" fill="url(#hgRedH)" stroke="#4a0408" stroke-width=".3"/>
-  <rect x="68.8" y="79.8" width="8.8" height="3.4" rx="1.4" fill="url(#hgRedH)" stroke="#4a0408" stroke-width=".3"/>
-  <rect x="32.5" y="22.6" width="4" height="58.2" rx=".6" fill="url(#hgRed)" stroke="#4a0408" stroke-width=".3"/>
-  <rect x="71.5" y="22.6" width="4" height="58.2" rx=".6" fill="url(#hgRed)" stroke="#4a0408" stroke-width=".3"/>
-  <rect x="32.5" y="22.6" width="43" height="3.7" rx="1.2" fill="url(#hgRedH)" stroke="#4a0408" stroke-width=".3"/>
-  <rect x="33.6" y="22.95" width="40.8" height=".5" rx=".25" fill="#ffe1d9" opacity=".95"/>
-  <rect x="36" y="23.1" width="22" height="1.3" rx=".65" fill="#fff" opacity=".35" filter="url(#hgSoft)"/>
-  <rect x="33" y="24.4" width=".5" height="55.6" rx=".25" fill="#ffd0c4" opacity=".85"/>
-  <rect x="72" y="24.4" width=".5" height="55.6" rx=".25" fill="#ffd0c4" opacity=".85"/>
+  <rect x="32" y="77.4" width="8" height="3" rx="1.3" fill="url(#hgRedH)" stroke="#4a0408" stroke-width=".3"/>
+  <rect x="68" y="77.4" width="8" height="3" rx="1.3" fill="url(#hgRedH)" stroke="#4a0408" stroke-width=".3"/>
+  <rect x="32.5" y="27" width="4" height="51.4" rx=".6" fill="url(#hgRed)" stroke="#4a0408" stroke-width=".3"/>
+  <rect x="71.5" y="27" width="4" height="51.4" rx=".6" fill="url(#hgRed)" stroke="#4a0408" stroke-width=".3"/>
+  <rect x="32.5" y="24.6" width="43" height="3.5" rx="2.4" fill="url(#hgRedH)" stroke="#4a0408" stroke-width=".3"/>
+  <rect x="35" y="24.95" width="38" height=".5" rx=".25" fill="#ffe1d9" opacity=".95"/>
+  <rect x="36" y="25.1" width="22" height="1.3" rx=".65" fill="#fff" opacity=".35" filter="url(#hgSoft)"/>
+  <rect x="33" y="28.1" width=".5" height="49.3" rx=".25" fill="#ffd0c4" opacity=".85"/>
+  <rect x="72" y="28.1" width=".5" height="49.3" rx=".25" fill="#ffd0c4" opacity=".85"/>
   <rect x="33.5" y="27" width="1" height="20" rx=".5" fill="#fff" opacity=".4" filter="url(#hgSoft)"/>
   <rect x="72.5" y="27" width="1" height="20" rx=".5" fill="#fff" opacity=".4" filter="url(#hgSoft)"/>
-  <rect x="31" y="80.15" width="7.6" height=".45" rx=".22" fill="#ffd0c4" opacity=".8"/>
-  <rect x="69.4" y="80.15" width="7.6" height=".45" rx=".22" fill="#ffd0c4" opacity=".8"/>
-  <g fill="#3a0407"><rect x="33.65" y="29.40" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="32.50" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="35.60" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="38.70" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="54.20" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="57.30" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="60.40" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="63.50" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="66.60" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="69.70" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="72.80" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="75.90" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="79.00" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="29.40" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="32.50" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="35.60" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="38.70" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="54.20" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="57.30" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="60.40" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="63.50" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="66.60" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="69.70" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="72.80" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="75.90" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="79.00" width="1.7" height="1.7" rx=".45"/></g>
-  <g fill="#ff8b7a" opacity=".35" transform="translate(0 1.15)"><rect x="33.65" y="29.40" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="32.50" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="35.60" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="38.70" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="54.20" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="57.30" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="60.40" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="63.50" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="66.60" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="69.70" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="72.80" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="75.90" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="79.00" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="29.40" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="32.50" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="35.60" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="38.70" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="54.20" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="57.30" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="60.40" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="63.50" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="66.60" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="69.70" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="72.80" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="75.90" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="79.00" width="1.7" height="1.7" rx=".45"/></g>
+  <rect x="32.6" y="77.75" width="6.8" height=".45" rx=".22" fill="#ffd0c4" opacity=".8"/>
+  <rect x="68.6" y="77.75" width="6.8" height=".45" rx=".22" fill="#ffd0c4" opacity=".8"/>
+  <g fill="#3a0407"><rect x="33.65" y="29.40" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="32.50" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="35.60" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="38.70" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="54.20" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="57.30" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="60.40" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="63.50" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="66.60" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="69.70" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="72.80" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="75.90" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="29.40" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="32.50" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="35.60" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="38.70" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="54.20" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="57.30" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="60.40" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="63.50" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="66.60" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="69.70" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="72.80" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="75.90" width="1.7" height="1.7" rx=".45"/></g>
+  <g fill="#ff8b7a" opacity=".35" transform="translate(0 1.15)"><rect x="33.65" y="29.40" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="32.50" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="35.60" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="38.70" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="54.20" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="57.30" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="60.40" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="63.50" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="66.60" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="69.70" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="72.80" width="1.7" height="1.7" rx=".45"/><rect x="33.65" y="75.90" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="29.40" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="32.50" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="35.60" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="38.70" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="54.20" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="57.30" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="60.40" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="63.50" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="66.60" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="69.70" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="72.80" width="1.7" height="1.7" rx=".45"/><rect x="72.65" y="75.90" width="1.7" height="1.7" rx=".45"/></g>
  </g>
  <g id="hgHooks">
   <g id="hgHookL">
@@ -440,12 +441,12 @@ input[type=date]{background:rgba(var(--ac),.05);color:var(--fg);border:1px solid
    </g>
    <use href="#hgArmL" transform="matrix(-1 0 0 1 108 0)"/>
    <g id="hgBar">
-    <rect x="18.8" y="44.6" width="70.4" height="2.2" rx="1.1" fill="url(#hgGoldBar)"/>
-    <rect x="19.6" y="44.9" width="68.8" height=".42" rx=".21" fill="#fffbe6" opacity=".95"/>
+    <rect x="21" y="44.6" width="66" height="2.2" rx="1.1" fill="url(#hgGoldBar)"/>
+    <rect x="21.8" y="44.9" width="64.4" height=".42" rx=".21" fill="#fffbe6" opacity=".95"/>
     <rect x="46" y="44.7" width="16" height=".9" rx=".45" fill="#fff" opacity=".5" filter="url(#hgSoft)"/>
     <g id="hgPlates">
      <g id="hgPL">
-      <rect x="18.4" y="44.05" width="12.6" height="3.3" rx="1.2" fill="url(#hgGoldBar)"/>
+      <rect x="20.8" y="44.05" width="10.2" height="3.3" rx="1.2" fill="url(#hgGoldBar)"/>
       <ellipse cx="27.1" cy="45.7" rx="4.3" ry="10.8" fill="#6e4a05"/>
       <ellipse cx="26.1" cy="45.7" rx="4.3" ry="10.8" fill="url(#hgGold)"/>
       <ellipse cx="26.1" cy="45.7" rx="4.3" ry="10.8" fill="none" stroke="url(#hgGoldRim)" stroke-width=".75"/>
@@ -454,13 +455,13 @@ input[type=date]{background:rgba(var(--ac),.05);color:var(--fg);border:1px solid
       <ellipse cx="26.1" cy="45.7" rx="1.15" ry="2.5" fill="#8a5d05"/>
       <path d="M24 38.2c.6-1.5 1.5-2.3 2.2-2.3" stroke="#fffbe6" stroke-width=".6" fill="none" stroke-linecap="round"/>
       <ellipse cx="25" cy="41.5" rx="1" ry="3.4" fill="#fff" opacity=".45" filter="url(#hgSoft)"/>
-      <ellipse cx="21.9" cy="45.7" rx="2.9" ry="7.2" fill="#6e4a05"/>
-      <ellipse cx="21.1" cy="45.7" rx="2.9" ry="7.2" fill="url(#hgGold)"/>
-      <ellipse cx="21.1" cy="45.7" rx="2.9" ry="7.2" fill="none" stroke="url(#hgGoldRim)" stroke-width=".6"/>
-      <ellipse cx="21.1" cy="45.7" rx="2" ry="5.6" fill="none" stroke="#7a5106" stroke-width=".5" opacity=".85"/>
-      <ellipse cx="21" cy="45.5" rx="1.75" ry="5.2" fill="none" stroke="#fff3b5" stroke-width=".38" opacity=".9"/>
-      <ellipse cx="21.1" cy="45.7" rx=".8" ry="1.8" fill="#8a5d05"/>
-      <path d="M19.7 40.8c.4-1 1-1.6 1.5-1.6" stroke="#fffbe6" stroke-width=".5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="24.3" cy="45.7" rx="2.9" ry="7.2" fill="#6e4a05"/>
+      <ellipse cx="23.5" cy="45.7" rx="2.9" ry="7.2" fill="url(#hgGold)"/>
+      <ellipse cx="23.5" cy="45.7" rx="2.9" ry="7.2" fill="none" stroke="url(#hgGoldRim)" stroke-width=".6"/>
+      <ellipse cx="23.5" cy="45.7" rx="2" ry="5.6" fill="none" stroke="#7a5106" stroke-width=".5" opacity=".85"/>
+      <ellipse cx="23.4" cy="45.5" rx="1.75" ry="5.2" fill="none" stroke="#fff3b5" stroke-width=".38" opacity=".9"/>
+      <ellipse cx="23.5" cy="45.7" rx=".8" ry="1.8" fill="#8a5d05"/>
+      <path d="M22.1 40.8c.4-1 1-1.6 1.5-1.6" stroke="#fffbe6" stroke-width=".5" fill="none" stroke-linecap="round"/>
      </g>
      <use href="#hgPL" transform="matrix(-1 0 0 1 108 0)"/>
     </g>
@@ -541,7 +542,7 @@ input[type=date]{background:rgba(var(--ac),.05);color:var(--fg);border:1px solid
 const EQUIPMENT = {
  "Joschy Gym":[
   "Power Rack mit Klimmzugstange, J-Hooks und Sicherheitsablagen",
-  "2 Olympia-Langhanteln (20 kg) mit Klemmen",
+  "2 Olympia-Langhanteln (20 kg), eine in Silber (Chrom) und eine in Gold, mit Klemmen",
   "Bumper Plates: 25 kg rot, 20 kg blau, 15 kg gelb, 10 kg grün, dazu kleine schwarze Scheiben",
   "Kurzhantel-Set Gummi PRO (Gorilla Sports), feste Paare: 2,5 · 5 · 7,5 · 10 · 12,5 · 15 · 17,5 · 20 kg",
   "Verstellbare Hantelbank mit Beinpolster",
@@ -554,6 +555,30 @@ const EQUIPMENT = {
 };
 /* 3.7: Joschys Kurzhantel-Paare (kg je Hand). Vorschläge und Steigerung springen nur zwischen diesen Paaren, 20 kg ist das Maximum. */
 const JOSCHY_DB=[2.5,5,7.5,10,12.5,15,17.5,20];
+/* 3.8 (@ Joschy): so sehen Joschys Kurzhanteln aus (Set Gummi PRO, Maße laut Hersteller: Ø Kopf und Gesamtlänge in cm, Griff 15 cm):
+   runde Köpfe aus schwarzem Gummi, Chrom-Griff mit Rändel, Chrom-Ring am Griff, Gewichtsplakette rot/schwarz mit der Zahl.
+   Die Köpfe werden mit dem Gewicht vor allem breiter (2,5 kg: 5,8 cm, 20 kg: 11,5 cm je Kopf), der Durchmesser wächst wenig. */
+const DB_LOOK={2.5:[13.5,26.5],5:[14.3,28],7.5:[14.3,31],10:[14.3,33],12.5:[14.3,35.5],15:[14.8,36.5],17.5:[15,38],20:[16,38]};
+const DB_STD=10,BAR_STD=60;/* Standardgewicht, wenn eine Animation kein konkretes Gewicht kennt (Bibliothek, Vorschau) */
+function dbLook(kg){kg=+kg>0?+kg:DB_STD;const ks=Object.keys(DB_LOOK).map(Number).sort((a,b)=>a-b);let D,L;
+  if(kg<=ks[0])[D,L]=DB_LOOK[ks[0]];else if(kg>=ks[ks.length-1])[D,L]=DB_LOOK[ks[ks.length-1]];
+  else{let i=0;while(ks[i+1]<kg)i++;const a=ks[i],b=ks[i+1],t=(kg-a)/(b-a);D=DB_LOOK[a][0]+(DB_LOOK[b][0]-DB_LOOK[a][0])*t;L=DB_LOOK[a][1]+(DB_LOOK[b][1]-DB_LOOK[a][1])*t}
+  return{kg,D,W:(L-15)/2}}
+/* Körpermaße der Kurzhantel in Figur-Einheiten (1 Einheit ≈ 1 cm; Tiefe wie die übrigen Geräte verkürzt): Kopfradius, Kopfbreite, Abstand Griffmitte–Kopfmitte */
+function dbDims(kg){const L=dbLook(kg);const rr=L.D/2*.78,th=L.W*.6;return{rr,th,off:4.5+th/2}}
+/* 3.8: Bumper Plates – Standardfarben nach Gewicht (25 rot, 20 blau, 15 gelb, 10 grün, 5 weiß, kleinere schwarz), voller Durchmesser ab 10 kg.
+   Eigene Farben je Scheibengewicht in S.settings.plateCol (Einstellungen › Langhantel). */
+const PLATE_PAL=[["#e0322b","Rot"],["#2f6be0","Blau"],["#f2bd2c","Gelb"],["#2fb36a","Grün"],["#e8eef2","Weiß"],["#2a2f35","Schwarz"],["#7f95a3","Grau"]];
+function plateDefHex(p){p=+p;return p>=25?"#e0322b":p>=20?"#2f6be0":p>=15?"#f2bd2c":p>=10?"#2fb36a":p>=5?"#e8eef2":"#2a2f35"}
+const HEXRE=/^#[0-9a-f]{6}$/i;
+function plateHex(p){const c=typeof S!=="undefined"&&S&&S.settings&&S.settings.plateCol;const k=String(+p);return c&&typeof c[k]==="string"&&HEXRE.test(c[k])?c[k]:plateDefHex(p)}
+function plateRad(p){p=+p;return p>=10?1:p>=5?.68:p>=2.5?.52:.44}
+function plateTh(p){p=+p;return p>=10?1.8+.19*p:1+.32*p}/* Scheibendicke in cm */
+/* Stangenfarbe: "silver", "gold" oder "alt" (abwechselnd pro Training, innerhalb einer Einheit gleich) */
+function normBarSet(st){if(!st||typeof st!=="object")return;if(!["silver","gold","alt"].includes(st.barCol))st.barCol="alt";
+  if(st.plateCol!=null){if(typeof st.plateCol!=="object"||Array.isArray(st.plateCol))delete st.plateCol;else for(const k of Object.keys(st.plateCol))if(!(+k>0)||typeof st.plateCol[k]!=="string"||!HEXRE.test(st.plateCol[k]))delete st.plateCol[k]}}
+function barColOf(){const m=S.settings.barCol;if(m==="silver"||m==="gold")return m;const ss=S.session;
+  if(ss&&(ss.barCol==="silver"||ss.barCol==="gold"))return ss.barCol;const c=(S.history.length%2)?"gold":"silver";if(ss&&typeof ss==="object")ss.barCol=c;return c}
 
 const EX = {
   squat:{n:"Kniebeuge",eq:"Langhantel · Rack",m:"Beine · Gesäß · Rumpf",type:"bar",rest:150,inc:5,
@@ -647,11 +672,11 @@ const KEY = "homegym.v1";
 /* 2.3 designs: key, name, background effect */
 const THEMES=[["arc","Arc Blau","Raster"],["ironman","Iron Man","Funken"],["toxic","Toxic","Matrix"],["cyber","Cyber","Neon-Linien"],["sunset","Sunset","Glut"],["ice","Eis","Schnee"],["stealth","Stealth","ruhig"],["day","Tag","hell · ruhig"]];
 const THEME_KEYS=THEMES.map(t=>t[0]);
-const DEF = {settings:{theme:"arc",fig:"mix",animSpd:1,voice:true,quick:false,deload:false,warmSets:true,goal:3,sound:true,vib:true,restF:1,bar:20,plates:{"25":1,"20":2,"15":1,"10":1,"5":1,"2.5":1,"1.25":1}},history:[],next:0,session:null};
+const DEF = {settings:{theme:"arc",fig:"mix",animSpd:1,voice:true,quick:false,deload:false,warmSets:true,goal:3,sound:true,vib:true,restF:1,bar:20,barCol:"alt",plates:{"25":1,"20":2,"15":1,"10":1,"5":1,"2.5":1,"1.25":1}},history:[],next:0,session:null};
 let S;
 function load(){try{const raw=localStorage.getItem(KEY);S=raw?JSON.parse(raw):null}catch(e){S=null}
   if(!S)S=JSON.parse(JSON.stringify(DEF));
-  S.settings=Object.assign({},DEF.settings,S.settings||{});if(!THEME_KEYS.includes(S.settings.theme))S.settings.theme="arc";S.history=S.history||[];if(typeof S.next!=="number")S.next=0;
+  S.settings=Object.assign({},DEF.settings,S.settings||{});normBarSet(S.settings);if(!THEME_KEYS.includes(S.settings.theme))S.settings.theme="arc";S.history=S.history||[];if(typeof S.next!=="number")S.next=0;
   S.protein=S.protein||{d:"",g:0,log:[]};S.body=S.body||[];
   if(S.profile&&S.profile.name&&!Array.isArray(S.profile.gear))S.profile.gear=["barbell","rack","bench","db","pullbar","band","grips","bag","tread","cross"];
   if(S.profile&&Array.isArray(S.profile.gear)&&!S.profile.gearV){const old="bag,band,barbell,bench,cross,db,grips,pullbar,rack,tread";
@@ -1062,9 +1087,17 @@ function boundsOf(def,g,still){const ck=(g||"_")+(still?"s":"");def._bb=def._bb|
   if(g&&typeof animPose==="function"&&typeof cycT==="function"){const st=phaseAt.still;if(still){phaseAt.still=true;try{poses.push(animPose(def,def.tempo[0]*.55,g).o)}catch(e){}}/* still preview: just the frame it shows (no lag tables for the library) */
     else{const T=cycT(def);phaseAt.still=false;for(let i=0;i<48;i++){try{poses.push(animPose(def,(i+.5)/48*T,g).o)}catch(e){}}}phaseAt.still=st}
   for(const o of poses){for(const k in o)if(Array.isArray(o[k])&&o[k].length===2&&typeof o[k][0]==="number")inc(o[k],bndR(k));
-    for(const e of def.eq){if(e.t==="plate"){const p=o[e.at];inc(p?add(p,[0,e.dy||0]):null,(e.r||21)+7)}if(e.t==="db"&&o[e.at])inc(o[e.at],12);if(e.t==="bar"){inc([-44,-4]);inc([44,20])}if(e.t==="box"){inc([e.x,e.y]);inc([e.x+e.w,e.y])}if(e.t==="band")inc(e.from);if(e.t==="rackbar"){inc(e.at,6);inc([e.at[0],0]);inc([e.at[0]+10,e.at[1]+31])}if(e.t==="bag"){inc([e.x,40]);inc([e.x+34,178]);inc([e.x+17,215])}if(e.t==="tread"){inc([-62,0]);inc([66,0])}if(e.t==="wall"){inc([e.x-8,0]);inc([e.x,190])}if(typeof extraBounds==="function")extraBounds(e,o,inc)}}
+    for(const e of def.eq){if(e.t==="plate"){const p=o[e.at];inc(p?add(p,[0,e.dy||0]):null,(e.r||21)+7)}if(e.t==="db"&&o[e.at]){const X=dbExtent(o,e.at,g,def.view==="front",20,e.dir);inc([X[0],X[1]]);inc([X[2],X[3]])}if(e.t==="bar"){inc([-44,-4]);inc([44,20])}if(e.t==="box"){inc([e.x,e.y]);inc([e.x+e.w,e.y])}if(e.t==="band")inc(e.from);if(e.t==="rackbar"){inc(e.at,6);inc([e.at[0],0]);inc([e.at[0]+10,e.at[1]+31])}if(e.t==="bag"){inc([e.x,40]);inc([e.x+34,178]);inc([e.x+17,215])}if(e.t==="tread"){inc([-62,0]);inc([66,0])}if(e.t==="wall"){inc([e.x-8,0]);inc([e.x,190])}if(typeof extraBounds==="function")extraBounds(e,o,inc)}}
   const fl=floorOf(def);if(fl!=null)y0=Math.min(y0,fl);if(def.padT)y1+=def.padT;
   def._bb[ck]={x0,y0,x1,y1};return{x0,y0,x1,y1}}
+/* 3.8 (@ Joschy): Umriss einer Kurzhantel (beide Köpfe) in Figur-Einheiten: Griffmitte wie beim Zeichnen (Faustmitte), Achse wie beim Zeichnen.
+   Liefert [x0,y0,x1,y1]; dient der Bildgröße (größtes Gewicht) und den Tests (Rand und Boden). */
+function dbExtent(o,at,g,front,kg,dir){const B=BODY[g]||BODY.m;let h=o[at];if(!h)return null;const el=at==="hand"?o.elbow:at==="hand2"?o.elbow2:null;
+  if(el){const v=norm2(sub(h,el));h=add(h,[v[0]*B.hand*.25,v[1]*B.hand*.25])}
+  const ds=front?norm2([.18*(o[at][0]<0?-1:1),.5]):dir?norm2(dir):CAM;const d=[ds[0],-ds[1]],u=[-d[1],d[0]];const D=dbDims(kg);
+  let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;for(const sg of[-1,1])for(const q of[-1,1]){const c=[h[0]+d[0]*(sg*D.off+q*D.th/2),h[1]+d[1]*(sg*D.off+q*D.th/2)];
+    const ex=Math.hypot(u[0]*D.rr,d[0]*D.rr*.5),ey=Math.hypot(u[1]*D.rr,d[1]*D.rr*.5);x0=Math.min(x0,c[0]-ex);x1=Math.max(x1,c[0]+ex);y0=Math.min(y0,c[1]-ey);y1=Math.max(y1,c[1]+ey)}
+  return[x0,y0,x1,y1]}
 function floorOf(def){if(def.floor===null)return null;if(typeof def.floor==="number")return def.floor;if(def.view==="front")return 0;
   let m=1e9;for(let i=0;i<=8;i++){const o=poseAt(def,i/8);m=Math.min(m,o.ankle[1],o.toe[1],o.ankle2[1],o.toe2[1])}return Math.min(m,0)}
 
@@ -1223,9 +1256,10 @@ function drawShoe(x,kit,a,t,kn,s,mini,fy){if(drawShoe.bare&&typeof drawFootBare=
 /* ---------- equipment (screen space) ---------- */
 const CAM=norm2([.5,.36]); /* projected direction of an axis that points towards the viewer */
 function eqKit(ctx,s,mini){
-  const chromeG=(A,B,w)=>{const n=norm2([-(B[1]-A[1]),B[0]-A[0]]);const m=[(A[0]+B[0])/2,(A[1]+B[1])/2];const g=ctx.createLinearGradient(m[0]+n[0]*w,m[1]+n[1]*w,m[0]-n[0]*w,m[1]-n[1]*w);
-    g.addColorStop(0,"#5d6a74");g.addColorStop(.3,"#f2f6f8");g.addColorStop(.55,"#9aa7b0");g.addColorStop(1,"#3a444c");return g};
-  function rod(A,B,w,knurl){ctx.lineCap="round";ctx.strokeStyle=chromeG(A,B,w/2);ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(A[0],A[1]);ctx.lineTo(B[0],B[1]);ctx.stroke();
+  const chromeG=(A,B,w,gold)=>{const n=norm2([-(B[1]-A[1]),B[0]-A[0]]);const m=[(A[0]+B[0])/2,(A[1]+B[1])/2];const g=ctx.createLinearGradient(m[0]+n[0]*w,m[1]+n[1]*w,m[0]-n[0]*w,m[1]-n[1]*w);
+    if(gold){g.addColorStop(0,"#7a5718");g.addColorStop(.3,"#fff0b0");g.addColorStop(.55,"#d6a63a");g.addColorStop(1,"#4f390d")}
+    else{g.addColorStop(0,"#5d6a74");g.addColorStop(.3,"#f2f6f8");g.addColorStop(.55,"#9aa7b0");g.addColorStop(1,"#3a444c")}return g};
+  function rod(A,B,w,knurl,gold){ctx.lineCap="round";ctx.strokeStyle=chromeG(A,B,w/2,gold);ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(A[0],A[1]);ctx.lineTo(B[0],B[1]);ctx.stroke();
     if(knurl&&!mini){const d=[B[0]-A[0],B[1]-A[1]];const n=norm2([-d[1],d[0]]);ctx.strokeStyle="rgba(40,48,54,.45)";ctx.lineWidth=.6;for(let i=1;i<9;i++){const c=[A[0]+d[0]*i/9,A[1]+d[1]*i/9];ctx.beginPath();ctx.moveTo(c[0]+n[0]*w*.4-d[0]*.02,c[1]+n[1]*w*.4-d[1]*.02);ctx.lineTo(c[0]-n[0]*w*.4+d[0]*.02,c[1]-n[1]*w*.4+d[1]*.02);ctx.stroke()}}}
   /* hex head of a dumbbell: c centre, axis d (unit, screen), rr radius, th thickness (px) */
   function hexHead(c,d,rr,th,dim){const u=[-d[1],d[0]];const face=(cc)=>{const pts=[];for(let k=0;k<6;k++){const a=Math.PI/6+k*Math.PI/3;pts.push([cc[0]+u[0]*Math.cos(a)*rr+d[0]*Math.sin(a)*rr*.5,cc[1]+u[1]*Math.cos(a)*rr+d[1]*Math.sin(a)*rr*.5])}return pts};
@@ -1236,12 +1270,30 @@ function eqKit(ctx,s,mini){
     const fg=ctx.createLinearGradient(c[0]-u[0]*rr,c[1]-u[1]*rr,c[0]+u[0]*rr,c[1]+u[1]*rr);fg.addColorStop(0,dim?"#1a1f24":"#2b3238");fg.addColorStop(.5,dim?"#111418":"#1b2025");fg.addColorStop(1,dim?"#090b0d":"#0f1215");
     ctx.beginPath();polyPath(ctx,f);ctx.fillStyle=fg;ctx.fill();if(!mini){ctx.strokeStyle=dim?"rgba(255,255,255,.06)":"rgba(255,255,255,.16)";ctx.lineWidth=.8;ctx.stroke();
       const cc=[c[0]+d[0]*th/2,c[1]+d[1]*th/2];ctx.beginPath();ctx.ellipse(cc[0],cc[1],rr*.32,rr*.16,Math.atan2(u[1],u[0]),0,7);ctx.fillStyle=dim?"#4a545b":"#aeb9c1";ctx.fill()}}
-  function dumbbell(h,dim,d=CAM,part){const off=7.2*s,rr=5.3*s,th=4.2*s;const A=[h[0]-d[0]*off,h[1]-d[1]*off],B=[h[0]+d[0]*off,h[1]+d[1]*off];
-    if(part!=="near"){hexHead(A,d,rr,th,dim);rod([A[0]+d[0]*th*.5,A[1]+d[1]*th*.5],[B[0]-d[0]*th*.5,B[1]-d[1]*th*.5],2.3*s,!dim)}
-    if(part!=="far")hexHead(B,d,rr,th,dim)}
+  /* 3.8 (@ Joschy): runder Gummikopf wie Joschys Set Gummi PRO. face "out": Stirnseite mit der Gewichtsplakette (rot/schwarz, Zahl), "in": Chrom-Ring am Griff */
+  function rubberHead(c,d,rr,th,dim,face,kg){const u=[-d[1],d[0]];const rot=Math.atan2(u[1],u[0]);const sq=.5;
+    const b=[c[0]-d[0]*th/2,c[1]-d[1]*th/2],f=[c[0]+d[0]*th/2,c[1]+d[1]*th/2];
+    const sg=ctx.createLinearGradient(c[0]-u[0]*rr,c[1]-u[1]*rr,c[0]+u[0]*rr,c[1]+u[1]*rr);
+    if(dim){sg.addColorStop(0,"#07090b");sg.addColorStop(1,"#101316")}else{sg.addColorStop(0,"#0a0c0e");sg.addColorStop(.28,"#363e45");sg.addColorStop(.5,"#1c2126");sg.addColorStop(1,"#08090b")}
+    ctx.fillStyle=sg;ctx.beginPath();ctx.ellipse(b[0],b[1],rr,rr*sq,rot,0,7);ctx.fill();
+    ctx.beginPath();polyPath(ctx,[[b[0]+u[0]*rr,b[1]+u[1]*rr],[f[0]+u[0]*rr,f[1]+u[1]*rr],[f[0]-u[0]*rr,f[1]-u[1]*rr],[b[0]-u[0]*rr,b[1]-u[1]*rr]]);ctx.fill();
+    if(!mini&&!dim){ctx.strokeStyle="rgba(255,255,255,.13)";ctx.lineWidth=.8;const e0=[b[0]+u[0]*rr*.72,b[1]+u[1]*rr*.72],e1=[f[0]+u[0]*rr*.72,f[1]+u[1]*rr*.72];ctx.beginPath();ctx.moveTo(e0[0],e0[1]);ctx.lineTo(e1[0],e1[1]);ctx.stroke()}
+    const fg=ctx.createLinearGradient(f[0]-u[0]*rr,f[1]-u[1]*rr,f[0]+u[0]*rr,f[1]+u[1]*rr);fg.addColorStop(0,dim?"#15191c":"#2c3339");fg.addColorStop(.55,dim?"#0e1113":"#191d21");fg.addColorStop(1,dim?"#08090b":"#0d1012");
+    ctx.beginPath();ctx.ellipse(f[0],f[1],rr,rr*sq,rot,0,7);ctx.fillStyle=fg;ctx.fill();
+    if(!mini){ctx.strokeStyle=dim?"rgba(255,255,255,.05)":"rgba(255,255,255,.2)";ctx.lineWidth=.8;ctx.beginPath();ctx.ellipse(f[0],f[1],rr*.93,rr*.93*sq,rot,Math.PI*1.05,Math.PI*1.6);ctx.stroke()}
+    if(face==="in"){const cg=ctx.createLinearGradient(f[0]-u[0]*rr*.4,f[1]-u[1]*rr*.4,f[0]+u[0]*rr*.4,f[1]+u[1]*rr*.4);cg.addColorStop(0,"#6c7880");cg.addColorStop(.35,"#f2f6f8");cg.addColorStop(1,"#4a545b");
+      ctx.beginPath();ctx.ellipse(f[0],f[1],rr*.42,rr*.42*sq,rot,0,7);ctx.fillStyle=cg;ctx.fill();ctx.beginPath();ctx.ellipse(f[0],f[1],rr*.24,rr*.24*sq,rot,0,7);ctx.fillStyle="#3a444c";ctx.fill();return}
+    /* Gewichtsplakette: rotes Feld, schwarzer Rand, Zahl in Schwarz */
+    ctx.beginPath();ctx.ellipse(f[0],f[1],rr*.62,rr*.62*sq,rot,0,7);ctx.fillStyle=dim?"#0b0d0f":"#0b0d0f";ctx.fill();
+    ctx.beginPath();ctx.ellipse(f[0],f[1],rr*.54,rr*.54*sq,rot,0,7);ctx.fillStyle=dim?"#7a1e19":"#d8302a";ctx.fill();
+    if(!mini&&rr>=6.5){const t=String(kg).replace(".",",");ctx.save();ctx.translate(f[0],f[1]);ctx.rotate(Math.cos(rot)<0?rot+Math.PI:rot);ctx.scale(1,sq);ctx.fillStyle="#0b0d0f";ctx.textAlign="center";ctx.textBaseline="middle";
+      ctx.font="700 "+Math.max(5,rr*(t.length>2?.5:.68)).toFixed(1)+"px Rajdhani,sans-serif";ctx.fillText(t,0,rr*.04);ctx.restore()}}
+  function dumbbell(h,dim,d=CAM,part,kg){kg=+kg>0?+kg:DB_STD;const D=dbDims(kg);const off=D.off*s,rr=D.rr*s,th=D.th*s;const A=[h[0]-d[0]*off,h[1]-d[1]*off],B=[h[0]+d[0]*off,h[1]+d[1]*off];
+    if(part!=="near"){rubberHead(A,d,rr,th,dim,"in",kg);rod([A[0]+d[0]*th*.5,A[1]+d[1]*th*.5],[B[0]-d[0]*th*.5,B[1]-d[1]*th*.5],2.3*s,!dim)}
+    if(part!=="far")rubberHead(B,d,rr,th,dim,"out",kg)}
   /* bumper plate seen at an angle; h = bar position at the hand */
-  function plate(h,r,col,d=CAM,part,near=1){if(near)r*=.84;const R_=r*s;const off=near?0:r*.12*s;const C=[h[0]+d[0]*off,h[1]+d[1]*off];const u=[-d[1],d[0]];const rot=Math.atan2(u[1],u[0]);const sq=.55;
-    if(part==="bar"){rod(h,[C[0]+d[0]*R_*.75,C[1]+d[1]*R_*.75],2.5*s,true);return}
+  function plate(h,r,col,d=CAM,part,near=1,gold){if(near)r*=.84;const R_=r*s;const off=near?0:r*.12*s;const C=[h[0]+d[0]*off,h[1]+d[1]*off];const u=[-d[1],d[0]];const rot=Math.atan2(u[1],u[0]);const sq=.55;
+    if(part==="bar"){rod(h,[C[0]+d[0]*R_*.75,C[1]+d[1]*R_*.75],2.5*s,true,gold);return}
     const th=3.2*s;const back=[C[0]-d[0]*th,C[1]-d[1]*th];
     ctx.beginPath();ctx.ellipse(back[0],back[1],R_,R_*sq,rot,0,7);ctx.fillStyle=shade(col,-.62);ctx.fill();
     ctx.beginPath();polyPath(ctx,[[back[0]+u[0]*R_,back[1]+u[1]*R_],[C[0]+u[0]*R_,C[1]+u[1]*R_],[C[0]-u[0]*R_,C[1]-u[1]*R_],[back[0]-u[0]*R_,back[1]-u[1]*R_]]);ctx.fill();
@@ -1256,6 +1308,30 @@ function eqKit(ctx,s,mini){
     ctx.beginPath();ctx.ellipse(C[0]+d[0]*R_*.12,C[1]+d[1]*R_*.12,R_*.2,R_*.2*sq,rot,0,7);ctx.fillStyle="#15191d";ctx.fill();
     if(!mini){const tb=[C[0]+d[0]*R_*.12+u[0]*R_*.2,C[1]+d[1]*R_*.12+u[1]*R_*.2];ctx.fillStyle="#d8392f";ctx.beginPath();ctx.arc(tb[0],tb[1],R_*.06,0,7);ctx.fill()}
     ctx.beginPath();ctx.ellipse(sl[0],sl[1],R_*.13,R_*.13*sq,rot,0,7);ctx.fillStyle="#cfd8de";ctx.fill()}
+  /* 3.8 (@ Joschy): beladene Olympia-Stange von der Seite: list = Scheiben einer Seite (größte zuerst = innen), Farben je Scheibengewicht,
+     voller Durchmesser r ab 10 kg, dicke Hülse in Silber (Chrom) oder Gold, Klemme außen */
+  function plateStack(h,r,list,d=CAM,near=1,gold){if(near)r*=.84;const u=[-d[1],d[0]];const rot=Math.atan2(u[1],u[0]);const sq=.55;
+    let x=near?0:r*.12*s;const C0=[h[0]+d[0]*x,h[1]+d[1]*x];const sw=5*s;
+    const at=t=>[C0[0]+d[0]*t,C0[1]+d[1]*t];let t=0;const discs=[];
+    for(const p of list){const th=Math.max(1.1,plateTh(p)*.62)*s;discs.push({p,R:r*plateRad(p)*s,a:t,b:t+th});t+=th+.25*s}
+    const tEnd=t+Math.max(6,11-t/s*.5)*s;/* Hülse steht über die äußere Scheibe hinaus */
+    /* inner collar (sleeve shoulder) behind the first plate */
+    {const c=at(-.8*s);ctx.beginPath();ctx.ellipse(c[0],c[1],sw*.95,sw*.95*sq,rot,0,7);ctx.fillStyle=gold?"#8a6420":"#59646c";ctx.fill()}
+    rod(at(0),at(Math.max(.1,discs.length?discs[0].a+.1:0)),sw,false,gold);
+    for(const D of discs){const col=plateHex(D.p);const A=at(D.a),B=at(D.b);const R_=D.R;
+      ctx.beginPath();ctx.ellipse(A[0],A[1],R_,R_*sq,rot,0,7);ctx.fillStyle=shade(col,-.6);ctx.fill();
+      ctx.beginPath();polyPath(ctx,[[A[0]+u[0]*R_,A[1]+u[1]*R_],[B[0]+u[0]*R_,B[1]+u[1]*R_],[B[0]-u[0]*R_,B[1]-u[1]*R_],[A[0]-u[0]*R_,A[1]-u[1]*R_]]);ctx.fill();
+      const fg=ctx.createLinearGradient(B[0]-u[0]*R_,B[1]-u[1]*R_,B[0]+u[0]*R_,B[1]+u[1]*R_);fg.addColorStop(0,shade(col,.12));fg.addColorStop(.55,col);fg.addColorStop(1,shade(col,-.4));
+      ctx.beginPath();ctx.ellipse(B[0],B[1],R_,R_*sq,rot,0,7);ctx.fillStyle=fg;ctx.fill();
+      if(!mini){ctx.lineWidth=.8;for(const[k,a]of[[.9,"rgba(0,0,0,.28)"],[.84,"rgba(255,255,255,.12)"],[.66,"rgba(255,255,255,.24)"],[.6,"rgba(0,0,0,.2)"]]){if(R_*k<sw*1.3)continue;ctx.strokeStyle=a;ctx.beginPath();ctx.ellipse(B[0],B[1],R_*k,R_*k*sq,rot,0,7);ctx.stroke()}
+        ctx.strokeStyle="rgba(255,255,255,.35)";ctx.lineWidth=1.1;ctx.beginPath();ctx.ellipse(B[0],B[1],R_*.97,R_*.97*sq,rot,Math.PI*1.08,Math.PI*1.55);ctx.stroke()}
+      const hub=ctx.createRadialGradient(B[0]-R_*.04,B[1]-R_*.04,0,B[0],B[1],sw*1.25);hub.addColorStop(0,"#f2f6f8");hub.addColorStop(1,"#6c7880");
+      ctx.beginPath();ctx.ellipse(B[0],B[1],sw*1.2,sw*1.2*sq,rot,0,7);ctx.fillStyle=hub;ctx.fill()}
+    /* sleeve out of the last plate, clamp with red tab, sleeve end cap */
+    const last=discs.length?discs[discs.length-1].b:0;rod(at(last),at(tEnd),sw,false,gold);
+    const cl=at(last+1.2*s);ctx.beginPath();ctx.ellipse(cl[0],cl[1],sw*.95,sw*.95*sq,rot,0,7);ctx.fillStyle="#15191d";ctx.fill();
+    if(!mini){const tb=[cl[0]+u[0]*sw*.95,cl[1]+u[1]*sw*.95];ctx.fillStyle="#d8392f";ctx.beginPath();ctx.arc(tb[0],tb[1],Math.max(.8,sw*.22),0,7);ctx.fill()}
+    const E=at(tEnd);ctx.beginPath();ctx.ellipse(E[0],E[1],sw*.5,sw*.5*sq,rot,0,7);ctx.fillStyle=gold?"#f4dc8a":"#cfd8de";ctx.fill()}
   function band(A,B,a,sag=.08){const d=[B[0]-A[0],B[1]-A[1]];const n=norm2([-d[1],d[0]]);const sg=(n[1]<0?-1:1)*Math.hypot(d[0],d[1])*sag;const m=[(A[0]+B[0])/2+n[0]*sg,(A[1]+B[1])/2+n[1]*sg];
     ctx.save();ctx.globalAlpha=a;ctx.lineCap="round";ctx.strokeStyle="#a83f2b";ctx.lineWidth=Math.max(1.6,2.6*s);ctx.beginPath();ctx.moveTo(A[0],A[1]);ctx.quadraticCurveTo(m[0],m[1],B[0],B[1]);ctx.stroke();
     ctx.strokeStyle="rgba(255,170,140,.55)";ctx.lineWidth=Math.max(.6,.8*s);ctx.stroke();ctx.restore()}
@@ -1265,7 +1341,7 @@ function eqKit(ctx,s,mini){
     if(!mini){const t=up?n:[-n[0],-n[1]];ctx.setLineDash([2,2.2]);ctx.strokeStyle="rgba(200,215,225,.28)";ctx.lineWidth=.7;ctx.beginPath();ctx.moveTo(A[0]+t[0]*w*.3,A[1]+t[1]*w*.3);ctx.lineTo(B[0]+t[0]*w*.3,B[1]+t[1]*w*.3);ctx.stroke();ctx.setLineDash([])}}
   function frame(A,B,w){ctx.lineCap="round";ctx.strokeStyle="#262d33";ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(A[0],A[1]);ctx.lineTo(B[0],B[1]);ctx.stroke();ctx.strokeStyle="rgba(190,205,215,.35)";ctx.lineWidth=Math.max(.6,w*.25);ctx.stroke()}
   function floorShadow(c,rx){const g=ctx.createRadialGradient(c[0],c[1],0,c[0],c[1],rx);g.addColorStop(0,"rgba(0,0,0,.45)");g.addColorStop(1,"rgba(0,0,0,0)");ctx.save();ctx.translate(c[0],c[1]);ctx.scale(1,.25);ctx.translate(-c[0],-c[1]);ctx.fillStyle=g;ctx.beginPath();ctx.arc(c[0],c[1],rx,0,7);ctx.fill();ctx.restore()}
-  return{rod,hexHead,dumbbell,plate,band,padSeg,frame,floorShadow,chromeG}}
+  return{rod,hexHead,rubberHead,dumbbell,plate,plateStack,band,padSeg,frame,floorShadow,chromeG}}
 
 const KNOWN_EQ=new Set(["plate","db","band","grip","bandHands","bandFront","box","bench","bar","wall","rackbar","benchF","bag","tread","cross"]);
 function drawFig0(ctx,def,o,tr,g,time,c){
@@ -1323,8 +1399,11 @@ function drawFig0(ctx,def,o,tr,g,time,c){
   if(!front){ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.drawImage(c._offF,0,0);ctx.restore()}
   for(const e of def.eq){if(e.t==="band"&&!front)EQ.band(P(e.from),P(o.hand2),.5)}
   /* far parts of hand-held dumbbells (behind the fist) */
-  for(const e of def.eq)if(e.t==="db"&&o[e.at]&&(e.at==="hand"||front))EQ.dumbbell(P(GP(e.at)),false,front?norm2([.18*(o[e.at][0]<0?-1:1),.5]):CAM,"far");
-  for(const e of def.eq)if(e.t==="plate"&&o[e.at]&&(e.at==="hand"))EQ.plate(P(add(GP(e.at),[0,e.dy||0])),e.r||21,CSS[e.c]||CSS["--accent"],CAM,"bar");
+  /* 3.8: the head keeps a dumbbell's head out of the face: parts close to the face are clipped around it (as for plates); behind the head is realistic, the far head lies beside it */
+  const dbClip=(e,fn)=>{const hc=!front&&e.at==="hand"&&o.head?P(o.head):null;const D=dbDims(ANW.db);const hr=hc?R(B.head*1.12):0;const clip=hc&&Math.hypot(...sub(P(GP(e.at)),hc))<R(D.off+D.th/2+D.rr)+hr;
+    if(clip){ctx.save();ctx.beginPath();ctx.rect(-1e4,-1e4,2e4,2e4);ctx.moveTo(hc[0]+hr,hc[1]);ctx.arc(hc[0],hc[1],hr,0,Math.PI*2,true);ctx.clip("evenodd")}fn();if(clip)ctx.restore()};
+  for(const e of def.eq)if(e.t==="db"&&o[e.at]&&(e.at==="hand"||front))dbClip(e,()=>EQ.dumbbell(P(GP(e.at)),false,front?norm2([.18*(o[e.at][0]<0?-1:1),.5]):e.dir?norm2(e.dir):CAM,"far",ANW.db));
+  for(const e of def.eq)if(e.t==="plate"&&o[e.at]&&(e.at==="hand"))EQ.plate(P(add(GP(e.at),[0,e.dy||0])),e.r||21,CSS[e.c]||CSS["--accent"],CAM,"bar",1,ANW.bb&&ANW.gold);
   {const rim=c._offR,rx=rim.getContext("2d");rx.setTransform(1,0,0,1,0,0);rx.clearRect(0,0,rim.width,rim.height);rx.globalCompositeOperation="source-over";rx.drawImage(c._offB,0,0);rx.globalCompositeOperation="source-in";rx.fillStyle=RimC(.9);rx.fillRect(0,0,rim.width,rim.height);rx.globalCompositeOperation="source-over";
     ctx.save();ctx.setTransform(1,0,0,1,0,0);const ro=(mini?.8:1.4)*dpr;
     ctx.globalAlpha=front?.35:.55;ctx.drawImage(rim,-Ls[0]*ro,Ls[1]*ro);ctx.globalAlpha=1;
@@ -1335,8 +1414,9 @@ function drawFig0(ctx,def,o,tr,g,time,c){
       /* 2.2: a plate passing the face (overhead press) is drawn behind the head, the face stays visible */
       const hc=!front&&e.at==="hand"&&o.head?P(o.head):null,hr=hc?R(B.head*1.18):0;const clip=hc&&Math.hypot(...sub(P(p),hc))<R(rr*1.1)+hr;
       if(clip){ctx.save();ctx.beginPath();ctx.rect(-1e4,-1e4,2e4,2e4);ctx.moveTo(hc[0]+hr,hc[1]);ctx.arc(hc[0],hc[1],hr,0,Math.PI*2,true);ctx.clip("evenodd")}
-      EQ.plate(P(p),rr,CSS[e.c]||CSS["--accent"],CAM,null,e.at==="hand");if(clip)ctx.restore()}
-    else if(e.t==="db"){if(o[e.at]&&(e.at==="hand"||front))EQ.dumbbell(P(GP(e.at)),false,front?norm2([.18*(o[e.at][0]<0?-1:1),.5]):CAM,"near")}
+      /* 3.8: Langhantel-Übungen zeigen die Scheiben, die für das aktuelle Gewicht auf die Stange gehören (Scheiben-Rechner), sonst eine einzelne Scheibe */
+      if(ANW.bb)EQ.plateStack(P(p),rr,ANW.plates,CAM,e.at==="hand",ANW.gold);else EQ.plate(P(p),rr,CSS[e.c]||CSS["--accent"],CAM,null,e.at==="hand");if(clip)ctx.restore()}
+    else if(e.t==="db"){if(o[e.at]&&(e.at==="hand"||front))dbClip(e,()=>EQ.dumbbell(P(GP(e.at)),false,front?norm2([.18*(o[e.at][0]<0?-1:1),.5]):e.dir?norm2(e.dir):CAM,"near",ANW.db))}
     else if(e.t==="band"){EQ.band(P(e.from),P(o.hand),1)}
     else if(e.t==="grip"){const h=o.hand;const A=P([h[0],fl+2.5]);EQ.floorShadow(A,R(12));ctx.beginPath();ctx.ellipse(A[0],A[1],R(10),R(2.6),0,0,7);const gg=ctx.createLinearGradient(0,A[1]-R(3),0,A[1]+R(3));gg.addColorStop(0,"#3a434b");gg.addColorStop(1,"#0b0e10");ctx.fillStyle=gg;ctx.fill();
       EQ.frame(P([h[0]-3,fl+3]),P([h[0]-1,h[1]-1]),R(2.2));EQ.frame(P([h[0]+3,fl+3]),P([h[0]+1,h[1]-1]),R(2.2))}
@@ -1423,7 +1503,7 @@ function drawFig0(ctx,def,o,tr,g,time,c){
     arm(x,kit,o.sh,o.elbow,o.hand,K.sleeve,"hand");
     kit.ao(P(o.elbow),R(4.5),.16);
     // far hand dumbbell: drawn onto the far layer so it sits behind the body
-    if(holdsDb.has("hand2")){const ex=eqKit(offF,s,mini);ex.dumbbell(P(o.hand2),true,CAM)}
+    if(holdsDb.has("hand2")){const ex=eqKit(offF,s,mini);ex.dumbbell(P(o.hand2),true,CAM,undefined,ANW.db)}
   }
   function circlePts(c,r,n,sq,rot){const pts=[];for(let i=0;i<n;i++){const a=i/n*Math.PI*2;const px=Math.cos(a)*r,py=Math.sin(a)*r*sq;pts.push([c[0]+px*Math.cos(rot)-py*Math.sin(rot),c[1]+px*Math.sin(rot)+py*Math.cos(rot)])}return pts}
 
@@ -1748,7 +1828,7 @@ function animPose(def,time,g){if(def.gait==="run")return gaitRun(def,time);let{p
 const RUN=new Set();let rafOn=false;
 const OFFP=new Map();function offFor(w,h){const k=w+"x"+h;let v=OFFP.get(k);if(v){OFFP.delete(k);OFFP.set(k,v);return v}
   v=[0,1,2].map(()=>{const e=document.createElement("canvas");e.width=w;e.height=h;return e});OFFP.set(k,v);if(OFFP.size>6)OFFP.delete(OFFP.keys().next().value);return v}
-function attachAnim(canvas,key,opts={}){const def=AN[key];if(!def)return;canvas._def=def;canvas._key=key;canvas._g=opts.g||figFor(key);canvas._b=boundsOf(def,canvas._g,!!opts.still);canvas._fl=floorOf(def);canvas._ph=opts.phaseEl||null;canvas._still=!!opts.still;canvas._done=false;canvas._t0=performance.now()-(opts.offset||0);
+function attachAnim(canvas,key,opts={}){const def=AN[key];if(!def)return;canvas._def=def;canvas._key=key;canvas._ex=opts.ex||(EX[key]?key:null);canvas._kgFix=+opts.kg>0?+opts.kg:0;canvas._barCol=opts.barCol||null;canvas._kgT=0;canvas._g=opts.g||figFor(key);canvas._b=boundsOf(def,canvas._g,!!opts.still);canvas._fl=floorOf(def);canvas._ph=opts.phaseEl||null;canvas._still=!!opts.still;canvas._done=false;canvas._t0=performance.now()-(opts.offset||0);
   RUN.add(canvas);if(!rafOn){rafOn=true;requestAnimationFrame(loop)}}
 function loop(now){for(const c of RUN){if(!c.isConnected){RUN.delete(c);continue}if(c.offsetParent===null&&!c.closest(".sheet"))continue;if(c._still&&c._done)continue;renderCanvas(c,now)}if(RUN.size)requestAnimationFrame(loop);else rafOn=false}
 const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -1764,6 +1844,16 @@ function ovBands(c){const st=c.parentElement;const o={t:0,b:0};if(!st||!st.class
   for(const el of st.children){if(el===c||!/\b(phase|tempo|readout)\b/.test(el.className))continue;const cs=getComputedStyle(el);const fs=parseFloat(cs.fontSize)||12;const lh=Math.max(el.offsetHeight,parseFloat(cs.lineHeight)||fs*1.25);
     const t=el.offsetTop-y0,bt=y0+H-(el.offsetTop+el.offsetHeight);if(t+el.offsetHeight/2<H/2)o.t=Math.max(o.t,t+lh+4);else o.b=Math.max(o.b,bt+lh+4)}
   return o}
+/* 3.8 (@ Joschy): Gewicht und Stangenfarbe der Animation. Im Training das Gewicht des aktuellen (sonst nächsten offenen) Satzes,
+   außerhalb das zuletzt benutzte Gewicht, sonst Standard (Kurzhantel 10 kg, Langhantel 60 kg). */
+let ANW={db:DB_STD,bar:BAR_STD,bb:false,gold:false,plates:[]};
+function animKg(ex){const ss=S.session;
+  if(ss&&Array.isArray(ss.items)&&Array.isArray(ss.log)){let i=ss.items[ss.ei]&&ss.items[ss.ei].ex===ex?ss.ei:ss.items.findIndex(it=>it&&it.ex===ex);const l=i>=0&&ss.log[i];
+    if(l&&Array.isArray(l.sets)&&l.sets.length){const x=(i===ss.ei&&ss.phase!=="rest"&&l.sets[ss.si])||l.sets.find(z=>z&&!z.done)||l.sets[l.sets.length-1];if(x&&+x.w>0)return+x.w}}
+  const oc=occFor(ex,1)[0];if(oc){const x=oc.l.sets.filter(z=>z&&z.done&&+z.w>0).pop();if(x)return+x.w}return null}
+function animCtx(c,now){const ex=c._ex,e=ex&&EX[ex];if(c._kgFix>0)c._kg=c._kgFix;else if(!(c._kgT>0)||now-c._kgT>400||now<c._kgT){c._kgT=now||1;c._kg=e?animKg(ex):null}
+  const bb=!!e&&e.type==="bar";const bar=bb&&c._kg>0?c._kg:BAR_STD;let plates=[];if(bb){const r=plateSplit(bar);plates=r.err?[]:r.out}
+  ANW={bb,db:!bb&&c._kg>0?c._kg:DB_STD,bar,plates,gold:(c._barCol||barColOf())==="gold"}}
 function renderCanvas(c,now){const def=c._def;const dpr=Math.min(window.devicePixelRatio||1,2);const W=c.clientWidth,H=c.clientHeight;if(!W||!H)return;
   if(c.width!==Math.round(W*dpr)||c.height!==Math.round(H*dpr)){c.width=Math.round(W*dpr);c.height=Math.round(H*dpr)}
   [c._offF,c._offB,c._offR]=offFor(c.width,c.height);for(const o of[c._offF,c._offB,c._offR]){const x=o.getContext("2d");if(x.reset)x.reset();else o.width=o.width}/* 3.2: scratch layers are shared per size (cleared every frame): many previews, little memory */
@@ -1775,6 +1865,7 @@ function renderCanvas(c,now){const def=c._def;const dpr=Math.min(window.devicePi
   const b=cosFit(c,c._b._f||(c._b._f=fitBox(def,c._b)));/* 3.5: a little more room for costumes (unchanged without) */const mini=W<110;const pad=mini?6:18;const ov=c._ovK===W+"x"+H?c._ov:(c._ovK=W+"x"+H,c._ov=ovBands(c));
   const top=Math.max(mini?6:34,ov.t);const padB=Math.max(pad,ov.b);const s=Math.min((W-2*pad)/(b.x1-b.x0),(H-top-padB)/(b.y1-b.y0));
   const ox=(W-(b.x1-b.x0)*s)/2-b.x0*s;const oy=H-padB+b.y0*s-((H-top-padB)-(b.y1-b.y0)*s)/2;
+  animCtx(c,now);
   drawFig(ctx,dd||def,o,{s,ox,oy,floor:c._fl,bx0:b.bx0,bx1:b.bx1,fx0:b.x0,fx1:b.x1,W,H,dpr},c._g,time,c);
   c._done=true;if(c._ph){const t=lbl!=null?lbl:(def.ph[ph]||"");if(c._ph.textContent!==t)c._ph.textContent=t}}
 
@@ -1985,7 +2076,7 @@ function workView(){const ss=S.session;const it=curItem();const e=EX[it.ex];cons
   <div class="row" style="flex-wrap:wrap;gap:8px">${e.type==="bar"?`<button class="btn small ghost" id="plateBtn">Scheiben</button>`:""}${isTime?`<button class="btn small ghost" id="holdBtn">${CAT[it.ex]==="cardio"?"Runden":"Halte"}-Timer ${it.hi}s</button>`:e.hold?`<button class="btn small ghost" id="holdBtn">Halte-Timer ${e.hold}s</button>`:""}<button class="btn small ghost" id="cueBtn">Technik</button>${!lg.sets.some(x=>x.done)&&swapPool(it).length>1?`<button class="btn small ghost" id="swapBtn">Tauschen</button>`:""}<span style="flex:1"></span><button class="btn small ghost" id="skipEx">Übung überspringen</button></div>
   <button class="btn primary block" id="doneSet" style="margin-top:auto">Satz erledigt</button>`}
 function bindWork(){const ss=S.session;const it=curItem();const e=EX[it.ex];const lg=ss.log[ss.ei];
-  attachAnim($("#cv"),animOf(it.ex),{phaseEl:$("#ph")});
+  attachAnim($("#cv"),animOf(it.ex),{phaseEl:$("#ph"),ex:it.ex});
   if(ss.annEi!==ss.ei&&!lg.sets.some(x=>x.done)){ss.annEi=ss.ei;const w=+lg.sets[0].w;save();const first=ss.ei===0;if(first&&!ss.annIntro){ss.annIntro=1;save()}
     const wu=wuActive(ss);const ei0=ss.ei;setTimeout(()=>{const s2=S.session;if(!s2||s2.phase!=="work"||s2.ei!==ei0)return;/* exercise already finished: no stale announcement */announce(`${e.n}. ${it.sets} Sätze, ${repSpeak(it)}.${w>0&&e.type!=="band"?` ${fmtKg(w)} Kilo.`:""}${wu?" Zuerst Aufwärmsätze.":""}`,[...jaiExSeq(it,lg),...(wu?["warmup_sets"]:[])],{pling:true})},400)}
   const st=()=>lg.sets[ss.si];
@@ -2411,7 +2502,7 @@ function openSwap(){const ss=S.session;const it=curItem();const pool=swapPool(it
   openSheet(`<div class="row between"><h2 style="font-size:24px">Übung tauschen</h2><button class="iconbtn" data-close aria-label="Schließen"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
    <p class="muted" style="margin:0;font-size:13.5px">Gleiche Muskelgruppe, andere Übung. Zum Beispiel wenn etwas zwickt oder du Lust auf Abwechslung hast.</p>
    ${pool.map(k=>`<button class="libitem" data-swap="${k}" ${k===it.ex?'style="border-color:var(--arc)"':""}><canvas data-mini="${k}"></canvas><span><b>${esc(EX[k].n)}</b><small>${it.sets} × ${repLabel({ex:k,...(it.hfin?holdReps(k):it.fin?{lo:it.lo,hi:it.hi}:repsFor(it,k))})}${isHoldEx(k)?" · Halte-Variante":""}</small></span><span class="sr">${k===it.ex?"aktuell":""}</span></button>`).join("")}`);
-  for(const c of document.querySelectorAll("#sheet [data-mini]"))attachAnim(c,animOf(c.dataset.mini),{still:1});
+  for(const c of document.querySelectorAll("#sheet [data-mini]"))attachAnim(c,animOf(c.dataset.mini),{still:1,ex:c.dataset.mini});
   for(const b of document.querySelectorAll("[data-swap]"))b.onclick=()=>{const k=b.dataset.swap;if(k===it.ex){closeSheet();return}const ni={...it,ex:k,...(it.fin?(it.hfin?holdReps(k):convReps(it,k)):repsFor(it,k))};const sg=suggest(ni);const e=EX[ni.ex];ss.items[ss.ei]=ni;
     ss.log[ss.ei]={ex:ni.ex,sets:initSets(ni,sg)};
     if(ss.ei===0)wuSync(ss);ss.si=0;ss.annEi=null;save();closeSheet();renderTrain();toast("Getauscht: "+e.n)}}
@@ -2490,7 +2581,7 @@ function renderRest(){const ss=S.session;const it=curItem();const e=EX[it.ex];co
    ${ss.restNewEx?effCard(ss):""}
    <p class="muted" style="margin:0;max-width:34ch">${esc(tip)}</p>
    <div class="restbtns"><button class="btn" id="rm">−15 s</button><button class="btn" id="rp">+15 s</button><button class="btn primary" id="rs" style="font-size:18px">Weiter</button></div></div>`;
-  if(ss.restNewEx)attachAnim($("#rcv"),animOf(it.ex),{phaseEl:$("#rph")});bindEff(ss);
+  if(ss.restNewEx)attachAnim($("#rcv"),animOf(it.ex),{phaseEl:$("#rph"),ex:it.ex});bindEff(ss);
   $("#rm").onclick=()=>{ss.restEnd-=15000;save();tick();nativeState()};$("#rp").onclick=()=>{ss.restEnd+=15000;ss.restTotal+=15;save();tick();nativeState()};$("#rs").onclick=endRest;
   let lastS=null;const tick=()=>{const left=(ss.restEnd-Date.now())/1000;const rt=$("#rt");if(!rt)return;rt.textContent=mmss(left);
     const rc=$("#rc");if(rc)rc.style.strokeDashoffset=String(C*(1-Math.max(0,left)/ss.restTotal));
@@ -2539,15 +2630,16 @@ function openExSheet(key){const e=EX[key];const usedIn=usedInCodes(key);
    <div><div class="label" style="margin-bottom:8px">Typische Fehler</div><ul class="cues bad">${e.bad.map(c=>`<li>${esc(c)}</li>`).join("")}</ul></div>
    ${canDo(key)?"":`<div class="hint"><b>Gerät fehlt:</b> ${esc(missingGear(key).join(", "))}. Im Training wird diese Übung automatisch ersetzt.</div>`}
    ${e.safe?`<div class="hint"><b>Sicherheit:</b> ${esc(e.safe)}</div>`:""}${e.note?`<div class="hint">${esc(e.note)}</div>`:""}`);
-  attachAnim($("#scv"),animOf(key),{phaseEl:$("#sph")})}
+  attachAnim($("#scv"),animOf(key),{phaseEl:$("#sph"),ex:key})}
 function plateSplit(total){const bar=+S.settings.bar;let side=(total-bar)/2;if(side<0)return{err:"Weniger als die Stange ("+bar+" kg)."};
   const sizes=Object.keys(S.settings.plates).map(Number).sort((a,b)=>b-a);const out=[];
   for(const p of sizes){let n=+S.settings.plates[String(p)]||0;while(n>0&&side>=p-1e-9){out.push(p);side-=p;n--}}
   return{out,rest:Math.round(side*100)/100}}
-function plateColor(p){return p>=25?"var(--p25)":p>=20?"var(--p20)":p>=15?"var(--p15)":p>=10?"var(--p10)":p>=5?"var(--p5)":"var(--p2)"}
+function plateColor(p){return plateHex(p)}
+function plateInk(p){const n=parseInt(plateHex(p).slice(1),16);const l=(.299*(n>>16)+.587*((n>>8)&255)+.114*(n&255))/255;return l<.45?"#f2f6f8":"#071018"}/* 3.8: lesbare Schrift auf dunklen Scheiben */
 function openPlates(w){const draw=()=>{const r=plateSplit(w);const box=$("#plOut");if(!box)return;$("#plW").textContent=fmtKg(w);
     if(r.err){box.innerHTML=`<div class="hint">${r.err}</div>`;return}
-    box.innerHTML=`<div class="platebar"><span class="sleeve"></span>${r.out.map(p=>`<span class="pl" style="background:${plateColor(p)};height:${Math.round(40+p*2.4)}px;width:${p>=10?26:18}px">${fmtKg(p)}</span>`).join("")}<span class="sleeve" style="width:40px"></span></div>
+    box.innerHTML=`<div class="platebar"><span class="sleeve"></span>${r.out.map(p=>`<span class="pl" style="background:${plateColor(p)};color:${plateInk(p)};height:${Math.round(40+p*2.4)}px;width:${p>=10?26:18}px">${fmtKg(p)}</span>`).join("")}<span class="sleeve" style="width:40px"></span></div>
      <div class="muted">Pro Seite: ${r.out.length?r.out.map(fmtKg).join(" + ")+" kg":"keine Scheiben"}${r.rest>0?` · <b style="color:var(--warn)">${fmtKg(r.rest)} kg fehlen pro Seite</b> mit deinen Scheiben`:""}</div>`};
   openSheet(`<div class="row between"><h2 style="font-size:26px">Scheiben-Rechner</h2><button class="iconbtn" data-close aria-label="Schließen"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
    <div class="stepper"><span class="label">Gesamtgewicht inkl. ${S.settings.bar} kg Stange</span><div class="ctl"><button id="pm">−</button><span class="val" id="plW"></span><button id="pp">+</button></div></div>
@@ -2559,7 +2651,7 @@ function renderLib(){
   $("#v-lib").innerHTML=`<h1 style="font-size:34px">Übungen</h1><p class="muted" style="margin:-8px 0 0">${Object.keys(EX).length} Übungen für dein Homegym. Tippe auf eine, um die Animation groß zu sehen.</p>
   <div class="row" style="flex-wrap:wrap;gap:6px">${CATS.map(([k,l])=>`<button class="chip" data-cat="${k}">${l}</button>`).join("")}</div>
   ${CATS.map(([k,l])=>{const ks=Object.keys(EX).filter(x=>CAT[x]===k);return`<div class="label" id="cat-${k}" style="margin-top:6px">${l} · ${ks.length}</div>${ks.map(x=>`<button class="libitem${canDo(x)?"":" off"}" data-ex="${x}"><canvas data-mini="${x}"></canvas><span><b>${esc(EX[x].n)}</b><small>${canDo(x)?esc(EX[x].m):"Gerät fehlt: "+esc(missingGear(x).join(", "))}</small></span><span class="sr">${(u=>u.length>3?u.slice(0,3).join(" ")+" …":u.join(" "))(usedInCodes(x))}</span></button>`).join("")}`}).join("")}`;
-  for(const c of document.querySelectorAll("[data-mini]"))attachAnim(c,animOf(c.dataset.mini),{still:1});
+  for(const c of document.querySelectorAll("[data-mini]"))attachAnim(c,animOf(c.dataset.mini),{still:1,ex:c.dataset.mini});
   for(const b of document.querySelectorAll("[data-cat]"))b.onclick=()=>{const el=$("#cat-"+b.dataset.cat);if(el)el.scrollIntoView({behavior:"smooth",block:"start"})};
   for(const b of document.querySelectorAll("[data-ex]"))b.onclick=()=>openExSheet(b.dataset.ex)}
 
@@ -2896,7 +2988,12 @@ function renderSet(){const st=S.settings;const gearDraft=[...myGear()];gearDraft
   ${extrasCard()}
   ${hasGear("barbell")?"":"<!--"}<div class="card"><div class="label">Langhantel</div><div class="seg">${[20,15].map(n=>`<button data-bar="${n}" aria-pressed="${+st.bar===n}">${n} kg Stange</button>`).join("")}</div>
    <div class="label">Scheiben pro Seite</div><div class="platecount">${sizes.map(s=>`<label><span><i class="swatch" style="background:${plateColor(+s)}"></i>${s.replace(".",",")} kg</span><input type="number" min="0" max="6" inputmode="numeric" id="pc${s.replace(".","_")}" data-pc="${s}" value="${st.plates[s]||0}"></label>`).join("")}</div>
-   <p class="muted" style="font-size:12.5px;margin:0">Anzahl der Scheiben, die du auf <b>eine</b> Seite stecken kannst. Trag hier ein, welche Scheiben du wirklich hast. Danach rechnet der Scheiben-Rechner.</p></div>${hasGear("barbell")?"":"-->"}
+   <p class="muted" style="font-size:12.5px;margin:0">Anzahl der Scheiben, die du auf <b>eine</b> Seite stecken kannst. Trag hier ein, welche Scheiben du wirklich hast. Danach rechnet der Scheiben-Rechner.</p>
+   <div class="field"><span class="label">Stangenfarbe in den Animationen</span><div class="seg">${[["silver","Silber"],["gold","Gold"],["alt","Abwechselnd pro Training"]].map(([v,l])=>`<button data-barcol="${v}" aria-pressed="${(st.barCol||"alt")===v}">${l}</button>`).join("")}</div><span class="muted" style="font-size:12.5px">Olympia-Stange in Chrom oder Gold. „Abwechselnd“ wechselt mit jedem Training, innerhalb einer Einheit bleibt die Farbe gleich.</span></div>
+   <div class="label">Scheibenfarben</div><div class="platecount">${sizes.map(s=>{const cur=plateHex(+s);const pal=PLATE_PAL.some(p=>p[0].toLowerCase()===cur.toLowerCase())?PLATE_PAL:[...PLATE_PAL,[cur,"Eigene"]];
+     return`<label><span><i class="swatch" style="background:${cur}"></i>${s.replace(".",",")} kg</span><select data-pcol="${s}" id="pcol${s.replace(".","_")}">${pal.map(([h,n])=>`<option value="${h}"${h.toLowerCase()===cur.toLowerCase()?" selected":""}>${n}</option>`).join("")}</select></label>`}).join("")}</div>
+   <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn small ghost" id="pcolReset">Standardfarben</button></div>
+   <p class="muted" style="font-size:12.5px;margin:0">So färben die Animationen deine Bumper Plates. Standard: 25 kg rot, 20 kg blau, 15 kg gelb, 10 kg grün, 5 kg weiß, kleinere schwarz.</p></div>${hasGear("barbell")?"":"-->"}
   <div class="card"><div class="label">Datensicherung</div><p class="muted" style="margin:0;font-size:13.5px">Deine Daten liegen nur auf diesem Handy. Das Backup enthält alles: Geräte, Gewichte, Rekorde, Körpergewicht, Fortschritt und Name. Es wird als Datei <b>'homegym-backup…json'</b> im Ordner Downloads gespeichert.</p>
    <button class="btn small" id="bkBtn">Backup erstellen / wiederherstellen</button></div>
   <button class="btn ghost block" id="reset">Alle Daten löschen</button>
@@ -2910,6 +3007,10 @@ function renderSet(){const st=S.settings;const gearDraft=[...myGear()];gearDraft
   for(const b of document.querySelectorAll("[data-fig]"))b.onclick=()=>{st.fig=b.dataset.fig;save();renderSet()};
   for(const b of document.querySelectorAll("[data-aspd]"))b.onclick=()=>{st.animSpd=+b.dataset.aspd===.75?.75:1;save();renderSet();toast(st.animSpd<1?"Animationen langsamer":"Animationen normal")};
   for(const b of document.querySelectorAll("[data-bar]"))b.onclick=()=>{st.bar=+b.dataset.bar;save();renderSet()};
+  for(const b of document.querySelectorAll("[data-barcol]"))b.onclick=()=>{st.barCol=b.dataset.barcol;save();renderSet()};
+  for(const x of document.querySelectorAll("[data-pcol]"))x.onchange=()=>{const k=String(+x.dataset.pcol),v=x.value;const pc={...(st.plateCol||{})};if(!HEXRE.test(v)||v.toLowerCase()===plateDefHex(+k))delete pc[k];else pc[k]=v;
+    if(Object.keys(pc).length)st.plateCol=pc;else delete st.plateCol;save();renderSet()};
+  {const b=$("#pcolReset");if(b)b.onclick=()=>{delete st.plateCol;save();renderSet();toast("Standardfarben für die Scheiben")}}
   $("#tSound").onclick=()=>{st.sound=!st.sound;save();renderSet()};$("#tVib").onclick=()=>{st.vib=!st.vib;save();renderSet()};
   for(const b of document.querySelectorAll("[data-cw]"))b.onclick=()=>{const p=prog();p.block=+b.dataset.cw;p.done=[];S.pick=null;save();renderSet();toast("Jetzt Block "+b.dataset.cw+" · Einheit A")};
   for(const b of document.querySelectorAll("[data-wsets]"))b.onclick=()=>{st.warmSets=b.dataset.wsets==="1";save();renderSet()};
@@ -3003,7 +3104,7 @@ const MOTION={
 };
 for(const k in MOTION){const d=AN[k];if(!d)continue;const m=MOTION[k];for(const f in m){if(f==="A"||f==="B")Object.assign(d[f],m[f]);else d[f]=m[f]}}
 /* ================= 2.1 · HALTE-ÜBUNGEN · KETTLEBELL · GERÄTE-GEWICHTE · BACKUP (@ Joschy) ================= */
-const APP_VER="3.7",BK_VER=5;/* 3.0–3.4 keep backup format 5: all new fields are optional, older apps simply ignore them */
+const APP_VER="3.8",BK_VER=5;/* 3.0–3.4 keep backup format 5: all new fields are optional, older apps simply ignore them */
 /* ---- hold / tempo variants (strength stays the focus: they are alternatives, never forced) ---- */
 Object.assign(EX,{
   pushpause:{n:"Liegestütze mit Halt in der Mitte",eq:"Matte · Griffe optional",m:"Brust · Trizeps · Schultern",type:"bw",rest:90,inc:0,hold:3,holdAt:"auf halber Höhe",base:"pushup",
@@ -3208,7 +3309,7 @@ function parseBackup(t){let d;try{d=JSON.parse(String(t).replace(/^﻿/,""))}cat
   if(!st||typeof st!=="object"||!Array.isArray(st.history))throw"Die Sicherung ist beschädigt: der Verlauf fehlt.";
   st=JSON.parse(JSON.stringify(st));
   st.history=st.history.filter(h=>h&&typeof h==="object"&&Array.isArray(h.log)).map(h=>({...h,log:h.log.filter(l=>l&&EX[l.ex]&&Array.isArray(l.sets))}));
-  if(st.settings!=null&&(typeof st.settings!=="object"||Array.isArray(st.settings)))st.settings={};if(st.settings&&!THEME_KEYS.includes(st.settings.theme))st.settings.theme="arc";if(st.body!=null&&!Array.isArray(st.body))st.body=[];
+  if(st.settings!=null&&(typeof st.settings!=="object"||Array.isArray(st.settings)))st.settings={};if(st.settings&&!THEME_KEYS.includes(st.settings.theme))st.settings.theme="arc";if(st.settings)normBarSet(st.settings);if(st.body!=null&&!Array.isArray(st.body))st.body=[];
   if(st.profile!=null&&typeof st.profile!=="object")delete st.profile;
   if(st.session!=null&&!validSession(st.session))st.session=null;/* broken running session: drop it, keep the rest of the backup */
   sanitize3(st);
@@ -5330,7 +5431,7 @@ if(typeof EXTRA_EQ_LAYER!=="undefined")Object.assign(EXTRA_EQ_LAYER,{kband:"fron
     if(!mini){ctx.strokeStyle="rgba(240,246,250,.55)";ctx.lineWidth=Math.max(.6,R(w*.3));ctx.beginPath();ctx.moveTo(A[0],A[1]);ctx.lineTo(B[0],B[1]);ctx.stroke()}};
   if(e.t==="kband"){const a=typeof e.at==="string"?o[e.at]:e.at;if(!a)return;const EQ=eqKit(ctx,R(1),mini);ctx.save();EQ.band(P(e.from),P(a),1,e.sag!=null?e.sag:.05);if(e.at2&&o[e.at2])EQ.band(P(e.from2||e.from),P(o[e.at2]),1,e.sag!=null?e.sag:.05);ctx.restore();return}
   if(e.t==="kneeband"){const a=o.kneeR,b=o.kneeL;if(!a||!b)return;const EQ=eqKit(ctx,R(1),mini);ctx.save();EQ.band(P([a[0]-2,a[1]+4]),P([b[0]+2,b[1]+4]),1,.02);ctx.restore();return}
-  if(e.t==="lmbar"){const h=o[e.at||"hand"];if(!h)return;const pv=[e.px,f0+2];const d=norm2(sub(h,pv));const end=add(h,[d[0]*14,d[1]*14]);ctx.save();steel(pv,end,2.6);
+  if(e.t==="lmbar"){const h=o[e.at||"hand"];if(!h)return;const pv=[e.px,f0+2];const d=norm2(sub(h,pv));const end=add(h,[d[0]*14,d[1]*14]);ctx.save();/* 3.8: Stange in Joschys Farbe (Silber/Gold) */if(typeof ANW!=="undefined"&&ANW.gold)eqKit(ctx,R(1),mini).rod(P(pv),P(end),Math.max(1,R(2.6)),false,true);else steel(pv,end,2.6);
     const EQ=eqKit(ctx,R(1),mini);EQ.plate(P(add(h,[d[0]*9,d[1]*9])),e.r||15,CSS[e.c||"--p10"]||CSS["--accent"],CAM,null,true);ctx.restore();return}
   if(e.t==="fplate"){const h=o[e.at];if(!h)return;const c=add(h,[0,e.dy||0]);const A=P([c[0]-(e.w||2.6),c[1]+(e.h||15)]);const w=R(2*(e.w||2.6)),hh=R(2*(e.h||15));ctx.save();
     const g=ctx.createLinearGradient(A[0],0,A[0]+w,0);g.addColorStop(0,"#1b2025");g.addColorStop(.5,CSS[e.c||"--p10"]||"#888");g.addColorStop(1,"#0d1013");ctx.fillStyle=g;ctx.beginPath();ctx.roundRect?ctx.roundRect(A[0],A[1],w,hh,R(1.2)):ctx.rect(A[0],A[1],w,hh);ctx.fill();ctx.restore();return}
@@ -5386,7 +5487,7 @@ Object.assign(AN,{
   /* ---- Rücken ---- */
   pendlay:{anchor:"foot",A:{shin:-100,thigh:-42,torso:9,hand:[0,-60],bend:-1},B:{shin:-100,thigh:-42,torso:9,hand:[-18,-24],bend:-1},eq:[{t:"plate",at:"hand",c:"--p20",r:21}],floor:0,tempo:[.7,.3,1.4,.6],ph:["Ziehen","Ablegen"]},
   dbbentrow:kxA("row",{A:{shin:-100,thigh:-50,torso:38,hand:[-4,-58]},B:{shin:-100,thigh:-50,torso:38,hand:[-26,-28]},eq:[DB()]}),
-  renegade:{anchor:"foot",at:[0,10.3],noBal:1,A:{...kxPl(22),handAt:[139,6.5],bend:-1,hand2:[0,-60],bend2:-1},B:{...kxPl(22),handAt:[118,40],bend:-1,hand2:[0,-60],bend2:-1},eq:[DB()],floor:0,tempo:[1,.4,1.4,.5],ph:["Ziehen","Absetzen"]},
+  renegade:{anchor:"foot",at:[0,10.3],noBal:1,A:{...kxPl(22),handAt:[139,9.5],bend:-1,hand2:[0,-60],bend2:-1},B:{...kxPl(22),handAt:[118,40],bend:-1,hand2:[0,-60],bend2:-1},eq:[{t:"db",at:"hand",dir:[1,.22]}]/* 3.8: Hantel liegt quer am Boden, große Köpfe bleiben über dem Boden */,floor:0,tempo:[1,.4,1.4,.5],ph:["Ziehen","Absetzen"]},
   bandlat:{anchor:"hip",at:[0,50],A:{torso:92,thigh:-90,shin:180,foot:180,hand:[6,58],bend:-1},B:{torso:96,thigh:-90,shin:180,foot:180,hand:[16,6],bend:-1},eq:[{t:"band",from:[6,232]}],floor:0,tempo:[1.1,.5,1.8,.4],ph:["Ziehen","Zurück"]},
   straightarm:{anchor:"foot",A:{...STAND,torso:76,upper:32,fore:36},B:{...STAND,torso:76,upper:-78,fore:-76},eq:[{t:"post",x:150,w:7,h:205},{t:"band",from:[147,190]}],floor:0,tempo:[1.1,.5,1.7,.4],ph:["Runterziehen","Zurück"]},
   scappull:kxA("scaphang",{tempo:[.9,.6,1.3,.5],hseg:undefined,ph:["Schultern runter","Lösen"]}),
@@ -5770,10 +5871,10 @@ function splashRun(){const sp=document.getElementById("splash");if(!sp)return;le
     const mk=(tag,at,par)=>{const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(at))e.setAttribute(k,v);if(par)par.appendChild(e);return e};
     const defs=svg.querySelector("defs")||mk("defs",{},svg);
     const g=mk("linearGradient",{id:"splSG",x1:"0",y1:"0",x2:"1",y2:"0"},defs);for(const[o,c,a]of[[0,"#fff",0],[.5,"#fffdf0",.95],[1,"#fff",0]])mk("stop",{offset:o,"stop-color":c,"stop-opacity":a},g);
-    const cp=mk("clipPath",{id:"splSC"},defs);for(const[cx,rx,ry]of[[26.1,4.3,10.8],[21.1,2.9,7.2],[81.9,4.3,10.8],[86.9,2.9,7.2]])mk("ellipse",{cx,cy:45.7,rx,ry},cp);
+    const cp=mk("clipPath",{id:"splSC"},defs);for(const[cx,rx,ry]of[[26.1,4.3,10.8],[23.5,2.9,7.2],[81.9,4.3,10.8],[84.5,2.9,7.2]])/* 3.8: äußere Scheiben 2,4 nach innen (Safe-Zone) */mk("ellipse",{cx,cy:45.7,rx,ry},cp);
     const cg=mk("g",{"clip-path":"url(#splSC)"},pl);const sk=mk("g",{transform:"skewX(-22)"},cg);
-    mk("rect",{class:"splSweep",x:"19",y:"30",width:"7",height:"32",fill:"url(#splSG)"},sk);
-    for(const[x,y,c]of[[24.4,36.2,""],[83.4,37.4," s2"]])mk("path",{class:"splStar"+c,fill:"#fffbe6",d:`M${x} ${y-2.6}l.7 1.9 1.9.7-1.9.7-.7 1.9-.7-1.9-1.9-.7 1.9-.7z`},pl)}
+    mk("rect",{class:"splSweep",x:"21",y:"30",width:"7",height:"32",fill:"url(#splSG)"},sk);
+    for(const[x,y,c]of[[25.2,36.4,""],[82.8,37.4," s2"]])mk("path",{class:"splStar"+c,fill:"#fffbe6",d:`M${x} ${y-3.2}l.85 2.35 2.35.85-2.35.85-.85 2.35-.85-2.35-2.35-.85 2.35-.85z`},pl)}
   let gone=false;const hide=ms=>{if(gone)return;gone=true;sp.classList.add("out");setTimeout(done,ms)};
   sp.classList.add(red?"still":"run");const t=setTimeout(()=>hide(red?0:240),red?280:860);
   sp.addEventListener("pointerdown",e=>{e.preventDefault();clearTimeout(t);hide(red?0:130)},{once:true})}
