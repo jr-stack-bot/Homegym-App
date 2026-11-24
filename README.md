@@ -1,4 +1,4 @@
-# Homegym – dein persönlicher Trainingscoach
+# <img src="docs/icon.png" width="48" align="absmiddle"> Homegym – dein persönlicher Trainingscoach
 
 ## Download
 
@@ -32,6 +32,10 @@ Android-App für Krafttraining zu Hause: geführte Trainings mit animierten Übu
 - **Offline, keine Anmeldung**: alle Daten bleiben auf dem Handy. Beim ersten Start fragt ein kurzes Onboarding Name, Gewicht, Trainingstage und Geräte ab.
 
 ## Screenshots
+| App-Icon |
+|---|
+| <img src="docs/icon_vorschau.png" width="200" alt="Neues App-Icon: Mann mit Langhantel im Power Rack auf dunklem, abgerundetem Hintergrund"> |
+
 | Start | Training | Pause | Übungen |
 |---|---|---|---|
 | <img src="docs/screenshots/01_start.png" width="200" alt="Startseite"> | <img src="docs/screenshots/02_training.png" width="200" alt="Übung im Training"> | <img src="docs/screenshots/03_pause.png" width="200" alt="Pausen-Timer"> | <img src="docs/screenshots/04_uebungen.png" width="200" alt="Übungsbibliothek"> |
