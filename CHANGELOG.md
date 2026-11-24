@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.9
+- **Start-Animation im Gym-Raum** (ca. 1,5 s): schwarzer Gummiboden aus Platten, Betonwand mit Schalungsfugen, warmer Spot von oben mit sichtbarem Lichtkegel. In der Mitte das rote Rack mit Figur und Langhantel wie bisher; links die Hantelablage mit 2 Etagen und Joschys Kurzhanteln Gummi PRO (2,5–20 kg) und davor schräg die Hantelbank; rechts der Scheibenständer mit Bumper Plates (Farben wie in den Übungen) und dahinter der Boxsack; ganz hinten im Halbdunkel Laufband und Crosstrainer.
+- Ablauf: dunkel → Spot flackert an (Chromgriffe glänzen, Boxsack pendelt) → Dip und Stange hoch → Scheiben blitzen golden, Kreidestaub im Licht, Schriftzug „HOMEGYM“ → App. Tippen überspringt, bei „Bewegung reduzieren“ nur kurz das stehende Bild (ohne Flackern und Partikel).
+- Nur SVG/CSS, die Geräte zeichnen dieselben Funktionen wie die Übungs-Animationen; App und Icon unverändert.
+- Neuer Test t39 (Raum, Dauer ≤ 1,7 s, Tippen, reduzierte Bewegung).
+
 ## 3.8
 - **Kurzhanteln wie Joschys Set Gummi PRO**: runde schwarze Gummiköpfe, Chrom-Griff mit Rändel, Chrom-Ring und rot-schwarze Gewichtsplakette mit der Zahl. Jedes Gewicht von 2,5 bis 20 kg hat seine eigene Größe nach Herstellermaßen; die Animation zeigt das Gewicht des aktuellen Satzes (sonst zuletzt benutzt, sonst 10 kg).
 - **Langhantel**: die beiden Olympia-Stangen (20 kg) in **Silber oder Gold** mit dicken Hülsen. Wahl unter Einstellungen › Langhantel: Silber, Gold oder **Abwechselnd pro Training** (Standard, innerhalb einer Einheit gleich).

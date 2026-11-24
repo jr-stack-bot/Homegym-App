@@ -323,22 +323,43 @@ input[type=date]{background:rgba(var(--ac),.05);color:var(--fg);border:1px solid
 .seg button{min-width:0;overflow-wrap:anywhere}
 .row:has(>#bwSave){flex-wrap:wrap}#bwSave{flex:1 1 auto}
 @media (max-width:380px){.stage .phase{font-size:13.5px;letter-spacing:.17em}}
-/* 3.7 (@ Joschy): Start-Animation mit dem App-Icon (ca. 1 s, Tippen überspringt) und Gold-Glanz im Kopf nach einem Training */
-#splash{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:radial-gradient(circle at 50% 46%,#3d424b 0,#1c1f24 52%,#0b0c0f 100%);transition:opacity .22s ease;touch-action:none;cursor:pointer}
-#splash.out{opacity:0;pointer-events:none}
-#splash .spl-in{width:min(70vw,58vh,360px);aspect-ratio:1}
-#splash svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 12px 28px rgba(0,0,0,.55))}
+/* 3.7 (@ Joschy): Start-Animation mit dem App-Icon (Tippen überspringt) und Gold-Glanz im Kopf nach einem Training.
+   3.9 (@ Joschy): die Start-Animation spielt in Joschys Gym-Raum (Betonwand, Gummiboden, Spot von oben, Geräte gestaffelt), ca. 1,5 s:
+   dunkel -> Spot flackert an (Chromgriffe glänzen, Boxsack pendelt) -> Dip + Stange hoch -> Scheiben blitzen, Kreidestaub, Schriftzug -> App */
+#splash{position:fixed;inset:0;z-index:9999;background:#050607;touch-action:none;cursor:pointer;overflow:hidden}
+#splash .spl-in{position:absolute;inset:0;opacity:0}
+#splash .splRoom{position:absolute;inset:0;width:100%;height:100%;display:block}
+#splash .splRoom svg{overflow:visible}
 #splash #hgBack{display:none}
-#splash.run .spl-in{animation:splIn .2s ease-out both}
-#splash.run #hgLegs{transform-box:fill-box;transform-origin:50% 100%;animation:splLegs .64s .14s cubic-bezier(.45,0,.3,1) both}
-#splash.run #hgUpper{animation:splUp .64s .14s cubic-bezier(.45,0,.3,1) both}
+#splash.run{animation:splOut .18s 1.32s ease-in both}
+#splash.still{animation:splOut .16s .44s ease-in both}
+#splash.out{animation:splSkip .13s ease-in both;pointer-events:none}
+#splash .splDark{opacity:0}
+#splash.run .splDark{animation:splFlick .4s .1s linear both}
+#splash .splBag{transform-box:view-box}
+#splash.run .splBag{animation:splBag 1.15s .3s ease-in-out both}
+#splash .splGl{opacity:0}
+#splash.run .splGl{animation:splGl .36s ease-out both}
+#splash .splDust{opacity:0}
+#splash.run .splDust{animation:splDust .4s ease-out both}
+#splash .splTxt{opacity:0;transform-box:fill-box;transform-origin:50% 50%}
+#splash.run .splTxt{animation:splTxt .32s 1s ease-out both}
+#splash.still .splTxt{opacity:1}
+#splash.run #hgLegs{transform-box:fill-box;transform-origin:50% 100%;animation:splLegs .64s .55s cubic-bezier(.45,0,.3,1) both}
+#splash.run #hgUpper{animation:splUp .64s .55s cubic-bezier(.45,0,.3,1) both}
 #splash .splSweep{opacity:0}
-#splash.run .splSweep{animation:splSweep .6s .4s cubic-bezier(.45,0,.25,1) both}
+#splash.run .splSweep{animation:splSweep .5s .92s cubic-bezier(.45,0,.25,1) both}
 #splash .splStar{opacity:0;transform-box:fill-box;transform-origin:50% 50%;filter:drop-shadow(0 0 1.2px #fffbe6) drop-shadow(0 0 2.6px #ffd54a)}
-#splash.run .splStar{animation:splStar .5s .5s ease-out both}
-/* 3.8: zweiter Stern früher, damit er vor dem Ausblenden (ab 0,86 s) sichtbar ist */
-#splash.run .splStar.s2{animation-delay:.58s}
-@keyframes splIn{from{transform:scale(.84);opacity:0}to{transform:none;opacity:1}}
+#splash.run .splStar{animation:splStar .45s .98s ease-out both}
+/* 3.8: zweiter Stern etwas später; 3.9: beide vor dem Ausblenden (ab 1,32 s) */
+#splash.run .splStar.s2{animation-delay:1.04s}
+@keyframes splOut{to{opacity:0}}
+@keyframes splSkip{from{opacity:1}to{opacity:0}}
+@keyframes splFlick{0%{opacity:1}14%{opacity:.35}22%{opacity:.92}36%{opacity:.18}46%{opacity:.7}60%{opacity:.04}70%{opacity:.28}100%{opacity:0}}
+@keyframes splBag{0%{transform:none}25%{transform:rotate(1.3deg)}55%{transform:rotate(-.9deg)}80%{transform:rotate(.45deg)}100%{transform:none}}
+@keyframes splGl{0%{opacity:0;transform:translateX(-2px)}40%{opacity:1}100%{opacity:0;transform:translateX(3px)}}
+@keyframes splDust{0%{opacity:0;transform:none}25%{opacity:var(--o,.8)}100%{opacity:0;transform:translate(var(--dx,0),var(--dy,-60px))}}
+@keyframes splTxt{from{opacity:0;transform:translateY(6px) scale(.96)}to{opacity:1;transform:none}}
 @keyframes splLegs{0%{transform:none}42%{transform:scale(1.12,.6)}100%{transform:none}}
 @keyframes splUp{0%{transform:none}42%{transform:translateY(5.6px)}78%{transform:translateY(-1.6px)}100%{transform:none}}
 @keyframes splSweep{0%{transform:translateX(0);opacity:0}12%{opacity:1}88%{opacity:1}100%{transform:translateX(100px);opacity:0}}
@@ -3112,7 +3133,7 @@ const MOTION={
 };
 for(const k in MOTION){const d=AN[k];if(!d)continue;const m=MOTION[k];for(const f in m){if(f==="A"||f==="B")Object.assign(d[f],m[f]);else d[f]=m[f]}}
 /* ================= 2.1 · HALTE-ÜBUNGEN · KETTLEBELL · GERÄTE-GEWICHTE · BACKUP (@ Joschy) ================= */
-const APP_VER="3.8",BK_VER=5;/* 3.0–3.4 keep backup format 5: all new fields are optional, older apps simply ignore them */
+const APP_VER="3.9",BK_VER=5;/* 3.0–3.4 keep backup format 5: all new fields are optional, older apps simply ignore them */
 /* ---- hold / tempo variants (strength stays the focus: they are alternatives, never forced) ---- */
 Object.assign(EX,{
   pushpause:{n:"Liegestütze mit Halt in der Mitte",eq:"Matte · Griffe optional",m:"Brust · Trizeps · Schultern",type:"bw",rest:90,inc:0,hold:3,holdAt:"auf halber Höhe",base:"pushup",
@@ -5864,18 +5885,155 @@ document.addEventListener("visibilitychange",()=>{if(!document.hidden)fxKick()})
 FX_REDUCE.addEventListener&&FX_REDUCE.addEventListener("change",()=>{if(!FX_REDUCE.matches)fxKick()});
 /* overlays (training, rest, yoga) pause the effect; restart it when they close */
 new MutationObserver(()=>{FX.hd=true;fxKick()}).observe(document.body,{subtree:true,attributes:true,attributeFilter:["hidden","class"]});
-/* 3.7 (@ Joschy): Start-Animation. Liegt nur über der schon fertig aufgebauten App (kein Warten beim Start): Icon-Motiv groß in der
-   Mitte, die Figur geht in die Hocke und drückt die Stange hoch, die goldenen Scheiben blitzen, dann blendet die App ein (ca. 1 s).
-   Tippen überspringt; prefers-reduced-motion: nur kurz das stehende Bild. Einmal pro App-Start (nicht nach einem Neuladen, z. B.
-   Backup). Tests überspringen sie mit ?nosplash in der Adresse oder window.__hgNoSplash. */
+/* 3.7 (@ Joschy): Start-Animation. Liegt nur über der schon fertig aufgebauten App (kein Warten beim Start). Tippen überspringt;
+   prefers-reduced-motion: nur kurz das stehende, beleuchtete Bild. Einmal pro App-Start (nicht nach einem Neuladen, z. B. Backup).
+   Tests überspringen sie mit ?nosplash in der Adresse oder window.__hgNoSplash.
+   3.9 (@ Joschy): das Icon-Motiv (rotes Rack, Figur, Langhantel – unverändert) steht jetzt in Joschys Gym-Raum. Alles nur SVG/CSS,
+   die Kurzhanteln und Bumper Plates zeichnen dieselben Funktionen wie in den Übungen (eqKit: rubberHead, plateStack, plateHex) auf ein
+   kleines Canvas, das als Bild in die Szene kommt. Raum in Perspektive (Augenhöhe 1,3 m, Rack 3 m entfernt), je weiter hinten, desto dunkler. */
+const SPL_T=1500;/* 3.9: Gesamtdauer der Start-Animation in ms (Ausblenden ab 1,32 s) */
+function splashRoom(sp,red){const NS="http://www.w3.org/2000/svg";const ic=sp.querySelector(".spl-in svg");if(!ic)return null;
+  const mk=(tag,at,par)=>{const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(at))e.setAttribute(k,v);if(par)par.appendChild(e);return e};
+  const F=346,EH=1.3,VY=-150,P=(X,Y,Z)=>[F*X/Z,VY+F*(EH-Y)/Z],K=Z=>F/Z,r1=v=>Math.round(v*10)/10,pt=a=>a.map(p=>r1(p[0])+","+r1(p[1])).join(" ");
+  let seed=11;const rnd=()=>(seed=seed*16807%2147483647)/2147483647;
+  const svg=mk("svg",{class:"splRoom",viewBox:"-172 -330 344 480",preserveAspectRatio:"xMidYMid meet"});
+  const defs=mk("defs",{},svg);
+  const grad=(type,id,at,stops)=>{const g=mk(type,Object.assign({id},at),defs);for(const[o,c,a]of stops)mk("stop",{offset:o,"stop-color":c,"stop-opacity":a==null?1:a},g);return g};
+  grad("linearGradient","splWall",{gradientUnits:"userSpaceOnUse",x1:0,y1:-460,x2:0,y2:-52},[[0,"#0c0d0f"],[.55,"#2e3136"],[1,"#24262a"]]);
+  grad("linearGradient","splFloor",{x1:0,y1:0,x2:0,y2:1,gradientUnits:"userSpaceOnUse",y1:-52,y2:330},[[0,"#17181b"],[.35,"#0e0f11"],[1,"#050506"]]);
+  grad("radialGradient","splWarm",{},[[0,"#ffd49a",.30],[.45,"#ffc07a",.12],[1,"#ffb060",0]]);
+  grad("radialGradient","splPool",{},[[0,"#ffe0ad",.42],[.5,"#ffc98a",.16],[1,"#ffb870",0]]);
+  grad("linearGradient","splCone",{x1:0,y1:0,x2:0,y2:1},[[0,"#ffe6bd",.34],[.45,"#ffd59c",.13],[1,"#ffc98a",.05]]);
+  grad("radialGradient","splMk",{},[[0,"#000",1],[1,"#000",0]]);grad("radialGradient","splMw",{},[[0,"#fff",1],[1,"#fff",0]]);
+  grad("radialGradient","splBulb",{},[[0,"#fffaf0",1],[.25,"#ffe7b8",.75],[1,"#ffc97a",0]]);
+  grad("radialGradient","splVig",{gradientUnits:"userSpaceOnUse",cx:0,cy:-95,r:440},[[0,"#000",0],[.42,"#000",0],[.78,"#000",.55],[1,"#000",.88]]);
+  grad("linearGradient","splBagG",{x1:0,y1:0,x2:1,y2:0},[[0,"#3d2a22"],[.35,"#2a1c17"],[1,"#0d0908"]]);
+  grad("linearGradient","splPad",{x1:0,y1:0,x2:0,y2:1},[[0,"#2b3036"],[.5,"#15181b"],[1,"#08090a"]]);
+  mk("filter",{id:"splBlur",x:"-30%",y:"-10%",width:"160%",height:"120%"},defs).appendChild(mk("feGaussianBlur",{stdDeviation:"5"}));
+  const g0=mk("g",{},svg);
+  /* Betonwand (Wandfuß 4,6 m entfernt) mit Schalungsfugen, Ankerlöchern und dezenter Fleckung */
+  const ZW=4.6,yW=P(0,0,ZW)[1];
+  mk("rect",{x:-3000,y:-3000,width:6000,height:3000+yW,fill:"url(#splWall)"},g0);
+  for(let i=0;i<90;i++){const x=(rnd()-.5)*620,y=-470+rnd()*(yW+450),w=6+rnd()*30;mk("ellipse",{cx:r1(x),cy:r1(y),rx:r1(w),ry:r1(w*(.4+rnd()*.5)),fill:rnd()<.6?"url(#splMk)":"url(#splMw)",opacity:((.05+rnd()*.09)).toFixed(2)},g0)}
+  const jn=mk("g",{stroke:"#000","stroke-width":".7",opacity:".42"},g0),jl=mk("g",{stroke:"#fff","stroke-width":".5",opacity:".05"},g0);
+  for(const Y of[1.25,2.5,3.75,5]){const y=P(0,Y,ZW)[1];mk("line",{x1:-3000,y1:r1(y),x2:3000,y2:r1(y)},jn);mk("line",{x1:-3000,y1:r1(y+.8),x2:3000,y2:r1(y+.8)},jl)}
+  for(let k=-5;k<=5;k++){const X=1.25+k*2.5,x=P(X,0,ZW)[0];mk("line",{x1:r1(x),y1:-3000,x2:r1(x),y2:r1(yW)},jn);mk("line",{x1:r1(x+.8),y1:-3000,x2:r1(x+.8),y2:r1(yW)},jl)}
+  const th=mk("g",{},g0);for(let k=-6;k<=6;k++)for(const Y of[.3125,.9375,1.5625,2.1875,2.8125,3.4375,4.0625]){const[x,y]=P(k*1.25,Y,ZW);mk("circle",{cx:r1(x),cy:r1(y),r:1.3,fill:"#0b0c0e",opacity:".8"},th);mk("path",{d:`M${r1(x-1.2)} ${r1(y+.6)}a1.3 1.3 0 0 0 2.4 0`,stroke:"#fff","stroke-width":".4",fill:"none",opacity:".09"},th)}
+  /* Gummiboden aus Platten (0,5 m) mit feinen Fugen */
+  mk("rect",{x:-3000,y:r1(yW),width:6000,height:3000,fill:"url(#splFloor)"},g0);
+  mk("rect",{x:-3000,y:r1(yW-5),width:6000,height:12,fill:"#000",opacity:".35",filter:"url(#splBlur)"},g0);
+  const fj=mk("g",{stroke:"#000","stroke-width":".8",opacity:".85"},g0),fh=mk("g",{stroke:"#fff","stroke-width":".45",opacity:".035"},g0);
+  for(let Z=ZW-.5;Z>.75;Z-=.5){const y=P(0,0,Z)[1];mk("line",{x1:-3000,y1:r1(y),x2:3000,y2:r1(y)},fj);mk("line",{x1:-3000,y1:r1(y+.9),x2:3000,y2:r1(y+.9)},fh)}
+  for(let k=-24;k<=24;k++){const a=P(k*.5,0,ZW),b=P(k*.5,0,.75);mk("line",{x1:r1(a[0]),y1:r1(a[1]),x2:r1(b[0]),y2:r1(b[1])},fj);mk("line",{x1:r1(a[0]+.9),y1:r1(a[1]),x2:r1(b[0]+.9),y2:r1(b[1])},fh)}
+  /* Licht auf Wand und Boden (warm, vom Spot) */
+  mk("ellipse",{cx:0,cy:-178,rx:215,ry:205,fill:"url(#splWarm)"},g0);
+  mk("ellipse",{cx:0,cy:6,rx:190,ry:44,fill:"url(#splPool)"},g0);
+  /* ganz hinten im Halbdunkel: Laufband (links) und Crosstrainer (rechts) als dunkle Umrisse */
+  const bk=mk("g",{opacity:".7",fill:"#0c0d0f",stroke:"#0c0d0f","stroke-linecap":"round","stroke-linejoin":"round"},g0),rim=mk("g",{fill:"none",stroke:"#ffd9a8",opacity:".13","stroke-width":".7","stroke-linecap":"round"},g0);
+  {const Z=4.4,A=(X,Y)=>P(X,Y,Z),k=K(Z)/100,ln=(pts,w,par=bk)=>mk("path",{d:"M"+pt(pts).replace(/ /g,"L"),"stroke-width":w,fill:"none"},par);
+    /* Laufband: Konsole links, Lauffläche nach rechts */
+    mk("polygon",{points:pt([A(-1.98,.3),A(-1.72,.3),A(-1.62,.2),A(-.62,.16),A(-.56,.06),A(-.64,0),A(-2.0,0)]),"stroke-width":"1"},bk);
+    ln([A(-1.8,.28),A(-1.86,.7),A(-1.9,1.16)],r1(3.4*k*1.2));ln([A(-1.7,.26),A(-1.78,1.12)],r1(2.6*k*1.2));
+    ln([A(-1.88,1.02),A(-1.2,1.0),A(-1.12,.9)],r1(2.4*k*1.2));ln([A(-1.8,.96),A(-1.28,.95)],r1(1.8*k*1.2));
+    mk("polygon",{points:pt([A(-2.1,1.16),A(-1.86,1.38),A(-1.6,1.33),A(-1.66,1.24),A(-1.96,1.07)]),"stroke-width":"1.2"},bk);
+    ln([A(-1.62,.2),A(-.62,.16)],".7",rim);ln([A(-1.78,1.36),A(-1.64,1.29)],".7",rim);ln([A(-1.88,1.02),A(-1.2,1.0)],".7",rim);
+    /* Crosstrainer: Schwungradhaube rechts, Pedalarme, zwei lange Griffe */
+    mk("path",{d:`M${pt([A(2.18,.04)])}L${pt([A(2.2,.38)])}Q${pt([A(2.18,.62)])} ${pt([A(1.92,.6)])}L${pt([A(1.84,.36)])}L${pt([A(1.9,.04)])}Z`,"stroke-width":"1"},bk);
+    ln([A(1.02,.05),A(2.2,.05)],"3.2");ln([A(2.0,.55),A(1.9,1.2)],"3.2");
+    mk("rect",{x:r1(A(1.86,1.34)[0]),y:r1(A(1.86,1.34)[1]),width:8,height:5.5,rx:1.5},bk);
+    ln([A(1.95,.32),A(1.2,.24)],"2.4");ln([A(1.62,1.78),A(1.93,.68),A(1.3,.3)],"2.2");ln([A(1.74,1.72),A(1.97,.74)],"1.8");
+    mk("rect",{x:r1(A(1.3,.3)[0]-6),y:r1(A(1.3,.3)[1]-1.5),width:11,height:3,rx:1},bk);
+    ln([A(1.62,1.78),A(1.93,.68)],".7",rim);ln([A(1.92,.6),A(2.18,.62)],".7",rim);ln([A(1.9,1.2),A(2.0,.55)],".6",rim)}
+  /* Boxsack hinter dem Scheibenständer, pendelt leicht */
+  let bag;{const Z=4.05,k=K(Z),X=1.6,[bx,by]=P(X,1.52,Z),[,bb]=P(X,.55,Z),w=.18*k,top=P(X,3.4,Z)[1];
+    bag=mk("g",{class:"splBag",style:`transform-origin:${r1(bx)}px ${r1(top)}px`},g0);
+    mk("path",{d:`M${r1(bx)} ${r1(top)}V${r1(by-12)}M${r1(bx)} ${r1(by-12)}L${r1(bx-w*.9)} ${r1(by+1)}M${r1(bx)} ${r1(by-12)}L${r1(bx+w*.9)} ${r1(by+1)}M${r1(bx)} ${r1(by-12)}L${r1(bx-w*.3)} ${r1(by+1)}M${r1(bx)} ${r1(by-12)}L${r1(bx+w*.3)} ${r1(by+1)}`,stroke:"#3a3e44","stroke-width":".7",fill:"none"},bag);
+    mk("circle",{cx:r1(bx),cy:r1(by-12),r:1.4,fill:"none",stroke:"#5a6068","stroke-width":".7"},bag);
+    mk("rect",{x:r1(bx-w),y:r1(by),width:r1(2*w),height:r1(bb-by),rx:r1(w*.45),fill:"url(#splBagG)"},bag);
+    mk("ellipse",{cx:r1(bx),cy:r1(by+2),rx:r1(w*.97),ry:2.4,fill:"#1a110e"},bag);
+    for(const f of[.3,.72])mk("rect",{x:r1(bx-w),y:r1(by+(bb-by)*f),width:r1(2*w),height:1.6,fill:"#120c0a",opacity:".8"},bag);
+    mk("path",{d:`M${r1(bx-w+2)} ${r1(by+5)}V${r1(bb-6)}`,stroke:"#ffcf9a","stroke-width":"1.1",opacity:".22","stroke-linecap":"round"},bag);
+    mk("ellipse",{cx:r1(bx),cy:r1(P(X,0,Z)[1]),rx:r1(w*1.2),ry:2.6,fill:"#000",opacity:".35"},g0)}
+  /* Geräte aus den Übungen (eqKit) auf ein Canvas, als Bild in die Szene. dark: abdunkeln (weiter hinten), rimX: warme Kante zur Mitte */
+  const px=Math.min(4,Math.max(1,Math.min(innerWidth/344,innerHeight/480))*(window.devicePixelRatio||1)),urls=[];
+  const cnv=(x0,y0,w,h,draw,dark,rimX)=>{const c=document.createElement("canvas");c.width=Math.ceil(w*px);c.height=Math.ceil(h*px);const x=c.getContext("2d");if(!x)return;
+    x.setTransform(px,0,0,px,-x0*px,-y0*px);try{draw(x)}catch(e){return}
+    x.globalCompositeOperation="source-atop";x.fillStyle=`rgba(5,6,8,${dark})`;x.fillRect(x0,y0,w,h);
+    const lg=x.createLinearGradient(rimX,0,rimX+(rimX<0?-60:60),0);lg.addColorStop(0,"rgba(255,206,150,.16)");lg.addColorStop(1,"rgba(255,206,150,0)");x.fillStyle=lg;x.fillRect(x0,y0,w,h);
+    const im=mk("image",{x:r1(x0),y:r1(y0),width:r1(w),height:r1(h),preserveAspectRatio:"none"},g0);
+    const set=u=>im.setAttribute("href",u);if(c.toBlob&&window.URL&&URL.createObjectURL)c.toBlob(b=>{if(b){const u=URL.createObjectURL(b);urls.push(u);set(u)}else set(c.toDataURL())});else set(c.toDataURL())};
+  /* rechts: Scheibenständer mit Bumper Plates (Farben wie in den Übungen, plateHex) */
+  {const Z=3.5,s=K(Z)/100,X=1.18,[cx,fy]=P(X,0,Z),ty=P(X,1.08,Z)[1];
+    cnv(cx-60,ty-8,120,fy-ty+16,x=>{const kit=eqKit(x,s,false);
+      x.fillStyle="#111316";x.beginPath();x.ellipse(cx,fy+1,30*s,5*s,0,0,7);x.fill();
+      const pg=x.createLinearGradient(cx-2.5*s,0,cx+2.5*s,0);pg.addColorStop(0,"#1b1e22");pg.addColorStop(.4,"#4a5058");pg.addColorStop(1,"#111316");
+      x.fillStyle=pg;x.fillRect(cx-2.2*s*1.2,ty,4.4*s*1.2,fy-ty);x.fillStyle="#2a2e33";x.fillRect(cx-3.2*s,ty-1.5*s,6.4*s,2.4*s);
+      for(const[Y,L,R]of[[.27,[25,25],[20,20]],[.76,[15,10],[10,5]]]){const y=P(X,Y,Z)[1];
+        kit.plateStack([cx-3*s,y],22.5,L,[-1,0],0,false);kit.plateStack([cx+3*s,y],22.5,R,[1,0],0,false)}},.48,cx-60)}
+  /* links: Hantelablage mit 2 Etagen und Joschys Kurzhanteln Gummi PRO 2,5–20 kg (wie in den Übungen: rubberHead, Chromgriff) */
+  const gl=[];{const Z=3.55,s=K(Z)/100,XL=-1.62,XR=-.78,[xl,fy]=P(XL,0,Z),[xr]=P(XR,0,Z),dd=CAM,dep=16*s;
+    const tiers=[[.22,[12.5,15,17.5,20]],[.56,[2.5,5,7.5,10]]],ty=P(XL,.84,Z)[1];
+    cnv(xl-14,ty-8,xr-xl+40,fy-ty+16,x=>{const sd=s*1.2,kit=eqKit(x,sd,false);/* Hanteln etwas größer als maßstäblich, damit sie lesbar bleiben */
+      const steel=(a,b,w)=>{x.strokeStyle="#16181b";x.lineWidth=w;x.lineCap="round";x.beginPath();x.moveTo(a[0],a[1]);x.lineTo(b[0],b[1]);x.stroke();
+        x.strokeStyle="rgba(190,200,210,.18)";x.lineWidth=w*.25;x.beginPath();x.moveTo(a[0],a[1]-w*.25);x.lineTo(b[0],b[1]-w*.25);x.stroke()};
+      const bx=-dd[0]*dep,by=-dd[1]*dep;
+      x.fillStyle="rgba(0,0,0,.45)";x.beginPath();x.ellipse((xl+xr)/2+bx/2,fy+by/2+2,(xr-xl)/2+14,7,0,0,7);x.fill();
+      for(const xx of[xl,xr]){steel([xx+bx,fy+by],[xx+bx,ty+by],3.2);}
+      for(const[Y]of tiers){const y=P(XL,Y,Z)[1];steel([xl+bx,y+by],[xr+bx,y+by],2.4)}
+      for(const[Y,list]of tiers){const y=P(XL,Y,Z)[1];const n=list.length,step=(xr-xl-10)/n;
+        list.forEach((kg,i)=>{const D=dbDims(kg);const hx=xl+8+step*(i+.5)+bx*.5,hy=y+by*.5-D.rr*sd*.62;kit.dumbbell([hx,hy],false,dd,undefined,kg);
+          gl.push([hx,hy,D.rr*sd,D.off*sd,D.th*sd])})}
+      for(const[Y]of tiers){const y=P(XL,Y,Z)[1];steel([xl,y],[xr,y],2.6)}
+      for(const xx of[xl,xr]){steel([xx,fy],[xx,ty],3.4);steel([xx,ty],[xx+bx,ty+by],2.4);steel([xx-6,fy],[xx+bx+5,fy+by],2.8)}},.32,xr+20)}
+  /* Glanz auf den Chromgriffen, wenn der Spot angeht */
+  const gG=mk("g",{stroke:"#fffdf5","stroke-linecap":"round",fill:"none"},g0);
+  gl.forEach((q,i)=>{const[hx,hy,rr,off,thk]=q,d=CAM,u=[-d[1],d[0]],L=(off-thk*.5)*.75,o=-rr*.0-1;
+    const a=[hx-d[0]*L+u[0]*o,hy-d[1]*L+u[1]*o],b=[hx+d[0]*L+u[0]*o,hy+d[1]*L+u[1]*o];
+    const g=mk("g",{class:"splGl",style:`animation-delay:${(.4+i*.035).toFixed(3)}s`},gG);
+    mk("line",{x1:r1(a[0]),y1:r1(a[1]),x2:r1(b[0]),y2:r1(b[1]),"stroke-width":"2.6",opacity:".28"},g);
+    mk("line",{x1:r1(a[0]),y1:r1(a[1]),x2:r1(b[0]),y2:r1(b[1]),"stroke-width":".9"},g)});
+  /* Hantelbank schräg vor der Ablage */
+  {const b0=[-1.1,2.62],b1=[-.53,2.16],ax=[b1[0]-b0[0],b1[1]-b0[1]],al=Math.hypot(ax[0],ax[1]),n=[-ax[1]/al*.14,ax[0]/al*.14],bn=mk("g",{},g0);
+    const Q=(t,w,Y)=>P(b0[0]+ax[0]*t+n[0]*w,Y,b0[1]+ax[1]*t+n[1]*w),poly=(a,f,o)=>mk("polygon",Object.assign({points:pt(a),fill:f},o||{}),bn);
+    poly([Q(-.08,-1.6,0),Q(1.08,-1.6,0),Q(1.08,1.6,0),Q(-.08,1.6,0)],"#000",{opacity:".45",filter:"url(#splBlur)"});
+    for(const t of[.14,.86]){const a=Q(t,0,.37),b=Q(t,0,.02);mk("path",{d:`M${pt([a])}L${pt([b])}`,stroke:"#1c1f23","stroke-width":r1(.05*K(b0[1]+ax[1]*t)),"stroke-linecap":"round"},bn);
+      const f0=Q(t,-1.5,.02),f1=Q(t,1.5,.02);mk("path",{d:`M${pt([f0])}L${pt([f1])}`,stroke:"#15171a","stroke-width":r1(.045*K(b0[1]+ax[1]*t)),"stroke-linecap":"round"},bn);
+      mk("path",{d:`M${pt([a])}L${pt([b])}`,stroke:"#ffd2a0","stroke-width":".5",opacity:".18"},bn)}
+    mk("path",{d:`M${pt([Q(.14,0,.33)])}L${pt([Q(.86,0,.33)])}`,stroke:"#1c1f23","stroke-width":"3"},bn);
+    poly([Q(0,-1,.455),Q(1,-1,.455),Q(1,-1,.375),Q(0,-1,.375)],"#0b0c0e");
+    poly([Q(1,-1,.455),Q(1,1,.455),Q(1,1,.375),Q(1,-1,.375)],"#121417");
+    poly([Q(0,-1,.455),Q(1,-1,.455),Q(1,1,.455),Q(0,1,.455)],"url(#splPad)");
+    mk("path",{d:`M${pt([Q(.02,-.82,.456)])}L${pt([Q(.98,-.82,.456)])}`,stroke:"#c41a20","stroke-width":".6",opacity:".75","stroke-dasharray":"1.4 1.1"},bn);
+    mk("path",{d:`M${pt([Q(0,1,.456)])}L${pt([Q(1,1,.456)])}`,stroke:"#ffd8a8","stroke-width":".7",opacity:".25"},bn)}
+  /* Mitte: das Icon-Motiv (Rack, Figur, Langhantel) unverändert; Boden des Icons auf dem Boden der Szene */
+  const KI=2.9;for(const[k,v]of Object.entries({x:r1(-54*KI),y:r1(-81.5*KI),width:r1(108*KI),height:r1(108*KI)}))ic.setAttribute(k,v);
+  g0.appendChild(ic);
+  /* Spot von oben mit sichtbarem Lichtkegel */
+  const ly=P(0,2.75,3)[1],lamp=mk("g",{},g0);
+  mk("path",{d:`M-13 ${r1(ly+15)}L13 ${r1(ly+15)}L168 8Q0 44-168 8Z`,fill:"url(#splCone)",filter:"url(#splBlur)",opacity:".9"},lamp);
+  mk("path",{d:`M-8 ${r1(ly+15)}L8 ${r1(ly+15)}L92 4Q0 22-92 4Z`,fill:"#ffe9c4",opacity:".06",filter:"url(#splBlur)"},lamp);
+  mk("path",{d:`M0 -3000V${r1(ly-6)}`,stroke:"#0a0b0c","stroke-width":"1.2"},lamp);
+  mk("path",{d:`M-5 ${r1(ly-6)}H5L14 ${r1(ly+14)}H-14Z`,fill:"#141619",stroke:"#2c3036","stroke-width":".6"},lamp);
+  mk("path",{d:`M-4 ${r1(ly-5)}L-12.5 ${r1(ly+13)}`,stroke:"#ffd9a8","stroke-width":".6",opacity:".35"},lamp);
+  mk("ellipse",{cx:0,cy:r1(ly+15),rx:36,ry:22,fill:"url(#splBulb)",opacity:".55"},lamp);
+  mk("ellipse",{cx:0,cy:r1(ly+14.6),rx:12.5,ry:2.6,fill:"#fff6dc"},lamp);
+  /* Kreidestaub im Lichtkegel */
+  if(!red)for(let i=0;i<14;i++){const x=(rnd()-.5)*120,y=-18-rnd()*70,r=.6+rnd()*1.1;
+    mk("circle",{class:"splDust",cx:r1(x),cy:r1(y),r:r1(r),fill:"#fff4dc",style:`animation-delay:${(.88+rnd()*.2).toFixed(2)}s;--dx:${r1((rnd()-.5)*24)}px;--dy:${r1(-38-rnd()*60)}px;--o:${(.45+rnd()*.5).toFixed(2)}`},g0)}
+  mk("rect",{x:-3000,y:-3000,width:6000,height:6000,fill:"url(#splVig)"},g0);
+  mk("rect",{class:"splDark",x:-3000,y:-3000,width:6000,height:6000,fill:"#000"},g0);
+  /* kleiner goldener Schriftzug */
+  const tx=mk("text",{class:"splTxt",x:0,y:112,"text-anchor":"middle",fill:"url(#hgGoldBar)","font-family":"Orbitron,Rajdhani,sans-serif","font-weight":"700","font-size":"17","letter-spacing":"6.5",style:"filter:drop-shadow(0 0 4px rgba(255,200,90,.45))"},svg);tx.textContent="HOMEGYM";
+  sp.insertBefore(svg,sp.firstChild);return{bag,urls}}
 function splashRun(){const sp=document.getElementById("splash");if(!sp)return;let skip=!!window.__hgNoSplash;
   try{skip=skip||/(^|[?&#])nosplash\b/.test(location.search+"&"+location.hash)||sessionStorage.getItem("hgSplash")==="1"}catch(e){}
-  const done=()=>{if(sp.isConnected)sp.remove()};if(skip){done();return}
+  const done=()=>{if(sp.isConnected)sp.remove();if(room)for(const u of room.urls)try{URL.revokeObjectURL(u)}catch(e){}};let room=null;if(skip){done();return}
   try{sessionStorage.setItem("hgSplash","1")}catch(e){}
   const red=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  try{room=splashRoom(sp,red)}catch(e){room=null}
   /* Blitz der Goldscheiben: ein schräger Glanzstreifen läuft über alle vier Scheiben (auf die Scheiben zugeschnitten), dazu zwei Funkel-Sterne.
      Direkt in #hgPlates (nicht in das gespiegelte <use>), damit das CSS greift. */
-  const pl=sp.querySelector("#hgPlates"),svg=sp.querySelector("svg");if(pl&&svg&&!red){const NS="http://www.w3.org/2000/svg";
+  const pl=sp.querySelector("#hgPlates"),svg=sp.querySelector(".spl-in svg")||sp.querySelector("svg svg");if(pl&&svg&&!red){const NS="http://www.w3.org/2000/svg";
     const mk=(tag,at,par)=>{const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(at))e.setAttribute(k,v);if(par)par.appendChild(e);return e};
     const defs=svg.querySelector("defs")||mk("defs",{},svg);
     const g=mk("linearGradient",{id:"splSG",x1:"0",y1:"0",x2:"1",y2:"0"},defs);for(const[o,c,a]of[[0,"#fff",0],[.5,"#fffdf0",.95],[1,"#fff",0]])mk("stop",{offset:o,"stop-color":c,"stop-opacity":a},g);
@@ -5883,9 +6041,9 @@ function splashRun(){const sp=document.getElementById("splash");if(!sp)return;le
     const cg=mk("g",{"clip-path":"url(#splSC)"},pl);const sk=mk("g",{transform:"skewX(-22)"},cg);
     mk("rect",{class:"splSweep",x:"21",y:"30",width:"7",height:"32",fill:"url(#splSG)"},sk);
     for(const[x,y,c]of[[25.2,36.4,""],[82.8,37.4," s2"]])mk("path",{class:"splStar"+c,fill:"#fffbe6",d:`M${x} ${y-3.2}l.85 2.35 2.35.85-2.35.85-.85 2.35-.85-2.35-2.35-.85 2.35-.85z`},pl)}
-  let gone=false;const hide=ms=>{if(gone)return;gone=true;sp.classList.add("out");setTimeout(done,ms)};
-  sp.classList.add(red?"still":"run");const t=setTimeout(()=>hide(red?0:240),red?280:860);
-  sp.addEventListener("pointerdown",e=>{e.preventDefault();clearTimeout(t);hide(red?0:130)},{once:true})}
+  let gone=false;const hide=()=>{if(gone)return;gone=true;sp.classList.add("out");setTimeout(done,130)};
+  sp.classList.add(red?"still":"run");const t=setTimeout(()=>{gone=true;done()},red?600:SPL_T);
+  sp.addEventListener("pointerdown",e=>{e.preventDefault();clearTimeout(t);hide()},{once:true})}
 /* ================= BOOT ================= */
 normTempo();
 if(S.session&&typeof S.session==="object"&&!Array.isArray(S.session.items)){S.session.items=planItems(S.session.plan||"A",false,S.session.week||1);S.session.warm=WARM}/* very old running session */
