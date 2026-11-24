@@ -865,7 +865,7 @@ function openMonth(){const p=prog();const cw=p.block;const nu=nextUnit();
 /* ================= MORE ANIMATIONS ================= */
 Object.assign(AN,{
   frontsquat:{lag:.14,anchor:"foot",A:{...STAND,rel:1,upper:-88,fore:72},B:{shin:-125,thigh:-8,torso:72,rel:1,upper:-88,fore:72},eq:[{t:"plate",at:"hand",c:"--p20"}],tempo:[2,.35,1.2,.6],ph:["Runter","Hoch"]},
-  goblet:{lag:.14,anchor:"foot",A:{...STAND,rel:1,upper:-92,fore:70},B:{shin:-122,thigh:-5,torso:70,rel:1,upper:-92,fore:70},eq:[{t:"db",at:"hand"}],tempo:[1.8,.35,1.2,.5],ph:["Runter","Hoch"]},
+  goblet:{lag:.14,anchor:"foot",A:{...STAND,rel:1,upper:-92,fore:78},B:{shin:-122,thigh:-5,torso:70,rel:1,upper:-92,fore:78},eq:[{t:"db",at:"hand"}],tempo:[1.8,.35,1.2,.5],ph:["Runter","Hoch"]},
   goodmorning:{lag:.1,anchor:"foot",A:{...STAND,handTo:"back",bend:1},B:{shin:-97,thigh:-65,torso:15,handTo:"back",bend:1},eq:[{t:"plate",at:"back",c:"--p10",r:19}],tempo:[2,.4,1.4,.5],ph:["Vorbeugen","Aufrichten"]},
   rdlbb:{lag:.1,anchor:"foot",A:{...STAND,upper:-92,fore:-90},B:{shin:-97,thigh:-62,torso:12,upper:-92,fore:-90},eq:[{t:"plate",at:"hand",c:"--p15"}],tempo:[2.2,.4,1.4,.5],ph:["Hüfte zurück","Strecken"]},
   dbbench:{anchor:"hip",A:{torso:180,thigh:-20,shin:-95,hand:[2,58],bend:-1},B:{torso:180,thigh:-20,shin:-95,hand:[12,6],bend:-1},eq:[{t:"bench"},{t:"db",at:"hand"}],tempo:[2,.4,1.2,.5],ph:["Ablassen","Drücken"]},
@@ -1100,11 +1100,17 @@ function eqKit(ctx,s,mini){
     if(!mini){ctx.strokeStyle=dim?"rgba(255,255,255,.05)":"rgba(255,255,255,.2)";ctx.lineWidth=.8;ctx.beginPath();ctx.ellipse(f[0],f[1],rr*.93,rr*.93*sq,rot,Math.PI*1.05,Math.PI*1.6);ctx.stroke()}
     if(face==="in"){const cg=ctx.createLinearGradient(f[0]-u[0]*rr*.4,f[1]-u[1]*rr*.4,f[0]+u[0]*rr*.4,f[1]+u[1]*rr*.4);cg.addColorStop(0,"#6c7880");cg.addColorStop(.35,"#f2f6f8");cg.addColorStop(1,"#4a545b");
       ctx.beginPath();ctx.ellipse(f[0],f[1],rr*.42,rr*.42*sq,rot,0,7);ctx.fillStyle=cg;ctx.fill();ctx.beginPath();ctx.ellipse(f[0],f[1],rr*.24,rr*.24*sq,rot,0,7);ctx.fillStyle="#3a444c";ctx.fill();return}
-    /* Gewichtsplakette: rotes Feld, schwarzer Rand, Zahl in Schwarz */
-    ctx.beginPath();ctx.ellipse(f[0],f[1],rr*.62,rr*.62*sq,rot,0,7);ctx.fillStyle=dim?"#0b0d0f":"#0b0d0f";ctx.fill();
-    ctx.beginPath();ctx.ellipse(f[0],f[1],rr*.54,rr*.54*sq,rot,0,7);ctx.fillStyle=dim?"#7a1e19":"#d8302a";ctx.fill();
-    if(!mini&&rr>=6.5){const t=String(kg).replace(".",",");ctx.save();ctx.translate(f[0],f[1]);ctx.rotate(Math.cos(rot)<0?rot+Math.PI:rot);ctx.scale(1,sq);ctx.fillStyle="#0b0d0f";ctx.textAlign="center";ctx.textBaseline="middle";
-      ctx.font="700 "+Math.max(5,rr*(t.length>2?.5:.68)).toFixed(1)+"px Rajdhani,sans-serif";ctx.fillText(t,0,rr*.04);ctx.restore()}}
+    /* 3.8 (@ Joschy): Stirnseite wie das Original: schwarz, breiter Chrom-Ring außen, in der Mitte eine kleine rote Plakette mit der Gewichtszahl (rot/schwarz) */
+    const rg=ctx.createLinearGradient(f[0]-u[0]*rr,f[1]-u[1]*rr,f[0]+u[0]*rr,f[1]+u[1]*rr);
+    if(dim){rg.addColorStop(0,"#3a4248");rg.addColorStop(1,"#1c2125")}else{rg.addColorStop(0,"#5d6a74");rg.addColorStop(.3,"#f2f6f8");rg.addColorStop(.55,"#9aa7b0");rg.addColorStop(.8,"#e4eaee");rg.addColorStop(1,"#3a444c")}
+    ctx.beginPath();ctx.ellipse(f[0],f[1],rr*.9,rr*.9*sq,rot,0,7);ctx.fillStyle=rg;ctx.fill();
+    ctx.beginPath();ctx.ellipse(f[0],f[1],rr*.7,rr*.7*sq,rot,0,7);ctx.fillStyle=dim?"#0b0d0f":"#121518";ctx.fill();
+    /* kleine Plakette: rotes Rechteck mit schwarzem Rand, in der Ebene der Stirnseite */
+    ctx.save();ctx.translate(f[0],f[1]);ctx.rotate(Math.cos(rot)<0?rot+Math.PI:rot);ctx.scale(1,sq);
+    const pw=rr*.62,ph=rr*.34;ctx.fillStyle="#0b0d0f";ctx.fillRect(-pw/2-rr*.05,-ph/2-rr*.05,pw+rr*.1,ph+rr*.1);ctx.fillStyle=dim?"#7a1e19":"#d8302a";ctx.fillRect(-pw/2,-ph/2,pw,ph);
+    if(!mini&&rr>=6.5){const t=String(kg).replace(".",",");ctx.fillStyle="#0b0d0f";ctx.textAlign="center";ctx.textBaseline="middle";
+      ctx.font="700 "+Math.max(4,ph*(t.length>2?.78:.95)).toFixed(1)+"px Rajdhani,sans-serif";ctx.fillText(t,0,ph*.06,pw*.92)}
+    ctx.restore()}
   function dumbbell(h,dim,d=CAM,part,kg){kg=+kg>0?+kg:DB_STD;const D=dbDims(kg);const off=D.off*s,rr=D.rr*s,th=D.th*s;const A=[h[0]-d[0]*off,h[1]-d[1]*off],B=[h[0]+d[0]*off,h[1]+d[1]*off];
     if(part!=="near"){rubberHead(A,d,rr,th,dim,"in",kg);rod([A[0]+d[0]*th*.5,A[1]+d[1]*th*.5],[B[0]-d[0]*th*.5,B[1]-d[1]*th*.5],2.3*s,!dim)}
     if(part!=="far")rubberHead(B,d,rr,th,dim,"out",kg)}
@@ -1217,9 +1223,11 @@ function drawFig0(ctx,def,o,tr,g,time,c){
   for(const e of def.eq){if(e.t==="band"&&!front)EQ.band(P(e.from),P(o.hand2),.5)}
   /* far parts of hand-held dumbbells (behind the fist) */
   /* 3.8: the head keeps a dumbbell's head out of the face: parts close to the face are clipped around it (as for plates); behind the head is realistic, the far head lies beside it */
-  const dbClip=(e,fn)=>{const hc=!front&&e.at==="hand"&&o.head?P(o.head):null;const D=dbDims(ANW.db);const hr=hc?R(B.head*1.12):0;const clip=hc&&Math.hypot(...sub(P(GP(e.at)),hc))<R(D.off+D.th/2+D.rr)+hr;
-    if(clip){ctx.save();ctx.beginPath();ctx.rect(-1e4,-1e4,2e4,2e4);ctx.moveTo(hc[0]+hr,hc[1]);ctx.arc(hc[0],hc[1],hr,0,Math.PI*2,true);ctx.clip("evenodd")}fn();if(clip)ctx.restore()};
-  for(const e of def.eq)if(e.t==="db"&&o[e.at]&&(e.at==="hand"||front))dbClip(e,()=>EQ.dumbbell(P(GP(e.at)),false,front?norm2([.18*(o[e.at][0]<0?-1:1),.5]):e.dir?norm2(e.dir):CAM,"far",ANW.db));
+  const dbClip=(e,fn,far)=>{const hd=!front&&e.at==="hand"&&o.head?o.head:null;const D=dbDims(ANW.db);
+    /* 3.8: der hintere Kopf liegt hinter Kopf, Gesicht und Kinn (Oval); der vordere wird nur am Schädel ausgespart, die Bahnen führen ihn vor bzw. neben das Gesicht */
+    const fc=hd?P(far?add(hd,[face*B.head*.18,-B.head*.22]):hd):null;const rx=hd?R(B.head*(far?1.3:1.08)):0,ry=hd?R(B.head*(far?1.42:1.08)):0;const clip=fc&&Math.hypot(...sub(P(GP(e.at)),fc))<R(D.off+D.th/2+D.rr)+ry;
+    if(clip){ctx.save();ctx.beginPath();ctx.rect(-1e4,-1e4,2e4,2e4);ctx.moveTo(fc[0]+rx,fc[1]);ctx.ellipse(fc[0],fc[1],rx,ry,0,0,Math.PI*2,true);ctx.clip("evenodd")}fn();if(clip)ctx.restore()};
+  for(const e of def.eq)if(e.t==="db"&&o[e.at]&&(e.at==="hand"||front))dbClip(e,()=>EQ.dumbbell(P(GP(e.at)),false,front?norm2([.18*(o[e.at][0]<0?-1:1),.5]):e.dir?norm2(e.dir):CAM,"far",ANW.db),1);
   for(const e of def.eq)if(e.t==="plate"&&o[e.at]&&(e.at==="hand"))EQ.plate(P(add(GP(e.at),[0,e.dy||0])),e.r||21,CSS[e.c]||CSS["--accent"],CAM,"bar",1,ANW.bb&&ANW.gold);
   {const rim=c._offR,rx=rim.getContext("2d");rx.setTransform(1,0,0,1,0,0);rx.clearRect(0,0,rim.width,rim.height);rx.globalCompositeOperation="source-over";rx.drawImage(c._offB,0,0);rx.globalCompositeOperation="source-in";rx.fillStyle=RimC(.9);rx.fillRect(0,0,rim.width,rim.height);rx.globalCompositeOperation="source-over";
     ctx.save();ctx.setTransform(1,0,0,1,0,0);const ro=(mini?.8:1.4)*dpr;
@@ -2194,7 +2202,7 @@ Object.assign(AN,{
   cablerow:{anchor:"hip",at:[0,16],A:{torso:86,thigh:12,shin:-20,hand:[52,-14],bend:-1,foot:70},B:{torso:98,thigh:12,shin:-20,hand:[14,-34],bend:-1,foot:70},eq:[{t:"box",x:-26,w:42,y:9},{t:"cable",from:[150,24]}],floor:0,tempo:[1.1,.5,1.8,.4],ph:["Ziehen","Strecken"]},
   ezcurl:{...AN.bbcurl,eq:[{t:"ezbar",at:"hand"}]},
   kbswing:{anchor:"foot",A:{shin:-100,thigh:-58,torso:22,upper:-112,fore:-118},B:{...STAND,upper:-2,fore:0},eq:[{t:"kb",at:"hand"}],tempo:[.45,.15,.55,.1],ph:["Hüfte vor","Schwingen"]},
-  kbgoblet:{...AN.goblet,eq:[{t:"kb",at:"hand",off:[0,-7]}]},
+  kbgoblet:{...AN.goblet,A:{...AN.goblet.A,fore:70},B:{...AN.goblet.B,fore:70},eq:[{t:"kb",at:"hand",off:[0,-7]}]},/* 3.8: Kettlebell-Haltung wie bisher (nur die Kurzhantel-Variante liegt tiefer vor dem Gesicht) */
   boxstep:{...AN.stepup,eq:AN.stepup.eq.filter(e=>e.t!=="db")},
   boxjump:{anchor:"foot",A:{shin:-125,thigh:-8,torso:58,upper:-150,fore:-150,at:[0,0],foot:0},B:{...STAND,upper:-70,fore:-40,at:[64,35],foot:0},eq:[{t:"box",x:56,w:44,y:32}],floor:0,tempo:[.45,.6,.8,.5],ph:["Springen","Runtersteigen"]},
   mbslam:{anchor:"foot",A:{...STAND,hand:[6,58],bend:-1},B:{shin:-112,thigh:-38,torso:40,hand:[40,-52],bend:-1},eq:[{t:"mball",at:"hand",r:9}],tempo:[.45,.1,.35,.35],ph:["Hoch","Slam"]},
@@ -2912,7 +2920,7 @@ const MOTION={
   dips:{spine:[.6,-1.4]},
   kbswing:{spine:[.8,-.4]},
   kbpress:{A:{hand:[10,1],torso:91,neck:0},B:{hand:[1,59],torso:89,neck:4},K:[{t:.25,hand:[9.5,15],neck:-8},{t:.5,hand:[6,34],neck:-3}],spine:[1.4,-.6]},
-  ohpdb:{A:{hand:[10,1]},B:{hand:[1,59]},K:[{t:.25,hand:[9.5,15]},{t:.5,hand:[6,34]}]},
+  ohpdb:{A:{hand:[13.5,1]},B:{hand:[1,59]},K:[{t:.25,hand:[14,15]},{t:.5,hand:[9.5,34]}]},/* 3.8: Bahn etwas weiter vorn, der Hantelkopf geht vor dem Gesicht vorbei */
   mbslam:{K:[{t:.45,hand:[24,12]}]},
   wallsit:{noBal:1},
   run:{gait:"run",floor:0,hip:87.5},

@@ -66,7 +66,10 @@ async def main():
         await pn.evaluate("go('set')");vl=await pn.text_content('#verLine');chk('Version 3.8 · @ Joschy' in vl,vl)
         # 1) joints + grip points identical to 3.0 (all strength animations + yoga loops incl. transitions, both figures, 5 moments)
         gn=await pn.evaluate(GEO);go=await po.evaluate(GEO)
-        diff=[(k,q) for k in go for q in go[k] if gn.get(k,{}).get(q)!=go[k][q]]
+        # 3.8 (@ Joschy): Goblet Squat und Kurzhantel-Schulterdrücken bewusst geändert (Hantelkopf vor dem Gesicht vorbei), daher ausgenommen
+        CH38={'goblet','gobletpause','ohpdb'};d38=sorted({k.split('|')[0] for k in go for q in go[k] if gn.get(k,{}).get(q)!=go[k][q]})
+        print('3.8 geänderte Animationen:',d38)
+        diff=[(k,q) for k in go for q in go[k] if k.split('|')[0] not in CH38 and gn.get(k,{}).get(q)!=go[k][q]]
         miss=[k for k in go if set(go[k])-set(gn.get(k,{}))]
         chk(len(gn)>=len(go)>=150*2*5 and not diff and not miss,  # 3.2: new exercises/poses are additions; all 3.0 frames must stay identical
             f'joints/grip points identical to 3.0: {len(gn)} frames, diffs {len(diff)} {diff[:4]}')
@@ -104,3 +107,4 @@ async def main():
 try: asyncio.run(main())
 finally:
     for s in srvs:s.kill()
+sys.exit(1 if FAIL else 0)  # 3.8: Exit-Code ungleich 0 bei FAIL

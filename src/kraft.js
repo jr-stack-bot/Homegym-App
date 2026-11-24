@@ -502,10 +502,10 @@ Object.assign(AN,{
   bandchest:{anchor:"foot",A:{...STAND,hand:[10,-14],bend:-1},B:{...STAND,torso:86,hand:[56,-12],bend:-1},eq:[{t:"post",x:-34,w:7,h:180},{t:"band",from:[-31,140]}],floor:0,tempo:[1,.4,1.6,.4],ph:["Drücken","Zurück"]},
   svend:{anchor:"foot",A:{...STAND,hand:[12,-16],bend:-1},B:{...STAND,torso:87,hand:[50,-14],bend:-1},eq:[{t:"plate",at:"hand",c:"--p10",r:14}],floor:0,tempo:[1.4,.5,1.6,.4],ph:["Strecken","Zurück"]},
   /* ---- Schulter ---- */
-  dbohpstand:kxA("ohp",{eq:[DB()]}),
-  ohpuni:kxA("ohp",{A:{hand2:[4,-52],bend2:1},B:{hand2:[4,-52],bend2:1},eq:[DB()]}),
+  dbohpstand:kxA("ohp",{eq:[DB()],A:{hand:[13.5,1]},K:[{t:.22,neck:-12,hand:[14.5,14]},{t:.5,neck:-5,hand:[11.5,34]}]}),/* 3.8: Hantelkopf vor dem Gesicht vorbei */
+  ohpuni:kxA("ohp",{A:{hand:[13.5,1],hand2:[4,-52],bend2:1},B:{hand2:[4,-52],bend2:1},K:[{t:.22,neck:-12,hand:[14.5,14]},{t:.5,neck:-5,hand:[11.5,34]}],eq:[DB()]}),
   bbpushpress:kxA("kbpushpress",{eq:[{t:"plate",at:"hand",c:"--p20",r:19}]}),
-  zpress:{anchor:"hip",at:[0,9],A:{torso:90,thigh:0,shin:0,foot:80,hand:[10,2],bend:-1},B:{torso:90,thigh:0,shin:0,foot:80,hand:[-2,60],bend:-1},K:[{t:.25,hand:[9.5,15]},{t:.5,hand:[6,34]}],eq:[DB()],floor:0,tempo:[1.2,.4,1.8,.5],ph:["Drücken","Ablassen"]},
+  zpress:{anchor:"hip",at:[0,9],A:{torso:90,thigh:0,shin:0,foot:80,hand:[13.5,2],bend:-1},B:{torso:90,thigh:0,shin:0,foot:80,hand:[-2,60],bend:-1},K:[{t:.25,hand:[14,15]},{t:.5,hand:[9.5,34]}],eq:[DB()],floor:0,tempo:[1.2,.4,1.8,.5],ph:["Drücken","Ablassen"]},
   landmine:{anchor:"foot",A:{...STAND,thigh2:-110,shin2:-118,foot2:-20,torso:84,hand:[14,-10],bend:-1},B:{...STAND,thigh2:-110,shin2:-118,foot2:-20,torso:80,hand:[44,30],bend:-1},fix2:1,eq:[{t:"lmbar",px:205,r:15}],floor:0,tempo:[1.2,.4,1.8,.5],ph:["Drücken","Zurück"]},
   platefront:kxA("frontraise",{eq:[{t:"plate",at:"hand",c:"--p10",r:14}],B:{upper:2,fore:8}}),
   bandlateral:kxA("lateral",{eq:[{t:"kband",from:[13,1],at:"handR"},{t:"kband",from:[-13,1],at:"handL"}]}),
@@ -594,7 +594,7 @@ Object.assign(AN,{
   highknees:kxA("march",{A:{thigh:-4,shin:-96,thigh2:-92,shin2:-100,upper:-40,fore:40,upper2:-120,fore2:-90},B:{thigh:-92,shin:-100,thigh2:-4,shin2:-96,upper:-120,fore:-90,upper2:-40,fore2:40},tempo:[.32,0,.32,0]}),
   shadowbox:kxA("boxing",{eq:[]}),
   skater:{anchor:"hip",at:[0,84],A:{torso:72,thigh:-70,shin:-112,foot:0,thigh2:-125,shin2:-160,foot2:-70,upper:-40,fore:-10,upper2:-140,fore2:-120},B:{torso:72,thigh:-125,shin:-160,foot:-70,thigh2:-70,shin2:-112,foot2:0,upper:-140,fore:-120,upper2:-40,fore2:-10},eq:[],floor:"auto",tempo:[.5,.15,.5,.15],ph:["Sprung","Sprung"]},
-  thruster:{lag:.12,anchor:"foot",A:{shin:-120,thigh:-10,torso:62,hand:[9,2],bend:-1},B:{...STAND,hand:[-3,60],bend:-1},K:[{t:.5,shin:-96,thigh:-80,torso:84,hand:[9.5,10]}],K2:[{t:.5,shin:-95,thigh:-85,torso:86,hand:[9,4]}],eq:[DB()],floor:0,tempo:[1,.3,1.4,.3],ph:["Hoch & drücken","Runter"]},
+  thruster:{lag:.12,anchor:"foot",A:{shin:-120,thigh:-10,torso:62,hand:[14.5,2],bend:-1},B:{...STAND,hand:[-3,60],bend:-1},K:[{t:.5,shin:-96,thigh:-80,torso:84,hand:[18,10]}],K2:[{t:.5,shin:-95,thigh:-85,torso:86,hand:[19.5,8]}]/* 3.8: Hantelkopf vor dem Gesicht vorbei */,eq:[DB()],floor:0,tempo:[1,.3,1.4,.3],ph:["Hoch & drücken","Runter"]},
   dbsnatch:{lag:.1,anchor:"foot",A:{shin:-106,thigh:-40,torso:30,upper:-94,fore:-92},B:{...STAND,upper:94,fore:92},K:[{t:.45,shin:-92,thigh:-86,torso:84,upper:-40,fore:-40},{t:.72,upper:30,fore:80}],eq:[DB()],floor:0,tempo:[1,.4,1.3,.4],ph:["Explosiv hoch","Zurück"]},
   /* ---- Griff ---- */
   platepinch:{view:"front",A:{ua:-86,fa:-86,s:10},B:{ua:-85.4,fa:-85.4,s:10,br:1},eq:[{t:"fplate",at:"handR",c:"--p10"},{t:"fplate",at:"handL",c:"--p10"}],floor:0,tempo:[2,1,2,1],ph:["Halten","Atmen"]}

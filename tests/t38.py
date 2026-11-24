@@ -46,6 +46,13 @@ EDGE="""()=>{const keys=[...new Set(Object.keys(EX).map(k=>[k,animOf(k)]).filter
      for(const r0 of rec){const r=r0.b;n++;kgs.add(r0.kg);minEdge=Math.min(minEdge,r[0],r[1],W-r[2],H-r[3]);if(trc&&trc.floor!=null)minGap=Math.min(minGap,trc.oy-trc.floor*trc.s-r[3])}}
    cv.remove();res.push({a,g,cos,n,kgs:[...kgs],minEdge,minGap:minGap>1e8?null:minGap})}}}finally{window.eqKit=ek;window.drawFig0=df}
  return res}"""
+FACE="""()=>{const keys=[...new Set(Object.keys(EX).map(k=>animOf(k)).filter(a=>AN[a]&&AN[a].view!=="front"&&(AN[a].eq||[]).some(e=>e.t==="db"&&e.at==="hand")))];const out=[];
+ for(const a of keys){const def=AN[a];for(const g of["m","f"]){const T=cycT(def);let worst=-1e9,wt=0;
+  for(let i=0;i<80;i++){const t=(i+.5)/80*T;const o=animPose(def,t,g).o;const B=BODY[g];const e=def.eq.find(e=>e.t==="db");
+   const u0=norm2(sub(o.sh,o.hip));let nF=[u0[1],-u0[0]];if(def.flip)nF=[-nF[0],-nF[1]];const face=nF[0]>=0?1:-1;
+   let h=o.hand;const v=norm2(sub(h,o.elbow));h=add(h,[v[0]*B.hand*.25,v[1]*B.hand*.25]);const ds=e.dir?norm2(e.dir):CAM;const d=[ds[0],-ds[1]];const D=dbDims(20);
+   const c=[h[0]+d[0]*D.off,h[1]+d[1]*D.off];let ov=-1e9;for(const fy of[.3,0,-.3,-.6,-.9])for(const fx of[.5,.8,1]){const m=add(o.head,[face*B.head*fx,B.head*fy]);ov=Math.max(ov,D.rr+.5-Math.hypot(c[0]-m[0],c[1]-m[1]))}if(ov>worst){worst=ov;wt=+t.toFixed(2)}}
+  if(worst>0)out.push([a,g,+worst.toFixed(1),wt])}}return out}"""
 async def main():
     async with async_playwright() as p:
         b=await p.chromium.launch();ctx=await b.new_context(viewport={'width':390,'height':844});pg=await ctx.new_page()
@@ -71,8 +78,10 @@ async def main():
         res=await pg.evaluate(EDGE)
         bad=[x for x in res if x['n']==0 or x['minEdge']<1 or (x['minGap'] is not None and x['minGap']<-1)]
         chk(len(res)>=200 and not bad and all(x['kgs']==[20] for x in res),f"Rand/Boden: {len(res)} Kurzhantel-Animationen (Mann/Frau, ohne/2 Kostüme) bei 20 kg ganz im Bild und nicht im Boden {[(x['a'],x['g'],x['cos'],round(x['minEdge'],1),x['minGap']) for x in bad][:6]}")
+        r=await pg.evaluate(FACE)
+        chk(not r,f'vorderer Hantelkopf bei 20 kg nie vor Gesicht, Mund oder Kinn (Goblet Squat, Drücken, Z-Press, Thruster …) {r}')
         src=open(_os.path.join(_REPO,'src','app.html'),encoding='utf-8').read();blk=src[src.find('function rubberHead'):src.find('function dumbbell(')]
-        chk(blk and 'Gorilla' not in blk and 'fillText(t' in blk,'Kurzhantel-Kopf: nur die Gewichtszahl (rot/schwarz), kein Herstellerlogo')
+        chk(blk and 'Gorilla' not in blk and 'fillText(t' in blk and 'rr*.9' in blk and 'pw=rr*.62' in blk,'Kurzhantel-Stirnseite: schwarz, Chrom-Ring außen, kleine rote Plakette mit Gewichtszahl, kein Herstellerlogo')
         # ---------- 2) Langhantel ----------
         r=await pg.evaluate("()=>[[40,60,100].map(w=>plateSplit(w).out),[25,20,15,10,5,2.5,1.25].map(plateHex),[25,20,15,10,5,2.5,1.25].map(plateRad)]")
         chk(r[0]==[[10],[20],[25,15]],f'Scheiben laut Scheiben-Rechner, größte innen: 40/60/100 kg -> {r[0]}')

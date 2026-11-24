@@ -210,7 +210,8 @@ async def main():
                 for x in exp['log'][i]['sets']:
                     if not x['done'] and x['w']==8.75:x['w']=7.5
         print('db-Übungen in der laufenden 3.1-Einheit:',[it['ex'] for it,d in zip(exp['items'],dbi) if d])
-        keep=all(n[k]==f31['state'][k] for k in ['history','prog']) and n['settings']=={**f31['state']['settings'],'barCol':'alt'} and n['session']==exp  # 3.8: Stangenfarbe 'Abwechselnd' ergänzt and any(dbi) and prof_ok and all(n['yoga'][k]==f31['state']['yoga'][k] for k in ['start','done','log'])  # yoga v/startLv = existing 3.2 yoga migration
+        # 3.8: Stangenfarbe 'Abwechselnd' wird in settings ergänzt
+        keep=all(n[k]==f31['state'][k] for k in ['history','prog']) and n['settings']=={**f31['state']['settings'],'barCol':'alt'} and n['session']==exp and any(dbi) and prof_ok and all(n['yoga'][k]==f31['state']['yoga'][k] for k in ['start','done','log'])  # yoga v/startLv = existing 3.2 yoga migration
         chk(keep and n['hang']=={'v':1,'tests':[],'pauses':[],'base':None},f'3.1 state: S.hang added, history/plan position/yoga unchanged; weights exakt umgestellt {n["profile"].get("weights")}, offene Kurzhantel-Sätze aufs Paar')
         await pg.reload();await pg.wait_for_timeout(500);s2=await pg.evaluate("localStorage.getItem(KEY)")
         chk(s1==s2,'migration idempotent: second start leaves the stored state byte-identical')
@@ -256,3 +257,4 @@ async def main():
     srv.terminate();old.terminate();pre.terminate()
     print('RESULT '+('ALL OK' if not fails else f'{len(fails)} FAILED: '+' | '.join(fails)))
 asyncio.run(main())
+sys.exit(1 if fails else 0)  # 3.8: Exit-Code ungleich 0 bei FAIL

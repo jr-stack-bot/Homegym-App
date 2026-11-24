@@ -122,6 +122,7 @@ python3 tests/t30.py     # Yoga in 3 Stufen, 24-Wochen-Plan, Startstufe, Überna
 python3 tests/t32.py     # Griffkraft & Hängen: Stufen, Hang-Test, Hang-Pause, Farmer's Hold, 60-Minuten-Grenze, Migration, Backup
 python3 tests/t36.py     # JAI: Namen der Übungen/Haltungen: Pause einmal „Als Nächstes“ + Name, Start mit Name, nie „Nächste Übung“
 python3 tests/t37.py     # Kurzhantel-Set: Migration, Rundung auf vorhandene Paare, max. 20 kg, Plan wie 3.6; Start-Animation, Gold-Glanz
+python3 tests/t38.py     # Hanteln in den Animationen: Kurzhantel je Gewicht, Rand/Boden bei 20 kg, Scheiben + Farben, Stange Silber/Gold, Backup, Icon-Safe-Zone
 HOMEGYM_EXTRAS_PW=… python3 tests/t35.py   # Extras: Freischaltung, Speicherung, Backup inkl. 3.2-Backup, Zufällig pro Training, Vorschau (Kennwort per Umgebungsvariable)
 ```
 

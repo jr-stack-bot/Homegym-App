@@ -188,3 +188,4 @@ async def main():
     print('RESULT',('ALL OK' if not fails else f'{len(fails)} FAILED'))
 try: asyncio.run(main())
 finally: srv.kill();old.kill();o33.kill()
+sys.exit(1 if fails else 0)  # 3.8: Exit-Code ungleich 0 bei FAIL
