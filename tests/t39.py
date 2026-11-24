@@ -27,9 +27,8 @@ ROOM="""()=>{const s=document.getElementById('splash'),r=s&&s.querySelector('.sp
     return[c,{x0:Math.round(b.left),x1:Math.round(b.right),w:Math.round(b.width),h:Math.round(b.height),y0:Math.round(b.top),y1:Math.round(b.bottom)}]})),
   imgs:[...r.querySelectorAll('image')].map(e=>{const b=e.getBoundingClientRect();return[Math.round(b.left),Math.round(b.right)]}),
   run:window.__r}}"""
-# Aufbau der Szene: splashRoom auf einer Kopie des Icons, Dauer in ms
-BUILD="""()=>{const d=document.createElement('div');d.innerHTML='<div class="spl-in"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108"></svg></div>';
- document.body.appendChild(d);const t=performance.now();splashRoom(d,false);const dt=performance.now()-t;d.remove();return dt}"""
+# Ladezeit: App-Start (DOMContentLoaded; das Inline-Skript mit Aufbau der App und des Raums läuft davor) mit und ohne Start-Animation
+DCL="document.addEventListener('DOMContentLoaded',()=>{window.__dcl=performance.now()})"
 async def main():
     async with async_playwright() as p:
         b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox'])
@@ -51,8 +50,13 @@ async def main():
                 async with q.expect_navigation():await q.evaluate("location.reload()")
                 await q.wait_for_timeout(150);chk(await q.evaluate("!document.getElementById('splash')"),'nach Neuladen keine zweite Start-Animation')
             await c.close()
-        c,q,e=await fresh();await q.goto(UR+'?nosplash=1');await q.wait_for_timeout(300);bt=min([await q.evaluate(BUILD) for _ in range(3)])
-        chk(bt<120 and not e,f'Ladezeit: Aufbau des Raums {bt:.0f} ms (ohne Drosselung, Soll < 120 ms)');await c.close()
+        async def start(url):
+            c,q,e=await fresh();await c.add_init_script(DCL);await q.goto(url);await q.wait_for_function('window.__dcl>0');
+            v=await q.evaluate("[window.__dcl,!!document.querySelector('#splash .splRoom')]");await c.close();return v
+        mit=[];ohne=[]
+        for _ in range(4):mit.append(await start(UR));ohne.append(await start(UR+'?nosplash=1'))
+        m=sorted(x[0] for x in mit[1:])[1];o=sorted(x[0] for x in ohne[1:])[1]
+        chk(all(x[1] for x in mit) and not any(x[1] for x in ohne) and m-o<250,f'Ladezeit: App-Start mit Start-Animation {m:.0f} ms, ohne {o:.0f} ms (+{m-o:.0f} ms, Grenze +250 ms)')
         c,q,e=await fresh();await q.goto(UR);await q.wait_for_selector('#splash.run');await q.wait_for_timeout(200);t0=time.time();await q.mouse.click(180,400)
         await q.wait_for_selector('#splash',state='detached',timeout=1000);chk(time.time()-t0<.5 and not e,f'Tippen überspringt ({time.time()-t0:.2f} s)');await c.close()
         c,q,e=await fresh(reduced_motion='reduce');await q.goto(UR);await q.wait_for_selector('#splash.still',timeout=2000);t0=time.time()
