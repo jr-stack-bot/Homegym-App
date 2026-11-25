@@ -3469,7 +3469,8 @@ function splToday(){try{const p=prog(),ss=S.session,cw=ss?(ss.week||1):p.block,r
 function splHang(){try{const T=typeof hgS==="function"?hgS().tests:[];const b=T.reduce((m,x)=>Math.max(m,+x.s||0),0);return b>0?"Hang-Rekord: "+b+" s":"Hang-Rekord: bald!"}catch(e){return"Hang-Rekord: bald!"}}
 /* 3.10: Maße der zwei schweren Paare, die es nur in der Start-Animation gibt (App bleibt bei max. 20 kg) */
 const SPL_DB={22.5:[16.6,40],25:[17.2,42]};
-function splDbDims(kg){const L=SPL_DB[kg];if(!L)return dbDims(kg);const rr=L[0]/2*.78,th=(L[1]-15)/2*.6;return{rr,th,off:4.5+th/2}}
+function splDbDims(kg){const L=SPL_DB[kg],D=L?(()=>{const th=(L[1]-15)/2*.6;return{rr:L[0]/2*.78,th,off:4.5+th/2}})():dbDims(kg);
+  return{...D,rr:D.rr*(.86+.3*kg/25)}}/* Kopf je nach Gewicht etwas deutlicher (nur Start-Animation), damit 2,5 bis 25 kg auch klein gut zu unterscheiden sind */
 function splashRoom(sp,red){const NS="http://www.w3.org/2000/svg";const ic=sp.querySelector(".spl-in svg");if(!ic)return null;
   const mk=(tag,at,par)=>{const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(at))e.setAttribute(k,v);if(par)par.appendChild(e);return e};
   const F=346,EH=1.3,VY=-150,P=(X,Y,Z)=>[F*X/Z,VY+F*(EH-Y)/Z],K=Z=>F/Z,r1=v=>Math.round(v*10)/10,pt=a=>a.map(p=>r1(p[0])+","+r1(p[1])).join(" ");
@@ -3614,46 +3615,6 @@ function splashRoom(sp,red){const NS="http://www.w3.org/2000/svg";const ic=sp.qu
       x.fillStyle=pg;x.fillRect(cx-2.2*s*1.2,ty,4.4*s*1.2,fy-ty);x.fillStyle="#2a2e33";x.fillRect(cx-3.2*s,ty-1.5*s,6.4*s,2.4*s);
       for(const[Y,L,R]of[[.27,[25,25],[20,20]],[.76,[15,10],[10,5]]]){const y=P(X,Y,Z)[1];
         kit.plateStack([cx-3*s,y],22.5,L,[-1,0],0,false);kit.plateStack([cx+3*s,y],22.5,R,[1,0],0,false)}},.48,cx-42)}
-  /* 3.10 (@ Joschy): links die Hantelablage wie Joschys echte (schwarzes Gestell, A-förmige Seitenteile, 2 schräge Etagen für 10 Paare),
-     lang in die Tiefe gestellt. Darauf 10 Paare 2,5–25 kg, jede Hantel so groß wie ihr Gewicht (rubberHead wie in den Übungen).
-     Nur hier gibt es 22,5 und 25 kg; die App selbst bleibt bei Joschys 8 Paaren bis 20 kg. */
-  const RACK_KG=[],gl=[];{const F0=[-.7,2.15],F1=[-.69,2.62],DK=.7,SC=1.15,AS=.64;/* Ende vorn links / hinten rechts (m), DK: Achse steiler, SC: Hanteln etwas größer, AS: Tiefe des Gestells */
-    const Lx=F1[0]-F0[0],Lz=F1[1]-F0[1],ll=Math.hypot(Lx,Lz),N=[Lz/ll,-Lx/ll];/* N: Vorderseite (zum Betrachter) */
-    const W=(t,a,Y)=>P(F0[0]+Lx*t+N[0]*a*AS,Y,F0[1]+Lz*t+N[1]*a*AS),Zt=(t,a)=>F0[1]+Lz*t+N[1]*a*AS;
-    const TI=[{a:-.035,ab:-.1,af:.03,yb:.66,yf:.61,kg:[12.5,12.5,10,10,7.5,7.5,5,5,2.5,2.5]},{a:.17,ab:.1,af:.24,yb:.34,yf:.29,kg:[25,25,22.5,22.5,20,20,17.5,17.5,15,15]}];
-    const pts=[];for(const t of[0,1])for(const a of[-.3,.36])for(const Y of[0,.8])pts.push(W(t,a,Y));
-    const xs=pts.map(q=>q[0]),ys=pts.map(q=>q[1]),x0=Math.min(...xs)-26,x1=Math.max(...xs)+26,y0=Math.min(...ys)-22,y1=Math.max(...ys)+8;
-    cnv(x0,y0,x1-x0,y1-y0,x=>{
-      const nrm=(a,b)=>{let n=[a[1]-b[1],b[0]-a[0]];const l=Math.hypot(n[0],n[1])||1;n=[n[0]/l,n[1]/l];return n[1]>0?[-n[0],-n[1]]:n};
-      /* Stahlprofil: von w0 nach w1 verjüngt (Perspektive), oben eine schwache Lichtkante */
-      const beam=(a,b,w0,w1)=>{w1=w1==null?w0:w1;const n=nrm(a,b);x.fillStyle="#141619";x.beginPath();
-        x.moveTo(a[0]+n[0]*w0/2,a[1]+n[1]*w0/2);x.lineTo(b[0]+n[0]*w1/2,b[1]+n[1]*w1/2);x.lineTo(b[0]-n[0]*w1/2,b[1]-n[1]*w1/2);x.lineTo(a[0]-n[0]*w0/2,a[1]-n[1]*w0/2);x.closePath();x.fill();
-        x.strokeStyle="rgba(235,220,200,.26)";x.lineWidth=Math.max(.3,Math.min(w0,w1)*.2);x.beginPath();x.moveTo(a[0]+n[0]*w0*.36,a[1]+n[1]*w0*.36);x.lineTo(b[0]+n[0]*w1*.36,b[1]+n[1]*w1*.36);x.stroke()};
-      const bm=(t,a0,Y0,a1,Y1,m)=>beam(W(t,a0,Y0),W(t,a1,Y1),m*K(Zt(t,a0)),m*K(Zt(t,a1)));
-      const rail=(a,Y,m,t0=0,t1=1)=>beam(W(t0,a,Y),W(t1,a,Y),m*K(Zt(t0,a)),m*K(Zt(t1,a)));
-      /* A-Seitenteil wie das Original: hinterer und vorderer Schenkel laufen oben zusammen, Arm nach vorn für die untere Etage, Querstrebe, Fußplatten */
-      const side=t=>{bm(t,-.22,.012,-.11,.012,.045);bm(t,.18,.012,.34,.012,.045);
-        bm(t,-.18,.02,-.09,.68,.04);bm(t,.26,.02,.03,.68,.04);bm(t,-.12,.68,.06,.68,.036);
-        bm(t,-.17,.1,.23,.1,.03);bm(t,-.16,.33,.27,.29,.032)};
-      x.fillStyle="rgba(0,0,0,.5)";x.beginPath();for(const[t,a]of[[-.02,-.24],[1.03,-.24],[1.03,.38],[-.02,.38]]){const q=W(t,a,0);x.lineTo(q[0],q[1]+1)}x.closePath();x.fill();
-      side(1);rail(.02,.1,.03);
-      for(const T of TI){rail(T.ab,T.yb,.03);rail(T.af,T.yf,.03)}
-      /* Kurzhanteln: weiter hinten zuerst; Achse quer zur Ablage (zum Betrachter), etwas steiler gezeichnet, damit die Stirnseiten sichtbar bleiben */
-      const rs=(()=>{const a=W(0,0,.5),b=W(1,0,.5),l=Math.hypot(b[0]-a[0],b[1]-a[1]);return[(b[0]-a[0])/l,(b[1]-a[1])/l]})(),pd=[-rs[1],rs[0]];if(pd[1]<0){pd[0]=-pd[0];pd[1]=-pd[1]}
-      const it=[];TI.forEach((T,k)=>T.kg.forEach((kg,i)=>{RACK_KG.push(kg);const t=.075+Math.floor(i/2)*.2+(i%2)*.074,D=splDbDims(kg),Y=(T.yb+T.yf)/2+D.rr/100*.8*SC,Z=Zt(t,T.a);it.push({t,a:T.a,Y,Z,kg,D,k})}));
-      it.sort((p,q)=>q.Z-p.Z||p.k-q.k);
-      for(const o of it){const h=W(o.t,o.a,o.Y),e=W(o.t,o.a+.1,o.Y);let d=[e[0]-h[0],e[1]-h[1]];const l=Math.hypot(d[0],d[1]);d=[d[0]/l*(1-DK)+pd[0]*DK,d[1]/l*(1-DK)+pd[1]*DK];
-        const l2=Math.hypot(d[0],d[1]);d=[d[0]/l2,d[1]/l2];const s=K(o.Z)/100*SC;
-        eqKit(x,s,false).dumbbell(h,false,d,undefined,o.kg,o.D);gl.push([h[0],h[1],d,o.D.rr*s,o.D.off*s,o.D.th*s])}
-      for(const T of TI)rail(T.af,T.yf-.012,.02);
-      side(0)},.1,x1-30)}
-  /* Glanz auf den Chromgriffen, wenn das Licht kommt */
-  const gG=mk("g",{class:"splGrips",stroke:"#fffdf5","stroke-linecap":"round",fill:"none","data-kg":RACK_KG.join(",")},g0);
-  gl.forEach((q,i)=>{const[hx,hy,d,rr,off,thk]=q,u=[d[1],-d[0]],L=(off-thk*.5)*.8,o=u[1]<0?.6:-.6;
-    const a=[hx-d[0]*L+u[0]*o,hy-d[1]*L+u[1]*o],b=[hx+d[0]*L+u[0]*o,hy+d[1]*L+u[1]*o];
-    const g=mk("g",{class:"splGl",style:`animation-delay:${(1.3+i*.03).toFixed(3)}s`},gG);
-    mk("line",{x1:r1(a[0]),y1:r1(a[1]),x2:r1(b[0]),y2:r1(b[1]),"stroke-width":"2.4",opacity:".26"},g);
-    mk("line",{x1:r1(a[0]),y1:r1(a[1]),x2:r1(b[0]),y2:r1(b[1]),"stroke-width":".8"},g)});
   /* Mitte: das Icon-Motiv (Rack, Figur, Langhantel) unverändert; Boden des Icons auf dem Boden der Szene */
   const KI=2.9;for(const[k,v]of Object.entries({x:r1(-54*KI),y:r1(-81.5*KI),width:r1(108*KI),height:r1(108*KI)}))ic.setAttribute(k,v);
   g0.appendChild(ic);
@@ -3670,6 +3631,38 @@ function splashRoom(sp,red){const NS="http://www.w3.org/2000/svg";const ic=sp.qu
     poly([Q(0,-1,.455),Q(1,-1,.455),Q(1,1,.455),Q(0,1,.455)],"url(#splPad)");
     mk("path",{d:`M${pt([Q(.02,-.82,.456)])}L${pt([Q(.98,-.82,.456)])}`,stroke:"#c41a20","stroke-width":".6",opacity:".75","stroke-dasharray":"1.4 1.1"},bn);
     mk("path",{d:`M${pt([Q(0,1,.456)])}L${pt([Q(1,1,.456)])}`,stroke:"#ffd8a8","stroke-width":".7",opacity:".25"},bn)}
+  /* 3.10 (@ Joschy): vorn links im Vordergrund die Hantelablage, fast frontal wie auf Joschys Bestellfoto: schwarzes Gestell mit A-förmigen
+     Seitenteilen und 2 schrägen Etagen, je Etage 5 Paare nebeneinander (zwischen den Paaren mindestens eine Grifflänge Platz). Die Hanteln
+     (rubberHead wie in den Übungen) liegen quer, die Stirnseite mit Chrom-Ring und Plakette zeigt zum Betrachter, jede so groß wie ihr Gewicht.
+     22,5 und 25 kg gibt es nur hier; die App selbst bleibt bei Joschys 8 Paaren bis 20 kg. Eigene Schrägansicht (Bildschirm-Einheiten). */
+  const RACK_KG=[],gl=[];{const X0=-125,Y0=64,SC=.66,LR=119,BV=[-.42,.42],GAP=.5;/* X0/Y0: linkes Ende am Boden, BV: Richtung „nach vorn“ je Tiefeneinheit */
+    const O=(u,v,h)=>[X0+u+BV[0]*v,Y0-h+BV[1]*v],dl=Math.hypot(BV[0],BV[1]),d=[BV[0]/dl,BV[1]/dl];
+    const TI=[{v:-2,vb:-7,hb:43,vf:3,hf:39,kg:[2.5,5,7.5,10,12.5]},{v:12,vb:7,hb:22,vf:17,hf:18,kg:[15,17.5,20,22.5,25]}];
+    const pts=[O(-4,-16,0),O(LR+4,-16,0),O(-4,22,0),O(LR+4,22,0),O(-4,-10,58),O(LR+4,-10,58)];
+    const x0=Math.min(...pts.map(q=>q[0]))-14,x1=Math.max(...pts.map(q=>q[0]))+14,y0=Math.min(...pts.map(q=>q[1]))-14,y1=Math.max(...pts.map(q=>q[1]))+10;
+    cnv(x0,y0,x1-x0,y1-y0,x=>{
+      const nrm=(a,b)=>{let n=[a[1]-b[1],b[0]-a[0]];const l=Math.hypot(n[0],n[1])||1;n=[n[0]/l,n[1]/l];return n[1]>0?[-n[0],-n[1]]:n};
+      /* Stahlprofil mit schwacher Lichtkante oben */
+      const beam=(a,b,w)=>{const n=nrm(a,b);x.lineCap="butt";x.strokeStyle="#15171a";x.lineWidth=w;x.beginPath();x.moveTo(a[0],a[1]);x.lineTo(b[0],b[1]);x.stroke();
+        x.strokeStyle="rgba(235,220,200,.26)";x.lineWidth=Math.max(.35,w*.22);x.beginPath();x.moveTo(a[0]+n[0]*w*.34,a[1]+n[1]*w*.34);x.lineTo(b[0]+n[0]*w*.34,b[1]+n[1]*w*.34);x.stroke()};
+      const B=(u0,v0,h0,u1,v1,h1,w)=>beam(O(u0,v0,h0),O(u1,v1,h1),w);
+      x.save();x.filter="blur(2px)";x.fillStyle="rgba(0,0,0,.55)";x.beginPath();for(const[u,v]of[[0,-14],[LR,-14],[LR,17],[0,17]]){const q=O(u,v,0);x.lineTo(q[0],q[1])}x.closePath();x.fill();x.restore();
+      /* A-Seitenteile an beiden Enden: hinterer und vorderer Schenkel laufen oben zusammen, Arm nach vorn für die untere Etage, Querstrebe, Fußplatten */
+      const side=u=>{B(u,-14,1,u,-5,1,2.6);B(u,11,1,u,19,1,2.6);B(u,-10,1,u,-5,46,2.4);B(u,15,1,u,3,46,2.4);B(u,-7,46,u,4,46,2.2);
+        B(u,-9,8,u,14,8,1.8);B(u,-8,23,u,19,17,2)};
+      side(0);side(LR);B(0,2,8,LR,2,8,1.8);
+      for(const T of TI){B(0,T.vb,T.hb,LR,T.vb,T.hb,2);B(0,T.vf,T.hf,LR,T.vf,T.hf,2)}
+      TI.forEach(T=>{const D=T.kg.map(kg=>splDbDims(kg)),grip=9*SC,w=D.reduce((m,q)=>m+4*q.rr*SC+GAP,0)+grip*4;let u=(LR-w)/2;
+        T.kg.forEach((kg,i)=>{const q=D[i],r=q.rr*SC;for(let k=0;k<2;k++){const h=O(u+r,T.v,(T.hb+T.hf)/2+r*.82);RACK_KG.push(kg);
+          eqKit(x,SC,false).dumbbell(h,false,d,undefined,kg,q);gl.push([h[0],h[1],d,r,q.off*SC,q.th*SC]);u+=2*r+(k?0:GAP)}u+=GAP+grip})});
+      for(const T of TI)B(0,T.vf+1,T.hf-1.2,LR,T.vf+1,T.hf-1.2,1.4)},.06,X0+LR)}
+  /* Glanz auf den Chromgriffen, wenn das Licht kommt */
+  const gG=mk("g",{class:"splGrips",stroke:"#fffdf5","stroke-linecap":"round",fill:"none","data-kg":RACK_KG.join(",")},g0);
+  gl.forEach((q,i)=>{const[hx,hy,d,rr,off,thk]=q,u=[d[1],-d[0]],L=(off-thk*.5)*.8,o=u[1]<0?.6:-.6;
+    const a=[hx-d[0]*L+u[0]*o,hy-d[1]*L+u[1]*o],b=[hx+d[0]*L+u[0]*o,hy+d[1]*L+u[1]*o];
+    const g=mk("g",{class:"splGl",style:`animation-delay:${(1.3+i*.03).toFixed(3)}s`},gG);
+    mk("line",{x1:r1(a[0]),y1:r1(a[1]),x2:r1(b[0]),y2:r1(b[1]),"stroke-width":"2.4",opacity:".26"},g);
+    mk("line",{x1:r1(a[0]),y1:r1(a[1]),x2:r1(b[0]),y2:r1(b[1]),"stroke-width":".8"},g)});
   /* Spot von oben mit sichtbarem Lichtkegel */
   const ly=P(0,3.05,3)[1],lamp=mk("g",{},g0);
   mk("path",{class:"splCone",d:`M-13 ${r1(ly+15)}L13 ${r1(ly+15)}L168 8Q0 44-168 8Z`,fill:"url(#splCone)",filter:"url(#splBlur)",opacity:".9"},lamp);
@@ -3694,8 +3687,8 @@ function splashRoom(sp,red){const NS="http://www.w3.org/2000/svg";const ic=sp.qu
     mk("ellipse",{cx:NX,cy:NY-5,rx:78,ry:24,fill:"url(#splNeonW)"},ne);
     const t=mk("text",Object.assign({class:"splNeonTxt",fill:"#ff5a52",stroke:"#ffe2dc","stroke-width":".45",style:"filter:drop-shadow(0 0 1.5px #ff3a30) drop-shadow(0 0 5px #ff1e1e) drop-shadow(0 0 11px rgba(255,25,25,.55))"},nAt),ne);t.textContent=NEON;fits.push([t,108])}
   /* kleiner goldener Schriftzug */
-  const tx=mk("text",{class:"splTxt",x:0,y:58,"text-anchor":"middle",fill:"url(#hgGoldBar)","font-family":"Orbitron,Rajdhani,sans-serif","font-weight":"700","font-size":"17","letter-spacing":"6.5",style:"filter:drop-shadow(0 0 4px rgba(255,200,90,.45))"},svg);tx.textContent="HOMEGYM";
-  const by=mk("text",{class:"splBy",x:0,y:73,"text-anchor":"middle",fill:"#e9c771","font-family":"Rajdhani,sans-serif","font-weight":"600","font-size":"8.5","letter-spacing":"2.2",style:"filter:drop-shadow(0 0 3px rgba(255,200,90,.35))"},svg);by.textContent="by Joschy";
+  const tx=mk("text",{class:"splTxt",x:0,y:122,"text-anchor":"middle",fill:"url(#hgGoldBar)","font-family":"Orbitron,Rajdhani,sans-serif","font-weight":"700","font-size":"17","letter-spacing":"6.5",style:"filter:drop-shadow(0 0 4px rgba(255,200,90,.45))"},svg);tx.textContent="HOMEGYM";
+  const by=mk("text",{class:"splBy",x:0,y:139,"text-anchor":"middle",fill:"#e9c771","font-family":"Rajdhani,sans-serif","font-weight":"600","font-size":"11.5","letter-spacing":"1",style:"filter:drop-shadow(0 0 3px rgba(255,200,90,.35))"},svg);by.textContent="by Joschy";
   sp.insertBefore(svg,sp.firstChild);
   /* zu lange Zeilen (Tafel, Neon, Urkunde) auf ihre Breite stauchen */
   for(const[t,mx]of fits)try{if(t.getComputedTextLength()>mx){t.setAttribute("textLength",mx);t.setAttribute("lengthAdjust","spacingAndGlyphs")}}catch(e){}

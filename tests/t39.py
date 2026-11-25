@@ -6,7 +6,8 @@
 # 3) Laufband, Crosstrainer, Bank, Lichtkegel und die Wand-Elemente ganz im Bild (nichts angeschnitten), Wand-Elemente überlappen sich nicht und sind lesbar
 # 4) Uhr zeigt die echte Uhrzeit (Stunden-/Minutenzeiger), Sekundenzeiger läuft
 # 5) Kreidetafel = nächstes/heutiges Training wie auf dem Startbildschirm; erledigt / Ruhetag / läuft; Urkunde mit und ohne Hang-Rekord
-# 6) prefers-reduced-motion: stark verkürzt, kein Flackern, keine Partikel; Ladezeit mit und ohne Start-Animation
+# 6) Zeitablauf: 0–1 s Lampe flackert im Dunkeln, 1–2 s Licht breitet sich aus und Wand/Neon leuchten auf; Ablage vorn links, „by Joschy“ ≥ 12 px
+# 7) prefers-reduced-motion: stark verkürzt, kein Flackern, keine Partikel; Ladezeit mit und ohne Start-Animation
 # Aufruf: python3 -I tests/t39.py  (HOMEGYM_OUT = Ordner mit index.html, Standard out/)
 import os as _os
 _REPO=_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
@@ -36,6 +37,8 @@ ROOM="""()=>{const s=document.getElementById('splash'),r=s&&s.querySelector('.sp
   inf:an.filter(a=>!isFinite(a.effect.getTiming().iterations)).map(a=>a.animationName),
   parts:Object.fromEntries(['splTread','splCross','splBench','splCone','splWallArt','splClock','splBoard','splCert','splNeonTxt'].map(c=>[c,BOX(r.querySelector('.'+c))])),
   fonts:[...r.querySelectorAll('.splChalk,.splRec,.splNeonTxt')].map(e=>Math.round(e.getBoundingClientRect().height)),
+  byPx:(()=>{const e=r.querySelector('.splBy');return Math.round(+e.getAttribute('font-size')*e.getScreenCTM().a*10)/10})(),
+  feet:BOX(s.querySelector('#hgLegs')),homegym:BOX(r.querySelector('.splTxt')),
 
   run:window.__r}}"""
 CLOCK="""()=>{const c=document.querySelector('#splash .splClock');const rot=q=>{const m=/rotate\\(([-\\d.]+)/.exec(c.querySelector(q).getAttribute('transform'));return m?+m[1]:NaN};
@@ -72,6 +75,9 @@ async def main():
             chk(ok and (inside or w>900) and pa['splCone']['w']>w*.3,f'{w}x{h}: Laufband, Crosstrainer, Bank, Lichtkegel, Wand-Elemente sichtbar, nichts angeschnitten {r["imgs"]}')
             wall=['splWallArt','splClock','splBoard','splCert'];ov=[(a,b2) for i,a in enumerate(wall) for b2 in wall[i+1:] if not(pa[a]['x1']<=pa[b2]['x0'] or pa[b2]['x1']<=pa[a]['x0'] or pa[a]['y1']<=pa[b2]['y0'] or pa[b2]['y1']<=pa[a]['y0'])]
             chk(not ov and (min(r['fonts'])>=8 or w>900),f'{w}x{h}: Wand-Elemente überlappen nicht {ov}, Schrift lesbar (Zeilenhöhen {r["fonts"]} px)')
+            ra=r['imgs'][1];ft=r['feet'];hg=r['homegym']
+            chk(w>900 or (ra[2]>ft['y1'] and .38*w<=ra[1]-ra[0]<=.5*w and ra[3]<hg['y0']-4),f'{w}x{h}: Hantelablage vorn links unter Rack und Füßen (oben {ra[2]} > Füße {ft["y1"]}), Breite {(ra[1]-ra[0])/w:.0%} (Soll 38–50 %), Abstand zu HOMEGYM {hg["y0"]-ra[3]} px')
+            chk(r['byPx']>=12,f'{w}x{h}: „by Joschy“ {r["byPx"]} px (mind. 12 px)')
             chk(r['run']<1500,f'{w}x{h}: Start-Animation läuft {r["run"]:.0f} ms nach dem Seitenstart')
             chk(not e,f'{w}x{h}: keine JS-Fehler {e[:2]}')
             if w==360:
@@ -80,6 +86,16 @@ async def main():
                 v=await q.evaluate("[JOSCHY_DB.join(),JSON.stringify(dbDims(25))===JSON.stringify(dbDims(20)),Object.keys(DB_LOOK).map(Number).sort((a,b)=>a-b).join()]")
                 chk(v==['2.5,5,7.5,10,12.5,15,17.5,20',True,'2.5,5,7.5,10,12.5,15,17.5,20'],f'App unverändert: Joschys Kurzhanteln bis 20 kg, keine Maße über 20 kg {v}')
             await c.close()
+        # Zeitablauf: 0–1 s nur die Lampe flackert (Raum dunkel), 1–2 s Licht breitet sich aus, Neon flackert an, Wand wird sichtbar
+        TL="""()=>{const s=document.getElementById('splash'),an=document.getAnimations().filter(a=>a.effect&&a.effect.target&&a.effect.target.closest&&a.effect.target.closest('#splash'));
+          const g=q=>+getComputedStyle(s.querySelector(q)).opacity,out={};
+          for(let t=0;t<=2200;t+=50){for(const a of an){a.pause();a.currentTime=t}out[t]={lamp:g('.splLampOn'),dark:g('.splDark'),spread:g('.splSpread'),neon:g('.splNeon')}}return out}"""
+        c,q,e=await fresh();await q.goto(UR);await q.wait_for_selector('#splash.run');tl={int(k):v for k,v in (await q.evaluate(TL)).items()};await c.close()
+        lamp=[tl[t]['lamp'] for t in range(100,1000,50)];ch=sum(1 for a,b2 in zip(lamp,lamp[1:]) if abs(a-b2)>.3)
+        chk(all(tl[t]['dark']==1 for t in range(0,950,50)) and ch>=4 and tl[1000]['lamp']==1 and all(tl[t]['neon']==0 for t in range(0,1100,50)),f'0–1 s: Raum dunkel, Lampe flackert ({ch} Sprünge), Neon noch aus')
+        nn=[tl[t]['neon'] for t in range(1100,1800,50)];nch=sum(1 for a,b2 in zip(nn,nn[1:]) if abs(a-b2)>.3)
+        chk(tl[1050]['dark']==0 and .5<tl[1050]['spread']<=1 and 0<tl[1500]['spread']<tl[1050]['spread'] and tl[2000]['spread']==0 and nch>=3 and tl[2000]['neon']==1,
+            f'1–2 s: Licht breitet sich aus (Abdeckung {tl[1050]["spread"]:.2f} → {tl[1500]["spread"]:.2f} → {tl[2000]["spread"]:.2f}), Neon flackert an ({nch} Sprünge), Wand ab 2 s ganz hell')
         # Uhr
         c,q,e=await fresh();await q.goto(UR);await q.wait_for_selector('#splash.run');cl=await q.evaluate(CLOCK);await c.close()
         hh,mm,ss=map(int,cl['t'].split(':'));t0=hh*3600+mm*60+ss;t1=cl['now'][0]*3600+cl['now'][1]*60+cl['now'][2]
