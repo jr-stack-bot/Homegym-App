@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.12
+- **Hantelablage an der linken Seite**: Sie läuft von vorn unten links steil schräg nach hinten oben, in der freien Fläche links neben dem Rack; der Bereich vor der Figur bleibt frei. Die 10 Paare liegen quer (Stirnseite zum Raum), vorn groß und schwer, hinten klein.
+- Das Laufband steht kleiner hinten an der Wand hinter dem Ende der Ablage.
+- t39 prüft die neue Lage (links, frei vor der Figur, lang in die Tiefe, leicht nach links geneigt) und das Laufband dahinter; Versionsprüfungen auf „3.12“.
+
 ## 3.11
 - **Bildaufbau der Start-Animation nach Joschys Markierungen**: Die Hantelablage läuft schräg nach hinten zum Rack (links vorn, rechts hinten), mit moderater Perspektive; die schweren Paare stehen vorn, sodass die Größen von 25 bis 2,5 kg gut zu sehen bleiben, und die Ablage berührt das Rack nicht.
 - Das Gerät hinter dem Rack links steht weiter links und ist neben dem Rack gut zu sehen.

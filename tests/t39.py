@@ -1,4 +1,4 @@
-# Homegym 3.11 @ Joschy – t39: Start-Animation im Gym-Raum (5 s)
+# Homegym 3.12 @ Joschy – t39: Start-Animation im Gym-Raum (5 s)
 # 1) Raum vorhanden: Betonwand, Spot, Rack mit Figur aus dem Icon, Hantelablage (Canvas) mit 10 Paaren 2,5–25 kg + Scheibenständer,
 #    Chromglanz auf 20 Griffen, Boxsack, Kreidestaub, Schriftzug HOMEGYM + „by Joschy“; Wand: Neon „NEVER GIVE UP“, Uhr, Kreidetafel, Urkunde.
 #    Die App ist darunter schon aufgebaut. 22,5/25 kg nur in der Animation: App-Daten (JOSCHY_DB, Maße bis 20 kg) unverändert.
@@ -7,7 +7,7 @@
 # 4) Uhr zeigt die echte Uhrzeit (Stunden-/Minutenzeiger), Sekundenzeiger läuft
 # 5) Kreidetafel = nächstes/heutiges Training wie auf dem Startbildschirm; erledigt / Ruhetag / läuft; Urkunde mit und ohne Hang-Rekord
 # 6) Zeitablauf: 0–1 s Lampe flackert im Dunkeln, 1–2 s Licht breitet sich aus und Wand/Neon leuchten auf; Ablage vorn links, „by Joschy“ ≥ 12 px
-# 7) 3.11: Ablage läuft schräg nach hinten (rechts höher als links), Laufband links neben dem Rack sichtbar, Bank vorn und frei von HOMEGYM
+# 7) 3.12: Ablage an der linken Seite, läuft steil nach oben (hinten) und leicht nach links, frei vor der Figur; Laufband klein an der Wand dahinter sichtbar; Bank vorn und frei von HOMEGYM
 # 8) prefers-reduced-motion: stark verkürzt, kein Flackern, keine Partikel; Ladezeit mit und ohne Start-Animation
 # Aufruf: python3 -I tests/t39.py  (HOMEGYM_OUT = Ordner mit index.html, Standard out/)
 import os as _os
@@ -49,8 +49,9 @@ CLOCK="""()=>{const c=document.querySelector('#splash .splClock');const rot=q=>{
 IMGS="""async()=>{const out=[];for(const e of document.querySelectorAll('#splash .splRoom image')){const b=e.getBoundingClientRect(),u=e.getAttribute('href');if(!u){out.push(null);continue}
  const im=new Image();im.src=u;await im.decode();const c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;const x=c.getContext('2d');x.drawImage(im,0,0);
  const d=x.getImageData(0,0,c.width,c.height).data;let x0=1e9,x1=-1,y0=1e9,y1=-1;for(let y=0;y<c.height;y++)for(let i=0;i<c.width;i++)if(d[(y*c.width+i)*4+3]>8){if(i<x0)x0=i;if(i>x1)x1=i;if(y<y0)y0=y;if(y>y1)y1=y}
+ const row=(b0,b1)=>{let n=0,sx=0;for(let y=b0;y<b1;y++)for(let i=0;i<c.width;i++)if(d[(y*c.width+i)*4+3]>8){n++;sx+=i}return n?sx/n:NaN};const qh=Math.round((y1-y0)*.15),RT=row(y0,y0+qh),RB=row(y1-qh,y1+1);
  const col=(a0,a1)=>{let t=1e9,u=-1;for(let y=0;y<c.height;y++)for(let i=a0;i<a1;i++)if(d[(y*c.width+i)*4+3]>8){if(y<t)t=y;if(y>u)u=y}return[t,u]};const q=Math.round((x1-x0)*.15),L=col(x0,x0+q),R=col(x1-q,x1+1);
- const sx=b.width/c.width,sy=b.height/c.height;out.push([Math.round(b.left+x0*sx),Math.round(b.left+(x1+1)*sx),Math.round(b.top+y0*sy),Math.round(b.top+(y1+1)*sy),Math.round(b.top+L[0]*sy),Math.round(b.top+L[1]*sy),Math.round(b.top+R[0]*sy),Math.round(b.top+R[1]*sy)])}return out}"""
+ const sx=b.width/c.width,sy=b.height/c.height;out.push([Math.round(b.left+x0*sx),Math.round(b.left+(x1+1)*sx),Math.round(b.top+y0*sy),Math.round(b.top+(y1+1)*sy),Math.round(b.top+L[0]*sy),Math.round(b.top+L[1]*sy),Math.round(b.top+R[0]*sy),Math.round(b.top+R[1]*sy),Math.round(b.left+RT*sx),Math.round(b.left+RB*sx)])}return out}"""
 # Ladezeit: App-Start (DOMContentLoaded; das Inline-Skript mit Aufbau der App und des Raums läuft davor) mit und ohne Start-Animation
 DCL="document.addEventListener('DOMContentLoaded',()=>{window.__dcl=performance.now()})"
 HOME="""()=>{const h=document.querySelector('#nextCard h2').textContent.split(' · ');const m=/Block (\\d) von 4/.exec(document.querySelector('#posLine').textContent);return['Heute: '+h[0],h[1]||'',m?'Block '+m[1]+' von 4':'']}"""
@@ -78,11 +79,12 @@ async def main():
             wall=['splWallArt','splClock','splBoard','splCert'];ov=[(a,b2) for i,a in enumerate(wall) for b2 in wall[i+1:] if not(pa[a]['x1']<=pa[b2]['x0'] or pa[b2]['x1']<=pa[a]['x0'] or pa[a]['y1']<=pa[b2]['y0'] or pa[b2]['y1']<=pa[a]['y0'])]
             chk(not ov and (min(r['fonts'])>=8 or w>900),f'{w}x{h}: Wand-Elemente überlappen nicht {ov}, Schrift lesbar (Zeilenhöhen {r["fonts"]} px)')
             ra=r['imgs'][1];ft=r['feet'];hg=r['homegym']
-            chk(w>900 or (ra[2]>ft['y1'] and .38*w<=ra[1]-ra[0]<=.5*w and ra[3]<hg['y0']-4),f'{w}x{h}: Hantelablage vorn links unter Rack und Füßen (oben {ra[2]} > Füße {ft["y1"]}), Breite {(ra[1]-ra[0])/w:.0%} (Soll 38–50 %), Abstand zu HOMEGYM {hg["y0"]-ra[3]} px')
+            rw,rh=ra[1]-ra[0],ra[3]-ra[2]
+            chk(w>900 or (ra[1]<ft['x0']-.05*w and ra[1]<=.32*w and rh>=.25*h and rh>=1.8*rw and ra[3]<hg['y0']-4),f'{w}x{h}: Hantelablage an der linken Seite, frei vor der Figur (rechts {ra[1]} px, Beine ab {ft["x0"]} px), lang in die Tiefe ({rh} x {rw} px), Abstand zu HOMEGYM {hg["y0"]-ra[3]} px')
             if w<900:
-                sl=(ra[5]-ra[7],ra[4]-ra[6]);tr=pa['splTread'];bn=pa['splBench'];by=r['byBox']
-                chk(sl[0]>=.07*w and sl[1]>=.04*w and ra[6]>ft['y1'],f'{w}x{h}: Ablage läuft schräg nach hinten: rechtes Ende {sl[0]} px (unten) / {sl[1]} px (oben) höher als das linke, bleibt unter den Füßen')
-                chk(0<=tr['x0']<.15*w and tr['x1']>ft['x0'],f'{w}x{h}: Laufband links neben dem Rack gut sichtbar (von {tr["x0"]} px, 3.10: ab ca. 26 % der Breite)')
+                tr=pa['splTread'];bn=pa['splBench'];by=r['byBox'];bd=pa['splBoard']
+                chk(ra[8]<ra[9]-.02*w,f'{w}x{h}: Ablage läuft von unten nach oben leicht nach links (Mitte oben {ra[8]} px, unten {ra[9]} px)')
+                chk(tr['x0']>=0 and tr['y0']<ra[2]-.03*h and tr['y0']>bd['y1'] and tr['h']<.2*h,f'{w}x{h}: Laufband klein an der Wand hinter dem Ende der Ablage sichtbar (oben {tr["y0"]} px, Ablage ab {ra[2]} px, Höhe {tr["h"]} px)')
                 chk(bn['y1']>ft['y1']+.08*h and bn['y1']<hg['y0'] and (bn['x0']>by['x1'] or bn['y1']<by['y0']),f'{w}x{h}: Bank vorn (unten {bn["y1"]} px, Füße {ft["y1"]} px), frei von HOMEGYM / by Joschy')
             chk(r['byPx']>=12,f'{w}x{h}: „by Joschy“ {r["byPx"]} px (mind. 12 px)')
             chk(r['run']<1500,f'{w}x{h}: Start-Animation läuft {r["run"]:.0f} ms nach dem Seitenstart')
