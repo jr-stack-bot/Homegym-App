@@ -2,7 +2,7 @@
 
 ## Download
 
-**[Homegym 3.12 herunterladen (APK, ca. 7 MB)](https://github.com/jr-stack-bot/homegym-app/raw/main/releases/Homegym-3.12.apk)**
+**[Homegym 3.13 herunterladen (APK, ca. 7 MB)](https://github.com/jr-stack-bot/homegym-app/raw/main/releases/Homegym-3.13.apk)**
 
 Auf dem Android-Handy antippen, Datei öffnen und die Installation aus unbekannter Quelle einmalig erlauben. Ab Android 7.
 
@@ -25,6 +25,7 @@ Android-App für Krafttraining zu Hause: geführte Trainings mit animierten Übu
 - **Pausen-Timer** mit Benachrichtigung und Bild-in-Bild-Mini-Fenster, auch wenn die App im Hintergrund ist.
 - **Sprachassistent JAI**: sagt Übungen, Sätze, Gewichte, Countdown und Bestwerte an.
 - **Klügere Steigerung**: nach dem letzten Satz kurz „leicht / passend / hart“ angeben, die nächsten Vorschläge kommen mit Begründung; nach 3 Einheiten ohne Fortschritt ein Plateau-Vorschlag (Gewicht −10 %, neues Ziel oder Variante).
+- **Aufwärmen ca. 10 Minuten**: zuerst 5 Minuten Crosstrainer (oder das vorhandene Cardio-Gerät), danach ca. 5 Minuten sanfte Mobilisation passend zum Tag (Drücken: Schultern, Brust, Brustwirbelsäule · Ziehen: Schulterblätter, Lat, Griff · Beine: Hüfte, Knie, Sprunggelenk, Gesäß), jedes Training anders zusammengestellt.
 - **Aufwärmsätze** vor der ersten Hauptübung mit Scheibenanzeige pro Seite.
 - **Auswertung** mit fünf Bereichen: Kraft (geschätzte Maximalkraft mit Kurve), Muskeln (Sätze pro Muskelgruppe mit Plan-Soll), Kalender mit Serien, Körpermaße und Monatsbericht.
 - **Fortschritt**: Scheiben-Rechner, Verlauf mit Bestleistungen, Körpergewicht, Eiweiß-Zähler, Entlastungswoche.
@@ -72,7 +73,7 @@ Android-App für Krafttraining zu Hause: geführte Trainings mit animierten Übu
 - Boxsack, Gymnastikball, Faszienrolle, Yogamatte
 
 ## Installation
-1. Die APK über den [Download-Link ganz oben](https://github.com/jr-stack-bot/homegym-app/raw/main/releases/Homegym-3.12.apk) laden (aktuell Version 3.12; ältere Versionen liegen im Ordner [`releases/`](releases/)).
+1. Die APK über den [Download-Link ganz oben](https://github.com/jr-stack-bot/homegym-app/raw/main/releases/Homegym-3.13.apk) laden (aktuell Version 3.13; ältere Versionen liegen im Ordner [`releases/`](releases/)).
 2. Auf dem Handy öffnen und „Installation aus unbekannten Quellen“ erlauben.
 3. Beim ersten Training die Benachrichtigungen zulassen.
 
@@ -124,6 +125,7 @@ python3 tests/t36.py     # JAI: Namen der Übungen/Haltungen: Pause einmal „Al
 python3 tests/t37.py     # Kurzhantel-Set: Migration, Rundung auf vorhandene Paare, max. 20 kg, Plan wie 3.6; Start-Animation, Gold-Glanz
 python3 tests/t38.py     # Hanteln in den Animationen: Kurzhantel je Gewicht, Rand/Boden bei 20 kg, Scheiben + Farben, Stange Silber/Gold, Backup, Icon-Safe-Zone
 python3 tests/t39.py     # Start-Animation im Gym-Raum: Raum, Ablage mit 10 Paaren, Wand (Neon, Uhr, Tafel, Urkunde), Dauer 5 s, Tippen, reduzierte Bewegung, Ladezeit
+python3 tests/t40.py     # Aufwärmen 10 min: Crosstrainer zuerst, wechselnde Mobilisation je Tag, Neuladen, Geräte, Animationen, Hauptübungen wie 3.12, max. 59 min
 HOMEGYM_EXTRAS_PW=… python3 tests/t35.py   # Extras: Freischaltung, Speicherung, Backup inkl. 3.2-Backup, Zufällig pro Training, Vorschau (Kennwort per Umgebungsvariable)
 ```
 
@@ -135,10 +137,11 @@ Screenshots landen in `/tmp/homegym-shots/` (änderbar über `HOMEGYM_SHOTS`).
 JAI („Joschy's AI“) ist eine eigene, mit ElevenLabs entworfene Stimme (keine Nachbildung einer realen Person). Die 276 Ansagen wurden einmalig erzeugt, mit `jai/split.py` geschnitten, mit der Effekt-Kette „leicht“ aus `jai/fx.md` bearbeitet und liegen fertig in `android/assets/jai/`. Die App setzt sie zur Laufzeit zusammen, etwa Zahl + „Komma fünf“ + „Kilo“.
 
 ## Versionen
-Aktuell: **3.12**. Details in [CHANGELOG.md](CHANGELOG.md).
+Aktuell: **3.13**. Details in [CHANGELOG.md](CHANGELOG.md).
 
 | Version | Wichtigste Neuerungen |
 |---|---|
+| 3.13 | Aufwärmen 10 min: 5 min Crosstrainer + wechselnde Mobilisation passend zum Tag |
 | 3.12 | Start-Animation: Hantelablage wie das Original, schräg zum Rack; Bank schräg |
 | 3.11 | Start-Animation: Hantelablage schräg nach hinten, Gerät links neben dem Rack, Bank weiter vorn |
 | 3.10 | Start-Animation 5 s: Neon „NEVER GIVE UP“, Wanduhr, Kreidetafel mit dem heutigen Training, Urkunde Hang-Rekord, lange Hantelablage mit 10 Paaren |

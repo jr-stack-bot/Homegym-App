@@ -35,7 +35,7 @@ async def main():
         b=await p.chromium.launch();ctx=await b.new_context(viewport={'width':390,'height':844});pg=await ctx.new_page()
         errs=[];pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:errs.append(m.text) if m.type=='error' else None)
         await pg.goto(U);await pg.wait_for_timeout(500)
-        v=await pg.evaluate("[APP_VER,BK_VER,JOSCHY_DB]");chk(v==['3.12',5,SET],f'Version 3.12, Backup-Format 5, Set {v}')
+        v=await pg.evaluate("[APP_VER,BK_VER,JOSCHY_DB]");chk(v==['3.13',5,SET],f'Version 3.13, Backup-Format 5, Set {v}')
         # ---------- 1) Migration ----------
         await put(pg,OLD)
         r=await pg.evaluate("()=>{const st=JSON.parse(localStorage.getItem(KEY));return{w:st.profile.weights,f:st.profile.db37,gear:st.profile.gear,pre:st.profile.preset,log:st.session.log.map(l=>l.sets.map(s=>s.w)),h:st.history[0].log.map(l=>l.sets.map(s=>s.w))}}")
@@ -105,11 +105,15 @@ async def main():
         # ---------- 3) Plan wie in 3.6, <= 59 min ----------
         DUMP="""(db)=>{const keep=JSON.stringify(S);const o={};for(const c of [1,2,3])for(let w=1;w<=4;w++)for(const d of DAYS)for(const q of [false,true]){
             S.profile={name:'J',gear:[...JOSCHYGEAR],preset:'joschy',weights:{db,kb:[8,12,16],band:[]}};S.prog={v:1,block:w,done:[],cycle:c,units:0,dlLeft:0,dlAt:4};S.history=[];if(S.hang)S.hang.base=null;
-            const it=planItems(d,q,w);o[[c,w,d,q].join('|')]=[estSecs(it,q),it.map(x=>[x.ex,x.sets,x.lo,x.hi])]}S=JSON.parse(keep);save();return o}"""
+            const it=planItems(d,q,w);o[[c,w,d,q].join('|')]=[estSecs(it,q),it.map(x=>[x.ex,x.sets,x.lo,x.hi,!x.fin&&(x.slot===0||/Kniebeuge|Bankdrück|Kreuzheb|Schulterdrück|Rudern|Klimmz|Chin-up/i.test(EX[x.ex].n))])]}S=JSON.parse(keep);save();return o}"""
         p36=await ctx.new_page();await p36.goto(U36);await p36.wait_for_timeout(500)
         ref=await p36.evaluate(DUMP,[]);await p36.close();cur=await pg.evaluate(DUMP,SET)
-        diff=[k for k in ref if ref[k][1]!=cur.get(k,[0,None])[1]];long=[(k,round(v[0]/60,1)) for k,v in cur.items() if v[0]>3540]
-        chk(len(cur)==len(ref)==72 and not diff,f'Plan (Zyklen 1–3 x 4 Blöcke x A/B/C x voll/kurz) identisch zu 3.6 {diff[:3]}')
+        # 3.13: das Aufwärmen dauert 10 min; die Zeit dafür kommt nur aus Neben- und Bonussätzen. Übungen, Reihenfolge und Wdh.-Ziele
+        # bleiben identisch, Hauptübungen auch in den Sätzen, Neben-/Bonusübungen haben 1 bis gleich viele Sätze wie 3.6.
+        def same36(x,y):
+            return len(x)==len(y) and all(a[0]==b[0] and a[2:5]==b[2:5] and (a[1]==b[1] if b[4] else 1<=a[1]<=b[1]) for a,b in zip(x,y))
+        diff=[k for k in ref if not same36(cur.get(k,[0,[]])[1],ref[k][1])];long=[(k,round(v[0]/60,1)) for k,v in cur.items() if v[0]>3540]
+        chk(len(cur)==len(ref)==72 and not diff,f'Plan (Zyklen 1–3 x 4 Blöcke x A/B/C x voll/kurz) identisch zu 3.6 (3.13: nur Neben-/Bonussätze kürzer fürs 10-min-Aufwärmen) {diff[:3]}')
         chk(not long,f'keine Einheit über 59 min {long[:3]}')
         # Geräte-Karte zeigt Joschy Gym / Zubehör
         await pg.evaluate("()=>{S.profile={name:'Joschy',gear:[...JOSCHYGEAR],gearV:2,preset:'joschy',db37:1,weights:{db:JOSCHY_DB.slice(),kb:[8,12,16],band:[]}};save();go('set')}");await pg.wait_for_timeout(300)

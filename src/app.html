@@ -530,6 +530,61 @@ const WARM = [
   {n:"Ausfallschritte ohne Gewicht",reps:"5× je Seite",anim:"lungebw",t:"Hüfte vorne öffnen."}
 ];
 
+/* ================= 3.13 · AUFWÄRMEN 10 MIN (@ Joschy) =================
+   Immer zuerst 5 min Crosstrainer (ohne Crosstrainer das bisherige Ersatz-Cardio aus warmFor), danach ca. 5 min wechselnde,
+   sanfte Mobilisation und Aktivierung passend zum Tag: A Drücken = Schultern, Brust, Brustwirbelsäule · B Ziehen = Schulterblätter,
+   Lat, Griff · C Beine = Hüfte, Knie, Sprunggelenk, Gesäß. Schulter- und hüftfreundlich, nichts Ruckartiges, keine Sprünge.
+   Auswahl deterministisch aus Tag + Einheitenzähler (Anzahl Einträge im Verlauf): jedes Training eine andere Zusammenstellung,
+   nie derselbe Block zweimal hintereinander. Die Liste wird beim Start in S.session.warm gespeichert, bleibt also beim Neuladen fest.
+   Felder: k Id, n Name, an Animation, d Tage, j JAI-Clip (fehlt er, bleibt JAI still), t Anleitung, b Atmung, x Achtung,
+   nd Geräte (Alternativen wie NEEDS), g Gruppe (nur eine je Block), pos 0 liegend · 1 Vierfüßler/kniend · 2 stehend (Reihenfolge). */
+const WARM_SECS=600,WARM_ITEM=60;
+const WPOOL=[
+  {k:"armkreis",n:"Armkreisen",an:"armcircle",d:"AB",j:"warm_armcircle",pos:2,g:"kreis",t:"Arme locker seitlich, erst kleine, dann größere Kreise. 30 Sekunden vorwärts, 30 Sekunden rückwärts.",b:"Ruhig und gleichmäßig weiteratmen.",x:"Nur so groß kreisen, wie es in der Schulter angenehm bleibt."},
+  {k:"schulterkreis",n:"Schulterkreisen",an:"y_schulterkreisen",d:"AB",j:"yoga_schulterkreisen",pos:2,t:"Schultern langsam zu den Ohren, dann weit nach hinten und unten kreisen. Arme hängen locker.",b:"Hochziehen beim Einatmen, nach hinten-unten beim Ausatmen.",x:"Nacken lang lassen, nicht ruckartig."},
+  {k:"wandengel",n:"Wandengel",an:"y_wandengel",d:"AB",j:"yoga_wandengel",pos:2,g:"wand",t:"Rücken, Po und Hinterkopf an der Wand, Arme wie ein Torpfosten. Langsam hoch- und runtergleiten.",b:"Hochgleiten beim Einatmen, runter beim Ausatmen.",x:"Nur so hoch, wie Rücken und Hände an der Wand bleiben. Kein Schmerz in der Schulter."},
+  {k:"wandgleiten",n:"Wandgleiten",an:"wallslide",d:"A",j:"ex_wallslide",pos:2,g:"wand",t:"Unterarme an die Wand, Ellbogen auf Schulterhöhe. Unterarme langsam nach oben schieben und zurück.",b:"Hochschieben beim Ausatmen.",x:"Schultern weg von den Ohren, kleiner Bereich reicht."},
+  {k:"katzekuh",n:"Katze-Kuh",an:"y_katzekuh",d:"ABC",j:"yoga_katzekuh",pos:1,t:"Vierfüßlerstand, Hände unter den Schultern. Rücken langsam rund machen, dann Brust nach vorn öffnen.",b:"Ausatmen rund, einatmen öffnen.",x:"Weich bewegen, Knie bei Bedarf auf eine Unterlage."},
+  {k:"faden",n:"Faden einfädeln",an:"y_faden",d:"AB",j:"yoga_faden",pos:1,t:"Vierfüßlerstand. Einen Arm unter dem Körper durchfädeln, dann zurück und weit zur Decke öffnen. Je Seite 30 Sekunden.",b:"Einfädeln beim Ausatmen, öffnen beim Einatmen.",x:"Drehung aus der Brustwirbelsäule, die Hüfte bleibt über den Knien."},
+  {k:"brustoeffner",n:"Brustöffner im Stehen",an:"y_brustoeffner",d:"A",j:"yoga_brustoeffner",pos:2,t:"Hände hinter dem Rücken verschränken, Brustbein heben, Arme sanft nach hinten-unten. Im Wechsel öffnen und lösen.",b:"Öffnen beim Einatmen, lösen beim Ausatmen.",x:"Arme nicht hochreißen, die vordere Schulter soll nur leicht ziehen."},
+  {k:"pullapart",n:"Band Pull-Aparts",an:"pullapart",d:"AB",j:"warm_pullapart",nd:[["band"]],pos:2,g:"open",t:"Leichtes Band, Arme gestreckt vor der Brust. Band auseinanderziehen, Schulterblätter zusammen, langsam zurück.",b:"Ausatmen beim Auseinanderziehen.",x:"Leichtestes Band nehmen, Schultern bleiben unten."},
+  {k:"armopen",n:"Arme öffnen ohne Band",an:"armopen",d:"AB",j:"warm_armopen",pos:2,g:"open",t:"Arme gestreckt nach vorn, langsam weit nach hinten öffnen, Schulterblätter zusammen, zurück.",b:"Öffnen beim Einatmen, schließen beim Ausatmen.",x:"Nicht in die Endposition schwingen."},
+  {k:"aussenrot",n:"Außenrotation mit Band",an:"bandextrot",d:"AB",j:"ex_bandextrot",nd:[["band"]],pos:2,t:"Ellbogen am Körper, 90 Grad gebeugt. Unterarm langsam nach außen drehen und zurück. Je Seite 30 Sekunden.",b:"Ausatmen beim Drehen nach außen.",x:"Sehr leichtes Band, kleine ruhige Bewegung, schützt die Schulter."},
+  {k:"wandliege",n:"Wand-Liegestütze langsam",an:"wallpush",d:"A",j:"ex_wallpush",pos:2,t:"Hände schulterbreit an die Wand, Körper gerade. Langsam zur Wand und wegdrücken, ohne Last.",b:"Einatmen zur Wand, ausatmen wegdrücken.",x:"Ellbogen etwa 45 Grad vom Körper, nicht ganz einsinken."},
+  {k:"ytw",n:"Y-T-W-Heben",an:"ytw",d:"AB",j:"ex_ytw",pos:0,t:"Bauchlage, Stirn auf der Matte. Arme nacheinander als Y, T und W leicht anheben und senken.",b:"Anheben beim Ausatmen.",x:"Nur wenige Zentimeter heben, ohne Schwung, Nacken lang."},
+  {k:"schwimmer",n:"Schwimmer",an:"swimmer",d:"B",j:"ex_swimmer",pos:0,t:"Bauchlage, Arme und Beine knapp über dem Boden. Langsam im Wechsel paddeln.",b:"Gleichmäßig weiteratmen.",x:"Klein und ruhig bewegen, kein Hohlkreuz."},
+  {k:"welpe",n:"Welpe (Lat-Dehnung)",an:"y_welpe",d:"B",j:"yoga_welpe",pos:1,t:"Aus dem Vierfüßlerstand die Hände weit nach vorn wandern lassen, Brust sinkt Richtung Boden. Kurz halten, wieder hoch, wiederholen.",b:"Ausatmen beim Sinken.",x:"Nur so tief, wie es in der Schulter angenehm bleibt."},
+  {k:"bandrudern",n:"Band-Rudern leicht",an:"bandrow",d:"B",j:"ex_bandrow",nd:[["band"]],pos:2,t:"Leichtes Band, Ellbogen nah am Körper nach hinten ziehen, Schulterblätter zusammen, langsam zurück.",b:"Ausatmen beim Ziehen.",x:"Aufwärmen, keine Arbeit: ganz leichtes Band."},
+  {k:"hangstuetz",n:"Hängen mit Fußstütze",an:"hangsupp",d:"B",j:"ex_hangsupp",nd:[["pullbar"],["rack"]],pos:2,t:"An die Stange greifen, Füße bleiben am Boden oder auf dem Stuhl. 3 × 15 Sekunden locker hängen, dazwischen kurz lösen. Weckt Griff und Lat.",b:"Ruhig weiteratmen, nicht pressen.",x:"Nur so viel Gewicht abgeben, wie die Schulter mag. Nicht einfach fallen lassen."},
+  {k:"birddog",n:"Bird Dog",an:"birddog",d:"BC",j:"ex_birddog",pos:1,t:"Vierfüßlerstand. Langsam einen Arm und das Gegenbein lang machen, kurz halten, wechseln.",b:"Ausatmen beim Strecken.",x:"Becken bleibt waagerecht, Bein nur bis Hüfthöhe."},
+  {k:"hueftkreis",n:"Hüftkreisen",an:"y_hueftkreisen",d:"C",j:"yoga_hueftkreisen",pos:2,t:"Hände an die Hüfte, Knie weich. Becken in ruhigen Kreisen bewegen, nach der Hälfte die Richtung wechseln.",b:"Gleichmäßig weiteratmen.",x:"Kleine Kreise, wenn die Hüfte zwickt."},
+  {k:"kniebeuge",n:"Kniebeugen ohne Gewicht",an:"airsquat",d:"C",j:"ex_airsquatx",pos:2,t:"Langsam in die Hocke, Knie nach außen, Brust oben, zurück hoch.",b:"Einatmen runter, ausatmen hoch.",x:"Nur so tief, wie die Hüfte frei bleibt."},
+  {k:"ausfall",n:"Ausfallschritte ohne Gewicht",an:"lungebw",d:"C",j:"ex_lungebwx",pos:2,t:"Ruhiger Schritt nach hinten, hinteres Knie Richtung Boden, zurück. Seiten abwechseln.",b:"Einatmen runter, ausatmen hoch.",x:"Kleiner Schritt reicht, Knie zeigt über den Fuß."},
+  {k:"seitausfall",n:"Seitliche Ausfallschritte",an:"sidelunge",d:"C",j:"ex_sidelunge",pos:2,t:"Kleiner Schritt zur Seite, Hüfte nach hinten, das andere Bein bleibt gestreckt. Zurück, Seiten abwechseln.",b:"Einatmen in den Schritt, ausatmen zurück.",x:"Schritt nur so weit, wie die Leiste locker bleibt."},
+  {k:"bruecke",n:"Glute Bridge",an:"glutebridge",d:"C",j:"ex_glutebridge",pos:0,g:"bruecke",t:"Rückenlage, Füße aufgestellt. Becken langsam heben, Po fest, langsam senken.",b:"Ausatmen beim Heben.",x:"Kein Hohlkreuz oben, Rippen bleiben unten."},
+  {k:"brueckmarsch",n:"Glute Bridge Marsch",an:"bridgemarch",d:"C",j:"ex_bridgemarch",pos:0,g:"bruecke",t:"In der Brücke abwechselnd ein Knie leicht anheben, Becken bleibt ruhig.",b:"Gleichmäßig weiteratmen.",x:"Becken kippt nicht, kleine Bewegung."},
+  {k:"beinseit",n:"Seitliches Beinheben liegend",an:"sidelyingabd",d:"C",j:"ex_sidelyingabd",pos:0,t:"Seitlage, oberes Bein gestreckt langsam anheben und senken. Je Seite 30 Sekunden.",b:"Ausatmen beim Heben.",x:"Nur bis etwa 30 Grad, Hüfte nicht nach hinten drehen."},
+  {k:"tiefausfall",n:"Hüftbeuger-Mobilisation kniend",an:"y_tiefausfall",d:"C",j:"yoga_tiefausfall",pos:1,t:"Kniender Ausfallschritt. Hüfte sanft nach vorn schieben und zurück, je Seite 30 Sekunden.",b:"Ausatmen beim Vorschieben.",x:"Knie weich unterlegen, nur ein leichtes Ziehen vorn an der Hüfte."},
+  {k:"goodmorning",n:"Hüftbeuge ohne Gewicht",an:"gmbw",d:"C",j:"ex_gmbw",pos:2,t:"Hände an die Hüfte, Knie leicht gebeugt. Hüfte nach hinten schieben, Rücken gerade, wieder aufrichten.",b:"Einatmen nach vorn, ausatmen hoch.",x:"Nur bis ein Ziehen hinten am Oberschenkel kommt."},
+  {k:"waden",n:"Wadenheben ohne Gewicht",an:"calfbw",d:"C",j:"ex_calfbw",pos:2,g:"fuss",t:"Hüftbreit stehen, langsam auf die Zehenspitzen und kontrolliert ab.",b:"Ausatmen hoch.",x:"Bei Bedarf leicht an der Wand festhalten."},
+  {k:"schienbein",n:"Schienbein-Heben an der Wand",an:"tibraise",d:"C",j:"ex_tibraise",pos:2,g:"fuss",t:"Rücken an die Wand, Füße etwas vor dem Körper. Zehen langsam anheben und senken.",b:"Gleichmäßig weiteratmen.",x:"Fersen bleiben am Boden."},
+  {k:"kniewand",n:"Knie zur Wand",an:"kniewand",d:"C",j:"warm_kniewand",pos:2,g:"fuss",t:"Schrittstellung vor der Wand, Hände an der Wand. Vorderes Knie langsam Richtung Wand schieben, Ferse bleibt unten, zurück. Je Seite 30 Sekunden.",b:"Ausatmen beim Vorschieben.",x:"Knie zeigt über die Fußmitte, Ferse nicht abheben."},
+  {k:"marsch",n:"Langsames Knieheben",an:"march",d:"C",j:"warm_march",pos:2,t:"Aufrecht stehen, Knie abwechselnd ruhig bis etwa Hüfthöhe anheben, Arme schwingen mit.",b:"Gleichmäßig weiteratmen.",x:"Knie nur so hoch, wie die Hüfte frei bleibt, nicht springen."}
+];
+function wpCan(w){return!w.nd||w.nd.some(s=>s.every(hasGear))}
+function wpPool(day){return WPOOL.filter(w=>w.d.includes(day)&&wpCan(w)&&AN[w.an])}
+function wpRng(s){let h=2166136261;for(const c of String(s)){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return()=>{h+=0x6D2B79F5;let t=h;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}
+function wpRaw(day,n,cnt,salt){const L=wpPool(day),r=wpRng("hg313|"+day+"|"+n+(salt||""));const a=L.map(w=>[r(),w]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
+  const out=[],gs=new Set();for(const w of a){if(out.length>=cnt)break;if(w.g&&gs.has(w.g))continue;if(w.g)gs.add(w.g);out.push(w)}
+  return out.map((w,i)=>[w,i]).sort((x,y)=>x[0].pos-y[0].pos||x[1]-y[1]).map(x=>x[0])}
+const wpSig=l=>l.map(w=>w.k).join(",");
+function wpPick(day,n,cnt){let l=wpRaw(day,n,cnt);const prev=wpSig(wpRaw(day,n-1,cnt));for(let s=1;s<6&&wpSig(l)===prev;s++)l=wpRaw(day,n,cnt,"#"+s);return l}
+function warmCount(){return Array.isArray(S.history)?S.history.length:0}
+/* 3.13: 5 min Cardio (warmFor wählt das vorhandene Gerät) + Mobilisationsblock bis ca. 10 min. quick/ws bleiben als Parameter (früher kürzer) */
+function warmList(quick,ws,day,n){day=DAYS.includes(day)?day:"A";n=Number.isInteger(n)?n:warmCount();const c=warmFor([WARM[0]])[0];
+  const cnt=Math.max(1,Math.round((WARM_SECS-c.sec)/WARM_ITEM));
+  return[c,...wpPick(day,n,cnt).map(w=>({k:w.k,n:w.n,sec:WARM_ITEM,anim:w.an,t:w.t,b:w.b,x:w.x,j:w.j,day}))]}
+
 const REST_TIPS = [
   "Ausatmen beim Drücken oder Ziehen, einatmen beim Ablassen.",
   "Trink einen Schluck Wasser.",
@@ -580,8 +635,6 @@ const fmtKg=w=>(Math.round(w*100)/100).toLocaleString("de-DE");
 const mmss=s=>{s=Math.max(0,Math.round(s));return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")};
 function toast(t){const el=$("#toast");el.textContent=t;el.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>el.hidden=true,2200)}
 function restOf(item){return Math.round(EX[item.ex].rest*S.settings.restF/5)*5}
-/* 3.0: with warm-up sets before the first heavy lift the general warm-up is shorter (3 min cardio, no lunges) */
-function warmList(quick,ws){return warmFor(quick?[{...WARM[0],n:"Crosstrainer kurz",sec:150},WARM[1],WARM[2],WARM[4]]:ws?[{...WARM[0],sec:180},WARM[1],WARM[2],WARM[3],WARM[4]]:WARM)}
 function todayKey(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
 function bodyKg(){return S.body.length?S.body[S.body.length-1].kg:70}
 function proteinGoal(){return Math.round(bodyKg()*1.8/5)*5}
@@ -624,7 +677,7 @@ async function jaiPlay(seq,opt={}){if(typeof nativeBg==="function"&&nativeBg())r
 /* one entry point: JAI clips or phone voice */
 function announce(text,seq,opt){if(typeof nativeBg==="function"&&nativeBg())return;const m=voiceMode();if(m==="jai")jaiPlay(seq,opt);else if(m==="phone"){window.__jaiLog.push(["phone:"+text]);say(text)}}
 function jaiGreet(){const h=new Date().getHours();return jaiNamed(h<11?"greet_morning":h<18?"greet_noon":"greet_evening")}
-function jaiWarmId(w){const k=/kurz/.test(w.n);const m={cross:k?"warm_cross_kurz":"warm_cross",rowint:k?"warm_rower_kurz":"warm_rower",bikeint:k?"warm_bike_kurz":"warm_bike",walk:k?"warm_tread_kurz":"warm_tread",
+function jaiWarmId(w){if(w.j)return JAI_IDS.has(w.j)?w.j:null;/* 3.13: Mobilisation mit eigenem Clip, fehlt er: still */const k=/kurz/.test(w.n);const m={cross:k?"warm_cross_kurz":"warm_cross",rowint:k?"warm_rower_kurz":"warm_rower",bikeint:k?"warm_bike_kurz":"warm_bike",walk:k?"warm_tread_kurz":"warm_tread",
   jumprope:"warm_rope",march:"warm_march",jj:"ex_jumpjack",armcircle:"warm_armcircle",pullapart:"warm_pullapart",armopen:"warm_armopen",airsquat:"ex_airsquatx",lungebw:"ex_lungebwx"};return m[w.anim]||null}
 function jaiWarmSeq(w){const id=jaiWarmId(w);const s=id?[id]:[];if(w.reps){const n=parseInt(w.reps,10);if(n>0)s.push(...jaiNum(n),"u_mal");if(/je Seite/.test(w.reps))s.push("u_je_seite")}return s}
 /* 3.7: start of every exercise = name + sets/reps/kg. The pause before says "Als Nächstes" + name; the old extra "Nächste Übung" is gone */
@@ -739,6 +792,8 @@ const AN = {
   dbrow:{anchor:"foot",A:{shin:-95,thigh:-72,torso:12,hand:[0,-60],bend:-1,upper2:-80,fore2:-80},B:{shin:-95,thigh:-72,torso:12,hand:[-26,-30],bend:-1,upper2:-80,fore2:-80},eq:[{t:"box",x:42,w:54,y:42},{t:"db",at:"hand"}],tempo:[1,.4,1.8,.4],ph:["Ziehen","Ablassen"]},
   lunge:{lag:.14,anchor:"foot",A:{...STAND,thigh2:-92,shin2:-92,upper:-90,fore:-90},B:{shin:-105,thigh:-5,torso:84,thigh2:-100,shin2:-175,upper:-92,fore:-90,foot2:-150},eq:[{t:"db",at:"hand"},{t:"db",at:"hand2"}],tempo:[1.5,.3,1.2,.5],ph:["Schritt runter","Zurückdrücken"]},
   lungebw:{lag:.14,anchor:"foot",A:{...STAND,thigh2:-92,shin2:-92,upper:-90,fore:-90},B:{shin:-105,thigh:-5,torso:86,thigh2:-100,shin2:-175,upper:-60,fore:-20,foot2:-150},eq:[],tempo:[1.3,.3,1.1,.4],ph:["Schritt runter","Zurück"]},
+  /* 3.13 (@ Joschy) Aufwärmen: Knie zur Wand (Sprunggelenk), Schrittstellung, Hände an der Wand */
+  kniewand:{anchor:"foot",noBal:1,A:{shin:-90,thigh:-92,torso:80,thigh2:-118,shin2:-118,foot2:-25,hand:[44,-2],bend:-1,neck:4},B:{shin:-50,thigh:-132,torso:84,thigh2:-125,shin2:-140,foot2:-25,hand:[53,7],bend:-1,neck:4},eq:[{t:"wall",x:72}],floor:0,tempo:[1.6,.6,1.4,.4],ph:["Knie zur Wand","Zurück"]},
   facepull:{view:"front",A:{ua:-6,us:.3,fa:-6,fs:.3,s:12},B:{ua:12,us:1,fa:96,fs:1,s:12},eq:[{t:"bandFront"}],tempo:[1,.6,1.6,.3],ph:["Zum Gesicht","Zurück"]},
   pullapart:{view:"front",A:{ua:-2,us:.25,fa:-2,fs:.25,s:12},B:{ua:2,us:1,fa:2,fs:1,s:12},eq:[{t:"bandHands"}],tempo:[1,.4,1.2,.2],ph:["Auseinander","Zurück"]},
   kneeraise:{anchor:"hand",A:{upper:90,fore:90,torso:90,thigh:-92,shin:-92,foot:-60},B:{upper:90,fore:90,torso:94,thigh:8,shin:-78,foot:-20},eq:[{t:"bar"}],floor:null,tempo:[1.2,.4,1.8,.4],ph:["Knie hoch","Ablassen"]},
@@ -1807,7 +1862,8 @@ function initSets(it,sg,n){const e=EX[it.ex];const w=startW(it.ex,sg);const dr=e
 const WU=[[.4,8],[.6,5],[.8,3]];const WU_REST=45,WU_SECS=WU.length*(30+WU_REST);
 function wuEx(k){const e=EX[k];return!!e&&(e.type==="bar"||e.type==="db")}
 function wsOn(items){return S.settings.warmSets!==false&&!!items&&!!items[0]&&!items[0].fin&&wuEx(items[0].ex)}
-function estBase(items,quick){return(quick?330:wsOn(items)?360:480)+(wsOn(items)?WU_SECS:0)}
+/* 3.13: allgemeines Aufwärmen immer ca. 10 min (5 min Cardio + 5 min Mobilisation), Aufwärmsätze kommen dazu */
+function estBase(items,quick){return WARM_SECS+(wsOn(items)?WU_SECS:0)}
 /* weight for one warm-up set: pct of the working weight, rounded to what can be loaded (bar ≥ bar weight, plates per side, dumbbell/kettlebell list) */
 function wuW(k,W,p){const e=EX[k];if(!(W>0))return null;let w;
   if(e.type==="bar"){const bar=+S.settings.bar||20;w=Math.max(bar,wNear(k,Math.max(bar,W*p)));if(w<bar)w=bar}
@@ -1829,7 +1885,7 @@ function wuSync(ss){if(!ss||!Array.isArray(ss.items)||!ss.items[0]||!Array.isArr
 function startSession(plan,opt){opt=opt||{};const quick=!!S.settings.quick;const p=prog();const week=p.block;let items=planItems(plan,quick,week);
   if(opt.re)items=items.map(x=>!x.fin&&x.slot>0?{...x,sets:Math.max(1,x.sets-1)}:x);/* re-entry: one set less for assistance exercises */
   const ws=wsOn(items);
-  S.session={plan,week,quick,unit:!quick,cyc:p.cycle,reentry:!!opt.re,deload:!!S.settings.deload,items,warm:warmList(quick,ws),start:Date.now(),phase:"warm",wi:0,ei:0,si:0,warmEnd:null,
+  S.session={plan,week,quick,unit:!quick,cyc:p.cycle,reentry:!!opt.re,deload:!!S.settings.deload,items,warm:warmList(quick,ws,plan,warmCount()),start:Date.now(),phase:"warm",wi:0,ei:0,si:0,warmEnd:null,
     log:items.map(it=>{const sg=suggest(it);const sets=initSets(it,sg);if(opt.re)for(const x of sets)if(+x.w>0)x.w=Math.max(EX[it.ex].type==="bar"?(+S.settings.bar||20):0,wFloor(it.ex,x.w*.9));return{ex:it.ex,sets}})};
   if(ws)S.session.wu={ex:items[0].ex,sets:WU.map(()=>({w:null,done:false})),skip:false};
   save();openTrain()}
@@ -1888,7 +1944,7 @@ window.appResume=function(){const A=nat();const ss=S.session;
 /* warm-up */
 function warmView(){const ss=S.session;const w=ss.warm[ss.wi];const remain=ss.warmEnd?Math.max(0,(ss.warmEnd-Date.now())/1000):w.sec;
   return`<div class="stage"><canvas id="cv"></canvas><span class="phase" id="ph"></span><span class="tempo">${ss.wi+1} / ${ss.warm.length}</span><span class="readout">AUFWÄRM-PROTOKOLL</span></div>
-  <div><div class="label">Aufwärmen</div><h1 class="exname">${esc(w.n)}</h1><p class="muted" style="margin:6px 0 0">${esc(w.t)}</p></div>
+  <div><div class="label">Aufwärmen</div><h1 class="exname">${esc(w.n)}</h1><p class="muted" style="margin:6px 0 0">${esc(w.t)}</p>${w.b?`<p class="muted" style="margin:4px 0 0;font-size:13.5px"><b>Atmung:</b> ${esc(w.b)}</p>`:""}${w.x?`<p class="muted" style="margin:4px 0 0;font-size:13.5px"><b>Achtung:</b> ${esc(w.x)}</p>`:""}</div>
   ${w.sec?`<div class="card" style="align-items:center"><div class="num" id="wTime" style="font-size:64px;line-height:1">${mmss(remain)}</div>
     <button class="btn ${ss.warmEnd?"ghost":"primary"} block" id="wStart">${ss.warmEnd?"Timer läuft · Pause":"Timer starten"}</button></div>`
    :`<div class="card" style="align-items:center"><div class="num" style="font-size:56px;line-height:1">${esc(w.reps)}</div><div class="muted">Wiederholungen, in deinem Tempo</div></div>`}
@@ -2124,7 +2180,7 @@ function adaptCore(day,items,usage){const used=new Set(items.filter(it=>canDo(it
         let best=pool.includes(pick)?pick:pool[0]||pick,bu=usage[best]||0;for(const k of pool){const u=usage[k]||0;if(u<bu){best=k;bu=u}}pick=best}}
     if(!pick)continue;used.add(pick);out.push({...it,ex:pick,...(it.fin?convReps(it,pick):repsFor(it,pick)),adapted:true,orig:it.ex})}
   // keep within 60 minutes: trim sets of adapted items from the end
-  const total=()=>estBase(out,false)+out.filter(x=>!x.fin).reduce((a,x)=>a+itemSecs(x),0);
+  const total=()=>estBase312(out)+out.filter(x=>!x.fin).reduce((a,x)=>a+itemSecs(x),0);/* 3.13: Zeitansatz wie 3.12, Rest regelt fitHour */
   for(let guard=0;guard<20&&total()>3600;guard++){const x=[...out].reverse().find(x=>!x.fin&&x.sets>2);if(!x)break;x.sets--}
   if(usage)for(const x of out)if(!x.fin)usage[x.ex]=(usage[x.ex]||0)+1;
   return out.map((x,i)=>({...x,slot:i}))}
@@ -2843,7 +2899,7 @@ function renderSet(){const st=S.settings;const gearDraft=[...myGear()];gearDraft
    <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn small ghost" id="jaiTest">JAI testen</button><button class="btn small ghost" id="testSig">Signaltöne testen</button></div>
    <div class="field"><span class="label">Block im Zyklus</span><div class="seg">${[1,2,3,4].map(n=>`<button data-cw="${n}" aria-pressed="${progBlock()===n}">Block ${n}</button>`).join("")}</div><span class="muted" style="font-size:12.5px">Der Plan rückt nach jeder kompletten Einheit weiter (A → B → C, dann nächster Block). Hier kannst du den Block von Hand setzen, er beginnt dann wieder bei A.</span></div>
    <div class="field"><span class="label">Entlastung</span><div class="seg"><button data-deload="0" aria-pressed="${!st.deload}">Normal</button><button data-deload="1" aria-pressed="${st.deload}">Entlastung · 60 %</button></div><span class="muted" style="font-size:12.5px">Gilt für die nächsten 3 Einheiten (ein Block), danach automatisch wieder normal. Empfohlen alle 6–8 Blöcke.</span></div>
-   <div class="field"><span class="label">Aufwärmsätze</span><div class="seg"><button data-wsets="1" aria-pressed="${st.warmSets!==false}">An</button><button data-wsets="0" aria-pressed="${st.warmSets===false}">Aus</button></div><span class="muted" style="font-size:12.5px">Vor der ersten Hauptübung mit Gewicht: 40 % × 8, 60 % × 5, 80 % × 3, passend zu deinen Scheiben und Hanteln. Das allgemeine Aufwärmen ist dafür kürzer.</span></div>
+   <div class="field"><span class="label">Aufwärmsätze</span><div class="seg"><button data-wsets="1" aria-pressed="${st.warmSets!==false}">An</button><button data-wsets="0" aria-pressed="${st.warmSets===false}">Aus</button></div><span class="muted" style="font-size:12.5px">Vor der ersten Hauptübung mit Gewicht: 40 % × 8, 60 % × 5, 80 % × 3, passend zu deinen Scheiben und Hanteln. Sie kommen zum allgemeinen Aufwärmen (ca. 10 Minuten) dazu.</span></div>
    <div class="field"><span class="label">Animierte Figur</span><div class="seg">${[["mix","Abwechselnd"],["m","Mann"],["f","Frau"]].map(([v,l])=>`<button data-fig="${v}" aria-pressed="${(st.fig||"mix")===v}">${l}</button>`).join("")}</div></div>
    <div class="field"><span class="label">Animationstempo</span><div class="seg">${[[.75,"Langsam · 0,75×"],[1,"Normal · 1×"]].map(([v,l])=>`<button data-aspd="${v}" aria-pressed="${animSpd()===v}">${l}</button>`).join("")}</div><span class="muted" style="font-size:12.5px">Wie schnell die Figur die Übungen vormacht. Langsam hilft beim Lernen der Technik.</span></div></div>
   ${extrasCard()}
@@ -2965,7 +3021,7 @@ const MOTION={
 };
 for(const k in MOTION){const d=AN[k];if(!d)continue;const m=MOTION[k];for(const f in m){if(f==="A"||f==="B")Object.assign(d[f],m[f]);else d[f]=m[f]}}
 /* ================= 2.1 · HALTE-ÜBUNGEN · KETTLEBELL · GERÄTE-GEWICHTE · BACKUP (@ Joschy) ================= */
-const APP_VER="3.12",BK_VER=5;/* 3.10: Version immer als Text vergleichen („3.10“ ≠ 3.1) *//* 3.0–3.4 keep backup format 5: all new fields are optional, older apps simply ignore them */
+const APP_VER="3.13",BK_VER=5;/* 3.10: Version immer als Text vergleichen („3.10“ ≠ 3.1) *//* 3.0–3.4 keep backup format 5: all new fields are optional, older apps simply ignore them */
 /* ---- hold / tempo variants (strength stays the focus: they are alternatives, never forced) ---- */
 Object.assign(EX,{
   pushpause:{n:"Liegestütze mit Halt in der Mitte",eq:"Matte · Griffe optional",m:"Brust · Trizeps · Schultern",type:"bw",rest:90,inc:0,hold:3,holdAt:"auf halber Höhe",base:"pushup",
@@ -3065,9 +3121,19 @@ function kbMix(day,items){if(!kbOn())return items;const out=items.map(x=>({...x}
 function estSecs(items,quick){let s=estBase(items,quick);for(const it of items){const e=EX[it.ex];const work=e.type==="time"?it.hi+10:(e.uni?75:40);s+=it.sets*(work+restOf(it))}return s}
 function estMinFull(plan,quick,week){return estSecs(planItems(plan,quick,week),quick)/60}
 function bonusMin(plan,week){const its=planItems(plan,false,week).filter(x=>x.fin&&!x.blk);return Math.round((estSecs(its,false)-estBase(its,false))/60)}
+/* 3.13 (@ Joschy): das Aufwärmen ist länger (WARM_SECS). Damit Hauptübungen und ihre Progression genau wie in 3.12 bleiben,
+   kürzt Stufe 1 wie bisher mit dem alten Aufwärm-Zeitansatz (3.12: 360 s bzw. 480 s + Aufwärmsätze). Die zusätzliche Zeit holt
+   Stufe 2 nur aus Neben- und Bonussätzen: Bonus bis 2 (Halte-Bonus 1), Nebenübungen bis 2, dann Bonus und Nebenübungen bis 1 Satz.
+   Hauptübungen (erste Übung und die großen Grundübungen) kürzt Stufe 2 nie. */
+const MAIN_RE=/Kniebeuge|Bankdrück|Kreuzheb|Schulterdrück|Rudern|Klimmz|Chin-up/i;
+function mainLift(x){return x.slot===0||!!(EX[x.ex]&&MAIN_RE.test(EX[x.ex].n))}
+function estBase312(items){return(wsOn(items)?360:480)+(wsOn(items)?WU_SECS:0)}
+function estSecs312(items){return estSecs(items,false)-estBase(items,false)+estBase312(items)}
 function fitHour(items){const out=items.map(x=>({...x}));
-  for(let g=0;g<40&&estSecs(out,false)>3540;g++){const f=[...out].reverse().find(x=>x.fin&&!x.blk&&x.sets>(x.hfin?1:2));if(f){f.sets--;continue}
+  for(let g=0;g<40&&estSecs312(out)>3540;g++){const f=[...out].reverse().find(x=>x.fin&&!x.blk&&x.sets>(x.hfin?1:2));if(f){f.sets--;continue}
     const x=[...out].reverse().find(x=>!x.fin&&x.slot>0&&x.sets>2);if(x){x.sets--;continue}break}
+  const steps=[x=>x.fin&&!x.blk&&x.sets>(x.hfin?1:2),x=>!x.fin&&!mainLift(x)&&x.sets>2,x=>x.fin&&!x.blk&&x.sets>1,x=>!x.fin&&!mainLift(x)&&x.sets>1];
+  for(let g=0;g<60&&estSecs(out,false)>3540;g++){let x=null;for(const f of steps){x=[...out].reverse().find(f);if(x)break}if(!x)break;x.sets--}
   return out.map((x,i)=>({...x,slot:i}))}
 /* ---- weights per gear (catalogue only) ---- */
 const WGEAR=[["db","Kurzhanteln","Gewicht je Hantel. Leer = verstellbar, jedes Gewicht möglich.",[]],["kb","Kettlebells","Welche Kugelhanteln hast du?",[8,12,16]],["band","Widerstandsbänder","Zugkraft in kg, steht meist auf dem Band. Leer = ohne Angabe.",[]]];
@@ -3751,7 +3817,7 @@ function splashRun(){const sp=document.getElementById("splash");if(!sp)return;le
   sp.addEventListener("pointerdown",e=>{e.preventDefault();clearTimeout(t);hide()},{once:true})}
 /* ================= BOOT ================= */
 normTempo();
-if(S.session&&typeof S.session==="object"&&!Array.isArray(S.session.items)){S.session.items=planItems(S.session.plan||"A",false,S.session.week||1);S.session.warm=WARM}/* very old running session */
+if(S.session&&typeof S.session==="object"&&!Array.isArray(S.session.items)){S.session.items=planItems(S.session.plan||"A",false,S.session.week||1);S.session.warm=warmList(false,false,S.session.plan||"A")}/* very old running session */
 {const e=exNorm(S.extras);if(JSON.stringify(e)!==JSON.stringify(S.extras)){S.extras=e;save()}}/* 3.5 Extras (idempotent) */
 if(dbMigrate(S))save();/* 3.7: Joschys Kurzhanteln -> Set Gummi PRO (idempotent, läuft auch nach einem Backup-Import, der neu lädt) */
 migrate3();/* 3.0: plan position from completed units (idempotent; also runs after a backup import, which reloads) */

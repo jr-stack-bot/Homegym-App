@@ -34,7 +34,7 @@ async def main():
         b=await p.chromium.launch();ctx=await b.new_context(viewport={'width':390,'height':844},accept_downloads=True);pg=await ctx.new_page()
         errs=[];pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:errs.append(m.text) if m.type=='error' else None)
         await pg.goto(U);await boot(pg)
-        r=await pg.evaluate("[APP_VER,BK_VER]");chk(r==['3.8',5],'version 3.1, backup format stays 5 '+str(r))
+        r=await pg.evaluate("[APP_VER,BK_VER]");chk(r==['3.13',5],'version 3.13, backup format stays 5 '+str(r))
 
         # ===== 1) MIGRATION from realistic 2.3 states =====
         # 1a fresh 2.3 state in the middle of week 2: last week A,B,C (week 1), this week A (week 2)
@@ -213,7 +213,7 @@ async def main():
         # ===== 5) WARM-UP SETS =====
         await put(pg,"()=>T.base()")
         await pg.click('#startBtn');await pg.wait_for_timeout(200)
-        r=await pg.evaluate("[S.session.warm.length,S.session.warm[0].sec,!!S.session.wu]");chk(r==[5,180,True],'5 shorter general warm-up with warm-up sets '+str(r))
+        r=await pg.evaluate("[S.session.warm.length,S.session.warm[0].sec,!!S.session.wu]");chk(r==[6,300,True],'5 3.13: general warm-up stays 10 min (5 min cardio + 5 mobility) also with warm-up sets '+str(r))
         await pg.click('#wSkipAll');await pg.wait_for_timeout(200)
         await pg.evaluate("()=>{const ss=S.session;ss.log[0].sets.forEach(x=>x.w=60);save();renderTrain()}");await pg.wait_for_timeout(100)
         rows=await pg.eval_on_selector_all('#wuCard .wurow','e=>e.map(x=>x.innerText.replace(/\\s+/g," "))');print('5 rows',rows)
@@ -240,8 +240,8 @@ async def main():
           const a=[ss.items[0].ex,wuRows(ss).map(x=>x.w).join()];S.session=null;S.prog.done=['A'];startSession('B');const b=[S.session.items[0].ex,!!S.session.wu,estBase(S.session.items,false)];S.session=null;
           S.settings.warmSets=false;S.prog.done=[];startSession('A');const c=[!!S.session.wu,S.session.warm.length,estBase(S.session.items,false)];S.session=null;S.settings.warmSets=true;S.prog.block=1;save();return{a,b,c}}""")
         chk(r['a']==['dbbench','10,15,20'],'5 dumbbells snap to your list '+str(r['a']))
-        chk(r['b'][0] in('chinup','pullup') and r['b'][1] is False and r['b'][2]==480,'5 bodyweight main lift: no warm-up sets '+str(r['b']))
-        chk(r['c']==[False,6,480],'5 setting off: no warm-up sets, full general warm-up '+str(r['c']))
+        chk(r['b'][0] in('chinup','pullup') and r['b'][1] is False and r['b'][2]==600,'5 bodyweight main lift: no warm-up sets '+str(r['b']))
+        chk(r['c']==[False,6,600],'5 setting off: no warm-up sets, general warm-up 10 min '+str(r['c']))
         await pg.evaluate("closeTrain()")
         await pg.click('[data-tab=set]');await pg.wait_for_timeout(150);chk(await pg.is_visible('[data-wsets="0"]'),'5 setting "Aufwärmsätze" in settings')
         await pg.click('[data-wsets="0"]');r=await pg.evaluate("S.settings.warmSets");await pg.click('[data-wsets="1"]');chk(r is False and await pg.evaluate("S.settings.warmSets") is True,'5 setting toggles')
@@ -252,7 +252,7 @@ async def main():
             for rf in [1,1.2]:
                 t=await pg.evaluate("""([g,rf])=>{S.profile.gear=eval(g);S.settings.restF=rf;const o=[];for(let w=1;w<=4;w++)for(const d of DAYS){const it=planItems(d,false,w);o.push({c:w+d,m:estMinFull(d,false,w),ws:wsOn(it),base:estBase(it,false)})}return o}""",[g,rf])
                 worst=max(x['m'] for x in t);print('6',g,rf,'max',round(worst,1),'warm-up sets in',sum(1 for x in t if x['ws']),'of 12')
-                chk(worst<=60 and all((x['base']==360+225) if x['ws'] else x['base']==480 for x in t),'6 all 12 units <= 60 min '+g+' restF '+str(rf))
+                chk(worst<=60 and all((x['base']==600+225) if x['ws'] else x['base']==600 for x in t),'6 all 12 units <= 60 min '+g+' restF '+str(rf))
         await pg.evaluate("()=>{S.profile.gear=[...JOSCHYGEAR];S.settings.restF=1;save()}")
 
         # ===== 7) BACKUP roundtrip with all new fields + tolerant validation =====
@@ -273,7 +273,7 @@ async def main():
         print('7 tolerant',r)
         chk(r['prog'] and not r['eff'] and not r['wu'] and r['rr']=={'bench':[6,8]} and r['plat']=={'lateral':{}} and not r['ws'] and r['ss'] and not r['swu'] and not r['seff'],'7 parseBackup validates new fields tolerantly, history kept')
 
-        await pg.click('[data-tab=set]');await pg.wait_for_timeout(150);v=await pg.text_content('#verLine');chk('Version 3.8 · @ Joschy' in v,v)
+        await pg.click('[data-tab=set]');await pg.wait_for_timeout(150);v=await pg.text_content('#verLine');chk('Version 3.13 · @ Joschy' in v,v)
         # ===== 8) Abnahme-Fixes 3.0 =====
         # 8a warm-up sets follow a swapped first main lift (swap sheet, plateau "Variante", gear change); bodyweight -> no card
         await put(pg,"()=>T.base()")
