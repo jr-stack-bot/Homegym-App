@@ -436,7 +436,7 @@ function kxMix(day,items,week){const r=kxRound();if(!r||!week)return items;const
 {const _fh=fitHour;const isM=x=>x.slot===0||KX_MAINRE.test(EX[x.ex].n);const back=it=>{const{rot:_r,orig:_o,lo0:_l,hi0:_h,...r}=it;return{...r,ex:it.orig,lo:it.lo0??it.lo,hi:it.hi0??it.hi}};
   fitHour=function(items){if(!items.some(x=>x.rot&&x.orig))return _fh(items);
     const ref=_fh(items.map(x=>x.rot&&x.orig?back(x):x));const need={};for(const x of ref)if(!x.fin&&isM(x))need[x.ex]=x.sets;
-    const ok=o=>estSecs(o,false)<=3540&&o.every(x=>x.fin||!(x.ex in need)||x.sets>=need[x.ex]);
+    const ok=o=>(FH_QUICK?estSecs312(o):estSecs(o,false))<=3540&&o.every(x=>x.fin||!(x.ex in need)||x.sets>=need[x.ex]);
     let cur=items.map(x=>({...x}));let out=_fh(cur);const day=KX_CTX.d;const one=it=>estSecs([it],false)-estSecs([],false);
     for(let g=0;g<8&&!ok(out);g++){const rot=cur.map((x,i)=>i).filter(i=>cur[i].rot&&cur[i].orig&&EX[cur[i].orig]);if(!rot.length)break;let best=null;
       for(const i of rot.slice().reverse()){const it=cur[i];const base=back(it);const used=new Set(cur.map(x=>x.ex));

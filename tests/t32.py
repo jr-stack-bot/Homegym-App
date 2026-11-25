@@ -67,7 +67,7 @@ async def main():
         await pg.evaluate("closeSheet()")
         # 2) plan: block on pull day after main exercises, before bonus; farmer on leg day; quick without; A unchanged
         r=await pg.evaluate("""()=>{const B=planItems('B',false,1),C=planItems('C',false,1),A=planItems('A',false,1);const bi=B.findIndex(x=>x.blk),ci=C.findIndex(x=>x.blk);
-          return{b:B[bi]&&[B[bi].ex,B[bi].sets,B[bi].lo,B[bi].hi,B[bi].blk],before:B.slice(0,bi).every(x=>!x.fin),after:B.slice(bi+1).every(x=>x.fin&&!x.blk),last:B[B.length-1].hfin,
+          return{b:B[bi]&&[B[bi].ex,B[bi].sets,B[bi].lo,B[bi].hi,B[bi].blk],before:B.slice(0,bi).every(x=>!x.fin),after:B.slice(bi+1).every(x=>x.fin&&!x.blk),last:B.length-1===bi||(B[B.length-1].fin&&!B[B.length-1].blk),/* 3.13: Bonus darf fürs 10-min-Aufwärmen ganz wegfallen */
             c:C[ci]&&[C[ci].ex,C[ci].sets,C[ci].lo,C[ci].blk],a:A.some(x=>x.blk),q:planItems('B',true,1).some(x=>x.blk),sw:swapPool(B[bi],'B')}}""")
         chk(r['b']==['hangsupp',3,15,15,'hang'] and r['before'] and r['after'] and r['last'],f"pull day: block 'Hängen mit Fußstütze' 3 x 15 s after the main exercises, bonus stays last {r['b']}")
         chk(r['c']==['farmerhold',2,30,'grip'] and not r['a'] and not r['q'] and r['sw']==[r['b'][0]],f"leg day: Farmer's Hold 2 x 30 s; push day without; quick training without; never swapped {r['c']}")
@@ -109,6 +109,7 @@ async def main():
         for g in ['[...JOSCHYGEAR]','ALLGEAR','["db","bench","band"]','[]']:
             a=await pg.evaluate(PL,g);o=await po.evaluate(PL,g);diff=[]
             for k in o:
+                o[k]=[y for y in o[k] if not (y[5] and y[0] not in [x[0] for x in a[k]])]  # 3.13: Bonus darf ganz wegfallen (10-min-Aufwärmen)
                 if len(a[k])!=len(o[k]):diff.append((k,'len'));continue
                 for x,y in zip(a[k],o[k]):
                     if g=='["db","bench","band"]' and y[0] in ('facepull','pushdown') and x[0] not in ('facepull','pushdown') and not x[4] and x[1]==y[1]:continue  # 3.4: Face Pulls/Trizepsdrücken am Band brauchen Rack

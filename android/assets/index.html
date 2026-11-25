@@ -697,8 +697,8 @@ const WARM = [
    Immer zuerst 5 min Crosstrainer (ohne Crosstrainer das bisherige Ersatz-Cardio aus warmFor), danach ca. 5 min wechselnde,
    sanfte Mobilisation und Aktivierung passend zum Tag: A Drücken = Schultern, Brust, Brustwirbelsäule · B Ziehen = Schulterblätter,
    Lat, Griff · C Beine = Hüfte, Knie, Sprunggelenk, Gesäß. Schulter- und hüftfreundlich, nichts Ruckartiges, keine Sprünge.
-   Auswahl deterministisch aus Tag + Einheitenzähler (Anzahl Einträge im Verlauf): jedes Training eine andere Zusammenstellung,
-   nie derselbe Block zweimal hintereinander. Die Liste wird beim Start in S.session.warm gespeichert, bleibt also beim Neuladen fest.
+   Auswahl deterministisch aus Tag + Zähler dieses Tages (wie oft der Tag im Verlauf steht): jedes Training eine andere Zusammenstellung,
+   nie derselbe Block zweimal hintereinander am selben Tag, höchstens die Hälfte wiederholt. Die Liste wird beim Start in S.session.warm gespeichert, bleibt also beim Neuladen fest.
    Felder: k Id, n Name, an Animation, d Tage, j JAI-Clip (fehlt er, bleibt JAI still), t Anleitung, b Atmung, x Achtung,
    nd Geräte (Alternativen wie NEEDS), g Gruppe (nur eine je Block), pos 0 liegend · 1 Vierfüßler/kniend · 2 stehend (Reihenfolge). */
 const WARM_SECS=600,WARM_ITEM=60;
@@ -728,7 +728,7 @@ const WPOOL=[
   {k:"brueckmarsch",n:"Glute Bridge Marsch",an:"bridgemarch",d:"C",j:"ex_bridgemarch",pos:0,g:"bruecke",t:"In der Brücke abwechselnd ein Knie leicht anheben, Becken bleibt ruhig.",b:"Gleichmäßig weiteratmen.",x:"Becken kippt nicht, kleine Bewegung."},
   {k:"beinseit",n:"Seitliches Beinheben liegend",an:"sidelyingabd",d:"C",j:"ex_sidelyingabd",pos:0,t:"Seitlage, oberes Bein gestreckt langsam anheben und senken. Je Seite 30 Sekunden.",b:"Ausatmen beim Heben.",x:"Nur bis etwa 30 Grad, Hüfte nicht nach hinten drehen."},
   {k:"tiefausfall",n:"Hüftbeuger-Mobilisation kniend",an:"y_tiefausfall",d:"C",j:"yoga_tiefausfall",pos:1,t:"Kniender Ausfallschritt. Hüfte sanft nach vorn schieben und zurück, je Seite 30 Sekunden.",b:"Ausatmen beim Vorschieben.",x:"Knie weich unterlegen, nur ein leichtes Ziehen vorn an der Hüfte."},
-  {k:"goodmorning",n:"Hüftbeuge ohne Gewicht",an:"gmbw",d:"C",j:"ex_gmbw",pos:2,t:"Hände an die Hüfte, Knie leicht gebeugt. Hüfte nach hinten schieben, Rücken gerade, wieder aufrichten.",b:"Einatmen nach vorn, ausatmen hoch.",x:"Nur bis ein Ziehen hinten am Oberschenkel kommt."},
+  {k:"goodmorning",n:"Hüftbeuge ohne Gewicht",an:"gmbw",d:"C",j:"ex_gmbw",pos:2,t:"Hände locker an den Hinterkopf, Ellbogen weit, Knie leicht gebeugt. Hüfte nach hinten schieben, Rücken gerade, wieder aufrichten.",b:"Einatmen nach vorn, ausatmen hoch.",x:"Nur bis ein Ziehen hinten am Oberschenkel kommt. Zwickt die Schulter, Hände vor der Brust kreuzen."},
   {k:"waden",n:"Wadenheben ohne Gewicht",an:"calfbw",d:"C",j:"ex_calfbw",pos:2,g:"fuss",t:"Hüftbreit stehen, langsam auf die Zehenspitzen und kontrolliert ab.",b:"Ausatmen hoch.",x:"Bei Bedarf leicht an der Wand festhalten."},
   {k:"schienbein",n:"Schienbein-Heben an der Wand",an:"tibraise",d:"C",j:"ex_tibraise",pos:2,g:"fuss",t:"Rücken an die Wand, Füße etwas vor dem Körper. Zehen langsam anheben und senken.",b:"Gleichmäßig weiteratmen.",x:"Fersen bleiben am Boden."},
   {k:"kniewand",n:"Knie zur Wand",an:"kniewand",d:"C",j:"warm_kniewand",pos:2,g:"fuss",t:"Schrittstellung vor der Wand, Hände an der Wand. Vorderes Knie langsam Richtung Wand schieben, Ferse bleibt unten, zurück. Je Seite 30 Sekunden.",b:"Ausatmen beim Vorschieben.",x:"Knie zeigt über die Fußmitte, Ferse nicht abheben."},
@@ -737,14 +737,22 @@ const WPOOL=[
 function wpCan(w){return!w.nd||w.nd.some(s=>s.every(hasGear))}
 function wpPool(day){return WPOOL.filter(w=>w.d.includes(day)&&wpCan(w)&&AN[w.an])}
 function wpRng(s){let h=2166136261;for(const c of String(s)){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return()=>{h+=0x6D2B79F5;let t=h;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}
-function wpRaw(day,n,cnt,salt){const L=wpPool(day),r=wpRng("hg313|"+day+"|"+n+(salt||""));const a=L.map(w=>[r(),w]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
-  const out=[],gs=new Set();for(const w of a){if(out.length>=cnt)break;if(w.g&&gs.has(w.g))continue;if(w.g)gs.add(w.g);out.push(w)}
-  return out.map((w,i)=>[w,i]).sort((x,y)=>x[0].pos-y[0].pos||x[1]-y[1]).map(x=>x[0])}
+/* Block m eines Tages (m = wie oft dieser Tag schon im Verlauf steht). Verglichen wird mit dem letzten Block DESSELBEN Tages (m-1):
+   höchstens die Hälfte der Übungen darf sich wiederholen (soweit der Pool reicht), nie derselbe Block. Rekursiv ab m=0, gemerkt je Geräte-Pool. */
+const WP_MEMO=new Map();
+function wpOrder(l){return l.map((w,i)=>[w,i]).sort((x,y)=>x[0].pos-y[0].pos||x[1]-y[1]).map(x=>x[0])}
+function wpBuild(L,day,m,cnt,prev,salt){const r=wpRng("hg313|"+day+"|"+m+(salt||""));const a=L.map(w=>[r(),w]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
+  const pk=new Set(prev.map(w=>w.k));const lim=Math.floor(cnt/2);const out=[],gs=new Set();let ov=0;
+  const take=(w,force)=>{if(out.length>=cnt||out.includes(w)||(w.g&&gs.has(w.g)))return;const rep=pk.has(w.k);if(rep&&!force&&ov>=lim)return;if(rep)ov++;if(w.g)gs.add(w.g);out.push(w)};
+  for(const w of a)take(w,false);for(const w of a)take(w,true);return wpOrder(out)}
 const wpSig=l=>l.map(w=>w.k).join(",");
-function wpPick(day,n,cnt){let l=wpRaw(day,n,cnt);const prev=wpSig(wpRaw(day,n-1,cnt));for(let s=1;s<6&&wpSig(l)===prev;s++)l=wpRaw(day,n,cnt,"#"+s);return l}
-function warmCount(){return Array.isArray(S.history)?S.history.length:0}
+function wpPick(day,m,cnt){const L=wpPool(day);const key=day+"|"+cnt+"|"+L.map(w=>w.k).join(",");let c=WP_MEMO.get(key);if(!c){c=[];WP_MEMO.set(key,c)}
+  for(let i=c.length;i<=m;i++){const prev=i?c[i-1]:[];let l=wpBuild(L,day,i,cnt,prev);for(let s=1;s<8&&i&&wpSig(l)===wpSig(prev);s++)l=wpBuild(L,day,i,cnt,prev,"#"+s);
+    if(i&&wpSig(l)===wpSig(prev)&&l.length>1)l=[...l.slice(1),l[0]];c.push(l)}
+  return c[m]}
+function warmCount(day){return Array.isArray(S.history)?S.history.filter(h=>h&&h.plan===day).length:0}
 /* 3.13: 5 min Cardio (warmFor wählt das vorhandene Gerät) + Mobilisationsblock bis ca. 10 min. quick/ws bleiben als Parameter (früher kürzer) */
-function warmList(quick,ws,day,n){day=DAYS.includes(day)?day:"A";n=Number.isInteger(n)?n:warmCount();const c=warmFor([WARM[0]])[0];
+function warmList(quick,ws,day,n){day=DAYS.includes(day)?day:"A";n=Number.isInteger(n)&&n>=0?Math.min(n,5000):warmCount(day);const c=warmFor([WARM[0]])[0];
   const cnt=Math.max(1,Math.round((WARM_SECS-c.sec)/WARM_ITEM));
   return[c,...wpPick(day,n,cnt).map(w=>({k:w.k,n:w.n,sec:WARM_ITEM,anim:w.an,t:w.t,b:w.b,x:w.x,j:w.j,day}))]}
 
@@ -956,7 +964,7 @@ const AN = {
   lunge:{lag:.14,anchor:"foot",A:{...STAND,thigh2:-92,shin2:-92,upper:-90,fore:-90},B:{shin:-105,thigh:-5,torso:84,thigh2:-100,shin2:-175,upper:-92,fore:-90,foot2:-150},eq:[{t:"db",at:"hand"},{t:"db",at:"hand2"}],tempo:[1.5,.3,1.2,.5],ph:["Schritt runter","Zurückdrücken"]},
   lungebw:{lag:.14,anchor:"foot",A:{...STAND,thigh2:-92,shin2:-92,upper:-90,fore:-90},B:{shin:-105,thigh:-5,torso:86,thigh2:-100,shin2:-175,upper:-60,fore:-20,foot2:-150},eq:[],tempo:[1.3,.3,1.1,.4],ph:["Schritt runter","Zurück"]},
   /* 3.13 (@ Joschy) Aufwärmen: Knie zur Wand (Sprunggelenk), Schrittstellung, Hände an der Wand */
-  kniewand:{anchor:"foot",noBal:1,A:{shin:-90,thigh:-92,torso:80,thigh2:-118,shin2:-118,foot2:-25,hand:[44,-2],bend:-1,neck:4},B:{shin:-50,thigh:-132,torso:84,thigh2:-125,shin2:-140,foot2:-25,hand:[53,7],bend:-1,neck:4},eq:[{t:"wall",x:72}],floor:0,tempo:[1.6,.6,1.4,.4],ph:["Knie zur Wand","Zurück"]},
+  kniewand:{anchor:"foot",noBal:1,/* Hände absolut an der Wand (handAt), ragen nie hindurch; Kniebeugung = thigh - shin > 0 */A:{shin:-92,thigh:-88,torso:80,thigh2:-118,shin2:-118,foot2:-25,handAt:[61,147],bend:-1,neck:4},B:{shin:-120,thigh:-62,torso:82,thigh2:-118,shin2:-118,foot2:-25,handAt:[61,136],bend:-1,neck:4},eq:[{t:"wall",x:72}],floor:0,tempo:[1.6,.6,1.4,.4],ph:["Knie zur Wand","Zurück"]},
   facepull:{view:"front",A:{ua:-6,us:.3,fa:-6,fs:.3,s:12},B:{ua:12,us:1,fa:96,fs:1,s:12},eq:[{t:"bandFront"}],tempo:[1,.6,1.6,.3],ph:["Zum Gesicht","Zurück"]},
   pullapart:{view:"front",A:{ua:-2,us:.25,fa:-2,fs:.25,s:12},B:{ua:2,us:1,fa:2,fs:1,s:12},eq:[{t:"bandHands"}],tempo:[1,.4,1.2,.2],ph:["Auseinander","Zurück"]},
   kneeraise:{anchor:"hand",A:{upper:90,fore:90,torso:90,thigh:-92,shin:-92,foot:-60},B:{upper:90,fore:90,torso:94,thigh:8,shin:-78,foot:-20},eq:[{t:"bar"}],floor:null,tempo:[1.2,.4,1.8,.4],ph:["Knie hoch","Ablassen"]},
@@ -1072,7 +1080,7 @@ function cycleWeek(d){const w=Math.round((weekStart(d||new Date()).getTime()-cyc
 function dayDef(week,day){const W=PROGRAM[(week||1)-1]||PROGRAM[0];return W.days.find(x=>x.key===day)||W.days[0]}
 function planItems(day,quick,week){week=week||progBlock();const d=dayDef(week,day);let it=d.items.map((v,i)=>({ex:v[0],sets:v[1],lo:v[2],hi:v[3],slot:i}));
   it.push({ex:d.fin[0],sets:d.fin[1],lo:d.fin[2],hi:d.fin[3],slot:it.length,fin:true});
-  it=adaptItems(day,it,week);it=kbMix(day,it);it=hangMix(day,it);it.push(holdFin(day,week,it));it=fitHour(it);
+  it=adaptItems(day,it,week);it=kbMix(day,it);it=hangMix(day,it);it.push(holdFin(day,week,it));{const q0=FH_QUICK;FH_QUICK=!!quick;try{it=fitHour(it)}finally{FH_QUICK=q0}}
   if(S.rr&&typeof S.rr==="object")it=it.map(x=>{const o=!x.fin&&S.rr[x.ex];return Array.isArray(o)?{...x,lo:o[0],hi:o[1],rr:1}:x});/* 3.0: rep target changed after a plateau */
   if(quick)it=it.filter(x=>!x.fin).slice(0,4).map(x=>({...x,sets:Math.max(2,x.sets-1)}));return it}
 function doneThisWeek(){const ws=weekStart(new Date());return new Set(S.history.filter(h=>new Date(h.date)>=ws).map(h=>h.plan))}/* calendar week, only for the week card (and the 2.x migration) */
@@ -2068,7 +2076,7 @@ function wuSync(ss){if(!ss||!Array.isArray(ss.items)||!ss.items[0]||!Array.isArr
 function startSession(plan,opt){opt=opt||{};const quick=!!S.settings.quick;const p=prog();const week=p.block;let items=planItems(plan,quick,week);
   if(opt.re)items=items.map(x=>!x.fin&&x.slot>0?{...x,sets:Math.max(1,x.sets-1)}:x);/* re-entry: one set less for assistance exercises */
   const ws=wsOn(items);
-  S.session={plan,week,quick,unit:!quick,cyc:p.cycle,reentry:!!opt.re,deload:!!S.settings.deload,items,warm:warmList(quick,ws,plan,warmCount()),start:Date.now(),phase:"warm",wi:0,ei:0,si:0,warmEnd:null,
+  S.session={plan,week,quick,unit:!quick,cyc:p.cycle,reentry:!!opt.re,deload:!!S.settings.deload,items,warm:warmList(quick,ws,plan,warmCount(plan)),start:Date.now(),phase:"warm",wi:0,ei:0,si:0,warmEnd:null,
     log:items.map(it=>{const sg=suggest(it);const sets=initSets(it,sg);if(opt.re)for(const x of sets)if(+x.w>0)x.w=Math.max(EX[it.ex].type==="bar"?(+S.settings.bar||20):0,wFloor(it.ex,x.w*.9));return{ex:it.ex,sets}})};
   if(ws)S.session.wu={ex:items[0].ex,sets:WU.map(()=>({w:null,done:false})),skip:false};
   save();openTrain()}
@@ -3304,19 +3312,34 @@ function kbMix(day,items){if(!kbOn())return items;const out=items.map(x=>({...x}
 function estSecs(items,quick){let s=estBase(items,quick);for(const it of items){const e=EX[it.ex];const work=e.type==="time"?it.hi+10:(e.uni?75:40);s+=it.sets*(work+restOf(it))}return s}
 function estMinFull(plan,quick,week){return estSecs(planItems(plan,quick,week),quick)/60}
 function bonusMin(plan,week){const its=planItems(plan,false,week).filter(x=>x.fin&&!x.blk);return Math.round((estSecs(its,false)-estBase(its,false))/60)}
-/* 3.13 (@ Joschy): das Aufwärmen ist länger (WARM_SECS). Damit Hauptübungen und ihre Progression genau wie in 3.12 bleiben,
-   kürzt Stufe 1 wie bisher mit dem alten Aufwärm-Zeitansatz (3.12: 360 s bzw. 480 s + Aufwärmsätze). Die zusätzliche Zeit holt
-   Stufe 2 nur aus Neben- und Bonussätzen: Bonus bis 2 (Halte-Bonus 1), Nebenübungen bis 2, dann Bonus und Nebenübungen bis 1 Satz.
-   Hauptübungen (erste Übung und die großen Grundübungen) kürzt Stufe 2 nie. */
-const MAIN_RE=/Kniebeuge|Bankdrück|Kreuzheb|Schulterdrück|Rudern|Klimmz|Chin-up/i;
-function mainLift(x){return x.slot===0||!!(EX[x.ex]&&MAIN_RE.test(EX[x.ex].n))}
+/* 3.13 (@ Joschy): das Aufwärmen ist länger (WARM_SECS). Hauptübungen und ihre Progression bleiben genau wie in 3.12:
+   Geschützt sind Slot 0–2, alle Übungen mit Block-Steigerung und die Grundübungen (MAIN_RE) (Sätze/Wdh. ändern sich am selben Tag über die Blöcke); sie
+   bekommen genau die Sätze, die 3.12 mit dem alten Aufwärm-Zeitansatz (360 s bzw. 480 s + Aufwärmsätze) hatte.
+   Die zusätzliche Zeit kommt nur aus Bonus und Nebenübungen, in dieser Reihenfolge:
+   a) Bonus/Finisher ganz streichen (nie 1 Satz/1 Runde), b) Nebenübungen bis auf 2 Sätze kürzen, c) ganze Nebenübung streichen;
+   danach kommt ein gestrichener Bonus mit mind. 2 Sätzen zurück, wenn noch Zeit bleibt.
+   Griff-/Hang-Block (blk) bleibt. Kurztraining (FH_QUICK): nur der 3.12-Schritt, Sätze wie 3.12. */
+let FH_QUICK=false;
 function estBase312(items){return(wsOn(items)?360:480)+(wsOn(items)?WU_SECS:0)}
 function estSecs312(items){return estSecs(items,false)-estBase(items,false)+estBase312(items)}
-function fitHour(items){const out=items.map(x=>({...x}));
+function blockProg(day,k){if(!DAYS.includes(day))return false;const v=new Set();let n=0;
+  for(let w=1;w<=PROGRAM.length;w++){const d=dayDef(w,day);for(const it of d.items)if(it[0]===k){n++;v.add(it.slice(1).join("/"))}}return n>=2&&v.size>1}
+const MAIN_RE=/Kniebeuge|Bankdrück|Kreuzheb|Schulterdrück|Rudern|Klimmz|Chin-up/i;/* Grundübungen wie in t30 geprüft: bleiben zusätzlich geschützt */
+function mainLift(x,day){return!x.fin&&(x.slot<=2||!!(EX[x.ex]&&MAIN_RE.test(EX[x.ex].n))||blockProg(day||(typeof KX_CTX!=="undefined"&&KX_CTX.d)||"",x.orig||x.ex)||blockProg(day||(typeof KX_CTX!=="undefined"&&KX_CTX.d)||"",x.ex))}
+function fit312(items){const out=items.map(x=>({...x}));
   for(let g=0;g<40&&estSecs312(out)>3540;g++){const f=[...out].reverse().find(x=>x.fin&&!x.blk&&x.sets>(x.hfin?1:2));if(f){f.sets--;continue}
     const x=[...out].reverse().find(x=>!x.fin&&x.slot>0&&x.sets>2);if(x){x.sets--;continue}break}
-  const steps=[x=>x.fin&&!x.blk&&x.sets>(x.hfin?1:2),x=>!x.fin&&!mainLift(x)&&x.sets>2,x=>x.fin&&!x.blk&&x.sets>1,x=>!x.fin&&!mainLift(x)&&x.sets>1];
-  for(let g=0;g<60&&estSecs(out,false)>3540;g++){let x=null;for(const f of steps){x=[...out].reverse().find(f);if(x)break}if(!x)break;x.sets--}
+  return out}
+function fitHour(items){const ref=fit312(items);
+  if(FH_QUICK)return ref.map((x,i)=>({...x,slot:i}));
+  let out=items.map((x,i)=>mainLift(x)?{...ref[i]}:{...x});
+  for(let g=0;g<80&&estSecs(out,false)>3540;g++){
+    const f=[...out].reverse().find(x=>x.fin&&!x.blk);if(f){out=out.filter(x=>x!==f);continue}
+    const x=[...out].reverse().find(x=>!x.fin&&!mainLift(x)&&x.sets>2);if(x){x.sets--;continue}
+    const y=[...out].reverse().find(x=>!x.fin&&!mainLift(x));if(y){out=out.filter(x=>x!==y);continue}break}
+  /* gestrichene Bonus-Übungen kommen zurück, wenn die Zeit reicht (mit möglichst vielen Sätzen, mindestens 2) */
+  for(const f of items.filter(x=>x.fin&&!x.blk)){if(out.some(x=>x.slot===f.slot))continue;
+    for(let n=f.sets;n>=2;n--){const t=[...out,{...f,sets:n}].sort((a,b)=>a.slot-b.slot);if(estSecs(t,false)<=3540){out=t;break}}}
   return out.map((x,i)=>({...x,slot:i}))}
 /* ---- weights per gear (catalogue only) ---- */
 const WGEAR=[["db","Kurzhanteln","Gewicht je Hantel. Leer = verstellbar, jedes Gewicht möglich.",[]],["kb","Kettlebells","Welche Kugelhanteln hast du?",[8,12,16]],["band","Widerstandsbänder","Zugkraft in kg, steht meist auf dem Band. Leer = ohne Angabe.",[]]];
@@ -5505,7 +5528,7 @@ function kxMix(day,items,week){const r=kxRound();if(!r||!week)return items;const
 {const _fh=fitHour;const isM=x=>x.slot===0||KX_MAINRE.test(EX[x.ex].n);const back=it=>{const{rot:_r,orig:_o,lo0:_l,hi0:_h,...r}=it;return{...r,ex:it.orig,lo:it.lo0??it.lo,hi:it.hi0??it.hi}};
   fitHour=function(items){if(!items.some(x=>x.rot&&x.orig))return _fh(items);
     const ref=_fh(items.map(x=>x.rot&&x.orig?back(x):x));const need={};for(const x of ref)if(!x.fin&&isM(x))need[x.ex]=x.sets;
-    const ok=o=>estSecs(o,false)<=3540&&o.every(x=>x.fin||!(x.ex in need)||x.sets>=need[x.ex]);
+    const ok=o=>(FH_QUICK?estSecs312(o):estSecs(o,false))<=3540&&o.every(x=>x.fin||!(x.ex in need)||x.sets>=need[x.ex]);
     let cur=items.map(x=>({...x}));let out=_fh(cur);const day=KX_CTX.d;const one=it=>estSecs([it],false)-estSecs([],false);
     for(let g=0;g<8&&!ok(out);g++){const rot=cur.map((x,i)=>i).filter(i=>cur[i].rot&&cur[i].orig&&EX[cur[i].orig]);if(!rot.length)break;let best=null;
       for(const i of rot.slice().reverse()){const it=cur[i];const base=back(it);const used=new Set(cur.map(x=>x.ex));

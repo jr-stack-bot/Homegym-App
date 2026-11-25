@@ -2,10 +2,10 @@
 
 ## 3.13
 - **Aufwärmen jetzt ca. 10 Minuten und abwechslungsreich**: immer zuerst 5 Minuten Crosstrainer (ohne Crosstrainer wie bisher Rudergerät, Heimtrainer, Laufband, Seil oder Marschieren), danach ca. 5 Minuten sanfte Mobilisation und Aktivierung passend zum Tag: Drücken (Schultern, Brust, Brustwirbelsäule), Ziehen (Schulterblätter, Lat, Griff), Beine (Hüfte, Knie, Sprunggelenk, Gesäß). Schulter- und hüftfreundlich, ohne Sprünge.
-- Pool mit 30 Aufwärmübungen (mit Joschys Geräten 12 / 14 / 15 je Tag), jede mit Animation, Anleitung, Atmung und Achtung-Hinweis; nur Übungen mit vorhandenen Geräten. Neu: „Knie zur Wand“ (Sprunggelenk) mit eigener Animation, noch ohne JAI-Clip (JAI bleibt dort still).
-- Jedes Training bekommt eine andere Zusammenstellung (aus Tag und Einheitenzähler, nie derselbe Block zweimal hintereinander); innerhalb einer Einheit bleibt sie fest, auch nach einem Neuladen.
-- Das gilt auch für Kurztraining. Die Einheit bleibt bei höchstens 59 Minuten: Die zusätzliche Zeit kommt nur aus Neben- und Bonussätzen, Hauptübungen und Steigerung bleiben exakt wie in 3.12.
-- t40 neu; t27 auf das 10-Minuten-Aufwärmen angepasst; Versionsprüfungen auf „3.13“.
+- Pool mit 30 Aufwärmübungen (mit Joschys Geräten 12 / 14 / 15 je Tag), jede mit Animation, Anleitung, Atmung und Achtung-Hinweis; nur Übungen mit vorhandenen Geräten. Neu: „Knie zur Wand“ (Sprunggelenk) mit eigener Animation (Hände bleiben an der Wand), noch ohne JAI-Clip (JAI bleibt dort still).
+- Jeder Trainingstag bekommt eine andere Zusammenstellung als beim letzten Mal an diesem Tag (höchstens die Hälfte gleich, soweit die Geräte es zulassen); innerhalb einer Einheit bleibt sie fest, auch nach einem Neuladen.
+- **59-Minuten-Grenze**: Slot 1–3, Übungen mit Block-Steigerung und die Grundübungen bleiben exakt wie in 3.12. Die Zeit fürs Aufwärmen kommt zuerst aus dem Bonus (ganz oder gar nicht, nie nur 1 Satz; ein gestrichener Bonus kommt zurück, wenn die Zeit reicht), dann aus Nebenübungen (nie unter 2 Sätze, sonst fällt lieber eine ganze Nebenübung weg). Kurztraining: Sätze wie in 3.12, nur das Aufwärmen ist länger.
+- t40 neu (Aufwärmen, Abwechslung je Tag, Geräte, Animationen, Vergleich mit 3.12 über 11 520 Einheiten); t37 prüft nach Slot/Block-Steigerung statt nach Namen; t27 auf das 10-Minuten-Aufwärmen; Versionsprüfungen auf „3.13“.
 
 ## 3.12
 - **Hantelablage wie Joschys echte Ablage**: schwarzes Stahlgestell mit zwei A-förmigen Seitenteilen (Vierkantrohr, quadratische Fußplatten, untere Querstrebe), oben hinten und vorn tiefer je ein Doppelholm mit V-Auflagen. Alles gerade und räumlich richtig mit gemeinsamem Fluchtpunkt; Füße stehen auf dem Boden, Holme liegen auf den Seitenteilen, jede Hantel liegt in ihrer Auflage. Auf der Querstrebe steht „Joschy“.

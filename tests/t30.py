@@ -132,8 +132,12 @@ async def main():
         # (Kniebeuge, Bankdrücken, Kreuzheben, Schulterdrücken, Rudern, Klimmzug incl. Negativ-Klimmzüge) keep their sets at EVERY
         # position (not only slot 0) – strict check of exercise, sets, reps and order.
         MAINRE=r"/Kniebeuge|Bankdrück|Kreuzheb|Schulterdrück|Rudern|Klimmz|Chin-up/i"
-        PLAN="(g)=>{const M="+MAINRE+";S.profile.gear=eval(g);const o={};for(let w=1;w<=4;w++)for(const d of DAYS)o[w+d]=planItems(d,false,w).filter(x=>!x.blk).map(x=>[x.ex,x.sets,x.lo,x.hi,x.slot===0||M.test(EX[x.ex].n)]);S.profile.gear=[...JOSCHYGEAR];return o}"
+        PLAN="(g)=>{const M="+MAINRE+";S.profile.gear=eval(g);const o={};for(let w=1;w<=4;w++)for(const d of DAYS)o[w+d]=planItems(d,false,w).filter(x=>!x.blk).map(x=>[x.ex,x.sets,x.lo,x.hi,x.slot===0||M.test(EX[x.ex].n),!!x.fin]);S.profile.gear=[...JOSCHYGEAR];return o}"
+        # 3.13: für das 10-min-Aufwärmen darf ein Bonus (fin) ganz wegfallen; alle anderen Übungen bleiben streng wie in 3.1
+        def dropfin(a,b2):
+            return {k:[y for y in b2[k] if not (y[5] and y[0] not in [x[0] for x in a[k]])] for k in b2}
         def same31(a,b2):
+            b2=dropfin(a,b2)
             return a.keys()==b2.keys() and all(len(a[k])==len(b2[k]) and all(x[0]==y[0] and x[2:4]==y[2:4] and x[4]==y[4] and (x[1]==y[1] if y[4] else 1<=x[1]<=y[1]) for x,y in zip(a[k],b2[k])) for k in a)
         def mains(a):return sum(1 for k in a for x in a[k] if x[4])
         for g,name in [('[...JOSCHYGEAR]','Joschys Homegym'),('ALLGEAR','Alles')]:
@@ -146,6 +150,7 @@ async def main():
         fp=[(k,x[0]) for k in b2 for x,y in zip(a[k],b2[k]) if y[0] in RB]
         a2={k:[(list(y[:1])+list(x[1:4])+[y[4]] if y[0] in RB and not x[4] and x[1]==y[1] and x[0] not in RB else x) for x,y in zip(a[k],b2[k])]+a[k][len(b2[k]):] for k in a}
         def same31fp(a,b2):
+            b2=dropfin(a,b2)
             return a.keys()==b2.keys() and all(len(a[k])==len(b2[k]) and all(x[0]==y[0] and (x[2:4]==y[2:4] or y[0] in RB) and x[4]==y[4] and (x[1]==y[1] if y[4] else 1<=x[1]<=y[1]) for x,y in zip(a[k],b2[k])) for k in a)
         chk(same31fp(a2,b2) and mains(b2)>=12 and fp and all(e not in RB for _,e in fp),f'preset Nur Kurzhanteln: all 12 sessions as in 3.1 except band+rack exercises -> {sorted(set(e for _,e in fp))}, main lifts strict at every position ({mains(b2)} slots); plus grip block')
         await po.close()

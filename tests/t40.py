@@ -1,12 +1,14 @@
 # Homegym 3.13 @ Joschy – t40: Aufwärmen 10 min, Crosstrainer zuerst, danach wechselnde Mobilisation passend zum Tag
 # 1) Dauer ca. 10 min (±1) für jede Einheit, Kurz, mit/ohne Aufwärmsätze; Cardio (Crosstrainer bzw. Ersatz) immer zuerst
-# 2) Abwechslung: 12 aufeinanderfolgende Einheiten -> mind. 8 verschiedene Blöcke, nie derselbe Block zweimal hintereinander
-#    (auch nicht bei gleichem Tag hintereinander); deterministisch (gleiche Eingabe = gleicher Block)
+# 2) Abwechslung: Zähler je Tag (wie oft der Tag im Verlauf steht); am selben Tag nie derselbe Block zweimal hintereinander,
+#    höchstens die Hälfte wiederholt (soweit der Pool reicht, auch ohne Geräte/Seil); 12 Einheiten je Tag mind. 8 verschiedene Blöcke
 # 3) Auswahl passt zum Tag (Push: Schultern/Brust/BWS, Pull: Schulterblätter/Lat/Griff, Beine: Hüfte/Knie/Sprunggelenk/Gesäß)
 # 4) Stabil beim Neuladen (in S.session gespeichert), auch wenn sich der Verlauf ändert
 # 5) Geräte werden beachtet (Band, Klimmzugstange/Rack, Crosstrainer-Ersatz, ohne Geräte)
 # 6) alle Aufwärmübungen haben Animation (Mann/Frau, mit/ohne Kostüm zeichnen etwas), Anleitung, Atmung, Achtung
-# 7) Hauptübungen exakt wie 3.12 (releases/Homegym-3.12.apk), Übungslisten gleich, keine Einheit > 59 min (Zyklen 1-8, 24 Geräte-Einstellungen, voll/kurz)
+# 7) gegen 3.12 (releases/Homegym-3.12.apk), Zyklen 1-8, 5 Gerätesets x Aufwärmsätze x KB x Pausen, voll/kurz, <= 59 min:
+#    geschützt (Slot 0-2, Block-Steigerung, Grundübungen) exakt wie 3.12; Nebenübungen 2..Plan-Sätze, Reihenfolge gleich;
+#    Bonus ganz oder gar nicht (nie 1 Satz); Griff-/Hang-Block unverändert; Kurztraining komplett wie 3.12
 # 8) JAI: Übungen ohne Clip bleiben still (Liste wird ausgegeben)
 # Aufruf: python3 -I tests/t40.py  (HOMEGYM_OUT = Ordner mit index.html, Standard out/)
 import os as _os
@@ -23,12 +25,14 @@ fails=[]
 def chk(c,msg):
     print(('ok   ' if c else 'FAIL ')+msg);(None if c else fails.append(msg))
 PROFILE="()=>{S.profile={name:'Joschy',gear:[...JOSCHYGEAR],preset:'joschy'};S.settings.voiceMode='off';save();location.reload()}"
-DUMP=r"""()=>{const M=/Kniebeuge|Bankdrück|Kreuzheb|Schulterdrück|Rudern|Klimmz|Chin-up/i;const keep=JSON.stringify(S);const o={};
-  const G={joschy:[...JOSCHYGEAR],all:ALLGEAR,dbonly:["db","bench","band"],none:[]};
-  for(const [gn,g] of Object.entries(G))for(const km of [true,false])for(const rf of [.8,1,1.2])for(let c=1;c<=8;c++)for(let w=1;w<=4;w++)for(const d of DAYS)for(const q of [false,true]){
-    S.profile={name:'J',gear:[...g],preset:'x',kbMix:km};S.settings.restF=rf;S.prog={v:1,block:w,done:[],cycle:c,units:0,dlLeft:0,dlAt:4};S.history=[];if(S.hang)S.hang.base=null;
-    const it=planItems(d,q,w);o[[gn,km,rf,c,w,d,q].join('|')]=[estSecs(it,q),it.map(x=>[x.ex,x.sets,x.lo,x.hi,!x.fin&&(x.slot===0||M.test(EX[x.ex].n)),!!x.fin])]}
-  S=JSON.parse(keep);save();return o}"""
+DUMP=r"""()=>{const M=/Kniebeuge|Bankdrück|Kreuzheb|Schulterdrück|Rudern|Klimmz|Chin-up/i;
+ const BP=(d,k)=>{const v=new Set();let n=0;for(let w=1;w<=PROGRAM.length;w++)for(const it of dayDef(w,d).items)if(it[0]===k){n++;v.add(it.slice(1).join('/'))}return n>=2&&v.size>1};
+ const keep=JSON.stringify(S);const o={};
+ const G={joschy:[...JOSCHYGEAR],all:ALLGEAR,dbonly:["db","bench","band"],none:[],nokb:[...JOSCHYGEAR,"kb"]};
+ for(const [gn,g] of Object.entries(G))for(const ws of [true,false])for(const km of [true,false])for(const rf of [.8,1,1.2])for(let c=1;c<=8;c++)for(let w=1;w<=4;w++)for(const d of DAYS)for(const q of [false,true]){
+  S.profile={name:'J',gear:[...g],preset:'x',kbMix:km};S.settings.restF=rf;S.settings.warmSets=ws;S.prog={v:1,block:w,done:[],cycle:c,units:0,dlLeft:0,dlAt:4};S.history=[];if(S.hang)S.hang.base=null;
+  const it=planItems(d,q,w);let ni=0;o[[gn,ws,km,rf,c,w,d,q].join('|')]=[estSecs(it,q),it.map(x=>{const i0=ni;const p=!x.fin&&(ni++<=2||M.test(EX[x.ex].n)||BP(d,x.orig||x.ex)||BP(d,x.ex));const pl=x.fin?null:((dayDef(w,d).items[i0]||[])[1]||null);return[x.ex,x.sets,x.lo,x.hi,p,x.fin?(x.blk?'blk':'fin'):'',pl]})]}
+ S=JSON.parse(keep);save();return o}"""
 async def main():
     async with async_playwright() as p:
         b=await p.chromium.launch();ctx=await b.new_context(viewport={'width':390,'height':844});pg=await ctx.new_page()
@@ -42,17 +46,19 @@ async def main():
         o=r['o'];bad=[x for x in o if not (540<=x['sec']<=660)]
         chk(not bad and r['est']==[600,600],f"Aufwärmen 10 min ±1 in allen {len(o)} Fällen (Tag × Einheit × Kurz × Aufwärmsätze), Zeitansatz 600 s {bad[:2]} {r['est']}")
         chk(all(x['first']=='cross' and x['fn'].startswith('Crosstrainer') and len(x['rest'])>=4 for x in o),'Crosstrainer immer zuerst, danach mind. 4 Mobilisationsübungen')
-        # 2) Abwechslung über 12 aufeinanderfolgende Einheiten (A,B,C im Wechsel; n = Zähler)
-        r=await pg.evaluate("""()=>{const sig=l=>l.slice(1).map(w=>w.k).join(',');const seq=[];for(let n=0;n<12;n++){const d=DAYS[n%3];seq.push(d+':'+sig(warmList(false,true,d,n)))}
-          const same=[];for(const d of DAYS)for(let n=0;n<60;n++){if(sig(warmList(false,true,d,n))===sig(warmList(false,true,d,n+1)))same.push(d+n)}
-          const per={};for(const d of DAYS){const s=new Set();for(let n=0;n<12;n++)s.add(sig(warmList(false,true,d,n)));per[d]=s.size}
-          const det=sig(warmList(false,true,'B',7))===sig(warmList(false,true,'B',7));
-          const ord=new Set();for(let n=0;n<12;n++)ord.add(warmList(false,true,'A',n)[1].k);
-          return{seq,same,per,det,first:ord.size}}""")
-        seq=r['seq'];cons=[i for i in range(1,len(seq)) if seq[i]==seq[i-1]]
-        print('   12 Einheiten:',*seq,sep='\n     ')
-        chk(len(set(seq))>=8 and not cons,f"12 aufeinanderfolgende Einheiten: {len(set(seq))} verschiedene Blöcke, keiner zweimal hintereinander")
-        chk(not r['same'] and min(r['per'].values())>=8 and r['det'] and r['first']>=3,f"gleicher Tag hintereinander nie identisch (n 0-60), je Tag {r['per']} verschiedene Blöcke in 12 Einheiten, deterministisch, wechselnde erste Übung ({r['first']})")
+        # 2) Abwechslung: Zähler je Tag; gleicher Tag hintereinander nie identisch, höchstens die Hälfte gleich (soweit der Pool reicht)
+        VAR="""(g)=>{const keep=JSON.stringify(S.profile);S.profile.gear=g;const res={};for(const d of DAYS){const L=wpPool(d);const B=[];for(let m=0;m<40;m++)B.push(warmList(false,true,d,m).slice(1).map(w=>w.k));
+            const cnt=B[0].length;const eff=new Set(L.map(w=>w.g||w.k)).size;const lim=Math.max(Math.floor(cnt/2),2*cnt-eff);let same=0,over=0,maxov=0;
+            for(let m=1;m<B.length;m++){const ov=B[m].filter(k=>B[m-1].includes(k)).length;maxov=Math.max(maxov,ov);if(B[m].join()===B[m-1].join())same++;if(ov>lim)over++}
+            res[d]={pool:L.length,cnt,lim,maxov,same,over,dist12:new Set(B.slice(0,12).map(b=>b.join())).size,det:warmList(false,true,d,7).map(w=>w.k).join()===warmList(false,true,d,7).map(w=>w.k).join()}}
+          S.profile=JSON.parse(keep);return res}"""
+        for g,name in [('[...JOSCHYGEAR]','Joschy'),('[]','ohne Geräte'),('["rope"]','nur Seil'),('["db","bench","band"]','Nur Kurzhanteln')]:
+            r=await pg.evaluate('()=>('+VAR+')('+g+')')
+            ok=all(x['same']==0 and x['over']==0 and x['det'] for x in r.values()) and (name!='Joschy' or all(x['lim']==x['cnt']//2 and x['dist12']>=8 for x in r.values()))
+            chk(ok,f"{name}: je Tag 40 Einheiten hintereinander nie gleich, Überschneidung mit dem letzten Block desselben Tags <= Grenze; Tag:(Pool,Anzahl,Grenze,max. gleich,verschieden in 12) {dict((k,(v['pool'],v['cnt'],v['lim'],v['maxov'],v['dist12'])) for k,v in r.items())}")
+        r=await pg.evaluate("()=>{const s=new Set();for(let m=0;m<12;m++)s.add(warmList(false,true,'A',m)[1].k);const seq=[];for(let i=0;i<12;i++){const d=DAYS[i%3];seq.push(d+':'+warmList(false,true,d,Math.floor(i/3)).slice(1).map(w=>w.k).join(','))}return{first:s.size,seq}}")
+        print('   12 Einheiten A/B/C:',*r['seq'],sep='\n     ')
+        chk(r['first']>=3 and len(set(r['seq']))==12,f"12 aufeinanderfolgende Einheiten: 12 verschiedene Blöcke, wechselnde erste Übung ({r['first']})")
         # 3) passt zum Tag
         r=await pg.evaluate("""()=>{const P={};for(const d of DAYS)P[d]=wpPool(d).map(w=>w.k);const off=[];for(const d of DAYS)for(let n=0;n<40;n++)for(const w of warmList(false,true,d,n).slice(1)){const p=WPOOL.find(x=>x.k===w.k);if(!p||!p.d.includes(d))off.push(d+':'+w.k)}
           const reg={A:/Schulter|Brust|Arm|Wand|Faden|Katze|Pull|Außen|Y-T-W/i,B:/Schulter|Rudern|Hängen|Welpe|Schwimmer|Pull|Arm|Y-T-W|Faden|Katze|Bird|Wand|Außen/i,C:/Hüft|Knie|Wade|Schienbein|Bridge|Ausfall|Bird|Bein|Katze/i};
@@ -65,7 +71,7 @@ async def main():
         a=await pg.evaluate("()=>{S.history=[];S.prog={v:1,block:1,done:[],cycle:1,units:0,dlLeft:0,dlAt:0};save();startSession('A');save();return S.session.warm.map(w=>w.k||w.anim)}")
         await pg.reload();await pg.wait_for_timeout(700)
         b1=await pg.evaluate("S.session.warm.map(w=>w.k||w.anim)")
-        await pg.evaluate("()=>{S.history.push({date:new Date().toISOString(),plan:'C',week:1,dur:3000,log:[]});save()}");await pg.reload();await pg.wait_for_timeout(700)
+        await pg.evaluate("()=>{S.history.push({date:new Date().toISOString(),plan:'A',week:1,dur:3000,log:[]});save()}");await pg.reload();await pg.wait_for_timeout(700)
         b2=await pg.evaluate("[S.session.warm.map(w=>w.k||w.anim),warmList(false,true,'A',1).map(w=>w.k||w.anim)]")
         chk(a==b1==b2[0] and b2[1]!=a,f'Auswahl bleibt beim Neuladen fest (auch wenn sich der Verlauf ändert) {a}')
         await pg.evaluate("()=>{openTrain()}");await pg.wait_for_timeout(300)
@@ -100,13 +106,27 @@ async def main():
         # 7) Hauptübungen gegen 3.12, 59 min
         p2=await ctx.new_page();await p2.goto(UR);await p2.wait_for_timeout(400);await p2.evaluate(PROFILE);await p2.wait_for_timeout(700)
         cur=await pg.evaluate(DUMP);ref=await p2.evaluate(DUMP);await p2.close()
-        over=[(k,round(v[0]/60,1)) for k,v in cur.items() if v[0]>3540];less=[];diff=[]
+        over=[(k,round(v[0]/60,1)) for k,v in cur.items() if v[0]>3540];prot=[];side=[];fin1=[];blk=[];quick=[];nb=nb0=0
         for k in cur:
             a_=cur[k][1];r_=ref[k][1]
-            if [x[0] for x in a_]!=[x[0] for x in r_]:diff.append(k)
-            for x,y in zip(a_,r_):
-                if y[4] and (x[0]!=y[0] or x[1]!=y[1] or x[2:4]!=y[2:4]):less.append((k,x,y))
-        chk(len(cur)==4608 and not over and not less and not diff,f'{len(cur)} Einheiten (Zyklen 1-8, 24 Geräte-Einstellungen, voll/kurz): Hauptübungen mit Sätzen/Wdh. exakt wie 3.12, gleiche Übungen, keine > 59 min {over[:2]} {less[:2]} {diff[:2]}')
+            if k.endswith('|true'):
+                if a_!=r_:quick.append(k)
+                continue
+            if [x[:4] for x in a_ if x[4]]!=[x[:4] for x in r_ if x[4]]:prot.append(k)
+            if [x[:4] for x in a_ if x[5]=='blk']!=[x[:4] for x in r_ if x[5]=='blk']:blk.append(k)
+            rs=[x for x in r_ if not x[4] and not x[5]];it=iter([x[0] for x in rs])
+            for x in [x for x in a_ if not x[4] and not x[5]]:
+                y=next((y for y in rs if y[0]==x[0]),None)
+                if y is None or x[2:4]!=y[2:4] or not 2<=x[1]<=max(y[1],y[6] or 0,2):side.append((k,x,y))  # höchstens wie im Plan (3.12 hatte evtl. schon gekürzt)
+            if not all(any(e==z for z in it) for e in [x[0] for x in a_ if not x[4] and not x[5]]):side.append((k,'Reihenfolge'))
+            fin1+=[(k,x) for x in a_ if x[5]=='fin' and x[1]<2]
+            nf=sum(1 for x in a_ if x[5]=='fin');rf=sum(1 for x in r_ if x[5]=='fin');nb+=nf<rf;nb0+=nf==0<rf
+        print(f'   Bonus gekürzt/gestrichen: {nb} von 5760 vollen Einheiten weniger Bonus-Übungen, {nb0} ganz ohne Bonus')
+        chk(len(cur)==11520 and not over,f'{len(cur)} Einheiten (Zyklen 1-8, 5 Gerätesets x Aufwärmsätze x KB x Pausen, voll/kurz): keine > 59 min {over[:2]}')
+        chk(not prot,f'geschützte Übungen (Slot 0-2, Block-Steigerung, Grundübungen) mit Sätzen/Wdh./Reihenfolge exakt wie 3.12 {prot[:3]}')
+        chk(not side and not blk,f'Nebenübungen nur 2..Plan-Sätze (nie 1), gleiche Wdh. und Reihenfolge; Griff-/Hang-Block unverändert {side[:2]} {blk[:2]}')
+        chk(not fin1,f'kein Bonus mit nur 1 Satz/Runde {fin1[:2]}')
+        chk(not quick,f'Kurztraining: alle Kurz-Einheiten exakt wie 3.12 {quick[:3]}')
         chk(not errs,'keine JS-Fehler '+str(errs[:3]))
         await b.close()
     print('RESULT',('ALL OK' if not fails else f'{len(fails)} FAILED'))

@@ -105,15 +105,26 @@ async def main():
         # ---------- 3) Plan wie in 3.6, <= 59 min ----------
         DUMP="""(db)=>{const keep=JSON.stringify(S);const o={};for(const c of [1,2,3])for(let w=1;w<=4;w++)for(const d of DAYS)for(const q of [false,true]){
             S.profile={name:'J',gear:[...JOSCHYGEAR],preset:'joschy',weights:{db,kb:[8,12,16],band:[]}};S.prog={v:1,block:w,done:[],cycle:c,units:0,dlLeft:0,dlAt:4};S.history=[];if(S.hang)S.hang.base=null;
-            const it=planItems(d,q,w);o[[c,w,d,q].join('|')]=[estSecs(it,q),it.map(x=>[x.ex,x.sets,x.lo,x.hi,!x.fin&&(x.slot===0||/Kniebeuge|Bankdrück|Kreuzheb|Schulterdrück|Rudern|Klimmz|Chin-up/i.test(EX[x.ex].n))])]}S=JSON.parse(keep);save();return o}"""
+            const it=planItems(d,q,w);o[[c,w,d,q].join('|')]=[estSecs(it,q),(()=>{let ni=0;const BP=(d,k)=>{const v=new Set();let n=0;for(let w=1;w<=PROGRAM.length;w++)for(const q of dayDef(w,d).items)if(q[0]===k){n++;v.add(q.slice(1).join('/'))}return n>=2&&v.size>1};
+              return it.map(x=>{const i0=ni;const p=!x.fin&&(ni++<=2||/Kniebeuge|Bankdrück|Kreuzheb|Schulterdrück|Rudern|Klimmz|Chin-up/i.test(EX[x.ex].n)||BP(d,x.orig||x.ex)||BP(d,x.ex));return[x.ex,x.sets,x.lo,x.hi,p,x.fin?(x.blk?'blk':'fin'):'',x.fin?null:((dayDef(w,d).items[i0]||[])[1]||null)]})})()]}S=JSON.parse(keep);save();return o}"""
         p36=await ctx.new_page();await p36.goto(U36);await p36.wait_for_timeout(500)
         ref=await p36.evaluate(DUMP,[]);await p36.close();cur=await pg.evaluate(DUMP,SET)
-        # 3.13: das Aufwärmen dauert 10 min; die Zeit dafür kommt nur aus Neben- und Bonussätzen. Übungen, Reihenfolge und Wdh.-Ziele
-        # bleiben identisch, Hauptübungen auch in den Sätzen, Neben-/Bonusübungen haben 1 bis gleich viele Sätze wie 3.6.
+        # 3.13: das Aufwärmen dauert 10 min; die Zeit kommt nur aus Bonus und Nebenübungen. Geschützt (exakt wie 3.6): Slot 0-2,
+        # Übungen mit Block-Steigerung und Grundübungen. Nebenübungen: gleiche Wdh. und Reihenfolge, 2 bis Plan-Sätze (nie 1), dürfen
+        # ganz wegfallen; Bonus ganz oder gar nicht (nie 1 Satz); Griff-/Hang-Block unverändert.
         def same36(x,y):
-            return len(x)==len(y) and all(a[0]==b[0] and a[2:5]==b[2:5] and (a[1]==b[1] if b[4] else 1<=a[1]<=b[1]) for a,b in zip(x,y))
-        diff=[k for k in ref if not same36(cur.get(k,[0,[]])[1],ref[k][1])];long=[(k,round(v[0]/60,1)) for k,v in cur.items() if v[0]>3540]
-        chk(len(cur)==len(ref)==72 and not diff,f'Plan (Zyklen 1–3 x 4 Blöcke x A/B/C x voll/kurz) identisch zu 3.6 (3.13: nur Neben-/Bonussätze kürzer fürs 10-min-Aufwärmen) {diff[:3]}')
+            if [a[:4] for a in x if a[4]]!=[b[:4] for b in y if b[4]]:return False
+            if [a[:4] for a in x if a[5]=='blk']!=[b[:4] for b in y if b[5]=='blk']:return False
+            if any(a[5]=='fin' and a[1]<2 for a in x):return False
+            ys=[b for b in y if not b[4] and not b[5]];it=iter([b[0] for b in ys])
+            xs=[a for a in x if not a[4] and not a[5]]
+            if not all(any(e==z for z in it) for e in [a[0] for a in xs]):return False
+            for a in xs:
+                b=next(b for b in ys if b[0]==a[0])
+                if a[2:4]!=b[2:4] or not 2<=a[1]<=max(b[1],b[6] or 0,2):return False
+            return True
+        diff=[k for k in ref if not (([x[:4] for x in cur.get(k,[0,[]])[1]]==[x[:4] for x in ref[k][1]]) if k.endswith('|true') else same36(cur.get(k,[0,[]])[1],ref[k][1]))];long=[(k,round(v[0]/60,1)) for k,v in cur.items() if v[0]>3540]
+        chk(len(cur)==len(ref)==72 and not diff,f'Plan (Zyklen 1–3 x 4 Blöcke x A/B/C x voll/kurz) wie 3.6: geschützte Übungen (Slot 0-2, Block-Steigerung, Grundübungen) exakt, Kurz exakt, Bonus ganz oder gar nicht, Nebenübungen nie unter 2 Sätze {diff[:3]}')
         chk(not long,f'keine Einheit über 59 min {long[:3]}')
         # Geräte-Karte zeigt Joschy Gym / Zubehör
         await pg.evaluate("()=>{S.profile={name:'Joschy',gear:[...JOSCHYGEAR],gearV:2,preset:'joschy',db37:1,weights:{db:JOSCHY_DB.slice(),kb:[8,12,16],band:[]}};save();go('set')}");await pg.wait_for_timeout(300)
