@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.11
+- **Bildaufbau der Start-Animation nach Joschys Markierungen**: Die Hantelablage läuft schräg nach hinten zum Rack (links vorn, rechts hinten), mit moderater Perspektive; die schweren Paare stehen vorn, sodass die Größen von 25 bis 2,5 kg gut zu sehen bleiben, und die Ablage berührt das Rack nicht.
+- Das Gerät hinter dem Rack links steht weiter links und ist neben dem Rack gut zu sehen.
+- Die Hantelbank steht weiter vorn (tiefer im Bild).
+- t39 prüft zusätzlich die Schräglage der Ablage, die Lage des Geräts links und der Bank (frei von HOMEGYM / by Joschy); Versionsprüfungen auf „3.11“.
+
 ## 3.10
 - **Start-Animation 5 s** bei jedem App-Start: 0–1 s dunkel, die Lampe flackert an · 1–2 s das Licht breitet sich aus, Neon, Uhr, Tafel und Urkunde werden sichtbar, die Chromgriffe glänzen, der Boxsack pendelt · 2–3,5 s zwei Wiederholungen (Dip und Hochdrücken) · 3,5–4 s Gold-Blitz und Kreidestaub · 4–5 s goldener Schriftzug „HOMEGYM“ mit „by Joschy“ (tiefer im Bild) · dann die App. Die App lädt darunter, Tippen überspringt jederzeit, bei „Bewegung reduzieren“ nur kurz das stehende, helle Bild (ohne Flackern und Partikel).
 - **Wand**: roter Neon-Schriftzug „NEVER GIVE UP“ mit Glow (flackert mit dem Licht an), Wanduhr mit der echten Uhrzeit (Sekundenzeiger läuft), Kreidetafel mit dem heutigen Training wie auf dem Startbildschirm (z. B. „Heute: Drücken · Bankdrücken · Block 1 von 4“, sonst „erledigt“ oder „Ruhetag“), gerahmte Urkunde „Hang-Rekord“ mit dem besten Hang-Test (ohne Test: „bald!“).

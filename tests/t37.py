@@ -35,7 +35,7 @@ async def main():
         b=await p.chromium.launch();ctx=await b.new_context(viewport={'width':390,'height':844});pg=await ctx.new_page()
         errs=[];pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:errs.append(m.text) if m.type=='error' else None)
         await pg.goto(U);await pg.wait_for_timeout(500)
-        v=await pg.evaluate("[APP_VER,BK_VER,JOSCHY_DB]");chk(v==['3.10',5,SET],f'Version 3.10, Backup-Format 5, Set {v}')
+        v=await pg.evaluate("[APP_VER,BK_VER,JOSCHY_DB]");chk(v==['3.11',5,SET],f'Version 3.11, Backup-Format 5, Set {v}')
         # ---------- 1) Migration ----------
         await put(pg,OLD)
         r=await pg.evaluate("()=>{const st=JSON.parse(localStorage.getItem(KEY));return{w:st.profile.weights,f:st.profile.db37,gear:st.profile.gear,pre:st.profile.preset,log:st.session.log.map(l=>l.sets.map(s=>s.w)),h:st.history[0].log.map(l=>l.sets.map(s=>s.w))}}")
