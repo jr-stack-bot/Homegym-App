@@ -1,9 +1,10 @@
 # Changelog
 
 ## 3.12
-- **Hantelablage an der linken Seite**: Sie läuft von vorn unten links steil schräg nach hinten oben, in der freien Fläche links neben dem Rack; der Bereich vor der Figur bleibt frei. Die 10 Paare liegen quer (Stirnseite zum Raum), vorn groß und schwer, hinten klein.
-- Das Laufband steht kleiner hinten an der Wand hinter dem Ende der Ablage.
-- t39 prüft die neue Lage (links, frei vor der Figur, lang in die Tiefe, leicht nach links geneigt) und das Laufband dahinter; Versionsprüfungen auf „3.12“.
+- **Hantelablage wie Joschys echte Ablage**: schwarzes Stahlgestell mit zwei A-förmigen Seitenteilen (Vierkantrohr, quadratische Fußplatten, untere Querstrebe), oben hinten und vorn tiefer je ein Doppelholm mit V-Auflagen. Alles gerade und räumlich richtig mit gemeinsamem Fluchtpunkt; Füße stehen auf dem Boden, Holme liegen auf den Seitenteilen, jede Hantel liegt in ihrer Auflage. Auf der Querstrebe steht „Joschy“.
+- Die Ablage beginnt vorn unten links und läuft schräg nach hinten oben rechts zum Rack, ohne es zu berühren. 10 Paare, vorn die schweren bis 25 kg, hinten die kleinen.
+- Die Hantelbank steht schräg von links unten nach rechts oben; das Laufband an der Wand bleibt frei sichtbar.
+- t39 prüft Lage, Fluchtpunkt, dass nichts schwebt, den Abstand zum Rack, das Laufband und die Schräge der Bank.
 
 ## 3.11
 - **Bildaufbau der Start-Animation nach Joschys Markierungen**: Die Hantelablage läuft schräg nach hinten zum Rack (links vorn, rechts hinten), mit moderater Perspektive; die schweren Paare stehen vorn, sodass die Größen von 25 bis 2,5 kg gut zu sehen bleiben, und die Ablage berührt das Rack nicht.

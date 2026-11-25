@@ -139,7 +139,7 @@ Aktuell: **3.12**. Details in [CHANGELOG.md](CHANGELOG.md).
 
 | Version | Wichtigste Neuerungen |
 |---|---|
-| 3.12 | Start-Animation: Hantelablage links steil in die Tiefe, Laufband hinten an der Wand |
+| 3.12 | Start-Animation: Hantelablage wie das Original, schräg zum Rack; Bank schräg |
 | 3.11 | Start-Animation: Hantelablage schräg nach hinten, Gerät links neben dem Rack, Bank weiter vorn |
 | 3.10 | Start-Animation 5 s: Neon „NEVER GIVE UP“, Wanduhr, Kreidetafel mit dem heutigen Training, Urkunde Hang-Rekord, lange Hantelablage mit 10 Paaren |
 | 3.9 | Start-Animation in Joschys Gym-Raum (Spot, Hantelablage, Scheibenständer, Boxsack, Kreidestaub, Schriftzug) |

@@ -6054,12 +6054,12 @@ function splashRoom(sp,red){const NS="http://www.w3.org/2000/svg";const ic=sp.qu
     mk("ellipse",{cx:r1(bx),cy:r1(P(X,0,Z)[1]),rx:r1(w*1.2),ry:2.6,fill:"#000",opacity:".35"},g0)}
   /* Geräte aus den Übungen (eqKit) auf ein Canvas, als Bild in die Szene. dark: abdunkeln (weiter hinten), rimX: warme Kante zur Mitte */
   const px=Math.min(4,Math.max(1,Math.min(innerWidth/284,innerHeight/615))*(window.devicePixelRatio||1)),urls=[];
-  const cnv=(x0,y0,w,h,draw,dark,rimX)=>{const c=document.createElement("canvas");c.width=Math.ceil(w*px);c.height=Math.ceil(h*px);const x=c.getContext("2d");if(!x)return;
-    x.setTransform(px,0,0,px,-x0*px,-y0*px);try{draw(x)}catch(e){return}
+  const cnv=(x0,y0,w,h,draw,dark,rimX)=>{const c=document.createElement("canvas");c.width=Math.ceil(w*px);c.height=Math.ceil(h*px);const x=c.getContext("2d");if(!x)return null;
+    x.setTransform(px,0,0,px,-x0*px,-y0*px);try{draw(x)}catch(e){return null}
     x.globalCompositeOperation="source-atop";x.fillStyle=`rgba(5,6,8,${dark})`;x.fillRect(x0,y0,w,h);
     const lg=x.createLinearGradient(rimX,0,rimX+(rimX<0?-60:60),0);lg.addColorStop(0,"rgba(255,206,150,.16)");lg.addColorStop(1,"rgba(255,206,150,0)");x.fillStyle=lg;x.fillRect(x0,y0,w,h);
     const im=mk("image",{x:r1(x0),y:r1(y0),width:r1(w),height:r1(h),preserveAspectRatio:"none"},g0);
-    const set=u=>im.setAttribute("href",u);if(c.toBlob&&window.URL&&URL.createObjectURL)c.toBlob(b=>{if(b){const u=URL.createObjectURL(b);urls.push(u);set(u)}else set(c.toDataURL())});else set(c.toDataURL())};
+    const set=u=>im.setAttribute("href",u);if(c.toBlob&&window.URL&&URL.createObjectURL)c.toBlob(b=>{if(b){const u=URL.createObjectURL(b);urls.push(u);set(u)}else set(c.toDataURL())});else set(c.toDataURL());return im};
   /* rechts: Scheibenständer mit Bumper Plates (Farben wie in den Übungen, plateHex) */
   {const Z=3.6,s=K(Z)/100,X=1.03,[cx,fy]=P(X,0,Z),ty=P(X,1.08,Z)[1];
     cnv(cx-42,ty-8,84,fy-ty+16,x=>{const kit=eqKit(x,s,false);
@@ -6072,8 +6072,9 @@ function splashRoom(sp,red){const NS="http://www.w3.org/2000/svg";const ic=sp.qu
   const KI=2.9;for(const[k,v]of Object.entries({x:r1(-54*KI),y:r1(-81.5*KI),width:r1(108*KI),height:r1(108*KI)}))ic.setAttribute(k,v);
   g0.appendChild(ic);
   /* 3.10 (@ Joschy): Hantelbank rechts vorn, schräg vor dem Scheibenständer (vor der Hantelablage steht nichts mehr) */
-  {const b0=[.5,2.12],b1=[.82,2.5]/* 3.11: weiter vorn (tiefer im Bild) */,ax=[b1[0]-b0[0],b1[1]-b0[1]],al=Math.hypot(ax[0],ax[1]),n=[-ax[1]/al*.14,ax[0]/al*.14],bn=mk("g",{class:"splBench"},g0);
+  {const b0=[.39,2.0],b1=[.8,2.35]/* 3.12: länger und schräg entlang Joschys roter Linie (links unten -> rechts oben), Mitte wie bisher */,ax=[b1[0]-b0[0],b1[1]-b0[1]],al=Math.hypot(ax[0],ax[1]),n=[-ax[1]/al*.13,ax[0]/al*.13],bn=mk("g",{class:"splBench"},g0);
     const Q=(t,w,Y)=>P(b0[0]+ax[0]*t+n[0]*w,Y,b0[1]+ax[1]*t+n[1]*w),poly=(a,f,o)=>mk("polygon",Object.assign({points:pt(a),fill:f},o||{}),bn);
+    bn.setAttribute("data-axis",pt([Q(0,0,.455),Q(1,0,.455)]));
     poly([Q(-.04,-1.1,0),Q(1.04,-1.1,0),Q(1.04,1.1,0),Q(-.04,1.1,0)],"#000",{opacity:".45",filter:"url(#splBlur)"});
     for(const t of[.14,.86]){const a=Q(t,0,.37),b=Q(t,0,.02);mk("path",{d:`M${pt([a])}L${pt([b])}`,stroke:"#1c1f23","stroke-width":r1(.05*K(b0[1]+ax[1]*t)),"stroke-linecap":"round"},bn);
       const f0=Q(t,-1.15,.02),f1=Q(t,1.15,.02);mk("path",{d:`M${pt([f0])}L${pt([f1])}`,stroke:"#15171a","stroke-width":r1(.045*K(b0[1]+ax[1]*t)),"stroke-linecap":"round"},bn);
@@ -6084,41 +6085,67 @@ function splashRoom(sp,red){const NS="http://www.w3.org/2000/svg";const ic=sp.qu
     poly([Q(0,-1,.455),Q(1,-1,.455),Q(1,1,.455),Q(0,1,.455)],"url(#splPad)");
     mk("path",{d:`M${pt([Q(.02,-.82,.456)])}L${pt([Q(.98,-.82,.456)])}`,stroke:"#c41a20","stroke-width":".6",opacity:".75","stroke-dasharray":"1.4 1.1"},bn);
     mk("path",{d:`M${pt([Q(0,1,.456)])}L${pt([Q(1,1,.456)])}`,stroke:"#ffd8a8","stroke-width":".7",opacity:".25"},bn)}
-  /* 3.10 (@ Joschy): vorn links im Vordergrund die Hantelablage, fast frontal wie auf Joschys Bestellfoto: schwarzes Gestell mit A-förmigen
-     Seitenteilen und 2 schrägen Etagen, je Etage 5 Paare nebeneinander (zwischen den Paaren mindestens eine Grifflänge Platz). Die Hanteln
-     (rubberHead wie in den Übungen) liegen quer, die Stirnseite mit Chrom-Ring und Plakette zeigt zum Betrachter, jede so groß wie ihr Gewicht.
-     22,5 und 25 kg gibt es nur hier; die App selbst bleibt bei Joschys 8 Paaren bis 20 kg. Eigene Schrägansicht (Bildschirm-Einheiten).
-     3.11 (@ Joschy): die Ablage läuft schräg nach hinten zum Rack (links vorn/unten, rechts hinten/oben). Perspektive nur moderat: entlang der
-     Ablage schrumpft alles gleichmäßig (Maßstab k von Q am linken bis Q·(1−PA) am rechten Ende), Linien bleiben gerade, Paare bleiben getrennt. */
-  const RACK_KG=[],gl=[];{const F=[-98,78],BK=[-114,-54],PA=.3,SC=.66,LR=119,VD=[1,.08],GAP=.5;
-    /* 3.12 (@ Joschy): die Ablage steht an der linken Seite und läuft steil schräg nach hinten (vorn unten links F -> hinten oben links BK),
-       frei vor der Figur. u = entlang der Ablage (Bildschirm: von F nach BK, hinten kleiner um PA), v = quer zur Ablage (zum Raum, nach rechts),
-       h = Höhe. Die Hanteln liegen quer (Stirnseite mit Plakette zum Raum), je Etage 5 Paare hintereinander, schwere vorn. */
-    const LS=Math.hypot(BK[0]-F[0],BK[1]-F[1]),LN=Math.log(1/(1-PA)),Q=LS*LN/(PA*LR),sg=u=>(1-Math.pow(1-PA,u/LR))/PA,kf=u=>Q*(1-PA*sg(u));
-    const O=(u,v,h)=>{const g=sg(u),k=Q*(1-PA*g);return[F[0]+(BK[0]-F[0])*g+k*VD[0]*v,F[1]+(BK[1]-F[1])*g+k*VD[1]*v-k*h]},dl=Math.hypot(VD[0],VD[1]),d=[VD[0]/dl,VD[1]/dl];
-    const TI=[{k:0,v:-15,vb:-20,hb:41,vf:-10,hf:37,kg:[12.5,10,7.5,5,2.5]},{k:1,v:13,vb:8,hb:21,vf:18,hf:17,kg:[25,22.5,20,17.5,15]}];
-    const pts=[];for(const u of[-4,LR+4])for(const v of[-28,30])for(const h of[0,58])pts.push(O(u,v,h));
-    const x0=Math.min(...pts.map(q=>q[0]))-16,x1=Math.max(...pts.map(q=>q[0]))+16,y0=Math.min(...pts.map(q=>q[1]))-14,y1=Math.max(...pts.map(q=>q[1]))+10;
-    cnv(x0,y0,x1-x0,y1-y0,x=>{
-      const nrm=(a,b)=>{let n=[a[1]-b[1],b[0]-a[0]];const l=Math.hypot(n[0],n[1])||1;n=[n[0]/l,n[1]/l];return n[1]>0?[-n[0],-n[1]]:n};
-      /* Stahlprofil mit schwacher Lichtkante */
-      const beam=(a,b,w)=>{const n=nrm(a,b);x.lineCap="butt";x.strokeStyle="#15171a";x.lineWidth=w;x.beginPath();x.moveTo(a[0],a[1]);x.lineTo(b[0],b[1]);x.stroke();
-        x.strokeStyle="rgba(235,220,200,.26)";x.lineWidth=Math.max(.35,w*.22);x.beginPath();x.moveTo(a[0]+n[0]*w*.34,a[1]+n[1]*w*.34);x.lineTo(b[0]+n[0]*w*.34,b[1]+n[1]*w*.34);x.stroke()};
-      const B=(u0,v0,h0,u1,v1,h1,w)=>beam(O(u0,v0,h0),O(u1,v1,h1),w*kf(Math.min(u0,u1)));
-      x.save();x.filter="blur(2px)";x.fillStyle="rgba(0,0,0,.55)";x.beginPath();for(const[u,v]of[[0,-24],[LR,-24],[LR,26],[0,26]]){const q=O(u,v,0);x.lineTo(q[0],q[1])}x.closePath();x.fill();x.restore();
-      /* A-Seitenteile an beiden Enden (vorn gut zu sehen): hinterer und vorderer Schenkel laufen oben zusammen, Arm nach vorn für die untere Etage */
-      const side=u=>{B(u,-27,1,u,-17,1,2.6);B(u,19,1,u,29,1,2.6);B(u,-22,1,u,-14,44,2.4);B(u,24,1,u,-6,44,2.4);B(u,-17,44,u,-4,44,2.2);
-        B(u,-20,8,u,22,8,1.8);B(u,-18,22,u,27,15,2)};
-      side(LR);B(0,1,8,LR,1,8,1.8);
-      for(const T of TI){B(0,T.vb,T.hb,LR,T.vb,T.hb,2);B(0,T.vf,T.hf,LR,T.vf,T.hf,2)}
-      const it=[];TI.forEach(T=>{const D=T.kg.map(kg=>splDbDims(kg)),grip=9*SC,w=D.reduce((m,q)=>m+4*q.rr*SC+GAP,0)+grip*4;let u=(LR-w)/2;
-        T.kg.forEach((kg,i)=>{const q=D[i],r=q.rr*SC;for(let k=0;k<2;k++){it.push({u:u+r,T,kg,q,r});u+=2*r+(k?0:GAP)}u+=GAP+grip})});
-      /* hinten zuerst, bei gleicher Tiefe die obere (wandseitige) Etage zuerst */
-      it.sort((p,q)=>q.u-p.u||p.T.k-q.T.k);
-      for(const o of it){const h=O(o.u,o.T.v,(o.T.hb+o.T.hf)/2+o.r*.82),z=kf(o.u);RACK_KG.push(o.kg);
-        eqKit(x,SC*z,false).dumbbell(h,false,d,undefined,o.kg,o.q);gl.push([h[0],h[1],d,o.r*z,o.q.off*SC*z,o.q.th*SC*z])}
-      for(const T of TI)B(0,T.vf+1,T.hf-1.2,LR,T.vf+1,T.hf-1.2,1.4);
-      side(0)},.06,F[0]+40)}
+  /* 3.12 (@ Joschy): Hantelablage originalgetreu nach Joschys Produktfoto, echt räumlich in derselben Perspektive wie der Raum (P, gemeinsamer
+     Fluchtpunkt aller Längskanten): schwarzes Stahlgestell, zwei A-förmige Seitenteile aus Vierkantrohr mit quadratischen Fußplatten und je einer
+     unteren Querstrebe; oben hinten ein Doppelholm, davor und tiefer ein zweiter Doppelholm, beide mit V-förmigen Gummiauflagen. Die Holme liegen
+     auf den Kopfplatten der Seitenteile, die Füße stehen auf dem Boden, jede Hantel liegt in ihren zwei V-Auflagen (Griff quer, Stirnseite mit
+     Plakette zum Raum). Lage nach Joschys rotem Pfeil: vorn unten links beginnend, schräg nach hinten oben rechts Richtung linker Rack-Fuß, ohne
+     das Rack zu berühren. Vorn (zum Betrachter) die schweren Paare bis 25 kg, hinten die kleinen; 22,5 und 25 kg gibt es nur hier, die App selbst
+     bleibt bei Joschys 8 Paaren bis 20 kg. Auf der unteren Querstrebe des vorderen Seitenteils steht in Weiß „Joschy“.
+     Maße in cm am Gestell (l = entlang der Ablage nach hinten, d = quer zum Raum hin, h = Höhe), SM = Meter je cm in der Szene. */
+  const RACK_KG=[],gl=[];{const SM=.0046,X0=-.69,Z0=1.93,PH=10*Math.PI/180,AL=[-Math.sin(PH),0,Math.cos(PH)],AD=[Math.cos(PH),0,Math.sin(PH)];
+    const LEN=190,FA=8,FB=LEN-8,TW=5;
+    const W=(l,d,h)=>[X0+(AL[0]*l+AD[0]*d)*SM,h*SM,Z0+(AL[2]*l+AD[2]*d)*SM],PW=w=>P(w[0],w[1],w[2]),O=(l,d,h)=>PW(W(l,d,h)),ks=(l,d)=>K(W(l,d,0)[2])*SM;
+    const sub=(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]],add=(a,b)=>[a[0]+b[0],a[1]+b[1],a[2]+b[2]],mul=(a,k)=>[a[0]*k,a[1]*k,a[2]*k],dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2],
+      crs=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],nz=a=>{const q=Math.hypot(a[0],a[1],a[2])||1;return[a[0]/q,a[1]/q,a[2]/q]};
+    const CAM=[0,EH,0],LT=nz([.6,2.6,.7]);
+    /* Rahmen (vorn/hinten gleich): hinterer Schenkel von Fuß d=6 schräg nach vorn bis unter die obere Kopfplatte (d=20, h=77), vorderer Schenkel
+       von Fuß d=58 schräg nach hinten bis unter die untere Kopfplatte (d=48, h=43); Querstrebe h 9–17 zwischen den Schenkeln */
+    const FR={bk:[[6,1.2],[20,77]],fr:[[58,1.2],[48,43]],cb:[9,17],top:[6,34,77,79.5],low:[36,62,43,45.5]};
+    const legD=(g,h)=>g[0][0]+(g[1][0]-g[0][0])*(h-g[0][1])/(g[1][1]-g[0][1]);
+    /* Holme (je 4 cm Vierkant) auf den Kopfplatten, V-Auflagen 3,5 cm hoch */
+    const TI=[{k:0,rails:[15,27],y:79.5,kg:[12.5,10,7.5,5,2.5]},{k:1,rails:[41,57],y:45.5,kg:[25,22.5,20,17.5,15]}],RH=4,SH=3.5;
+    const geo={feet:[],rails:[],plates:[],legs:[],db:[]};
+    const it=[];TI.forEach(T=>{const D=T.kg.map(kg=>splDbDims(kg)),wd=D.reduce((m,q)=>m+4*q.rr+1,0),gp=(FB-FA-10-wd)/4;let l=FA+5;
+      T.kg.forEach((kg,i)=>{const q=D[i];for(let k=0;k<2;k++){const dc=(T.rails[0]+T.rails[1])/2,top=T.y+RH+SH;
+        it.push({l:l+q.rr,T,kg,q,dc,hc:T.y+RH+.9+q.rr,top});l+=2*q.rr+(k?0:1)}l+=gp})});
+    const pts=[];for(const l of[-6,LEN+6])for(const d of[-6,70])for(const h of[0,100])pts.push(O(l,d,h));
+    const x0=Math.min(...pts.map(q=>q[0]))-6,x1=Math.max(...pts.map(q=>q[0]))+6,y0=Math.min(...pts.map(q=>q[1]))-6,y1=Math.max(...pts.map(q=>q[1]))+6;
+    const im=cnv(x0,y0,x1-x0,y1-y0,x=>{
+      const poly=(a,f,s)=>{x.beginPath();a.forEach((p,i)=>i?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1]));x.closePath();x.fillStyle=f;x.fill();if(s){x.strokeStyle=s;x.lineWidth=.35;x.stroke()}};
+      /* Quader aus Ursprung o (Gestell-cm) und drei Kantenvektoren (Gestell-cm): nur die dem Betrachter zugewandten Flächen, Helligkeit nach dem Spot */
+      const box=(o,E,base=[20,22,25],gain=46)=>{const ow=W(...o),Ew=E.map(e=>sub(W(...add(o,e)),ow));
+        for(let k=0;k<3;k++){const a=Ew[(k+1)%3],b=Ew[(k+2)%3];let n=nz(crs(a,b));if(dot(n,Ew[k])<0)n=mul(n,-1);
+          for(const s of[0,1]){const nn=s?n:mul(n,-1),c0=s?add(ow,Ew[k]):ow,ctr=add(c0,mul(add(a,b),.5));if(dot(nn,sub(ctr,CAM))>=0)continue;
+            const br=Math.max(0,dot(nn,LT)),col=base.map(v=>Math.round(v+gain*br));
+            poly([c0,add(c0,a),add(add(c0,a),b),add(c0,b)].map(PW),`rgb(${col})`,`rgba(255,236,210,${(.05+.12*br).toFixed(2)})`)}}};
+      /* Vierkantrohr von p nach q (Gestell-cm), Querschnitt w x w, eine Seite parallel zur Längsachse der Ablage */
+      const tube=(p,q,w)=>{const ax=sub(q,p),ref=Math.abs(ax[0])>.9*Math.hypot(...ax)?[0,0,1]:[1,0,0],e1=nz(crs(ax,ref)),e2=nz(crs(ax,e1));
+        box(sub(sub(p,mul(e1,w/2)),mul(e2,w/2)),[ax,mul(e1,w),mul(e2,w)])};
+      x.save();x.filter="blur(2.5px)";poly([[-4,-6,0],[LEN+4,-6,0],[LEN+4,68,0],[-4,68,0]].map(p=>O(...p)),"rgba(0,0,0,.5)");x.restore();
+      const frame=(l,near)=>{
+        for(const fd of[FR.bk[0][0],FR.fr[0][0]]){const c=O(l,fd,0);x.save();x.filter="blur(1px)";x.fillStyle="rgba(0,0,0,.7)";x.beginPath();x.ellipse(c[0],c[1]+.6,9*ks(l,fd),2.2*ks(l,fd),0,0,7);x.fill();x.restore();
+          box([l-6,fd-6,0],[[12,0,0],[0,12,0],[0,0,1.2]]);geo.feet.push(W(l,fd,0)[1])}
+        for(const g of[FR.bk,FR.fr]){tube([l,g[0][0],g[0][1]],[l,g[1][0],g[1][1]],TW);geo.legs.push(g[1][1])}
+        const[c0,c1]=FR.cb,da=legD(FR.bk,(c0+c1)/2)+TW/2,db=legD(FR.fr,(c0+c1)/2)-TW/2;box([l-2,da,c0],[[4,0,0],[0,db-da,0],[0,0,c1-c0]],[22,24,27],40);
+        for(const pl of[FR.top,FR.low]){box([l-6,pl[0],pl[2]],[[12,0,0],[0,pl[1]-pl[0],0],[0,0,pl[3]-pl[2]]],[24,26,29],50);geo.plates.push({l:[l-6,l+6],d:[pl[0],pl[1]],bottom:pl[2],top:pl[3]})}
+        if(near){/* Schriftzug auf der Stirnseite der Querstrebe (zum Betrachter), statt des Herstellerlogos auf dem Foto */
+          const dm=(da+db)/2,c=O(l-2,dm,(c0+c1)/2),ex=sub2(O(l-2,dm+1,(c0+c1)/2),c),ey=sub2(O(l-2,dm,(c0+c1)/2-1),c);
+          x.save();x.transform(ex[0],ex[1],ey[0],ey[1],c[0],c[1]);x.fillStyle="#fff";x.textAlign="center";x.textBaseline="middle";
+          x.font="700 5.6px Rajdhani,sans-serif";const tw=x.measureText("Joschy").width,mx=(db-da)*.62;if(tw>mx)x.scale(mx/tw,1);x.fillText("Joschy",0,.3);x.restore()}};
+      const sub2=(a,b)=>[a[0]-b[0],a[1]-b[1]];
+      /* V-Auflage aus Gummi auf einem Holm: Profil in der l-h-Ebene, 5 cm breit (d) */
+      const saddle=(l,d,y,rr)=>{const a=Math.sqrt(rr*rr-Math.pow(rr-(SH-.9),2)),pr=[[-a-1.5,0],[-a-1.5,SH],[-a,SH],[0,.7],[a,SH],[a+1.5,SH],[a+1.5,0]],F=(dd)=>pr.map(p=>O(l+p[0],dd,y+p[1]));
+        const bk=F(d-2.5),fr=F(d+2.5);poly(bk,"#0d0e10");for(let i=0;i<pr.length-1;i++)poly([bk[i],bk[i+1],fr[i+1],fr[i]],i===2||i===3?"#08090a":"#1e2023");poly(fr,"#141518","rgba(255,236,210,.1)")};
+      frame(FB,false);frame(FA,true);
+      for(const T of TI)for(const d of T.rails){box([FA-6,d-RH/2,T.y],[[FB-FA+12,0,0],[0,RH,0],[0,0,RH]],[22,24,27],52);geo.rails.push({l:[FA-6,FB+6],d,bottom:T.y,scr:[O(FA-6,d,T.y+RH),O(FB+6,d,T.y+RH)]})}
+      it.sort((p,q)=>q.l-p.l||p.T.k-q.T.k);
+      for(const o of it){const s=ks(o.l,o.dc),c=O(o.l,o.dc,o.hc),dd=sub2(O(o.l,o.dc+1,o.hc),c),dl=Math.hypot(dd[0],dd[1]),d=[dd[0]/dl,dd[1]/dl];
+        for(const rd of o.T.rails)saddle(o.l,rd,o.T.y+RH,o.q.rr);
+        RACK_KG.push(o.kg);eqKit(x,s,false).dumbbell(c,false,d,undefined,o.kg,o.q);gl.push([c[0],c[1],d,o.q.rr*s,o.q.off*s,o.q.th*s]);
+        geo.db.push({kg:o.kg,l:o.l,d:o.dc,bottom:+(o.hc-o.q.rr).toFixed(2),railTop:o.T.y+RH,seat:o.top,off:+o.q.off.toFixed(2),th:+o.q.th.toFixed(2),rails:o.T.rails})}
+    },.04,X0*K(Z0)+60);
+    if(im){im.setAttribute("class","splDbRack");im.setAttribute("data-logo","Joschy");im.setAttribute("data-geo",JSON.stringify(geo))}}
   /* Glanz auf den Chromgriffen, wenn das Licht kommt */
   const gG=mk("g",{class:"splGrips",stroke:"#fffdf5","stroke-linecap":"round",fill:"none","data-kg":RACK_KG.join(",")},g0);
   gl.forEach((q,i)=>{const[hx,hy,d,rr,off,thk]=q,u=[d[1],-d[0]],L=(off-thk*.5)*.8,o=u[1]<0?.6:-.6;

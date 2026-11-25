@@ -7,7 +7,9 @@
 # 4) Uhr zeigt die echte Uhrzeit (Stunden-/Minutenzeiger), Sekundenzeiger läuft
 # 5) Kreidetafel = nächstes/heutiges Training wie auf dem Startbildschirm; erledigt / Ruhetag / läuft; Urkunde mit und ohne Hang-Rekord
 # 6) Zeitablauf: 0–1 s Lampe flackert im Dunkeln, 1–2 s Licht breitet sich aus und Wand/Neon leuchten auf; Ablage vorn links, „by Joschy“ ≥ 12 px
-# 7) 3.12: Ablage an der linken Seite, läuft steil nach oben (hinten) und leicht nach links, frei vor der Figur; Laufband klein an der Wand dahinter sichtbar; Bank vorn und frei von HOMEGYM
+# 7) 3.12: Ablage nach Produktfoto beginnt vorn unten links und läuft schräg nach hinten oben rechts zum Rack, ohne es zu berühren; Holme gerade mit
+#    gemeinsamem Fluchtpunkt, nichts schwebt (Füße am Boden, Holme auf den Seitenteilen, Hanteln in V-Auflagen), Schriftzug Joschy;
+#    Laufband an der Wand nicht verdeckt; Bank rechts vorn schräg von links unten nach rechts oben, frei von HOMEGYM
 # 8) prefers-reduced-motion: stark verkürzt, kein Flackern, keine Partikel; Ladezeit mit und ohne Start-Animation
 # Aufruf: python3 -I tests/t39.py  (HOMEGYM_OUT = Ordner mit index.html, Standard out/)
 import os as _os
@@ -52,6 +54,14 @@ IMGS="""async()=>{const out=[];for(const e of document.querySelectorAll('#splash
  const row=(b0,b1)=>{let n=0,sx=0;for(let y=b0;y<b1;y++)for(let i=0;i<c.width;i++)if(d[(y*c.width+i)*4+3]>8){n++;sx+=i}return n?sx/n:NaN};const qh=Math.round((y1-y0)*.15),RT=row(y0,y0+qh),RB=row(y1-qh,y1+1);
  const col=(a0,a1)=>{let t=1e9,u=-1;for(let y=0;y<c.height;y++)for(let i=a0;i<a1;i++)if(d[(y*c.width+i)*4+3]>8){if(y<t)t=y;if(y>u)u=y}return[t,u]};const q=Math.round((x1-x0)*.15),L=col(x0,x0+q),R=col(x1-q,x1+1);
  const sx=b.width/c.width,sy=b.height/c.height;out.push([Math.round(b.left+x0*sx),Math.round(b.left+(x1+1)*sx),Math.round(b.top+y0*sy),Math.round(b.top+(y1+1)*sy),Math.round(b.top+L[0]*sy),Math.round(b.top+L[1]*sy),Math.round(b.top+R[0]*sy),Math.round(b.top+R[1]*sy),Math.round(b.left+RT*sx),Math.round(b.left+RB*sx)])}return out}"""
+# Ablage-Bild: Pixel im Rack-Bereich (Bounding-Box #hgRack, links und unten 2 % Bildbreite Abstand), verdeckter Anteil des Laufbands, Geometrie (data-geo), Bank-Achse
+RACK="""async()=>{const r=document.querySelector('#splash .splRoom'),e=r.querySelector('image.splDbRack'),b=e.getBoundingClientRect(),k=r.querySelector('#hgRack').getBoundingClientRect(),t=r.querySelector('.splTread').getBoundingClientRect();
+ const im=new Image();im.src=e.getAttribute('href');await im.decode();const c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;const x=c.getContext('2d');x.drawImage(im,0,0);
+ const d=x.getImageData(0,0,c.width,c.height).data,sx=c.width/b.width,sy=c.height/b.height;
+ const cnt=(L,T,R,B)=>{let n=0,a=0;for(let Y=Math.max(0,Math.floor((T-b.top)*sy));Y<Math.min(c.height,(B-b.top)*sy);Y++)for(let X=Math.max(0,Math.floor((L-b.left)*sx));X<Math.min(c.width,(R-b.left)*sx);X++){if(d[(Y*c.width+X)*4+3]>40)n++;a++}return[n,a]};
+ const tr=cnt(t.left,t.top,t.right,t.bottom),ta=Math.max(1,(t.right-t.left)*(t.bottom-t.top)*sx*sy);
+ const ctm=r.getScreenCTM(),ax=r.querySelector('.splBench').getAttribute('data-axis').split(' ').map(p=>{const[u,v]=p.split(',').map(Number);return[u*ctm.a+ctm.e,v*ctm.d+ctm.f]});
+ return{hit:cnt(k.left-innerWidth*.02,k.top-3,k.right+3,k.bottom+innerWidth*.02)[0],rack:[Math.round(k.left),Math.round(k.right),Math.round(k.bottom)],tread:tr[0]/ta,geo:JSON.parse(e.getAttribute('data-geo')),logo:e.getAttribute('data-logo'),bench:ax}}"""
 # Ladezeit: App-Start (DOMContentLoaded; das Inline-Skript mit Aufbau der App und des Raums läuft davor) mit und ohne Start-Animation
 DCL="document.addEventListener('DOMContentLoaded',()=>{window.__dcl=performance.now()})"
 HOME="""()=>{const h=document.querySelector('#nextCard h2').textContent.split(' · ');const m=/Block (\\d) von 4/.exec(document.querySelector('#posLine').textContent);return['Heute: '+h[0],h[1]||'',m?'Block '+m[1]+' von 4':'']}"""
@@ -63,7 +73,7 @@ async def main():
         PAIRS=sorted([2.5,5,7.5,10,12.5,15,17.5,20,22.5,25]*2)
         for w,h in[(360,780),(412,915),(1280,800)]:
             c,q,e=await fresh(w,h);await q.goto(UR);await q.wait_for_selector('#splash.run',timeout=2000)
-            r=await q.evaluate(ROOM);home=await q.evaluate(HOME);await q.wait_for_function("[...document.querySelectorAll('#splash .splRoom image')].every(e=>e.getAttribute('href'))",timeout=3000);r['imgs']=await q.evaluate(IMGS)
+            r=await q.evaluate(ROOM);home=await q.evaluate(HOME);await q.wait_for_function("[...document.querySelectorAll('#splash .splRoom image')].every(e=>e.getAttribute('href'))",timeout=3000);r['imgs']=await q.evaluate(IMGS);rk=await q.evaluate(RACK)
             await q.wait_for_selector('#splash',state='detached',timeout=7000);dt=await q.evaluate("(window.__g-window.__r)/1000")
             kg=sorted(float(x) for x in (r['kg'] or '').split(',') if x)
             chk(r and r['icon'] and r['img']==2 and r['gl']==20 and kg==PAIRS and r['dust']>=8 and r['bag'] and r['txt']=='HOMEGYM' and r['by']=='by Joschy' and r['dark'] and r['app'] and r['w']==w,
@@ -79,13 +89,31 @@ async def main():
             wall=['splWallArt','splClock','splBoard','splCert'];ov=[(a,b2) for i,a in enumerate(wall) for b2 in wall[i+1:] if not(pa[a]['x1']<=pa[b2]['x0'] or pa[b2]['x1']<=pa[a]['x0'] or pa[a]['y1']<=pa[b2]['y0'] or pa[b2]['y1']<=pa[a]['y0'])]
             chk(not ov and (min(r['fonts'])>=8 or w>900),f'{w}x{h}: Wand-Elemente überlappen nicht {ov}, Schrift lesbar (Zeilenhöhen {r["fonts"]} px)')
             ra=r['imgs'][1];ft=r['feet'];hg=r['homegym']
-            rw,rh=ra[1]-ra[0],ra[3]-ra[2]
-            chk(w>900 or (ra[1]<ft['x0']-.05*w and ra[1]<=.32*w and rh>=.25*h and rh>=1.8*rw and ra[3]<hg['y0']-4),f'{w}x{h}: Hantelablage an der linken Seite, frei vor der Figur (rechts {ra[1]} px, Beine ab {ft["x0"]} px), lang in die Tiefe ({rh} x {rw} px), Abstand zu HOMEGYM {hg["y0"]-ra[3]} px')
+            chk(w>900 or (ra[0]<=.12*w and .78*h<=ra[3]<hg['y0']-4 and rk['hit']==0),f'{w}x{h}: Hantelablage beginnt vorn unten links (links {ra[0]} px, unten {ra[3]} px, HOMEGYM ab {hg["y0"]} px), berührt das Rack nicht ({rk["hit"]} Pixel im Rack-Bereich, Rack ab {rk["rack"][0]} px)')
             if w<900:
-                tr=pa['splTread'];bn=pa['splBench'];by=r['byBox'];bd=pa['splBoard']
-                chk(ra[8]<ra[9]-.02*w,f'{w}x{h}: Ablage läuft von unten nach oben leicht nach links (Mitte oben {ra[8]} px, unten {ra[9]} px)')
-                chk(tr['x0']>=0 and tr['y0']<ra[2]-.03*h and tr['y0']>bd['y1'] and tr['h']<.2*h,f'{w}x{h}: Laufband klein an der Wand hinter dem Ende der Ablage sichtbar (oben {tr["y0"]} px, Ablage ab {ra[2]} px, Höhe {tr["h"]} px)')
-                chk(bn['y1']>ft['y1']+.08*h and bn['y1']<hg['y0'] and (bn['x0']>by['x1'] or bn['y1']<by['y0']),f'{w}x{h}: Bank vorn (unten {bn["y1"]} px, Füße {ft["y1"]} px), frei von HOMEGYM / by Joschy')
+                tr=pa['splTread'];bn=pa['splBench'];by=r['byBox'];bd=pa['splBoard'];g=rk['geo']
+                # Holme: alle gerade, laufen nach hinten oben rechts (Richtung Rack-Fuß), gemeinsamer Fluchtpunkt der vier Längskanten
+                L=[x['scr'] for x in g['rails']];vp=[]
+                for i in range(len(L)):
+                    for j in range(i+1,len(L)):
+                        (a1,a2),(b1,b2)=L[i],L[j];d1=(a2[0]-a1[0],a2[1]-a1[1]);d2=(b2[0]-b1[0],b2[1]-b1[1]);den=d1[0]*d2[1]-d1[1]*d2[0]
+                        t=((b1[0]-a1[0])*d2[1]-(b1[1]-a1[1])*d2[0])/den;vp.append((a1[0]+t*d1[0],a1[1]+t*d1[1]))
+                sp=max(abs(p[0]-vp[0][0])+abs(p[1]-vp[0][1]) for p in vp)
+                chk(len(L)==4 and all(e[1][1]<e[0][1]-30 and e[1][0]>e[0][0]-3 for e in L) and sum(e[1][0]-e[0][0] for e in L)>0 and sp<1 and ra[8]>ra[9]-.01*w,
+                    f'{w}x{h}: Ablage läuft schräg nach hinten oben rechts, Holme gerade mit gemeinsamem Fluchtpunkt (Streuung {sp:.2f}, Mitte oben {ra[8]} / unten {ra[9]} px)')
+                # nichts schwebt: Füße auf dem Boden, Schenkel tragen die Kopfplatten, Holme liegen auf den Kopfplatten beider Seitenteile, jede Hantel in ihren zwei V-Auflagen
+                pl=g['plates'];fl=[]
+                if not(len(g['feet'])==4 and all(abs(y)<1e-9 for y in g['feet'])):fl.append('Füße')
+                if not all(any(abs(t-p['bottom'])<1e-6 for p in pl) for t in g['legs']):fl.append('Schenkel')
+                for x in g['rails']:
+                    on=[p for p in pl if abs(p['top']-x['bottom'])<1e-6 and p['d'][0]<=x['d']-2 and x['d']+2<=p['d'][1] and x['l'][0]<=p['l'][0] and p['l'][1]<=x['l'][1]]
+                    if len(on)!=2:fl.append(f'Holm d={x["d"]}')
+                for o in g['db']:
+                    if not(o['railTop']<=o['bottom']<=o['seat'] and all(abs(abs(rd-o['d'])-o['off'])<=o['th']/2 for rd in o['rails'])):fl.append(f'Hantel {o["kg"]}')
+                chk(not fl and len(g['db'])==20 and rk['logo']=='Joschy',f'{w}x{h}: nichts schwebt (Füße, Schenkel, Holme, 20 Hanteln in V-Auflagen) {fl}, Schriftzug „{rk["logo"]}“')
+                chk(tr['x0']>=0 and tr['y0']<ra[2]-.03*h and tr['y0']>bd['y1'] and tr['h']<.2*h and rk['tread']<=.02,f'{w}x{h}: Laufband an der Wand sichtbar, nicht verdeckt (Anteil verdeckt {rk["tread"]:.3f})')
+                ax=rk['bench'];sl=(ax[1][1]-ax[0][1])/(ax[1][0]-ax[0][0])
+                chk(bn['y1']>ft['y1']+.08*h and bn['y1']<hg['y0'] and (bn['x0']>by['x1'] or bn['y1']<by['y0']) and bn['x0']>.5*w and -1.2<sl<-.25,f'{w}x{h}: Bank rechts vorn schräg von links unten nach rechts oben (Steigung {sl:.2f}), frei von HOMEGYM / by Joschy')
             chk(r['byPx']>=12,f'{w}x{h}: „by Joschy“ {r["byPx"]} px (mind. 12 px)')
             chk(r['run']<1500,f'{w}x{h}: Start-Animation läuft {r["run"]:.0f} ms nach dem Seitenstart')
             chk(not e,f'{w}x{h}: keine JS-Fehler {e[:2]}')
