@@ -58,7 +58,7 @@ async def main():
         b=await p.chromium.launch();ctx=await b.new_context(viewport={'width':390,'height':844});pg=await ctx.new_page()
         errs=[];pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:errs.append(m.text) if m.type=='error' else None)
         await pg.goto(U);await pg.wait_for_timeout(500)
-        v=await pg.evaluate("[APP_VER,BK_VER,JOSCHY_DB]");chk(v==['3.9',5,SET],f'Version 3.9, Backup-Format 5, Set {v}')
+        v=await pg.evaluate("[APP_VER,BK_VER,JOSCHY_DB]");chk(v==['3.10',5,SET],f'Version 3.10, Backup-Format 5, Set {v}')
         await put(pg,BASE)
         # ---------- 1) Kurzhanteln ----------
         r=await pg.evaluate("(ks)=>ks.map(k=>{const L=dbLook(k),D=dbDims(k);return[L.D,L.W,D.rr,D.th,D.off]})",SET)
@@ -143,7 +143,7 @@ async def main():
         sp=await ctx.new_page();await sp.goto(UR);await sp.wait_for_timeout(120)
         r=await sp.evaluate("()=>{const s=[...document.querySelectorAll('#splash .splStar')].map(e=>getComputedStyle(e));return s.map(x=>[parseFloat(x.animationDelay),parseFloat(x.animationDuration),x.filter])}")
         await sp.close()
-        chk(len(r)==2 and r[1][0]+.4*r[1][1]<1.32 and r[1][0]<=1.1 and 'drop-shadow' in r[1][2],f'Start-Animation: zweiter Stern zündet früh genug (Höhepunkt vor dem Ausblenden) und leuchtet {r}')
+        chk(len(r)==2 and all(3.5<=x[0] and x[0]+x[1]<=4.1 and x[0]+.4*x[1]<4.0 for x in r) and r[0][0]<r[1][0] and 'drop-shadow' in r[1][2],f'Start-Animation (3.10): beide Sterne im Gold-Blitz 3,5–4 s, Höhepunkt vor dem Schriftzug, leuchten {r}')
         chk(not errs,f'keine JS-Fehler {errs[:3]}')
         await b.close()
 asyncio.run(main());srv.terminate();srv37.terminate()

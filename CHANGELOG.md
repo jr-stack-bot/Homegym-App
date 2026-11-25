@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.10
+- **Start-Animation 5 s** bei jedem App-Start: 0–1 s dunkel, die Lampe flackert an · 1–2 s das Licht breitet sich aus, Neon, Uhr, Tafel und Urkunde werden sichtbar, die Chromgriffe glänzen, der Boxsack pendelt · 2–3,5 s zwei Wiederholungen (Dip und Hochdrücken) · 3,5–4 s Gold-Blitz und Kreidestaub · 4–5 s goldener Schriftzug „HOMEGYM“ mit „by Joschy“ · dann die App. Die App lädt darunter, Tippen überspringt jederzeit, bei „Bewegung reduzieren“ nur kurz das stehende, helle Bild (ohne Flackern und Partikel).
+- **Wand**: roter Neon-Schriftzug „NEVER GIVE UP“ mit Glow (flackert mit dem Licht an), Wanduhr mit der echten Uhrzeit (Sekundenzeiger läuft), Kreidetafel mit dem heutigen Training wie auf dem Startbildschirm (z. B. „Heute: Drücken · Bankdrücken · Block 1 von 4“, sonst „erledigt“ oder „Ruhetag“), gerahmte Urkunde „Hang-Rekord“ mit dem besten Hang-Test (ohne Test: „bald!“).
+- **Hantelablage** wie Joschys echte (schwarz, A-förmige Seitenteile, 2 schräge Etagen), lang und schräg im Raum, mit 10 Paaren 2,5–25 kg, jede Hantel so groß wie ihr Gewicht. 22,5 und 25 kg gibt es nur in der Animation; in der App (Joschy Gym, Gewichtsvorschläge, max. 20 kg) ändert sich nichts.
+- Hantelbank rechts vorn schräg vor dem Scheibenständer; vor der Ablage steht nichts mehr.
+- t39 neu (5 s ± 0,3, Elemente, Uhrzeit, Tafel aus dem App-Zustand, Urkunde mit/ohne Rekord, Ladezeit), t37/t38 auf die neuen Zeiten, Versionsprüfungen auf „3.10“ (als Text, nicht 3.1).
+
 ## 3.9
 - **Start-Animation im Gym-Raum** (ca. 1,5 s): schwarzer Gummiboden aus Platten, Betonwand mit Schalungsfugen, warmer Spot von oben mit sichtbarem Lichtkegel. In der Mitte das rote Rack mit Figur und Langhantel wie bisher; links die Hantelablage mit 2 Etagen und Joschys Kurzhanteln Gummi PRO (2,5–20 kg) und davor schräg die Hantelbank; rechts der Scheibenständer mit Bumper Plates (Farben wie in den Übungen) und dahinter der Boxsack; ganz hinten im Halbdunkel Laufband und Crosstrainer.
 - Ablauf: dunkel → Spot flackert an (Chromgriffe glänzen, Boxsack pendelt) → Dip und Stange hoch → Scheiben blitzen golden, Kreidestaub im Licht, Schriftzug „HOMEGYM“ → App. Tippen überspringt, bei „Bewegung reduzieren“ nur kurz das stehende Bild (ohne Flackern und Partikel).

@@ -331,32 +331,47 @@ input[type=date]{background:rgba(var(--ac),.05);color:var(--fg);border:1px solid
 #splash .splRoom{position:absolute;inset:0;width:100%;height:100%;display:block}
 #splash .splRoom svg{overflow:visible}
 #splash #hgBack{display:none}
-#splash.run{animation:splOut .18s 1.32s ease-in both}
+/* 3.10 (@ Joschy): Ablauf 5 s bei jedem App-Start: 0–1 s dunkel, die Lampe flackert an · 1–2 s das Licht breitet sich aus, Neon flackert an,
+   Uhr, Tafel und Urkunde werden sichtbar, Chromgriffe glänzen, Boxsack pendelt · 2–3,5 s zwei Wiederholungen (Dip + Hochdrücken) ·
+   3,5–4 s Gold-Blitz und Kreidestaub · 4–5 s Schriftzug HOMEGYM und „by Joschy“, ab 4,8 s Ausblenden -> App */
+#splash.run{animation:splOut .2s 4.8s ease-in both}
 #splash.still{animation:splOut .16s .44s ease-in both}
 #splash.out{animation:splSkip .13s ease-in both;pointer-events:none}
-#splash .splDark{opacity:0}
-#splash.run .splDark{animation:splFlick .4s .1s linear both}
+#splash .splDark,#splash .splSpread{opacity:0}
+#splash.run .splDark{animation:splDark0 1.04s linear both}
+#splash .splSpread{transform-box:view-box}
+#splash.run .splSpread{animation:splSpread 1s 1s cubic-bezier(.4,.05,.6,.95) both}
+#splash.run .splLampOn{animation:splLampOn .88s .1s linear both}
+#splash .splNeon{opacity:0}
+#splash.still .splNeon{opacity:1}
+#splash.run .splNeon{animation:splNeon .62s 1.12s linear both}
+#splash .splSec{transform-box:view-box}
+#splash.run .splSec{animation:splSec 60s steps(60,end) infinite}
 #splash .splBag{transform-box:view-box}
-#splash.run .splBag{animation:splBag 1.15s .3s ease-in-out both}
+#splash.run .splBag{animation:splBag 1.6s 1s ease-in-out both}
 #splash .splGl{opacity:0}
-#splash.run .splGl{animation:splGl .36s ease-out both}
+#splash.run .splGl{animation:splGl .4s ease-out both}
 #splash .splDust{opacity:0}
-#splash.run .splDust{animation:splDust .4s ease-out both}
-#splash .splTxt{opacity:0;transform-box:fill-box;transform-origin:50% 50%}
-#splash.run .splTxt{animation:splTxt .32s 1s ease-out both}
-#splash.still .splTxt{opacity:1}
-#splash.run #hgLegs{transform-box:fill-box;transform-origin:50% 100%;animation:splLegs .64s .55s cubic-bezier(.45,0,.3,1) both}
-#splash.run #hgUpper{animation:splUp .64s .55s cubic-bezier(.45,0,.3,1) both}
+#splash.run .splDust{animation:splDust .6s ease-out both}
+#splash .splTxt,#splash .splBy{opacity:0;transform-box:fill-box;transform-origin:50% 50%}
+#splash.run .splTxt{animation:splTxt .4s 4s ease-out both}
+#splash.run .splBy{animation:splTxt .4s 4.25s ease-out both}
+#splash.still .splTxt,#splash.still .splBy{opacity:1}
+#splash.run #hgLegs{transform-box:fill-box;transform-origin:50% 100%;animation:splLegs .75s 2s cubic-bezier(.45,0,.3,1) 2 both}
+#splash.run #hgUpper{animation:splUp .75s 2s cubic-bezier(.45,0,.3,1) 2 both}
 #splash .splSweep{opacity:0}
-#splash.run .splSweep{animation:splSweep .5s .92s cubic-bezier(.45,0,.25,1) both}
+#splash.run .splSweep{animation:splSweep .5s 3.5s cubic-bezier(.45,0,.25,1) both}
 #splash .splStar{opacity:0;transform-box:fill-box;transform-origin:50% 50%;filter:drop-shadow(0 0 1.2px #fffbe6) drop-shadow(0 0 2.6px #ffd54a)}
-#splash.run .splStar{animation:splStar .45s .98s ease-out both}
-/* 3.8: zweiter Stern etwas später; 3.9: beide vor dem Ausblenden (ab 1,32 s) */
-#splash.run .splStar.s2{animation-delay:1.04s}
+#splash.run .splStar{animation:splStar .45s 3.56s ease-out both}
+#splash.run .splStar.s2{animation-delay:3.63s}
 @keyframes splOut{to{opacity:0}}
 @keyframes splSkip{from{opacity:1}to{opacity:0}}
-@keyframes splFlick{0%{opacity:1}14%{opacity:.35}22%{opacity:.92}36%{opacity:.18}46%{opacity:.7}60%{opacity:.04}70%{opacity:.28}100%{opacity:0}}
-@keyframes splBag{0%{transform:none}25%{transform:rotate(1.3deg)}55%{transform:rotate(-.9deg)}80%{transform:rotate(.45deg)}100%{transform:none}}
+@keyframes splDark0{0%{opacity:1}96%{opacity:1}100%{opacity:0}}
+@keyframes splSpread{0%{opacity:1;transform:scale(.3)}60%{opacity:.9}100%{opacity:0;transform:scale(2.4)}}
+@keyframes splLampOn{0%{opacity:0}9%{opacity:.85}15%{opacity:.08}27%{opacity:.95}34%{opacity:.15}50%{opacity:1}57%{opacity:.35}70%{opacity:1}100%{opacity:1}}
+@keyframes splNeon{0%{opacity:0}10%{opacity:.9}17%{opacity:.05}30%{opacity:1}38%{opacity:.25}52%{opacity:1}60%{opacity:.6}70%{opacity:1}100%{opacity:1}}
+@keyframes splSec{to{transform:rotate(360deg)}}
+@keyframes splBag{0%{transform:none}22%{transform:rotate(1.4deg)}50%{transform:rotate(-1deg)}76%{transform:rotate(.5deg)}100%{transform:none}}
 @keyframes splGl{0%{opacity:0;transform:translateX(-2px)}40%{opacity:1}100%{opacity:0;transform:translateX(3px)}}
 @keyframes splDust{0%{opacity:0;transform:none}25%{opacity:var(--o,.8)}100%{opacity:0;transform:translate(var(--dx,0),var(--dy,-60px))}}
 @keyframes splTxt{from{opacity:0;transform:translateY(6px) scale(.96)}to{opacity:1;transform:none}}
@@ -1315,7 +1330,7 @@ function eqKit(ctx,s,mini){
     if(!mini&&rr>=6.5){const t=String(kg).replace(".",",");ctx.fillStyle="#0b0d0f";ctx.textAlign="center";ctx.textBaseline="middle";
       ctx.font="700 "+Math.max(4,ph*(t.length>2?.78:.95)).toFixed(1)+"px Rajdhani,sans-serif";ctx.fillText(t,0,ph*.06,pw*.92)}
     ctx.restore()}
-  function dumbbell(h,dim,d=CAM,part,kg){kg=+kg>0?+kg:DB_STD;const D=dbDims(kg);const off=D.off*s,rr=D.rr*s,th=D.th*s;const A=[h[0]-d[0]*off,h[1]-d[1]*off],B=[h[0]+d[0]*off,h[1]+d[1]*off];
+  function dumbbell(h,dim,d=CAM,part,kg,DM){kg=+kg>0?+kg:DB_STD;const D=DM||dbDims(kg);/* 3.10: DM = eigene Maße (nur Start-Animation: 22,5/25 kg) */const off=D.off*s,rr=D.rr*s,th=D.th*s;const A=[h[0]-d[0]*off,h[1]-d[1]*off],B=[h[0]+d[0]*off,h[1]+d[1]*off];
     if(part!=="near"){rubberHead(A,d,rr,th,dim,"in",kg);rod([A[0]+d[0]*th*.5,A[1]+d[1]*th*.5],[B[0]-d[0]*th*.5,B[1]-d[1]*th*.5],2.3*s,!dim)}
     if(part!=="far")rubberHead(B,d,rr,th,dim,"out",kg)}
   /* bumper plate seen at an angle; h = bar position at the hand */
@@ -3133,7 +3148,7 @@ const MOTION={
 };
 for(const k in MOTION){const d=AN[k];if(!d)continue;const m=MOTION[k];for(const f in m){if(f==="A"||f==="B")Object.assign(d[f],m[f]);else d[f]=m[f]}}
 /* ================= 2.1 · HALTE-ÜBUNGEN · KETTLEBELL · GERÄTE-GEWICHTE · BACKUP (@ Joschy) ================= */
-const APP_VER="3.9",BK_VER=5;/* 3.0–3.4 keep backup format 5: all new fields are optional, older apps simply ignore them */
+const APP_VER="3.10",BK_VER=5;/* 3.10: Version immer als Text vergleichen („3.10“ ≠ 3.1) *//* 3.0–3.4 keep backup format 5: all new fields are optional, older apps simply ignore them */
 /* ---- hold / tempo variants (strength stays the focus: they are alternatives, never forced) ---- */
 Object.assign(EX,{
   pushpause:{n:"Liegestütze mit Halt in der Mitte",eq:"Matte · Griffe optional",m:"Brust · Trizeps · Schultern",type:"bw",rest:90,inc:0,hold:3,holdAt:"auf halber Höhe",base:"pushup",
@@ -5890,8 +5905,24 @@ new MutationObserver(()=>{FX.hd=true;fxKick()}).observe(document.body,{subtree:t
    Tests überspringen sie mit ?nosplash in der Adresse oder window.__hgNoSplash.
    3.9 (@ Joschy): das Icon-Motiv (rotes Rack, Figur, Langhantel – unverändert) steht jetzt in Joschys Gym-Raum. Alles nur SVG/CSS,
    die Kurzhanteln und Bumper Plates zeichnen dieselben Funktionen wie in den Übungen (eqKit: rubberHead, plateStack, plateHex) auf ein
-   kleines Canvas, das als Bild in die Szene kommt. Raum in Perspektive (Augenhöhe 1,3 m, Rack 3 m entfernt), je weiter hinten, desto dunkler. */
-const SPL_T=1500;/* 3.9: Gesamtdauer der Start-Animation in ms (Ausblenden ab 1,32 s) */
+   kleines Canvas, das als Bild in die Szene kommt. Raum in Perspektive (Augenhöhe 1,3 m, Rack 3 m entfernt), je weiter hinten, desto dunkler.
+   3.10 (@ Joschy): 5 s bei jedem App-Start (nicht nach einem Neuladen); Wand mit Neon, Uhr, Kreidetafel (heutiges Training) und Urkunde (Hang-Rekord),
+   lange Hantelablage mit 10 Paaren 2,5–25 kg, Bank rechts vorn, zwei Wiederholungen. Die App ist darunter längst fertig aufgebaut. */
+const SPL_T=5000;/* 3.10 (@ Joschy): Gesamtdauer der Start-Animation in ms (Ausblenden ab 4,8 s) */
+/* 3.10 (@ Joschy): Kreidetafel = was der Startbildschirm als nächste/heutige Einheit zeigt (gleiche Logik wie renderHome).
+   Heute schon trainiert -> „erledigt“, Wochenziel erreicht -> „Ruhetag“. */
+function splToday(){try{const p=prog(),ss=S.session,cw=ss?(ss.week||1):p.block,rem=DAYS.filter(k=>!p.done.includes(k));
+  const key=ss?ss.plan:(S.pick&&rem.includes(S.pick.day)?S.pick.day:rem[0]||"A");const nm=String(dayDef(cw,key).name||key).split(" · ");
+  const td=new Date().toDateString(),ws=weekStart(new Date()),H=Array.isArray(S.history)?S.history:[];
+  if(ss)return["Heute: "+nm[0],nm[1]||"","läuft · Block "+cw+" von 4"];
+  if(H.some(h=>h&&new Date(h.date).toDateString()===td))return["Heute: erledigt ✓","Stark gemacht!",""];
+  if(H.filter(h=>h&&new Date(h.date)>=ws).length>=(+S.settings.goal||3))return["Heute: Ruhetag","Wochenziel geschafft",""];
+  return["Heute: "+nm[0],nm[1]||"","Block "+cw+" von 4"]}catch(e){return["Heute: Training","",""]}}
+/* 3.10 (@ Joschy): Urkunde = bester Hang-Test (S.hang.tests) */
+function splHang(){try{const T=typeof hgS==="function"?hgS().tests:[];const b=T.reduce((m,x)=>Math.max(m,+x.s||0),0);return b>0?"Hang-Rekord: "+b+" s":"Hang-Rekord: bald!"}catch(e){return"Hang-Rekord: bald!"}}
+/* 3.10: Maße der zwei schweren Paare, die es nur in der Start-Animation gibt (App bleibt bei max. 20 kg) */
+const SPL_DB={22.5:[16.6,40],25:[17.2,42]};
+function splDbDims(kg){const L=SPL_DB[kg];if(!L)return dbDims(kg);const rr=L[0]/2*.78,th=(L[1]-15)/2*.6;return{rr,th,off:4.5+th/2}}
 function splashRoom(sp,red){const NS="http://www.w3.org/2000/svg";const ic=sp.querySelector(".spl-in svg");if(!ic)return null;
   const mk=(tag,at,par)=>{const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(at))e.setAttribute(k,v);if(par)par.appendChild(e);return e};
   const F=346,EH=1.3,VY=-150,P=(X,Y,Z)=>[F*X/Z,VY+F*(EH-Y)/Z],K=Z=>F/Z,r1=v=>Math.round(v*10)/10,pt=a=>a.map(p=>r1(p[0])+","+r1(p[1])).join(" ");
@@ -5910,6 +5941,18 @@ function splashRoom(sp,red){const NS="http://www.w3.org/2000/svg";const ic=sp.qu
   grad("linearGradient","splBagG",{x1:0,y1:0,x2:1,y2:0},[[0,"#3d2a22"],[.35,"#2a1c17"],[1,"#0d0908"]]);
   grad("linearGradient","splPad",{x1:0,y1:0,x2:0,y2:1},[[0,"#2b3036"],[.5,"#15181b"],[1,"#08090a"]]);
   mk("filter",{id:"splBlur",x:"-30%",y:"-10%",width:"160%",height:"120%"},defs).appendChild(mk("feGaussianBlur",{stdDeviation:"5"}));
+  /* 3.10 (@ Joschy): Kreide (raue Kanten, körnig), Licht breitet sich aus (dunkler Ring mit hellem Loch um den Spot), Holz der Tafel */
+  {const f=mk("filter",{id:"splChalk",x:"-5%",y:"-20%",width:"110%",height:"140%"},defs);
+    mk("feTurbulence",{type:"fractalNoise",baseFrequency:"1.3",numOctaves:"2",seed:"4",result:"n"},f);
+    mk("feDisplacementMap",{in:"SourceGraphic",in2:"n",scale:".9",xChannelSelector:"R",yChannelSelector:"G",result:"d"},f);
+    mk("feColorMatrix",{in:"n",type:"matrix",values:"0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 -1.5 0 0 0 1.5",result:"m"},f);
+    mk("feComposite",{in:"d",in2:"m",operator:"in"},f)}
+  grad("radialGradient","splHole",{gradientUnits:"userSpaceOnUse",cx:0,cy:-215,r:250,gradientTransform:"translate(0 -215) scale(1 1.35) translate(0 215)"},[[0,"#000",0],[.3,"#000",0],[.62,"#000",.92],[1,"#000",1]]);
+  grad("linearGradient","splWood",{x1:0,y1:0,x2:1,y2:1},[[0,"#6b4a2c"],[.5,"#4a321d"],[1,"#2e1f12"]]);
+  grad("linearGradient","splSlate",{x1:0,y1:0,x2:0,y2:1},[[0,"#26302c"],[1,"#18201d"]]);
+  grad("linearGradient","splPaper",{x1:0,y1:0,x2:1,y2:1},[[0,"#f3ead3"],[1,"#d9ccab"]]);
+  grad("linearGradient","splGoldF",{x1:0,y1:0,x2:1,y2:1},[[0,"#f6dc8a"],[.45,"#b98a2e"],[.7,"#e9c86a"],[1,"#7a5a1c"]]);
+  grad("radialGradient","splNeonW",{},[[0,"#ff2a2a",.32],[.5,"#ff1a1a",.12],[1,"#ff0000",0]]);
   const g0=mk("g",{},svg);
   /* Betonwand (Wandfuß 4,6 m entfernt) mit Schalungsfugen, Ankerlöchern und dezenter Fleckung */
   const ZW=4.6,yW=P(0,0,ZW)[1];
@@ -5928,6 +5971,54 @@ function splashRoom(sp,red){const NS="http://www.w3.org/2000/svg";const ic=sp.qu
   /* Licht auf Wand und Boden (warm, vom Spot) */
   mk("ellipse",{cx:0,cy:-178,rx:215,ry:205,fill:"url(#splWarm)"},g0);
   mk("ellipse",{cx:0,cy:6,rx:190,ry:44,fill:"url(#splPool)"},g0);
+  /* 3.10 (@ Joschy): Wand, gestaffelt um den Lichtkegel: links oben Neon „NEVER GIVE UP“, rechts oben Wanduhr (echte Uhrzeit, Sekundenzeiger
+     läuft), links Kreidetafel mit dem heutigen Training, rechts gerahmte Urkunde mit dem Hang-Rekord. Neon leuchtet über der Dunkelheit (eigene Ebene). */
+  const fits=[],NX=-80,NY=-396,NEON="NEVER GIVE UP",nAt={x:NX,y:NY,"text-anchor":"middle","font-family":"Rajdhani,sans-serif","font-weight":"700","font-size":"15","letter-spacing":"1.4"};
+  {const w=mk("g",{class:"splWallArt"},g0);
+    mk("rect",{x:NX-58,y:NY-15.5,width:116,height:21,rx:2.5,fill:"#0c0d0f",opacity:".5",stroke:"#2c3035","stroke-width":".5"},w);
+    for(const dx of[-54,54])mk("circle",{cx:NX+dx,cy:NY-5,r:1,fill:"#4a4f55"},w);
+    const t=mk("text",Object.assign({class:"splNeonOff",fill:"#3a1517",stroke:"#5c2428","stroke-width":".5"},nAt),w);t.textContent=NEON;fits.push([t,108])}
+  {const cx=96,cy=-392,R=19,c=mk("g",{class:"splClock"},g0),now=new Date(),h=now.getHours(),mi=now.getMinutes(),se=now.getSeconds(),ms=now.getMilliseconds();
+    c.setAttribute("data-time",[h,mi,se].map(v=>String(v).padStart(2,"0")).join(":"));
+    mk("circle",{cx:cx+1.5,cy:cy+2.5,r:R+3,fill:"#000",opacity:".45",filter:"url(#splBlur)"},c);
+    mk("circle",{cx,cy,r:R+2.4,fill:"#141619",stroke:"#3d4248","stroke-width":".9"},c);
+    mk("circle",{cx,cy,r:R,fill:"#ebe5d6"},c);
+    const tk=mk("g",{stroke:"#1d1f22"},c);for(let i=0;i<60;i++){const an=i*Math.PI/30,big=i%5===0,r0=R*(big?.8:.9),r1_=R*.96;
+      mk("line",{x1:r1(cx+Math.sin(an)*r0),y1:r1(cy-Math.cos(an)*r0),x2:r1(cx+Math.sin(an)*r1_),y2:r1(cy-Math.cos(an)*r1_),"stroke-width":big?"1.1":".35"},tk)}
+    const hand=(deg,len,w,col,cls)=>{const g=mk("g",{transform:`rotate(${deg.toFixed(2)} ${cx} ${cy})`,class:cls},c);mk("line",{x1:cx,y1:r1(cy+len*.18),x2:cx,y2:r1(cy-len),stroke:col,"stroke-width":w,"stroke-linecap":"round"},g);return g};
+    hand((h%12+mi/60)*30,R*.5,"2.2","#15171a","splHr");hand((mi+se/60)*6,R*.78,"1.4","#15171a","splMin");
+    const so=mk("g",{transform:`rotate(${se*6} ${cx} ${cy})`,class:"splSecO"},c),si=mk("g",{class:"splSec",style:`transform-origin:${cx}px ${cy}px;animation-delay:${(-ms/1000).toFixed(3)}s`},so);
+    mk("line",{x1:cx,y1:r1(cy+R*.2),x2:cx,y2:r1(cy-R*.86),stroke:"#c8201f","stroke-width":".65","stroke-linecap":"round"},si);
+    mk("circle",{cx,cy,r:1.3,fill:"#c8201f"},c);
+    mk("path",{d:`M${cx-R*.75} ${cy-R*.35}A${R*.85} ${R*.85} 0 0 1 ${cx+R*.1} ${cy-R*.84}`,stroke:"#fff",fill:"none","stroke-width":"1.6",opacity:".35","stroke-linecap":"round"},c)}
+  const BX=-136,BY=-322,BW=88,BH=60,today=splToday();
+  {const b=mk("g",{class:"splBoard"},g0);b.setAttribute("data-text",today.filter(Boolean).join(" | "));
+    mk("rect",{x:BX+2,y:BY+3,width:BW,height:BH,fill:"#000",opacity:".45",filter:"url(#splBlur)"},b);
+    mk("rect",{x:BX-3,y:BY-3,width:BW+6,height:BH+6,rx:1.5,fill:"url(#splWood)"},b);
+    mk("rect",{x:BX,y:BY,width:BW,height:BH,fill:"url(#splSlate)"},b);
+    for(const[ex,ey,er]of[[.25,.3,16],[.7,.62,20],[.45,.85,14]])mk("ellipse",{cx:BX+BW*ex,cy:BY+BH*ey,rx:er,ry:er*.45,fill:"#fff",opacity:".045"},b);
+    mk("rect",{x:BX-4,y:BY+BH+2.5,width:BW+8,height:3,rx:1,fill:"#3e2a18"},b);
+    mk("rect",{x:BX+BW-22,y:BY+BH+.8,width:9,height:2,rx:.8,fill:"#f2f0e8"},b);mk("rect",{x:BX+BW-10,y:BY+BH+1,width:5,height:1.8,rx:.8,fill:"#e9c9c9"},b);
+    const ch=mk("g",{filter:"url(#splChalk)",fill:"#f2f0e7","font-family":"Rajdhani,sans-serif","text-anchor":"middle"},b);
+    const ln=(y,fs,wt,txt,op)=>{if(!txt)return;const t=mk("text",{class:"splChalk",x:BX+BW/2,y,"font-size":fs,"font-weight":wt,opacity:op},ch);t.textContent=txt;fits.push([t,BW-8])};
+    const tl=today.filter(Boolean),three=tl.length>2;
+    ln(BY+(three?19:24),"12","700",tl[0],"1");
+    mk("path",{d:`M${BX+14} ${BY+(three?23.5:28.5)}q${BW/2-14} 2.2 ${BW-28} -.6`,stroke:"#f2f0e7","stroke-width":".8",fill:"none",opacity:".75"},ch);
+    ln(BY+(three?36:44),"10","600",tl[1],".92");ln(BY+50,"8.5","600",tl[2],".8")}
+  const UX=40,UY=-302,UW=80,UH=54,hang=splHang();
+  {const u=mk("g",{class:"splCert"},g0);u.setAttribute("data-text",hang);
+    mk("rect",{x:UX+2,y:UY+3,width:UW,height:UH,fill:"#000",opacity:".5",filter:"url(#splBlur)"},u);
+    mk("rect",{x:UX,y:UY,width:UW,height:UH,rx:1,fill:"#17120d",stroke:"url(#splGoldF)","stroke-width":"1.3"},u);
+    mk("rect",{x:UX+4,y:UY+4,width:UW-8,height:UH-8,fill:"url(#splPaper)"},u);
+    mk("rect",{x:UX+6.5,y:UY+6.5,width:UW-13,height:UH-13,fill:"none",stroke:"#b08a3a","stroke-width":".5"},u);
+    const tt=mk("text",{x:UX+UW/2,y:UY+15.5,"text-anchor":"middle","font-family":"Georgia,'Noto Serif',serif","font-size":"5.6","letter-spacing":"1.6",fill:"#7a5a1c"},u);tt.textContent="URKUNDE";
+    const[h1,h2]=hang.split(": ");
+    const a=mk("text",{x:UX+UW/2,y:UY+26,"text-anchor":"middle","font-family":"Rajdhani,sans-serif","font-weight":"700","font-size":"9",fill:"#2a2018"},u);a.textContent=h1+":";
+    const v=mk("text",{class:"splRec",x:UX+UW/2,y:UY+40,"text-anchor":"middle","font-family":"Rajdhani,sans-serif","font-weight":"700","font-size":"14",fill:"#8a1c18"},u);v.textContent=h2;fits.push([v,UW-30]);
+    mk("circle",{cx:UX+UW-14,cy:UY+UH-13,r:4.6,fill:"url(#splGoldF)",stroke:"#7a5a1c","stroke-width":".4"},u);
+    mk("path",{d:`M${UX+UW-16} ${UY+UH-9.5}l-1.6 5 2-1 1 1.8 1-5.2M${UX+UW-12} ${UY+UH-9.5}l1.6 5-2-1-1 1.8-1-5.2`,fill:"#b3221d"},u);
+    mk("path",{d:`M${UX+12} ${UY+UH-11}h22`,stroke:"#6b5a40","stroke-width":".4"},u);
+    const gg=mk("g",{class:"splGl",style:"animation-delay:1.6s"},u);mk("path",{d:`M${UX+8} ${UY+UH-8}L${UX+26} ${UY+8}`,stroke:"#fff","stroke-width":"3",opacity:".25"},gg)}
   /* ganz hinten im Halbdunkel, halb hinter dem Rack: Laufband (links) und Crosstrainer (rechts) als dunkle Umrisse mit warmem Randlicht */
   {const Z=4.4,k=K(Z)/100;
     const mach=(cls,ox)=>{const g=mk("g",{class:cls},g0),bk=mk("g",{opacity:".82",fill:"#121417",stroke:"#121417","stroke-linecap":"round","stroke-linejoin":"round"},g),
@@ -5976,33 +6067,51 @@ function splashRoom(sp,red){const NS="http://www.w3.org/2000/svg";const ic=sp.qu
       x.fillStyle=pg;x.fillRect(cx-2.2*s*1.2,ty,4.4*s*1.2,fy-ty);x.fillStyle="#2a2e33";x.fillRect(cx-3.2*s,ty-1.5*s,6.4*s,2.4*s);
       for(const[Y,L,R]of[[.27,[25,25],[20,20]],[.76,[15,10],[10,5]]]){const y=P(X,Y,Z)[1];
         kit.plateStack([cx-3*s,y],22.5,L,[-1,0],0,false);kit.plateStack([cx+3*s,y],22.5,R,[1,0],0,false)}},.48,cx-42)}
-  /* links: Hantelablage mit 2 Etagen und Joschys Kurzhanteln Gummi PRO 2,5–20 kg (wie in den Übungen: rubberHead, Chromgriff) */
-  const gl=[];{const Z=2.75,s=K(Z)/100,XL=-.96,XR=-.48,/* 3.9: vor dem Laufband, unter der Goldscheibe */[xl,fy]=P(XL,0,Z),[xr]=P(XR,0,Z),dd=CAM,dep=16*s;
-    const tiers=[[.28,[12.5,15,17.5,20]],[.58,[2.5,5,7.5,10]]],ty=P(XL,.8,Z)[1];
-    cnv(xl-21,ty-12,xr-xl+30,fy-ty+20,x=>{const sd=s,kit=eqKit(x,sd,false);/* Hanteln etwas größer als maßstäblich, damit sie lesbar bleiben */
-      const steel=(a,b,w)=>{x.strokeStyle="#2a2e34";x.lineWidth=w;x.lineCap="round";x.beginPath();x.moveTo(a[0],a[1]);x.lineTo(b[0],b[1]);x.stroke();
-        x.strokeStyle="rgba(210,218,226,.3)";x.lineWidth=w*.25;x.beginPath();x.moveTo(a[0],a[1]-w*.25);x.lineTo(b[0],b[1]-w*.25);x.stroke()};
-      const bx=-dd[0]*dep,by=-dd[1]*dep;
-      x.fillStyle="rgba(0,0,0,.45)";x.beginPath();x.ellipse((xl+xr)/2+bx/2,fy+by/2+2,(xr-xl)/2+14,7,0,0,7);x.fill();
-      for(const xx of[xl,xr]){steel([xx+bx,fy+by],[xx+bx,ty+by],3.2);}
-      for(const[Y]of tiers){const y=P(XL,Y,Z)[1];steel([xl+bx,y+by],[xr+bx,y+by],2.4)}
-      for(const[Y,list]of tiers){const y=P(XL,Y,Z)[1];const n=list.length,step=(xr-xl-10)/n;
-        list.forEach((kg,i)=>{const D=dbDims(kg);const hx=xl+8+step*(i+.5)+bx*.5,hy=y+by*.5-D.rr*sd*.62;kit.dumbbell([hx,hy],false,dd,undefined,kg);
-          gl.push([hx,hy,D.rr*sd,D.off*sd,D.th*sd])})}
-      for(const[Y]of tiers){const y=P(XL,Y,Z)[1];steel([xl,y],[xr,y],2.6)}
-      for(const xx of[xl,xr]){steel([xx,fy],[xx,ty],3.4);steel([xx,ty],[xx+bx,ty+by],2.4);steel([xx-4,fy],[xx+bx+4,fy+by],2.8)}},.12,xr+8)}
-  /* Glanz auf den Chromgriffen, wenn der Spot angeht */
-  const gG=mk("g",{stroke:"#fffdf5","stroke-linecap":"round",fill:"none"},g0);
-  gl.forEach((q,i)=>{const[hx,hy,rr,off,thk]=q,d=CAM,u=[-d[1],d[0]],L=(off-thk*.5)*.75,o=-rr*.0-1;
+  /* 3.10 (@ Joschy): links die Hantelablage wie Joschys echte (schwarzes Gestell, A-förmige Seitenteile, 2 schräge Etagen für 10 Paare),
+     lang in die Tiefe gestellt. Darauf 10 Paare 2,5–25 kg, jede Hantel so groß wie ihr Gewicht (rubberHead wie in den Übungen).
+     Nur hier gibt es 22,5 und 25 kg; die App selbst bleibt bei Joschys 8 Paaren bis 20 kg. */
+  const RACK_KG=[],gl=[];{const F0=[-.7,2.15],F1=[-.69,2.62],DK=.7,SC=1.15,AS=.64;/* Ende vorn links / hinten rechts (m), DK: Achse steiler, SC: Hanteln etwas größer, AS: Tiefe des Gestells */
+    const Lx=F1[0]-F0[0],Lz=F1[1]-F0[1],ll=Math.hypot(Lx,Lz),N=[Lz/ll,-Lx/ll];/* N: Vorderseite (zum Betrachter) */
+    const W=(t,a,Y)=>P(F0[0]+Lx*t+N[0]*a*AS,Y,F0[1]+Lz*t+N[1]*a*AS),Zt=(t,a)=>F0[1]+Lz*t+N[1]*a*AS;
+    const TI=[{a:-.035,ab:-.1,af:.03,yb:.66,yf:.61,kg:[12.5,12.5,10,10,7.5,7.5,5,5,2.5,2.5]},{a:.17,ab:.1,af:.24,yb:.34,yf:.29,kg:[25,25,22.5,22.5,20,20,17.5,17.5,15,15]}];
+    const pts=[];for(const t of[0,1])for(const a of[-.3,.36])for(const Y of[0,.8])pts.push(W(t,a,Y));
+    const xs=pts.map(q=>q[0]),ys=pts.map(q=>q[1]),x0=Math.min(...xs)-26,x1=Math.max(...xs)+26,y0=Math.min(...ys)-22,y1=Math.max(...ys)+8;
+    cnv(x0,y0,x1-x0,y1-y0,x=>{
+      const nrm=(a,b)=>{let n=[a[1]-b[1],b[0]-a[0]];const l=Math.hypot(n[0],n[1])||1;n=[n[0]/l,n[1]/l];return n[1]>0?[-n[0],-n[1]]:n};
+      /* Stahlprofil: von w0 nach w1 verjüngt (Perspektive), oben eine schwache Lichtkante */
+      const beam=(a,b,w0,w1)=>{w1=w1==null?w0:w1;const n=nrm(a,b);x.fillStyle="#141619";x.beginPath();
+        x.moveTo(a[0]+n[0]*w0/2,a[1]+n[1]*w0/2);x.lineTo(b[0]+n[0]*w1/2,b[1]+n[1]*w1/2);x.lineTo(b[0]-n[0]*w1/2,b[1]-n[1]*w1/2);x.lineTo(a[0]-n[0]*w0/2,a[1]-n[1]*w0/2);x.closePath();x.fill();
+        x.strokeStyle="rgba(235,220,200,.26)";x.lineWidth=Math.max(.3,Math.min(w0,w1)*.2);x.beginPath();x.moveTo(a[0]+n[0]*w0*.36,a[1]+n[1]*w0*.36);x.lineTo(b[0]+n[0]*w1*.36,b[1]+n[1]*w1*.36);x.stroke()};
+      const bm=(t,a0,Y0,a1,Y1,m)=>beam(W(t,a0,Y0),W(t,a1,Y1),m*K(Zt(t,a0)),m*K(Zt(t,a1)));
+      const rail=(a,Y,m,t0=0,t1=1)=>beam(W(t0,a,Y),W(t1,a,Y),m*K(Zt(t0,a)),m*K(Zt(t1,a)));
+      /* A-Seitenteil wie das Original: hinterer und vorderer Schenkel laufen oben zusammen, Arm nach vorn für die untere Etage, Querstrebe, Fußplatten */
+      const side=t=>{bm(t,-.22,.012,-.11,.012,.045);bm(t,.18,.012,.34,.012,.045);
+        bm(t,-.18,.02,-.09,.68,.04);bm(t,.26,.02,.03,.68,.04);bm(t,-.12,.68,.06,.68,.036);
+        bm(t,-.17,.1,.23,.1,.03);bm(t,-.16,.33,.27,.29,.032)};
+      x.fillStyle="rgba(0,0,0,.5)";x.beginPath();for(const[t,a]of[[-.02,-.24],[1.03,-.24],[1.03,.38],[-.02,.38]]){const q=W(t,a,0);x.lineTo(q[0],q[1]+1)}x.closePath();x.fill();
+      side(1);rail(.02,.1,.03);
+      for(const T of TI){rail(T.ab,T.yb,.03);rail(T.af,T.yf,.03)}
+      /* Kurzhanteln: weiter hinten zuerst; Achse quer zur Ablage (zum Betrachter), etwas steiler gezeichnet, damit die Stirnseiten sichtbar bleiben */
+      const rs=(()=>{const a=W(0,0,.5),b=W(1,0,.5),l=Math.hypot(b[0]-a[0],b[1]-a[1]);return[(b[0]-a[0])/l,(b[1]-a[1])/l]})(),pd=[-rs[1],rs[0]];if(pd[1]<0){pd[0]=-pd[0];pd[1]=-pd[1]}
+      const it=[];TI.forEach((T,k)=>T.kg.forEach((kg,i)=>{RACK_KG.push(kg);const t=.075+Math.floor(i/2)*.2+(i%2)*.074,D=splDbDims(kg),Y=(T.yb+T.yf)/2+D.rr/100*.8*SC,Z=Zt(t,T.a);it.push({t,a:T.a,Y,Z,kg,D,k})}));
+      it.sort((p,q)=>q.Z-p.Z||p.k-q.k);
+      for(const o of it){const h=W(o.t,o.a,o.Y),e=W(o.t,o.a+.1,o.Y);let d=[e[0]-h[0],e[1]-h[1]];const l=Math.hypot(d[0],d[1]);d=[d[0]/l*(1-DK)+pd[0]*DK,d[1]/l*(1-DK)+pd[1]*DK];
+        const l2=Math.hypot(d[0],d[1]);d=[d[0]/l2,d[1]/l2];const s=K(o.Z)/100*SC;
+        eqKit(x,s,false).dumbbell(h,false,d,undefined,o.kg,o.D);gl.push([h[0],h[1],d,o.D.rr*s,o.D.off*s,o.D.th*s])}
+      for(const T of TI)rail(T.af,T.yf-.012,.02);
+      side(0)},.1,x1-30)}
+  /* Glanz auf den Chromgriffen, wenn das Licht kommt */
+  const gG=mk("g",{class:"splGrips",stroke:"#fffdf5","stroke-linecap":"round",fill:"none","data-kg":RACK_KG.join(",")},g0);
+  gl.forEach((q,i)=>{const[hx,hy,d,rr,off,thk]=q,u=[d[1],-d[0]],L=(off-thk*.5)*.8,o=u[1]<0?.6:-.6;
     const a=[hx-d[0]*L+u[0]*o,hy-d[1]*L+u[1]*o],b=[hx+d[0]*L+u[0]*o,hy+d[1]*L+u[1]*o];
-    const g=mk("g",{class:"splGl",style:`animation-delay:${(.4+i*.035).toFixed(3)}s`},gG);
-    mk("line",{x1:r1(a[0]),y1:r1(a[1]),x2:r1(b[0]),y2:r1(b[1]),"stroke-width":"2.6",opacity:".28"},g);
-    mk("line",{x1:r1(a[0]),y1:r1(a[1]),x2:r1(b[0]),y2:r1(b[1]),"stroke-width":".9"},g)});
+    const g=mk("g",{class:"splGl",style:`animation-delay:${(1.3+i*.03).toFixed(3)}s`},gG);
+    mk("line",{x1:r1(a[0]),y1:r1(a[1]),x2:r1(b[0]),y2:r1(b[1]),"stroke-width":"2.4",opacity:".26"},g);
+    mk("line",{x1:r1(a[0]),y1:r1(a[1]),x2:r1(b[0]),y2:r1(b[1]),"stroke-width":".8"},g)});
   /* Mitte: das Icon-Motiv (Rack, Figur, Langhantel) unverändert; Boden des Icons auf dem Boden der Szene */
   const KI=2.9;for(const[k,v]of Object.entries({x:r1(-54*KI),y:r1(-81.5*KI),width:r1(108*KI),height:r1(108*KI)}))ic.setAttribute(k,v);
   g0.appendChild(ic);
-  /* Hantelbank schräg vor der Ablage (steht näher als das Rack) */
-  {const b0=[-.53,2.42],b1=[-.56,1.86],ax=[b1[0]-b0[0],b1[1]-b0[1]],al=Math.hypot(ax[0],ax[1]),n=[-ax[1]/al*.14,ax[0]/al*.14],bn=mk("g",{class:"splBench"},g0);
+  /* 3.10 (@ Joschy): Hantelbank rechts vorn, schräg vor dem Scheibenständer (vor der Hantelablage steht nichts mehr) */
+  {const b0=[.55,2.45],b1=[.92,2.85],ax=[b1[0]-b0[0],b1[1]-b0[1]],al=Math.hypot(ax[0],ax[1]),n=[-ax[1]/al*.14,ax[0]/al*.14],bn=mk("g",{class:"splBench"},g0);
     const Q=(t,w,Y)=>P(b0[0]+ax[0]*t+n[0]*w,Y,b0[1]+ax[1]*t+n[1]*w),poly=(a,f,o)=>mk("polygon",Object.assign({points:pt(a),fill:f},o||{}),bn);
     poly([Q(-.04,-1.1,0),Q(1.04,-1.1,0),Q(1.04,1.1,0),Q(-.04,1.1,0)],"#000",{opacity:".45",filter:"url(#splBlur)"});
     for(const t of[.14,.86]){const a=Q(t,0,.37),b=Q(t,0,.02);mk("path",{d:`M${pt([a])}L${pt([b])}`,stroke:"#1c1f23","stroke-width":r1(.05*K(b0[1]+ax[1]*t)),"stroke-linecap":"round"},bn);
@@ -6010,7 +6119,7 @@ function splashRoom(sp,red){const NS="http://www.w3.org/2000/svg";const ic=sp.qu
       mk("path",{d:`M${pt([a])}L${pt([b])}`,stroke:"#ffd2a0","stroke-width":".5",opacity:".18"},bn)}
     mk("path",{d:`M${pt([Q(.14,0,.33)])}L${pt([Q(.86,0,.33)])}`,stroke:"#1c1f23","stroke-width":"3"},bn);
     poly([Q(0,-1,.455),Q(1,-1,.455),Q(1,-1,.375),Q(0,-1,.375)],"#0b0c0e");
-    poly([Q(1,-1,.455),Q(1,1,.455),Q(1,1,.375),Q(1,-1,.375)],"#121417");
+    poly([Q(0,-1,.455),Q(0,1,.455),Q(0,1,.375),Q(0,-1,.375)],"#121417");
     poly([Q(0,-1,.455),Q(1,-1,.455),Q(1,1,.455),Q(0,1,.455)],"url(#splPad)");
     mk("path",{d:`M${pt([Q(.02,-.82,.456)])}L${pt([Q(.98,-.82,.456)])}`,stroke:"#c41a20","stroke-width":".6",opacity:".75","stroke-dasharray":"1.4 1.1"},bn);
     mk("path",{d:`M${pt([Q(0,1,.456)])}L${pt([Q(1,1,.456)])}`,stroke:"#ffd8a8","stroke-width":".7",opacity:".25"},bn)}
@@ -6018,19 +6127,32 @@ function splashRoom(sp,red){const NS="http://www.w3.org/2000/svg";const ic=sp.qu
   const ly=P(0,3.05,3)[1],lamp=mk("g",{},g0);
   mk("path",{class:"splCone",d:`M-13 ${r1(ly+15)}L13 ${r1(ly+15)}L168 8Q0 44-168 8Z`,fill:"url(#splCone)",filter:"url(#splBlur)",opacity:".9"},lamp);
   mk("path",{d:`M-8 ${r1(ly+15)}L8 ${r1(ly+15)}L92 4Q0 22-92 4Z`,fill:"#ffe9c4",opacity:".06",filter:"url(#splBlur)"},lamp);
-  mk("path",{d:`M0 -3000V${r1(ly-6)}`,stroke:"#0a0b0c","stroke-width":"1.2"},lamp);
-  mk("path",{d:`M-5 ${r1(ly-6)}H5L14 ${r1(ly+14)}H-14Z`,fill:"#141619",stroke:"#2c3036","stroke-width":".6"},lamp);
-  mk("path",{d:`M-4 ${r1(ly-5)}L-12.5 ${r1(ly+13)}`,stroke:"#ffd9a8","stroke-width":".6",opacity:".35"},lamp);
-  mk("ellipse",{cx:0,cy:r1(ly+15),rx:36,ry:22,fill:"url(#splBulb)",opacity:".55"},lamp);
-  mk("ellipse",{cx:0,cy:r1(ly+14.6),rx:12.5,ry:2.6,fill:"#fff6dc"},lamp);
   /* Kreidestaub im Lichtkegel */
   if(!red)for(let i=0;i<14;i++){const x=(rnd()-.5)*120,y=-18-rnd()*70,r=.6+rnd()*1.1;
-    mk("circle",{class:"splDust",cx:r1(x),cy:r1(y),r:r1(r),fill:"#fff4dc",style:`animation-delay:${(.88+rnd()*.2).toFixed(2)}s;--dx:${r1((rnd()-.5)*24)}px;--dy:${r1(-38-rnd()*60)}px;--o:${(.45+rnd()*.5).toFixed(2)}`},g0)}
+    mk("circle",{class:"splDust",cx:r1(x),cy:r1(y),r:r1(r),fill:"#fff4dc",style:`animation-delay:${(3.5+rnd()*.25).toFixed(2)}s;--dx:${r1((rnd()-.5)*24)}px;--dy:${r1(-38-rnd()*60)}px;--o:${(.45+rnd()*.5).toFixed(2)}`},g0)}
   mk("rect",{x:-3000,y:-3000,width:6000,height:6000,fill:"url(#splVig)"},g0);
+  /* 3.10 (@ Joschy): Dunkelheit in zwei Ebenen: bis 1 s ganz dunkel, danach weitet sich ein Lichtloch um den Spot (1–2 s) */
+  mk("rect",{class:"splSpread",style:"transform-origin:0px -215px",x:-3000,y:-3000,width:6000,height:6000,fill:"url(#splHole)"},g0);
   mk("rect",{class:"splDark",x:-3000,y:-3000,width:6000,height:6000,fill:"#000"},g0);
+  /* Lampe über der Dunkelheit: Schirm schwach sichtbar, Birne und Schein flackern an (0–1 s) */
+  {const lt=mk("g",{class:"splLamp"},g0);
+    mk("path",{d:`M0 -3000V${r1(ly-6)}`,stroke:"#0a0b0c","stroke-width":"1.2"},lt);
+    mk("path",{d:`M-5 ${r1(ly-6)}H5L14 ${r1(ly+14)}H-14Z`,fill:"#141619",stroke:"#2c3036","stroke-width":".6"},lt);
+    const on=mk("g",{class:"splLampOn"},lt);
+    mk("path",{d:`M-4 ${r1(ly-5)}L-12.5 ${r1(ly+13)}`,stroke:"#ffd9a8","stroke-width":".6",opacity:".35"},on);
+    mk("ellipse",{cx:0,cy:r1(ly+15),rx:36,ry:22,fill:"url(#splBulb)",opacity:".55"},on);
+    mk("ellipse",{cx:0,cy:r1(ly+14.6),rx:12.5,ry:2.6,fill:"#fff6dc"},on)}
+  /* Neon leuchtet selbst (über der Dunkelheit), flackert bei 1,1 s an */
+  {const ne=mk("g",{class:"splNeon"},g0);
+    mk("ellipse",{cx:NX,cy:NY-5,rx:78,ry:24,fill:"url(#splNeonW)"},ne);
+    const t=mk("text",Object.assign({class:"splNeonTxt",fill:"#ff5a52",stroke:"#ffe2dc","stroke-width":".45",style:"filter:drop-shadow(0 0 1.5px #ff3a30) drop-shadow(0 0 5px #ff1e1e) drop-shadow(0 0 11px rgba(255,25,25,.55))"},nAt),ne);t.textContent=NEON;fits.push([t,108])}
   /* kleiner goldener Schriftzug */
   const tx=mk("text",{class:"splTxt",x:0,y:58,"text-anchor":"middle",fill:"url(#hgGoldBar)","font-family":"Orbitron,Rajdhani,sans-serif","font-weight":"700","font-size":"17","letter-spacing":"6.5",style:"filter:drop-shadow(0 0 4px rgba(255,200,90,.45))"},svg);tx.textContent="HOMEGYM";
-  sp.insertBefore(svg,sp.firstChild);return{bag,urls}}
+  const by=mk("text",{class:"splBy",x:0,y:73,"text-anchor":"middle",fill:"#e9c771","font-family":"Rajdhani,sans-serif","font-weight":"600","font-size":"8.5","letter-spacing":"2.2",style:"filter:drop-shadow(0 0 3px rgba(255,200,90,.35))"},svg);by.textContent="by Joschy";
+  sp.insertBefore(svg,sp.firstChild);
+  /* zu lange Zeilen (Tafel, Neon, Urkunde) auf ihre Breite stauchen */
+  for(const[t,mx]of fits)try{if(t.getComputedTextLength()>mx){t.setAttribute("textLength",mx);t.setAttribute("lengthAdjust","spacingAndGlyphs")}}catch(e){}
+  return{bag,urls}}
 function splashRun(){const sp=document.getElementById("splash");if(!sp)return;let skip=!!window.__hgNoSplash;
   try{skip=skip||/(^|[?&#])nosplash\b/.test(location.search+"&"+location.hash)||sessionStorage.getItem("hgSplash")==="1"}catch(e){}
   const done=()=>{if(sp.isConnected)sp.remove();if(room)for(const u of room.urls)try{URL.revokeObjectURL(u)}catch(e){}};let room=null;if(skip){done();return}
@@ -6048,7 +6170,7 @@ function splashRun(){const sp=document.getElementById("splash");if(!sp)return;le
     mk("rect",{class:"splSweep",x:"21",y:"30",width:"7",height:"32",fill:"url(#splSG)"},sk);
     for(const[x,y,c]of[[25.2,36.4,""],[82.8,37.4," s2"]])mk("path",{class:"splStar"+c,fill:"#fffbe6",d:`M${x} ${y-3.2}l.85 2.35 2.35.85-2.35.85-.85 2.35-.85-2.35-2.35-.85 2.35-.85z`},pl)}
   let gone=false;const hide=()=>{if(gone)return;gone=true;sp.classList.add("out");setTimeout(done,130)};
-  sp.classList.add(red?"still":"run");const t=setTimeout(()=>{gone=true;done()},red?600:SPL_T);
+  sp.classList.add(red?"still":"run");const t=setTimeout(()=>{gone=true;done()},red?600:SPL_T);/* 3.10: 5 s, reduced motion 0,6 s */
   sp.addEventListener("pointerdown",e=>{e.preventDefault();clearTimeout(t);hide()},{once:true})}
 /* ================= BOOT ================= */
 normTempo();

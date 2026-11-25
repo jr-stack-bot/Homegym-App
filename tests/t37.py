@@ -3,7 +3,7 @@
 #    idempotent, andere Presets/eigene Listen unverändert, altes Backup (v5) lesbar und wird umgestellt.
 # 2) Gewichtsrundung auf vorhandene Paare (bei Gleichstand abrunden), Steigerung erst über Wiederholungen, Maximum 20 kg je Hand.
 # 3) Plan und Hauptübungen wie in 3.6 (Vergleich mit releases/Homegym-3.6.apk), keine Einheit über 59 min.
-# 4) Start-Animation (3.9: ca. 1,5 s, genaue Dauer in t39; Tippen überspringt, reduced motion kurz, Flag ?nosplash) und Gold-Glanz im Kopf nach einem Training.
+# 4) Start-Animation (3.10: 5 s, genaue Dauer in t39; Tippen überspringt, reduced motion kurz, Flag ?nosplash) und Gold-Glanz im Kopf nach einem Training.
 # Aufruf: python3 -I tests/t37.py  (HOMEGYM_OUT = Ordner mit index.html, Standard out/)
 import os as _os
 _REPO=_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
@@ -35,7 +35,7 @@ async def main():
         b=await p.chromium.launch();ctx=await b.new_context(viewport={'width':390,'height':844});pg=await ctx.new_page()
         errs=[];pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:errs.append(m.text) if m.type=='error' else None)
         await pg.goto(U);await pg.wait_for_timeout(500)
-        v=await pg.evaluate("[APP_VER,BK_VER,JOSCHY_DB]");chk(v==['3.9',5,SET],f'Version 3.9, Backup-Format 5, Set {v}')
+        v=await pg.evaluate("[APP_VER,BK_VER,JOSCHY_DB]");chk(v==['3.10',5,SET],f'Version 3.10, Backup-Format 5, Set {v}')
         # ---------- 1) Migration ----------
         await put(pg,OLD)
         r=await pg.evaluate("()=>{const st=JSON.parse(localStorage.getItem(KEY));return{w:st.profile.weights,f:st.profile.db37,gear:st.profile.gear,pre:st.profile.preset,log:st.session.log.map(l=>l.sets.map(s=>s.w)),h:st.history[0].log.map(l=>l.sets.map(s=>s.w))}}")
@@ -124,8 +124,8 @@ async def main():
             c=await b.new_context(viewport={'width':390,'height':844},**kw);q=await c.new_page();e=[];q.on('pageerror',lambda x:e.append(str(x)));return c,q,e
         c,q,e=await fresh();t0=time.time();await q.goto(UR);await q.wait_for_selector('#splash.run',timeout=2000)
         vis=await q.evaluate("()=>{const s=document.getElementById('splash');const r=s.getBoundingClientRect();return{w:r.width,h:r.height,svg:!!s.querySelector('#hgUpper'),fl:s.querySelectorAll('.splSweep').length*10+s.querySelectorAll('.splStar').length,app:!!document.querySelector('#v-home').innerHTML}}")
-        await q.wait_for_selector('#splash',state='detached',timeout=3000);dt=time.time()-t0
-        chk(vis['w']==390 and vis['svg'] and vis['fl']==12 and vis['app'] and dt<2.5,f'Start-Animation: Icon groß über der schon fertigen App, nach {dt:.2f} s weg {vis}')
+        await q.wait_for_selector('#splash',state='detached',timeout=8000);dt=time.time()-t0
+        chk(vis['w']==390 and vis['svg'] and vis['fl']==12 and vis['app'] and 4.7<=dt<=6.0,f'Start-Animation: Icon groß über der schon fertigen App, nach {dt:.2f} s weg (5 s + Laden, Soll 4,7–6,0 s) {vis}')
         async with q.expect_navigation():await q.evaluate("location.reload()")
         await q.wait_for_timeout(150);chk(await q.evaluate("!document.getElementById('splash')"),'nach einem Neuladen (z. B. Backup) keine zweite Start-Animation');await c.close()
         c,q,e=await fresh();await q.goto(UR);await q.wait_for_selector('#splash.run');t0=time.time();await q.mouse.click(195,420)

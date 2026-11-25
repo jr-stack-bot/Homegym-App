@@ -22,5 +22,5 @@ usesFramework:
   tag: null
 version: 2.9.3
 versionInfo:
-  versionCode: '24'
-  versionName: '3.9'
+  versionCode: '25'
+  versionName: '3.10'
