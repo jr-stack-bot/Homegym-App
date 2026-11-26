@@ -741,12 +741,12 @@ function wpRng(s){let h=2166136261;for(const c of String(s)){h^=c.charCodeAt(0);
    höchstens die Hälfte der Übungen darf sich wiederholen (soweit der Pool reicht), nie derselbe Block. Rekursiv ab m=0, gemerkt je Geräte-Pool. */
 const WP_MEMO=new Map();
 function wpOrder(l){return l.map((w,i)=>[w,i]).sort((x,y)=>x[0].pos-y[0].pos||x[1]-y[1]).map(x=>x[0])}
-/* 3.14: je Block mindestens eine Dehnübung (s) zum Tag, höchstens zwei (bei 7 Übungen drei); mindestens zwei Übungen für den Bereich des Tages (c: A Push,
+/* 3.14: je Block mindestens eine Dehnübung (s) zum Tag, höchstens zwei (auch bei 7 Übungen); mindestens zwei Übungen für den Bereich des Tages (c: A Push,
    B Pull, C Beine), höchstens zwei allgemeine (bei 7 Übungen vier) (Rumpf/Ganzkörper). Neuer Seed (neuer Pool). Grenze für Wiederholungen wie 3.13. */
 function wpBuild(L,day,m,cnt,prev,salt){const r=wpRng("hg314|"+day+"|"+m+(salt||""));const a=L.map(w=>[r(),w]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
   const pk=new Set(prev.map(w=>w.k));const lim=Math.floor(cnt/2);const out=[],gs=new Set();let ov=0;
   const core=w=>!!(w.c&&w.c.includes(day));const nS=()=>out.filter(w=>w.s).length,nC=()=>out.filter(core).length,nG=()=>out.filter(w=>!w.s&&!core(w)).length;
-  const sMax=cnt>5?3:2,gMax=Math.max(2,cnt-3);/* längerer Block (z. B. Seil 3 min): Grenzen wachsen mit */
+  const sMax=2,gMax=Math.max(2,cnt-3);/* Dehnen immer höchstens 2 (Abnahme 3.14); bei längerem Block (Seil 3 min) dürfen mehr allgemeine Übungen rein */
   const take=(w,force,cap)=>{if(out.length>=cnt||out.includes(w)||(w.g&&gs.has(w.g))||(w.s&&nS()>=sMax))return;if(cap&&!w.s&&!core(w)&&nG()>=gMax)return;
     const rep=pk.has(w.k);if(rep&&!force&&ov>=lim)return;if(rep)ov++;if(w.g)gs.add(w.g);out.push(w)};
   for(const f of[false,true])for(const w of a)if(w.s&&!nS())take(w,f,1);
@@ -5977,7 +5977,7 @@ const WX={
     an:{anchor:"foot",mat:1,A:{shin:185,thigh:-80,torso:15,foot:180,at:[-45.8,0],upper:-41,fore:123,neck:0},B:{shin:185,thigh:-67,torso:-5,foot:180,at:[-45.8,0],upper:5,fore:170,neck:4},eq:[{t:"box",x:60,w:52,y:40}],tempo:[2,1.5,1.6,.5],ph:["Brust sinken","Zurück"]}},
   halo:{n:"Halo mit leichter Kurzhantel",r:"push",z:"Schultergürtel · obere Brustwirbelsäule",d:"A",pos:2,nd:[["db"]],dos:"8 Kreise je Richtung",
     t:"Leichteste Kurzhantel (2,5 oder 5 kg) mit beiden Händen vor der Brust halten. In einem engen Kreis um den Kopf führen, dicht am Kopf vorbei. Nach 8 Kreisen die Richtung wechseln.",
-    b:"Gleichmäßig weiteratmen.",x:"Ganz leichtes Gewicht, kleiner Kreis nah am Kopf. Rumpf bleibt ruhig, kein Hohlkreuz.",
+    b:"Gleichmäßig weiteratmen.",x:"Ganz leichtes Gewicht, kleiner Kreis nah am Kopf. Rumpf bleibt ruhig, kein Hohlkreuz. Bei Schulterbeschwerden ohne Gewicht oder weglassen.",
     an:{view:"front",A:{yf:1,ua:-75,fa:136,uaL:-105,faL:44,s:10},B:{yf:1,ua:285,fa:136,uaL:255,faL:44,s:10},K:[{t:.25,ua:0,fa:136,uaL:75,faL:-20},{t:.5,ua:60,fa:162,uaL:120,faL:18},{t:.75,ua:105,fa:200,uaL:180,faL:44}],eq:[{t:"db",at:"handR"}],tempo:[2.4,0,2.4,0],ph:["Kreisen","Kreisen"]}},
   pendel:{n:"Armpendeln vorgebeugt",r:"push",z:"Schultergelenk (Entlastung)",d:"AB",pos:2,dos:"60 s · je Arm 30 s",
     t:"Leicht vorbeugen, eine Hand stützt sich am Oberschenkel ab. Der andere Arm hängt locker und pendelt ruhig vor und zurück, wie ein Pendel. Nach 30 s Arm wechseln.",
@@ -5999,7 +5999,7 @@ const WX={
     t:"Einen Arm gestreckt quer vor die Brust führen, die andere Hand zieht sanft am Oberarm, 2–3 s halten. Lösen und Seite wechseln.",
     b:"Ausatmen beim Heranziehen.",x:"Am Oberarm ziehen, nicht am Ellbogengelenk. Schulter bleibt unten.",
     an:{view:"front",A:{yf:1,ua:182,fa:182,uaL:-60,faL:120,s:8},B:{yf:1,ua:-120,fa:60,uaL:-2,faL:-2,s:8},K:[{t:.5,ua:240,fa:250,uaL:-60,faL:-70}],tempo:[1.4,2.2,1.4,2.2],ph:["Rechts quer","Links quer"]}},
-  nackenneig:{n:"Nacken-Neigen im Wechsel",r:"push",s:1,z:"Seitlicher Nacken",d:"AB",pos:2,g:"nacken",dos:"60 s · je Seite 3 s",
+  nackenneig:{n:"Nacken-Neigen im Wechsel",r:"rumpf",s:1,z:"Seitlicher Nacken",d:"AB",pos:2,g:"nacken",dos:"60 s · je Seite 3 s",
     t:"Aufrecht stehen, Arme hängen. Ohr langsam Richtung Schulter sinken lassen, 3 s halten, über die Mitte zur anderen Seite.",
     b:"Ausatmen beim Sinken lassen.",x:"Nur neigen, nicht kreisen. Die gegenüberliegende Schulter bleibt unten, kein Ziehen mit der Hand.",
     an:{view:"front",A:{yf:1,ua:-86,fa:-88,s:6,tilt:-27},B:{yf:1,ua:-86,fa:-88,s:6,tilt:27},tempo:[2.4,3,2.4,3],ph:["Zur Seite","Zur anderen Seite"]}},
@@ -6048,11 +6048,11 @@ const WX={
   beinpendel:{n:"Beinpendel vor und zurück",r:"beine",s:1,z:"Hüftbeuger · Beinrückseite",d:"C",pos:2,g:"pendel",dos:"60 s · je Bein 30 s",
     t:"Seitlich an Wand oder Rack festhalten. Ein Bein locker vor und zurück pendeln lassen, mit jedem Schwung etwas weiter, Oberkörper bleibt aufrecht. Nach 30 s Bein wechseln.",
     b:"Gleichmäßig weiteratmen.",x:"Kontrolliert pendeln, nicht kicken. Nur so weit, wie die Hüfte frei bleibt.",
-    an:{anchor:"foot",noBal:1,A:{shin:-92,thigh:-88,torso:88,thigh2:-48,shin2:-58,foot2:20,upper:-65,fore:-40},B:{shin:-92,thigh:-88,torso:86,thigh2:-125,shin2:-122,foot2:-40,upper:-65,fore:-40},K:[{t:.5,thigh2:-88,shin2:-112,foot2:-15}],tempo:[.95,0,.95,0],ph:["Pendeln","Pendeln"]}},
+    an:{anchor:"foot",noBal:1,A:{shin:-92,thigh:-88,torso:88,thigh2:-48,shin2:-58,foot2:20,upper:-65,fore:-40,hand2:[12,-24],bend2:-1},B:{shin:-92,thigh:-88,torso:86,thigh2:-125,shin2:-122,foot2:-40,upper:-65,fore:-40,hand2:[12,-24],bend2:-1},K:[{t:.5,thigh2:-88,shin2:-112,foot2:-15}],eq:[{t:"post",x:16,w:7,h:180}],tempo:[.95,0,.95,0],ph:["Pendeln","Pendeln"]}},
   beinpendelseit:{n:"Beinpendel seitlich",r:"beine",s:1,z:"Adduktoren · seitliche Hüfte",d:"C",pos:2,g:"pendel",dos:"60 s · je Bein 30 s",
-    t:"Vor Wand oder Rack stehen und festhalten. Ein Bein locker vor dem Standbein seitlich hin und her pendeln, langsam etwas weiter. Nach 30 s Bein wechseln.",
+    t:"Seitlich neben Wand oder Rack-Pfosten stehen und mit einer Hand festhalten. Ein Bein locker vor dem Standbein seitlich hin und her pendeln, langsam etwas weiter. Nach 30 s Bein wechseln.",
     b:"Gleichmäßig weiteratmen.",x:"Becken bleibt gerade, kleiner Ausschlag reicht. Nicht kicken.",
-    an:{view:"front",A:{yf:1,hx:-3,lean:-3,aR:[4,7],aL:[-12,0],kL:[-11,46],hR:[13,100],hL:[-13,100],bR:1,bL:-1},B:{yf:1,hx:-4,lean:-6,aR:[52,18],aL:[-12,0],kL:[-11,46],hR:[13,100],hL:[-13,100],bR:1,bL:-1},tempo:[.9,0,.9,0],ph:["Pendeln","Pendeln"]}},
+    an:{view:"front",A:{yf:1,hx:-3,lean:-3,aR:[4,7],aL:[-12,0],kL:[-11,46],hR:[13,100],hL:[-40,128],bR:1,bL:1},B:{yf:1,hx:-4,lean:-6,aR:[52,18],aL:[-12,0],kL:[-11,46],hR:[13,100],hL:[-40,128],bR:1,bL:1},eq:[{t:"post",x:-50,w:7,h:180}],tempo:[.9,0,.9,0],ph:["Pendeln","Pendeln"]}},
   vfkreis:{n:"Knie-Kreisen im Vierfüßler",r:"beine",z:"Hüftgelenk · Gesäß",d:"C",pos:1,g:"vf",dos:"60 s · je Seite 30 s",
     t:"Vierfüßlerstand. Ein Knie leicht anheben und mit dem Knie langsame Kreise malen: nach vorn unter den Bauch, zur Seite, nach hinten. Richtung wechseln, dann Seite wechseln.",
     b:"Gleichmäßig weiteratmen.",x:"Kleine Kreise, Rücken bleibt ruhig. Zwickt die Hüfte, Kreis kleiner machen.",
@@ -6066,12 +6066,12 @@ const WX={
     b:"Einatmen beim Schritt zurück, ausatmen beim Knieheben.",x:"Ruhig, ohne Sprung. Flacher Schritt, das vordere Knie zeigt über den Fuß.",
     an:{anchor:"foot",noBal:1,A:{shin:-100,thigh:-40,torso:85,thigh2:-115,shin2:-142.5,foot2:-25,upper:-60,fore:-30,upper2:-120,fore2:-100},B:{shin:-90,thigh:-90,torso:86,thigh2:-5,shin2:-95,foot2:-10,upper:-120,fore:-100,upper2:-50,fore2:-20},K:[{t:.5,shin:-92,thigh:-88,torso:88,thigh2:-80,shin2:-112,foot2:-20,upper:-90,fore:-70,upper2:-90,fore2:-70}],tempo:[1.4,.4,1.4,.3],ph:["Knie hoch","Schritt zurück"]}},
   squatstand:{n:"Hocke zum Stand",r:"beine",s:1,z:"Beinrückseite · Hüfte · Adduktoren",d:"C",pos:2,g:"ham",dos:"8 Wiederholungen",
-    t:"Füße schulterbreit, nach vorn beugen und die Zehen greifen. Mit den Händen an den Zehen in die Hocke sinken, Brust hoch, Ellbogen drücken die Knie nach außen. Dann die Beine strecken, Hände bleiben an den Zehen.",
+    t:"Füße schulterbreit, Knie weich, nach vorn beugen und die Schienbeine oder Zehen greifen. In eine echte Hocke sinken, Brust aufrecht, die Ellbogen drücken innen die Knie nach außen. Dann mit den Händen an den Beinen die Beine wieder strecken.",
     b:"Ausatmen beim Strecken der Beine.",x:"Nur so tief in die Hocke, wie die Hüfte frei bleibt. Hände dürfen auch an die Schienbeine.",
-    an:{anchor:"foot",noBal:1,A:{shin:-92,thigh:-70,torso:-38,handAt:[12,18],bend:-1,neck:-10},B:{shin:-125,thigh:0,torso:22,handAt:[13,6],bend:-1,neck:22},K:[{t:.5,shin:-110,thigh:-38,torso:-25,handAt:[11,6],neck:4}],tempo:[2,.8,2,.8],ph:["In die Hocke","Beine strecken"]}},
+    an:{anchor:"foot",noBal:1,A:{shin:-100,thigh:-60,torso:-25,handAt:[13,12],bend:-1,neck:-8},B:{shin:-125,thigh:-10,torso:55,handAt:[17,38],bend:-1,neck:10},K:[{t:.5,shin:-112,thigh:-40,torso:0,handAt:[15,24],neck:2}],tempo:[2,.8,2,.8],ph:["In die Hocke","Beine strecken"]}},
   fersepo:{n:"Ferse zum Po im Wechsel",r:"beine",s:1,z:"Oberschenkel vorn · Hüftbeuger",d:"C",pos:2,dos:"60 s · je Seite 2 s",
     t:"Aufrecht stehen, eine Ferse Richtung Po führen und den Fuß kurz mit der Hand fassen, 2 s, Knie zeigt nach unten. Abstellen, Seite wechseln.",
-    b:"Gleichmäßig weiteratmen.",x:"Becken leicht nach vorn, kein Hohlkreuz. Bei Bedarf an der Wand festhalten.",
+    b:"Gleichmäßig weiteratmen.",x:"Becken aufrichten, Po fest, kein Hohlkreuz. Bei Bedarf an der Wand festhalten.",
     an:{anchor:"foot",noBal:1,A:{shin:-92,thigh:-86,torso:90,thigh2:-90,shin2:-92,foot2:0,hand2:[2,-56],bend2:1,upper:-75,fore:-55},B:{shin:-92,thigh:-86,torso:90,thigh2:-110,shin2:95,foot2:150,hand2:[-19.4,-55.6],bend2:1,upper:-60,fore:-35},K:[{t:.5,thigh2:-118,shin2:-170,foot2:-60,hand2:[-6,-56]}],tempo:[1.2,2,1.2,.6],ph:["Ferse zum Po","Abstellen"]}},
   fusspumpe:{n:"Fußgelenk-Pumpe auf der Bank",r:"beine",z:"Sprunggelenk · Waden · Schienbein",d:"C",pos:0,g:"fuss",nd:[["bench"]],dos:"20 Wiederholungen",
     t:"Auf die Bank setzen, Beine gestreckt, Fersen am Boden. Zehen kräftig zu dir anziehen, dann weit wegstrecken, in ruhigem Rhythmus.",
@@ -6165,11 +6165,14 @@ const WX={
 };
 const WX_KEYS=Object.keys(WX);
 for(const k of WX_KEYS){const d=WX[k].an;const def={eq:[],floor:0,tempo:[1.4,.4,1.4,.4],ph:["",""],lag:.08,noLoop:1/* Matte ja, aber ohne Yoga-Weg aus dem Stand */,...d};def.A={...d.A};def.B={...d.B};if(d.K)def.K=d.K.map(x=>({...x}));AN["w_"+k]=def}
+{const h=AN.w_halo;AN.w_halo0={...h,eq:[],A:{...h.A},B:{...h.B},K:h.K.map(x=>({...x}))}}
 /* Pool: neue Übungen zuerst, dazu ausgewählte bestehende (wo sinnvoll). nd/g/pos wie in 3.13, s = Dehnen */
 {const KEEP={wandengel:"A",katzekuh:"ABC",pullapart:"B",aussenrot:"AB",bruecke:"C",kniewand:"C",birddog:"BC"};
   const CORE={wandengel:"A",pullapart:"B",aussenrot:"AB",bruecke:"C",kniewand:"C"};const RC={push:"A",pull:"B",beine:"C",rumpf:""};
   const old=WPOOL.filter(w=>KEEP[w.k]).map(w=>({...w,d:KEEP[w.k],c:CORE[w.k]||"",g:w.k==="pullapart"?"pa":w.k==="kniewand"?"fuss":w.k==="wandengel"?"wand":w.k==="katzekuh"||w.k==="birddog"?"vf":w.g}));
-  const neu=WX_KEYS.map(k=>{const w=WX[k];return{k,n:w.n,an:"w_"+k,d:w.d,c:[...w.d].filter(x=>RC[w.r]===x).join(""),j:"warm_"+k,pos:w.pos,g:w.g,nd:w.nd,s:w.s?1:0,t:w.t,b:w.b,x:w.x,dos:w.dos,nw:1}});
+  /* 3.14 Abnahme: Halo im Aufwärm-Pool nur ohne Gewicht (eigene Animation ohne Hantel, kein Gerät nötig) */
+  const POOLX={halo:{an:"w_halo0",nd:undefined,dos:"8 Kreise je Richtung, ohne Gewicht",t:"Im Aufwärmen ohne Gewicht: Hände vor der Brust falten und in einem engen Kreis um den Kopf führen, dicht am Kopf vorbei. Nach 8 Kreisen die Richtung wechseln."}};
+  const neu=WX_KEYS.map(k=>{const w=WX[k];return{k,n:w.n,an:"w_"+k,d:w.d,c:[...w.d].filter(x=>RC[w.r]===x).join(""),j:"warm_"+k,pos:w.pos,g:w.g,nd:w.nd,s:w.s?1:0,t:w.t,b:w.b,x:w.x,dos:w.dos,nw:1,...(POOLX[k]||{})}});
   WPOOL.splice(0,WPOOL.length,...neu,...old)}
 function wxCan(k){const n=WX[k].nd;return!n||n.some(s=>s.every(hasGear))}
 function wxGear(k){const n=WX[k].nd;if(!n)return"Ohne Geräte";return n.map(a=>a.map(id=>(GEAR.find(g=>g.id===id)||{l:id}).l).join(" + ")).join(" oder ")}

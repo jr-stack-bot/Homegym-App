@@ -578,12 +578,12 @@ function wpRng(s){let h=2166136261;for(const c of String(s)){h^=c.charCodeAt(0);
    höchstens die Hälfte der Übungen darf sich wiederholen (soweit der Pool reicht), nie derselbe Block. Rekursiv ab m=0, gemerkt je Geräte-Pool. */
 const WP_MEMO=new Map();
 function wpOrder(l){return l.map((w,i)=>[w,i]).sort((x,y)=>x[0].pos-y[0].pos||x[1]-y[1]).map(x=>x[0])}
-/* 3.14: je Block mindestens eine Dehnübung (s) zum Tag, höchstens zwei (bei 7 Übungen drei); mindestens zwei Übungen für den Bereich des Tages (c: A Push,
+/* 3.14: je Block mindestens eine Dehnübung (s) zum Tag, höchstens zwei (auch bei 7 Übungen); mindestens zwei Übungen für den Bereich des Tages (c: A Push,
    B Pull, C Beine), höchstens zwei allgemeine (bei 7 Übungen vier) (Rumpf/Ganzkörper). Neuer Seed (neuer Pool). Grenze für Wiederholungen wie 3.13. */
 function wpBuild(L,day,m,cnt,prev,salt){const r=wpRng("hg314|"+day+"|"+m+(salt||""));const a=L.map(w=>[r(),w]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
   const pk=new Set(prev.map(w=>w.k));const lim=Math.floor(cnt/2);const out=[],gs=new Set();let ov=0;
   const core=w=>!!(w.c&&w.c.includes(day));const nS=()=>out.filter(w=>w.s).length,nC=()=>out.filter(core).length,nG=()=>out.filter(w=>!w.s&&!core(w)).length;
-  const sMax=cnt>5?3:2,gMax=Math.max(2,cnt-3);/* längerer Block (z. B. Seil 3 min): Grenzen wachsen mit */
+  const sMax=2,gMax=Math.max(2,cnt-3);/* Dehnen immer höchstens 2 (Abnahme 3.14); bei längerem Block (Seil 3 min) dürfen mehr allgemeine Übungen rein */
   const take=(w,force,cap)=>{if(out.length>=cnt||out.includes(w)||(w.g&&gs.has(w.g))||(w.s&&nS()>=sMax))return;if(cap&&!w.s&&!core(w)&&nG()>=gMax)return;
     const rep=pk.has(w.k);if(rep&&!force&&ov>=lim)return;if(rep)ov++;if(w.g)gs.add(w.g);out.push(w)};
   for(const f of[false,true])for(const w of a)if(w.s&&!nS())take(w,f,1);

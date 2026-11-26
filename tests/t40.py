@@ -9,7 +9,7 @@
 # 4) Stabil beim Neuladen (in S.session gespeichert), auch wenn sich der Verlauf ändert
 # 5) Geräte werden beachtet (Band, Klimmzugstange/Rack, Crosstrainer-Ersatz, ohne Geräte)
 # 6) alle Aufwärmübungen haben Animation (Mann/Frau, mit/ohne Kostüm zeichnen etwas), Anleitung, Atmung, Achtung
-# 7) gegen 3.12 (releases/Homegym-3.12.apk), Zyklen 1-8, 5 Gerätesets x Aufwärmsätze x KB x Pausen, voll/kurz, <= 59 min:
+# 7) gegen 3.12 (releases/Homegym-3.12.apk) und 3.14 exakt gegen 3.13 (releases/Homegym-3.13.apk), Zyklen 1-8, 5 Gerätesets x Aufwärmsätze x KB x Pausen, voll/kurz, <= 59 min:
 #    geschützt (Slot 0-2, Block-Steigerung, Grundübungen) exakt wie 3.12; Nebenübungen 2..Plan-Sätze, Reihenfolge gleich;
 #    Bonus ganz oder gar nicht (nie 1 Satz); Griff-/Hang-Block unverändert; Kurztraining komplett wie 3.12
 # 8) JAI: Übungen ohne Clip bleiben still (Liste wird ausgegeben)
@@ -19,11 +19,13 @@ _REPO=_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
 _OUTDIR=_os.environ.get('HOMEGYM_OUT',_os.path.join(_REPO,'out'))
 import asyncio,subprocess,time,sys,json,tempfile,zipfile
 from playwright.async_api import async_playwright
-_V312=tempfile.mkdtemp(prefix='hg312-')
+_V312=tempfile.mkdtemp(prefix='hg312-');_V313=tempfile.mkdtemp(prefix='hg313-')
+with zipfile.ZipFile(_os.path.join(_REPO,'releases','Homegym-3.13.apk')) as z:open(_os.path.join(_V313,'index.html'),'wb').write(z.read('assets/index.html'))
 with zipfile.ZipFile(_os.path.join(_REPO,'releases','Homegym-3.12.apk')) as z:open(_os.path.join(_V312,'index.html'),'wb').write(z.read('assets/index.html'))
 srv=subprocess.Popen([sys.executable,'-m','http.server','8871','-d',_OUTDIR],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-srv2=subprocess.Popen([sys.executable,'-m','http.server','8872','-d',_V312],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL);time.sleep(1)
-U='http://127.0.0.1:8871/index.html?nosplash=1';UR='http://127.0.0.1:8872/index.html?nosplash=1'
+srv2=subprocess.Popen([sys.executable,'-m','http.server','8872','-d',_V312],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+srv3=subprocess.Popen([sys.executable,'-m','http.server','8873','-d',_V313],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL);time.sleep(1)
+U='http://127.0.0.1:8871/index.html?nosplash=1';UR='http://127.0.0.1:8872/index.html?nosplash=1';UR13='http://127.0.0.1:8873/index.html?nosplash=1'
 fails=[]
 def chk(c,msg):
     print(('ok   ' if c else 'FAIL ')+msg);(None if c else fails.append(msg))
@@ -118,7 +120,8 @@ async def main():
           const S_=W.filter(w=>w.s);const zs=S_.map(w=>w.z).join(' | ');
           const AREAS={Nacken:/Nacken/,Schultern:/Schulter/,Brust:/Brust(?!wirbel)/,Rücken:/Rücken|Brustwirbelsäule|Lat/,Hüftbeuger:/Hüftbeuger/,Gesäß:/Gesäß/,'Oberschenkel vorn':/Oberschenkel vorn/,'Oberschenkel hinten':/Beinrückseite/,Adduktoren:/Adduktoren/,Waden:/Wade/};
           const areaMiss=Object.entries(AREAS).filter(([a,re])=>!S_.some(w=>re.test(w.z))).map(x=>x[0]);
-          const pool=WPOOL.filter(w=>WX[w.k]).length;const anim=W.filter(w=>!AN['w_'+w.k]||WPOOL.find(p=>p.k===w.k).an!=='w_'+w.k).map(w=>w.k);
+          const pool=WPOOL.filter(w=>WX[w.k]).length;const anim=W.filter(w=>!AN['w_'+w.k]||WPOOL.find(p=>p.k===w.k).an!==(w.k==='halo'?'w_halo0':'w_'+w.k)).map(w=>w.k);/* Halo im Pool ohne Gewicht (Abnahme 3.14) */
+          const ph=WPOOL.find(p=>p.k==='halo');if(!(ph&&!ph.nd&&AN.w_halo0&&!AN.w_halo0.eq.some(e=>e.t==='db')&&AN.w_halo.eq.some(e=>e.t==='db')&&/ohne Gewicht/.test(ph.t)&&/ohne Gewicht oder weglassen/.test(WX.halo.x)))anim.push('halo-ohne-Gewicht');
           const jump=W.filter(w=>/spring|sprung|hüpf/i.test(w.t)&&!/ohne Sprung|nicht springen/i.test(w.t)).map(w=>w.k);
           return{n:W.length,cnt,nS:S_.length,dup,uniq:names.size===W.length,txt,gearAll,gearBad,areaMiss,pool,anim,jump}}""")
         print('   Aufwärmen:',r['n'],'Übungen',r['cnt'],'davon Dehnen',r['nS'],'Geräte',r['gearAll'])
@@ -128,7 +131,7 @@ async def main():
         chk(not r['gearBad'],f"Geräte nur Band, Kurzhantel, Bank, Rack/Stange und nur aus Joschys Einstellungen {r['gearBad']}")
         chk(not r['areaMiss'],f"Dehnen deckt alle Bereiche ab (Nacken, Schultern, Brust, Rücken/BWS, Hüftbeuger, Gesäß, Oberschenkel vorn/hinten, Adduktoren, Waden) {r['areaMiss']}")
         # Pool: neue Übungen = Hauptpool, je Einheit >= 1 Dehnübung zum Tag (<= 2), >= 2 für den Bereich des Tages; für mehrere Gerätesets
-        for g,name in [('[...JOSCHYGEAR]','Joschy'),('[]','ohne Geräte'),('["db","bench","band"]','Nur Kurzhanteln')]:
+        for g,name in [('[...JOSCHYGEAR]','Joschy'),('[]','ohne Geräte'),('["db","bench","band"]','Nur Kurzhanteln'),('["rope"]','nur Seil (7 Übungen)')]:
             r=await pg.evaluate("""(g)=>{const keep=JSON.stringify(S.profile);S.profile.gear=g;const RC={A:'push',B:'pull',C:'beine'};let tot=0,nw=0;const bad=[];
               for(const d of DAYS)for(let m=0;m<60;m++)for(const q of [false,true]){const l=warmList(q,true,d,m).slice(1);tot+=l.length;nw+=l.filter(w=>WX[w.k]).length;
                 const st=l.filter(w=>{const p=WPOOL.find(x=>x.k===w.k);return p.s&&p.d.includes(d)&&w.s});const core=l.filter(w=>{const p=WPOOL.find(x=>x.k===w.k);return p.c&&p.c.includes(d)});
@@ -163,6 +166,9 @@ async def main():
         # 7) Hauptübungen gegen 3.12, 59 min
         p2=await ctx.new_page();await p2.goto(UR);await p2.wait_for_timeout(400);await p2.evaluate(PROFILE);await p2.wait_for_timeout(700)
         cur=await pg.evaluate(DUMP);ref=await p2.evaluate(DUMP);await p2.close()
+        p3=await ctx.new_page();await p3.goto(UR13);await p3.wait_for_timeout(400);await p3.evaluate(PROFILE);await p3.wait_for_timeout(700);ref13=await p3.evaluate(DUMP);await p3.close()
+        d13=[k for k in cur if cur[k]!=ref13.get(k)]
+        chk(len(ref13)==len(cur)==11520 and not d13,f'3.14 gegen 3.13 (releases/Homegym-3.13.apk): alle {len(cur)} Einheiten mit identischen Übungen, Sätzen, Wdh. und Zeitansatz {d13[:3]}')
         over=[(k,round(v[0]/60,1)) for k,v in cur.items() if v[0]>3540];prot=[];side=[];fin1=[];blk=[];quick=[];nb=nb0=0
         for k in cur:
             a_=cur[k][1];r_=ref[k][1]
@@ -188,5 +194,5 @@ async def main():
         await b.close()
     print('RESULT',('ALL OK' if not fails else f'{len(fails)} FAILED'))
 try: asyncio.run(main())
-finally: srv.kill();srv2.kill()
+finally: srv.kill();srv2.kill();srv3.kill()
 sys.exit(1 if fails else 0)

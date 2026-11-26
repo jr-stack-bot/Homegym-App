@@ -36,10 +36,10 @@ async def main():
         b=await p.chromium.launch(args=['--autoplay-policy=no-user-gesture-required'])
         ctx=await b.new_context(viewport={'width':390,'height':844},accept_downloads=True);pg=await ctx.new_page()
         errs=[];pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:errs.append(m.text) if m.type=='error' else None)
-        await pg.goto(U);await pg.wait_for_timeout(400)
-        # 0) defaults: fresh state -> arc, version 2.3
+        await pg.goto(U);await pg.wait_for_function("typeof S!=='undefined'&&typeof THEME_KEYS!=='undefined'",timeout=20000);await pg.wait_for_timeout(400)  # 3.14: Seite größer, erst warten bis die App geladen ist
+        # 0) defaults: fresh state -> arc, aktuelle Version
         r=await pg.evaluate("[S.settings.theme,document.documentElement.dataset.theme,APP_VER,THEME_KEYS.join()]");print('default',r)
-        chk(r[0]=='arc' and r[1]=='arc' and r[2]=='3.8' and r[3]=='arc,ironman,toxic,cyber,sunset,ice,stealth,day','default theme/version '+str(r))
+        chk(r[0]=='arc' and r[1]=='arc' and r[2]=='3.14' and r[3]=='arc,ironman,toxic,cyber,sunset,ice,stealth,day','default theme/version '+str(r))
         await pg.evaluate(SEED);await pg.wait_for_timeout(700)
         # 1) every design over all main screens: no JS errors, no horizontal overflow, tiles + live preview
         acc={};contrast={};
@@ -108,7 +108,7 @@ async def main():
         r=await pg.evaluate("""()=>{const t=backupText();const d=JSON.parse(t);const p=parseBackup(t);const bad=JSON.parse(t);bad.state.settings.theme='<script>';const q=parseBackup(JSON.stringify(bad));
            const nos=JSON.parse(t);delete nos.state.settings.theme;const q2=parseBackup(JSON.stringify(nos));const arr=JSON.parse(t);arr.state.settings=[1];const q3=parseBackup(JSON.stringify(arr));
            return{appVer:d.appVer,inBk:d.state.settings.theme,rt:p.st.settings.theme,bad:q.st.settings.theme,missing:q2.st.settings.theme,arr:q3.st.settings.theme}}""");print('backup',r)
-        chk(r=={'appVer':'3.8','inBk':'cyber','rt':'cyber','bad':'arc','missing':'arc','arr':'arc'},'backup theme '+str(r))
+        chk(r=={'appVer':'3.14','inBk':'cyber','rt':'cyber','bad':'arc','missing':'arc','arr':'arc'},'backup theme '+str(r))
         bk=await pg.evaluate("backupText()")
         await pg.evaluate("go('set')");await pg.click('[data-th="day"]');await pg.wait_for_timeout(100)
         await pg.evaluate("(t)=>importBackupText(t)",bk);await pg.wait_for_timeout(200);await pg.click('#cOk');await pg.wait_for_timeout(1200)
@@ -129,11 +129,12 @@ async def main():
         for th,r in perf['figMsPerFrame'].items():chk(max(r.values())<perf['figMsPerFrame']['arc'][max(r,key=r.get)]*1.5+1.5,f'figure frame time {th} {r}')
         chk(max(perf['fxMsPerFrame'].values())<1.5,'effect frame too expensive '+str(perf['fxMsPerFrame']))
         # 8) footer
-        await pg.evaluate("go('set')");v=await pg.text_content('#verLine');chk('Version 3.8 · @ Joschy' in v,v)
+        await pg.evaluate("go('set')");v=await pg.text_content('#verLine');chk('Version 3.14 · @ Joschy' in v,v)
         await pg.screenshot(path=D+'/settings.png')
         chk(not errs,'JS errors '+str(errs[:5]))
         await b.close()
     srv.terminate()
     print('RESULT','FAIL '+str(len(fails)) if fails else 'ALL OK')
     sys.exit(1 if fails else 0)
-asyncio.run(main())
+try: asyncio.run(main())
+finally: srv.kill()  # 3.14: Server auch bei Abbruch beenden (sonst blockiert ein alter Server den Port)

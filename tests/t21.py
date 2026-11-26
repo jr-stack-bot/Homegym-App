@@ -21,15 +21,25 @@ async def main():
           const fins=Object.values(DAYHOLD).flat().filter(k=>!seen[k]);return{dup,holds,bad,fins}}""")
         print('holds',len(r['holds']),r['holds']);assert not r['dup'] and not r['bad'] and len(r['holds'])>=14,r
         # 2) all 12 sessions: hold finisher marked bonus, < 60 min incl. bonus (Joschy gear, all gear, +kb, longer rests)
+        #    3.13/3.14: das 10-min-Aufwärmen braucht Zeit, der Halte-Bonus fällt zuerst weg (ganz oder gar nicht). Daher streng:
+        #    höchstens 1 Halte-Finisher, wenn da, dann als letzte Übung und aus dem Pool des Tages; fehlt er, dann nur weil er
+        #    (mit 2 Sätzen, so wie er bei kürzeren Pausen eingeplant wird) nicht mehr unter 59 min passt. Mit kürzeren Pausen bzw. ohne Geräte kommt er vor.
+        seen=0
         for g in ['[...JOSCHYGEAR]','ALLGEAR','[...JOSCHYGEAR,"kb"]','[]']:
-            for rf in [1,1.2]:
-                t=await pg.evaluate("""([g,rf])=>{S.profile.gear=eval(g);S.settings.restF=rf;const o=[];for(let w=1;w<=4;w++)for(const d of DAYS){const it=planItems(d,false,w);const hf=it.filter(x=>x.hfin);
-                  o.push({c:w+d,m:estMinFull(d,false,w),hf:hf.length,hk:hf[0]&&hf[0].ex,last:it[it.length-1].hfin,inPool:hf[0]&&DAYHOLD[d].includes(hf[0].ex)})}return o}""",[g,rf])
-                worst=max(x['m'] for x in t);print(g,rf,'max min',round(worst,1))
-                assert all(x['hf']==1 and x['last'] and x['inPool'] for x in t),t
+            for rf in [.8,1,1.2]:
+                t=await pg.evaluate("""([g,rf])=>{S.profile.gear=eval(g);const o=[];for(let w=1;w<=4;w++)for(const d of DAYS){S.settings.restF=.8;const r8=planItems(d,false,w).find(x=>x.hfin);
+                  S.settings.restF=rf;const it=planItems(d,false,w);const hf=it.filter(x=>x.hfin);
+                  const fit=r8&&!hf.length?estSecs([...it,{...r8,sets:Math.min(2,r8.sets)}],false)<=3540:null;
+                  o.push({c:w+d,m:estMinFull(d,false,w),hf:hf.length,hk:hf[0]&&hf[0].ex,last:!hf.length||it[it.length-1].hfin,inPool:!hf.length||DAYHOLD[d].includes(hf[0].ex),fit})}return o}""",[g,rf])
+                worst=max(x['m'] for x in t);seen+=sum(x['hf'] for x in t);print(g,rf,'max min',round(worst,1),'mit Halte-Bonus',sum(x['hf'] for x in t),'/ 12')
+                assert all(x['hf']<=1 and x['last'] and x['inPool'] and x['fit'] is not True for x in t),t
                 assert worst<60,t
+            if g=='[]':assert sum(x['hf'] for x in t)>=6,'ohne Geräte: Halte-Bonus in den meisten Einheiten'
+        assert seen>=40,seen
         await pg.evaluate("()=>{S.profile.gear=[...JOSCHYGEAR];S.settings.restF=1;save()}")
         # 3) training: hold finisher visible on home + month plan, swap dialog offers hold variants
+        await pg.evaluate("()=>{S.settings.restF=.8;S.settings.warmSets=false;save()}")  # 3.13/3.14: kurze Pausen, ohne Aufwärmsätze -> Halte-Bonus passt in Training A
+        assert await pg.evaluate("planItems('A',false,1).some(x=>x.hfin)")
         await pg.evaluate("()=>{S.pick={day:'A',ws:weekStart(new Date()).getTime()};S.cycleStart=weekStart(new Date()).getTime();save();go('home')}");await pg.wait_for_timeout(200)
         home=(await pg.inner_text('#v-home')).lower();assert 'bonus · halten' in home and 'hochstütz halten' in home and 'bonus +' in home,home
         await pg.click('#monthBtn');await pg.wait_for_timeout(150);mt=(await pg.inner_text('#sheet')).lower();assert 'hochstütz halten' in mt and 'superman halten' in mt;await pg.click('#sheet [data-close]')
@@ -54,7 +64,7 @@ async def main():
         assert not any(k in r['A:bench'] for k in ['highplank','plank']),'no pure hold for main lift'
         # 4) gear editor changes plan + kettlebell weights flow into suggestions
         await pg.click('[data-tab=set]');await pg.wait_for_timeout(300)
-        assert 'joschys geräte' in (await pg.inner_text('#gearCard')).lower() and 'Version 3.8' in await pg.inner_text('#verLine') and '@ Joschy' in await pg.inner_text('#verLine')
+        assert 'joschys geräte' in (await pg.inner_text('#gearCard')).lower() and 'Version 3.14' in await pg.inner_text('#verLine') and '@ Joschy' in await pg.inner_text('#verLine')
         await pg.click('[data-sgear=kb]');await pg.wait_for_timeout(100)
         chips=await pg.eval_on_selector_all('[data-wdel=kb]','e=>e.map(x=>+x.dataset.v)');assert chips==[8,12,16],chips
         await pg.fill('#wIn-kb','20');await pg.click('[data-wadd=kb]');await pg.click('[data-wdel=kb][data-v="8"]')
