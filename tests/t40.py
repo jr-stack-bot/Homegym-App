@@ -126,14 +126,14 @@ async def main():
           const S_=W.filter(w=>w.s);const zs=S_.map(w=>w.z).join(' | ');
           const AREAS={Nacken:/Nacken/,Schultern:/Schulter/,Brust:/Brust(?!wirbel)/,Rücken:/Rücken|Brustwirbelsäule|Lat/,Hüftbeuger:/Hüftbeuger/,Gesäß:/Gesäß/,'Oberschenkel vorn':/Oberschenkel vorn/,'Oberschenkel hinten':/Beinrückseite/,Adduktoren:/Adduktoren/,Waden:/Wade/};
           const areaMiss=Object.entries(AREAS).filter(([a,re])=>!S_.some(w=>re.test(w.z))).map(x=>x[0]);
-          const pool=WPOOL.filter(w=>WX[w.k]).length;const anim=W.filter(w=>!AN['w_'+w.k]||WPOOL.find(p=>p.k===w.k).an!==(w.k==='halo'?'w_halo0':'w_'+w.k)).map(w=>w.k);/* Halo im Pool ohne Gewicht (Abnahme 3.14) */
-          const ph=WPOOL.find(p=>p.k==='halo');if(!(ph&&!ph.nd&&AN.w_halo0&&!AN.w_halo0.eq.some(e=>e.t==='db')&&AN.w_halo.eq.some(e=>e.t==='db')&&/ohne Gewicht/.test(ph.t)&&/ohne Gewicht oder weglassen/.test(WX.halo.x)))anim.push('halo-ohne-Gewicht');
+          const pool=WPOOL.filter(w=>WX[w.k]).length;const anim=W.filter(w=>!AN['w_'+w.k]||(w.k!=='halo'&&(WPOOL.find(p=>p.k===w.k)||{}).an!=='w_'+w.k)).map(w=>w.k);/* Halo nur in der Bibliothek (Abnahme 3.14) */
+          if(WPOOL.some(p=>p.k==='halo')||!AN.w_halo.eq.some(e=>e.t==='db')||!/ohne Gewicht oder weglassen/.test(WX.halo.x))anim.push('halo-nicht-im-Pool');
           const jump=W.filter(w=>/spring|sprung|hüpf/i.test(w.t)&&!/ohne Sprung|nicht springen/i.test(w.t)).map(w=>w.k);
           return{n:W.length,cnt,nS:S_.length,dup,uniq:names.size===W.length,txt,gearAll,gearBad,areaMiss,pool,anim,jump}}""")
         print('   Aufwärmen:',r['n'],'Übungen',r['cnt'],'davon Dehnen',r['nS'],'Geräte',r['gearAll'])
         chk(48<=r['n']<=56 and all(r['cnt'].get(x,0)>=8 for x in ['push','pull','beine','rumpf']) and r['nS']>=12,f"ca. 50 neue Aufwärmübungen in 4 Bereichen (je >= 8), davon >= 12 Dehnungen {r['cnt']}")
         chk(not r['dup'] and r['uniq'],f"klare Namen, keine Dopplung mit Kraft-, Yoga- oder bisherigen Aufwärmübungen {r['dup']}")
-        chk(not r['txt'] and not r['anim'] and r['pool']==r['n'] and not r['jump'],f"jede neue Übung: Anleitung, Atmung, Achtung, Dauer/Wdh., Bereich, eigene Animation, im Pool {r['txt']} {r['anim']} {r['jump']}")
+        chk(not r['txt'] and not r['anim'] and r['pool']==r['n']-1 and not r['jump'],f"jede neue Übung: Anleitung, Atmung, Achtung, Dauer/Wdh., Bereich, eigene Animation, im Pool {r['txt']} {r['anim']} {r['jump']}")
         chk(not r['gearBad'],f"Geräte nur Band, Kurzhantel, Bank, Rack/Stange und nur aus Joschys Einstellungen {r['gearBad']}")
         chk(not r['areaMiss'],f"Dehnen deckt alle Bereiche ab (Nacken, Schultern, Brust, Rücken/BWS, Hüftbeuger, Gesäß, Oberschenkel vorn/hinten, Adduktoren, Waden) {r['areaMiss']}")
         # Pool: neue Übungen = Hauptpool, je Einheit >= 1 Dehnübung zum Tag (<= 2), >= 2 für den Bereich des Tages; für mehrere Gerätesets

@@ -6167,14 +6167,13 @@ const WX={
 };
 const WX_KEYS=Object.keys(WX);
 for(const k of WX_KEYS){const d=WX[k].an;const def={eq:[],floor:0,tempo:[1.4,.4,1.4,.4],ph:["",""],lag:.08,noLoop:1/* Matte ja, aber ohne Yoga-Weg aus dem Stand */,...d};def.A={...d.A};def.B={...d.B};if(d.K)def.K=d.K.map(x=>({...x}));AN["w_"+k]=def}
-{const h=AN.w_halo;AN.w_halo0={...h,eq:[],A:{...h.A},B:{...h.B},K:h.K.map(x=>({...x}))}}
 /* Pool: neue Übungen zuerst, dazu ausgewählte bestehende (wo sinnvoll). nd/g/pos wie in 3.13, s = Dehnen */
 {const KEEP={wandengel:"A",katzekuh:"ABC",pullapart:"B",aussenrot:"AB",bruecke:"C",kniewand:"C",birddog:"BC"};
   const CORE={wandengel:"A",pullapart:"B",aussenrot:"AB",bruecke:"C",kniewand:"C"};const RC={push:"A",pull:"B",beine:"C",rumpf:""};
   const old=WPOOL.filter(w=>KEEP[w.k]).map(w=>({...w,d:KEEP[w.k],c:CORE[w.k]||"",g:w.k==="pullapart"?"pa":w.k==="kniewand"?"fuss":w.k==="wandengel"?"wand":w.k==="katzekuh"||w.k==="birddog"?"vf":w.g}));
-  /* 3.14 Abnahme: Halo im Aufwärm-Pool nur ohne Gewicht (eigene Animation ohne Hantel, kein Gerät nötig) */
-  const POOLX={halo:{an:"w_halo0",nd:undefined,dos:"8 Kreise je Richtung, ohne Gewicht",t:"Im Aufwärmen ohne Gewicht: Hände vor der Brust falten und in einem engen Kreis um den Kopf führen, dicht am Kopf vorbei. Nach 8 Kreisen die Richtung wechseln."}};
-  const neu=WX_KEYS.map(k=>{const w=WX[k];return{k,n:w.n,an:"w_"+k,d:w.d,c:[...w.d].filter(x=>RC[w.r]===x).join(""),j:"warm_"+k,pos:w.pos,g:w.g,nd:w.nd,s:w.s?1:0,t:w.t,b:w.b,x:w.x,dos:w.dos,nw:1,...(POOLX[k]||{})}});
+  /* 3.14 Abnahme: Halo nur in der Bibliothek, nicht im Aufwärm-Pool (Überkopf-Kreis bei Schulterbeschwerden heikel) */
+  const NOPOOL=new Set(["halo"]);
+  const neu=WX_KEYS.filter(k=>!NOPOOL.has(k)).map(k=>{const w=WX[k];return{k,n:w.n,an:"w_"+k,d:w.d,c:[...w.d].filter(x=>RC[w.r]===x).join(""),j:"warm_"+k,pos:w.pos,g:w.g,nd:w.nd,s:w.s?1:0,t:w.t,b:w.b,x:w.x,dos:w.dos,nw:1}});
   WPOOL.splice(0,WPOOL.length,...neu,...old)}
 function wxCan(k){const n=WX[k].nd;return!n||n.some(s=>s.every(hasGear))}
 function wxGear(k){const n=WX[k].nd;if(!n)return"Ohne Geräte";return n.map(a=>a.map(id=>(GEAR.find(g=>g.id===id)||{l:id}).l).join(" + ")).join(" oder ")}
@@ -6196,7 +6195,7 @@ function renderWarmLib(){const ks=WX_KEYS.filter(k=>(!WLF.r||WX[k].r===WLF.r)&&(
 function openWarmSheet(k){const w=WX[k];const ok=wxCan(k);
   openSheet(`<div class="row between"><div><div class="label">Aufwärmen · ${esc(wxRegName(w.r))}</div><h2 style="font-size:28px;margin-top:4px">${esc(w.n)}</h2></div><button class="iconbtn" data-close aria-label="Schließen"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
    <div class="stage"><canvas id="wsc"></canvas><span class="phase" id="wsp"></span><span class="readout">${esc(w.z.toUpperCase())}</span></div>
-   <div class="tagline">${w.s?`<span class="tag wtag">Dehnen · dynamisch</span>`:`<span class="tag">Mobilisation & Aktivierung</span>`}<span class="tag">${esc(w.dos)}</span><span class="tag">${esc(wxGear(k))}</span><span class="tag">Aufwärmen ${[...w.d].map(d=>WX_DAYN[d]).join(", ")}</span></div>
+   <div class="tagline">${w.s?`<span class="tag wtag">Dehnen · dynamisch</span>`:`<span class="tag">Mobilisation & Aktivierung</span>`}<span class="tag">${esc(w.dos)}</span><span class="tag">${esc(wxGear(k))}</span><span class="tag">${WPOOL.some(p=>p.k===k)?"Aufwärmen "+[...w.d].map(d=>WX_DAYN[d]).join(", "):"nicht im automatischen Aufwärmen"}</span></div>
    <div><div class="label" style="margin-bottom:8px">So geht's</div><p style="margin:0">${esc(w.t)}</p></div>
    <div class="hint"><b>Atmung:</b> ${esc(w.b)}</div><div class="ywarn"><b>Achtung:</b> ${esc(w.x)}</div>
    ${ok?"":`<div class="hint"><b>Gerät fehlt:</b> ${esc(wxGear(k))}. Im Aufwärmen wird diese Übung nicht eingeplant.</div>`}`);
