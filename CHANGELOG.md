@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.14
+- **Neue Kategorie „Aufwärmen“** in der Übungsbibliothek, gleichrangig als dritter Reiter neben Kraft und Yoga & Dehnen: Filter nach Bereich (Oberkörper Push, Oberkörper Pull, Beine, Rumpf & Ganzkörper) und Art (Mobilisation & Aktivierung, Dehnen mit Abzeichen), Übungsblatt mit Animation, Anleitung, Atmung, Achtung-Hinweis, Dauer bzw. Wiederholungen, Geräten und Trainingstagen.
+- **51 neue, eigens fürs Aufwärmen gemachte Übungen**: Push 12 (Schulter, Brust, Brustwirbelsäule) · Pull 10 (Schulterblätter, Lat, Griff/Unterarme) · Beine 18 (Hüfte, Knie, Sprunggelenk, Gesäß) · Rumpf & Ganzkörper 11. Sanft, dynamisch, ohne Sprünge, schulter- und hüftfreundlich; meist ohne Geräte, sonst nur Band, leichte Kurzhantel, Bank oder Rack. Jede mit eigener Animation (Mann/Frau, mit und ohne Kostüm).
+- **Unterart „Dehnen“** (19 Übungen): dynamische Dehnungen, aktiv und rhythmisch in die Endposition, Halteteile höchstens wenige Sekunden (z. B. Beinpendel, Ausfallschritt mit Rotation, Weltbeste Dehnung). Abgedeckt: Nacken, Schultern, Brust, Rücken/Brustwirbelsäule, Hüftbeuger, Gesäß, Oberschenkel vorn und hinten, Adduktoren, Waden.
+- **Aufwärm-Pool umgestellt**: die neuen Übungen sind der Hauptpool, von den bisherigen bleiben nur Wandengel, Katze-Kuh, Band Pull-Aparts, Außenrotation, Glute Bridge, Knie zur Wand und Bird Dog. Jede Einheit hat mindestens eine Dehnübung passend zum Tag (höchstens zwei) und mindestens zwei Übungen für den Bereich des Tages. Logik aus 3.13 unverändert: 5 min Crosstrainer zuerst, ca. 5 min wechselnde Übungen, innerhalb einer Einheit fest, höchstens die Hälfte gleich wie beim letzten Mal an diesem Tag, 10 min auch im Kurztraining; Hauptübungen und 59-Minuten-Regel wie 3.13.
+- JAI: die neuen Übungen haben noch keine Clips, JAI bleibt dort still (Clip-IDs `warm_…`).
+- t40 erweitert (Kategorie, Dehnen-Abdeckung, Pool, Geräte, Animationen ohne Ruck, Boden/Wand/Rand); t22 prüft den neuen Reiter; Versionsprüfungen auf „3.14“ (auch die seit 3.8 veralteten in t22–t25 und t29).
+
 ## 3.13
 - **Aufwärmen jetzt ca. 10 Minuten und abwechslungsreich**: immer zuerst 5 Minuten Crosstrainer (ohne Crosstrainer wie bisher Rudergerät, Heimtrainer, Laufband, Seil oder Marschieren), danach ca. 5 Minuten sanfte Mobilisation und Aktivierung passend zum Tag: Drücken (Schultern, Brust, Brustwirbelsäule), Ziehen (Schulterblätter, Lat, Griff), Beine (Hüfte, Knie, Sprunggelenk, Gesäß). Schulter- und hüftfreundlich, ohne Sprünge.
 - Pool mit 30 Aufwärmübungen (mit Joschys Geräten 12 / 14 / 15 je Tag), jede mit Animation, Anleitung, Atmung und Achtung-Hinweis; nur Übungen mit vorhandenen Geräten. Neu: „Knie zur Wand“ (Sprunggelenk) mit eigener Animation (Hände bleiben an der Wand), noch ohne JAI-Clip (JAI bleibt dort still).

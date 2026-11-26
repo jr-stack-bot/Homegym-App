@@ -787,7 +787,7 @@ function ylBounds(L_){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;const inc=(p,r)=>{x0=Mat
   const b0=boundsOf(L_.def,L_.g);/* 3.3: same margins as boundsOf (hand/foot outline, hair) */x0=Math.min(x0,b0.x0);x1=Math.max(x1,b0.x1);y1=Math.max(y1,b0.y1);y0=Math.min(y0,0);return{x0,y0,x1,y1}}
 function yLoopOf(def,g){def._yl=def._yl||{};return def._yl[g]||(def._yl[g]=ylBuild(def,g))}
 {const _att=attachAnim;attachAnim=function(canvas,key,opts={}){_att(canvas,key,opts);const def=AN[key];
-  if(def&&def.mat&&!opts.still&&!opts.noLoop){canvas._loop=yLoopOf(def,canvas._g);canvas._b=canvas._loop.b}else canvas._loop=null}}
+  if(def&&def.mat&&!def.noLoop&&!opts.still&&!opts.noLoop){canvas._loop=yLoopOf(def,canvas._g);canvas._b=canvas._loop.b}else canvas._loop=null}}
 
 /* ---- 3.4 (@ Joschy): Wege für die neuen Haltungen ---- */
 Object.assign(YL_PATH,{palme:"stand",rueckbeuge:"stand",kniestand:"stand",wandhund:"stand",reiter:"lunge",loewe:"heel",tiger:"four",kniebrett:"four",

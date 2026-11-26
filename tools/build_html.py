@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Baut die eigenständige index.html aus src/app.html + src/icon.svg + src/program.js + src/yoga.js + src/hang.js + src/kraft.js + src/costume.js und bettet die Schriften ein.
+"""Baut die eigenständige index.html aus src/app.html + src/icon.svg + src/program.js + src/yoga.js + src/hang.js + src/kraft.js + src/costume.js + src/warm.js und bettet die Schriften ein.
 
 Aufruf: python3 tools/build_html.py <ausgabe.html>
 Schriften: Ordner mit den entpackten npm-Paketen @fontsource/rajdhani, @fontsource/orbitron,
@@ -39,6 +39,9 @@ src = src.replace('/*KRAFT*/', kraft)
 costume = open(os.path.join(REPO, 'src', 'costume.js'), encoding='utf-8').read()
 assert src.count('/*COSTUME*/') == 1, 'Marker /*COSTUME*/ fehlt in app.html'
 src = src.replace('/*COSTUME*/', costume)
+warm = open(os.path.join(REPO, 'src', 'warm.js'), encoding='utf-8').read()
+assert src.count('/*WARM*/') == 1, 'Marker /*WARM*/ fehlt in app.html'
+src = src.replace('/*WARM*/', warm)  # 3.14: Kategorie Aufwärmen
 icon = open(os.path.join(REPO, 'src', 'icon.svg'), encoding='utf-8').read().strip()
 assert src.count('<!--ICON-->') == 1, 'Marker <!--ICON--> fehlt in app.html'
 src = src.replace('<!--ICON-->', icon)  # 3.7: App-Icon für die Start-Animation

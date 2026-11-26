@@ -51,7 +51,7 @@ async def main():
     async with async_playwright() as p:
         b=await p.chromium.launch(args=['--autoplay-policy=no-user-gesture-required'])
         pg,errs=await page(b)
-        v=await pg.evaluate("[APP_VER,BK_VER]");chk(v==['3.13',5],'Version 3.13, Backup-Format bleibt 5 '+str(v))
+        v=await pg.evaluate("[APP_VER,BK_VER]");chk(v==['3.14',5],'Version 3.14, Backup-Format bleibt 5 '+str(v))
         # ---------- 1) coverage ----------
         r=await pg.evaluate("""async()=>{const exMiss=Object.keys(EX).filter(k=>!jaiEx(k).length),yMiss=Object.keys(YP).filter(k=>!jaiYoga(k).length);
           const prog=[...new Set(PROGRAM.flatMap(b=>b.days.flatMap(d=>[...d.items.map(x=>x[0]),d.fin[0]])))].filter(k=>!jaiEx(k).length);

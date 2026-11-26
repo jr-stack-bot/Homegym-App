@@ -578,10 +578,17 @@ function wpRng(s){let h=2166136261;for(const c of String(s)){h^=c.charCodeAt(0);
    höchstens die Hälfte der Übungen darf sich wiederholen (soweit der Pool reicht), nie derselbe Block. Rekursiv ab m=0, gemerkt je Geräte-Pool. */
 const WP_MEMO=new Map();
 function wpOrder(l){return l.map((w,i)=>[w,i]).sort((x,y)=>x[0].pos-y[0].pos||x[1]-y[1]).map(x=>x[0])}
-function wpBuild(L,day,m,cnt,prev,salt){const r=wpRng("hg313|"+day+"|"+m+(salt||""));const a=L.map(w=>[r(),w]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
+/* 3.14: je Block mindestens eine Dehnübung (s) zum Tag, höchstens zwei (bei 7 Übungen drei); mindestens zwei Übungen für den Bereich des Tages (c: A Push,
+   B Pull, C Beine), höchstens zwei allgemeine (bei 7 Übungen vier) (Rumpf/Ganzkörper). Neuer Seed (neuer Pool). Grenze für Wiederholungen wie 3.13. */
+function wpBuild(L,day,m,cnt,prev,salt){const r=wpRng("hg314|"+day+"|"+m+(salt||""));const a=L.map(w=>[r(),w]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
   const pk=new Set(prev.map(w=>w.k));const lim=Math.floor(cnt/2);const out=[],gs=new Set();let ov=0;
-  const take=(w,force)=>{if(out.length>=cnt||out.includes(w)||(w.g&&gs.has(w.g)))return;const rep=pk.has(w.k);if(rep&&!force&&ov>=lim)return;if(rep)ov++;if(w.g)gs.add(w.g);out.push(w)};
-  for(const w of a)take(w,false);for(const w of a)take(w,true);return wpOrder(out)}
+  const core=w=>!!(w.c&&w.c.includes(day));const nS=()=>out.filter(w=>w.s).length,nC=()=>out.filter(core).length,nG=()=>out.filter(w=>!w.s&&!core(w)).length;
+  const sMax=cnt>5?3:2,gMax=Math.max(2,cnt-3);/* längerer Block (z. B. Seil 3 min): Grenzen wachsen mit */
+  const take=(w,force,cap)=>{if(out.length>=cnt||out.includes(w)||(w.g&&gs.has(w.g))||(w.s&&nS()>=sMax))return;if(cap&&!w.s&&!core(w)&&nG()>=gMax)return;
+    const rep=pk.has(w.k);if(rep&&!force&&ov>=lim)return;if(rep)ov++;if(w.g)gs.add(w.g);out.push(w)};
+  for(const f of[false,true])for(const w of a)if(w.s&&!nS())take(w,f,1);
+  for(const f of[false,true])for(const w of a)if(core(w)&&!w.s&&nC()<2)take(w,f,1);
+  for(const w of a)take(w,false,1);for(const w of a)take(w,true,1);for(const w of a)take(w,true,0);return wpOrder(out)}
 const wpSig=l=>l.map(w=>w.k).join(",");
 function wpPick(day,m,cnt){const L=wpPool(day);const key=day+"|"+cnt+"|"+L.map(w=>w.k).join(",");let c=WP_MEMO.get(key);if(!c){c=[];WP_MEMO.set(key,c)}
   for(let i=c.length;i<=m;i++){const prev=i?c[i-1]:[];let l=wpBuild(L,day,i,cnt,prev);for(let s=1;s<8&&i&&wpSig(l)===wpSig(prev);s++)l=wpBuild(L,day,i,cnt,prev,"#"+s);
@@ -591,7 +598,7 @@ function warmCount(day){return Array.isArray(S.history)?S.history.filter(h=>h&&h
 /* 3.13: 5 min Cardio (warmFor wählt das vorhandene Gerät) + Mobilisationsblock bis ca. 10 min. quick/ws bleiben als Parameter (früher kürzer) */
 function warmList(quick,ws,day,n){day=DAYS.includes(day)?day:"A";n=Number.isInteger(n)&&n>=0?Math.min(n,5000):warmCount(day);const c=warmFor([WARM[0]])[0];
   const cnt=Math.max(1,Math.round((WARM_SECS-c.sec)/WARM_ITEM));
-  return[c,...wpPick(day,n,cnt).map(w=>({k:w.k,n:w.n,sec:WARM_ITEM,anim:w.an,t:w.t,b:w.b,x:w.x,j:w.j,day}))]}
+  return[c,...wpPick(day,n,cnt).map(w=>({k:w.k,n:w.n,sec:WARM_ITEM,anim:w.an,t:w.t,b:w.b,x:w.x,j:w.j,day,...(w.s?{s:1}:{}),...(w.dos?{dos:w.dos}:{})}))]}
 
 const REST_TIPS = [
   "Ausatmen beim Drücken oder Ziehen, einatmen beim Ablassen.",
@@ -1626,7 +1633,7 @@ function humOf(def,t){const[d1,h1,d2,h2]=def.tempo;if(isIsoDef(def)||def.gait||M
   return{prep,ef:ef*ef}}/* sin^2: starts and ends with zero velocity */
 function phaseBase(def,time){return phaseAt(def,time)}
 /* 2.2 tempo: strength reps ~1 s concentric, ~2 s eccentric, small visible pauses at the turning points (holds keep their long pause) */
-function normTempo(){for(const k in AN){const d=AN[k];if(!d||k.startsWith("y_")||d.gait||d._tn||!Array.isArray(d.tempo))continue;const[d1,h1,d2,h2]=d.tempo;
+function normTempo(){for(const k in AN){const d=AN[k];if(!d||k.startsWith("y_")||k.startsWith("w_")/* 3.14: Aufwärm-Tempi bleiben wie angelegt */||d.gait||d._tn||!Array.isArray(d.tempo))continue;const[d1,h1,d2,h2]=d.tempo;
   if(!h1&&!h2)continue;if(Math.min(d1,d2)<.85||Math.max(d1,d2)/Math.min(d1,d2)<1.08)continue;const c1=d1<d2;
   d.tempo=[c1?1:2,Math.max(h1,.3),c1?2:1,Math.max(h2,.3)];d._tn=1;delete d._pu;delete d._lt}}
 const isIsoDef=def=>!!(def.mat||(def.ph&&/^Halten/.test(def.ph[0]||"")));
@@ -1952,7 +1959,7 @@ window.appResume=function(){const A=nat();const ss=S.session;
 /* warm-up */
 function warmView(){const ss=S.session;const w=ss.warm[ss.wi];const remain=ss.warmEnd?Math.max(0,(ss.warmEnd-Date.now())/1000):w.sec;
   return`<div class="stage"><canvas id="cv"></canvas><span class="phase" id="ph"></span><span class="tempo">${ss.wi+1} / ${ss.warm.length}</span><span class="readout">AUFWÄRM-PROTOKOLL</span></div>
-  <div><div class="label">Aufwärmen</div><h1 class="exname">${esc(w.n)}</h1><p class="muted" style="margin:6px 0 0">${esc(w.t)}</p>${w.b?`<p class="muted" style="margin:4px 0 0;font-size:13.5px"><b>Atmung:</b> ${esc(w.b)}</p>`:""}${w.x?`<p class="muted" style="margin:4px 0 0;font-size:13.5px"><b>Achtung:</b> ${esc(w.x)}</p>`:""}</div>
+  <div><div class="label">Aufwärmen</div><h1 class="exname">${esc(w.n)}</h1>${w.s||w.dos?`<div class="tagline" style="margin-top:6px">${w.s?`<span class="tag wtag">Dehnen</span>`:""}${w.dos?`<span class="tag">${esc(w.dos)}</span>`:""}</div>`:""}<p class="muted" style="margin:6px 0 0">${esc(w.t)}</p>${w.b?`<p class="muted" style="margin:4px 0 0;font-size:13.5px"><b>Atmung:</b> ${esc(w.b)}</p>`:""}${w.x?`<p class="muted" style="margin:4px 0 0;font-size:13.5px"><b>Achtung:</b> ${esc(w.x)}</p>`:""}</div>
   ${w.sec?`<div class="card" style="align-items:center"><div class="num" id="wTime" style="font-size:64px;line-height:1">${mmss(remain)}</div>
     <button class="btn ${ss.warmEnd?"ghost":"primary"} block" id="wStart">${ss.warmEnd?"Timer läuft · Pause":"Timer starten"}</button></div>`
    :`<div class="card" style="align-items:center"><div class="num" style="font-size:56px;line-height:1">${esc(w.reps)}</div><div class="muted">Wiederholungen, in deinem Tempo</div></div>`}
@@ -3029,7 +3036,7 @@ const MOTION={
 };
 for(const k in MOTION){const d=AN[k];if(!d)continue;const m=MOTION[k];for(const f in m){if(f==="A"||f==="B")Object.assign(d[f],m[f]);else d[f]=m[f]}}
 /* ================= 2.1 · HALTE-ÜBUNGEN · KETTLEBELL · GERÄTE-GEWICHTE · BACKUP (@ Joschy) ================= */
-const APP_VER="3.13",BK_VER=5;/* 3.10: Version immer als Text vergleichen („3.10“ ≠ 3.1) *//* 3.0–3.4 keep backup format 5: all new fields are optional, older apps simply ignore them */
+const APP_VER="3.14",BK_VER=5;/* 3.10: Version immer als Text vergleichen („3.10“ ≠ 3.1) *//* 3.0–3.4 keep backup format 5: all new fields are optional, older apps simply ignore them */
 /* ---- hold / tempo variants (strength stays the focus: they are alternatives, never forced) ---- */
 Object.assign(EX,{
   pushpause:{n:"Liegestütze mit Halt in der Mitte",eq:"Matte · Griffe optional",m:"Brust · Trizeps · Schultern",type:"bw",rest:90,inc:0,hold:3,holdAt:"auf halber Höhe",base:"pushup",
@@ -3480,6 +3487,7 @@ Object.assign(AN,{
 /*HANG*/
 /*KRAFT*/
 /*COSTUME*/
+/*WARM*/
 
 /* ================= DESIGNS (2.3) ================= */
 function curTheme(){const t=S&&S.settings&&S.settings.theme;return THEME_KEYS.includes(t)?t:"arc"}

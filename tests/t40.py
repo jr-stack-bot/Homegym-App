@@ -1,4 +1,7 @@
-# Homegym 3.13 @ Joschy – t40: Aufwärmen 10 min, Crosstrainer zuerst, danach wechselnde Mobilisation passend zum Tag
+# Homegym 3.13/3.14 @ Joschy – t40: Aufwärmen 10 min, Crosstrainer zuerst, danach wechselnde Mobilisation passend zum Tag
+# 3.14: eigene Kategorie „Aufwärmen“ (Reiter in der Bibliothek, Filter Bereich/Art, Übungsblatt) mit ca. 50 neuen Übungen inkl.
+#    Unterart „Dehnen“ (dynamisch, alle Bereiche Nacken bis Waden); die neuen Übungen sind der Hauptpool, je Einheit mind. 1 Dehnübung
+#    zum Tag und mind. 2 Übungen für den Bereich des Tages; nur Geräte aus Joschys Einstellungen; Animationen ohne Ruck, Boden/Wand/Rand ok (9)
 # 1) Dauer ca. 10 min (±1) für jede Einheit, Kurz, mit/ohne Aufwärmsätze; Cardio (Crosstrainer bzw. Ersatz) immer zuerst
 # 2) Abwechslung: Zähler je Tag (wie oft der Tag im Verlauf steht); am selben Tag nie derselbe Block zweimal hintereinander,
 #    höchstens die Hälfte wiederholt (soweit der Pool reicht, auch ohne Geräte/Seil); 12 Einheiten je Tag mind. 8 verschiedene Blöcke
@@ -38,7 +41,7 @@ async def main():
         b=await p.chromium.launch();ctx=await b.new_context(viewport={'width':390,'height':844});pg=await ctx.new_page()
         errs=[];pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:errs.append(m.text) if m.type=='error' else None)
         await pg.goto(U);await pg.wait_for_timeout(400);await pg.evaluate(PROFILE);await pg.wait_for_timeout(700)
-        v=await pg.evaluate("[APP_VER,BK_VER]");chk(v==['3.13',5],f'Version 3.13, Backup-Format 5 {v}')
+        v=await pg.evaluate("[APP_VER,BK_VER]");chk(v==['3.14',5],f'Version 3.14, Backup-Format 5 {v}')
         # 1) Dauer und Crosstrainer zuerst
         r=await pg.evaluate("""()=>{const o=[];for(const d of DAYS)for(let n=0;n<12;n++)for(const q of [false,true])for(const ws of [false,true]){const l=warmList(q,ws,d,n);
           o.push({d,n,q,ws,sec:l.reduce((a,w)=>a+(w.sec||30),0),first:l[0].anim,fn:l[0].n,rest:l.slice(1).map(w=>w.k)})}
@@ -61,8 +64,10 @@ async def main():
         chk(r['first']>=3 and len(set(r['seq']))==12,f"12 aufeinanderfolgende Einheiten: 12 verschiedene Blöcke, wechselnde erste Übung ({r['first']})")
         # 3) passt zum Tag
         r=await pg.evaluate("""()=>{const P={};for(const d of DAYS)P[d]=wpPool(d).map(w=>w.k);const off=[];for(const d of DAYS)for(let n=0;n<40;n++)for(const w of warmList(false,true,d,n).slice(1)){const p=WPOOL.find(x=>x.k===w.k);if(!p||!p.d.includes(d))off.push(d+':'+w.k)}
+          /* 3.14: neue Übungen nach Bereich (A Push, B Pull, C Beine, Rumpf/Ganzkörper an jedem Tag), bestehende nach Namen wie 3.13 */
+          const RG={A:['push','rumpf','pull'],B:['pull','rumpf','push'],C:['beine','rumpf','pull']};/* Oberkörper-Mobilisation passt zu A und B, Beine nur zu C; der Tagesbereich wird unten (>= 2 je Einheit) geprüft */
           const reg={A:/Schulter|Brust|Arm|Wand|Faden|Katze|Pull|Außen|Y-T-W/i,B:/Schulter|Rudern|Hängen|Welpe|Schwimmer|Pull|Arm|Y-T-W|Faden|Katze|Bird|Wand|Außen/i,C:/Hüft|Knie|Wade|Schienbein|Bridge|Ausfall|Bird|Bein|Katze/i};
-          const miss=[];for(const d of DAYS)for(const k of P[d]){const w=WPOOL.find(x=>x.k===k);if(!reg[d].test(w.n))miss.push(d+':'+w.n)}
+          const miss=[];for(const d of DAYS)for(const k of P[d]){const w=WPOOL.find(x=>x.k===k);const ok=WX[k]?RG[d].includes(WX[k].r)&&(WX[k].r!=='push'||d!=='C'):reg[d].test(w.n);if(!ok)miss.push(d+':'+w.n)}
           const legsInPush=P.A.filter(k=>/C/.test(WPOOL.find(x=>x.k===k).d)&&!/A/.test(WPOOL.find(x=>x.k===k).d));
           return{P,off,miss,legsInPush,jump:WPOOL.filter(w=>/jj|jump|rope|skater|plyo/.test(w.an)).map(w=>w.k)}}""")
         print('   Pool:',{d:len(x) for d,x in r['P'].items()})
@@ -87,11 +92,12 @@ async def main():
             ropeSec:[Math.min(...sec(rope)),Math.max(...sec(rope))],noneSec:[Math.min(...sec(none)),Math.max(...sec(none))],jo:[...ks(jo)]};
           res.gearBad=[];for(const[g,L]of[[[],none],[['rower'],row],[['rope'],rope]])for(const l of L)for(const w of l.slice(1)){const p=WPOOL.find(x=>x.k===w.k);if(p.nd&&!p.nd.some(s=>s.every(x=>g.includes(x))))res.gearBad.push(w.k)}
           S.profile=JSON.parse(keep);save();return res}""")
-        NEEDG={'pullapart','aussenrot','bandrudern','hangstuetz'}
-        chk(not r['gearBad'] and not (NEEDG & set(r['none'])) and not (NEEDG & set(r['nb'])) and r['noneFirst']==['march'] and r['rowFirst']==['rowint'] and 'armopen' in r['none'],
-            f"Geräte beachtet: ohne Band/Stange keine Band- oder Hängeübung, ohne Crosstrainer Ersatz-Cardio (marschieren, Rudergerät) {r['gearBad']}")
+        NEEDG=set(await pg.evaluate("WPOOL.filter(w=>w.nd&&w.nd.every(a=>a.some(x=>['band','pullbar','rack'].includes(x)))).map(w=>w.k)"))  # 3.14: aus dem Pool abgeleitet
+        chk(len(NEEDG)>=5 and not r['gearBad'] and not (NEEDG & set(r['none'])) and not (NEEDG & set(r['nb'])) and r['noneFirst']==['march'] and r['rowFirst']==['rowint'] and len(r['none'])>=30,
+            f"Geräte beachtet: ohne Band/Stange/Rack keine Band- oder Stangenübung ({sorted(NEEDG)}), ohne Crosstrainer Ersatz-Cardio (marschieren, Rudergerät), ohne Geräte genug Übungen ({len(r['none'])}) {r['gearBad']}")
         chk(540<=r['ropeSec'][0] and r['ropeSec'][1]<=660 and 540<=r['noneSec'][0] and r['noneSec'][1]<=660,f"auch mit Seil (3 min) und ohne Geräte ca. 10 min {r['ropeSec']} {r['noneSec']} {r['rope']}")
-        chk({'pullapart','aussenrot','bandrudern','hangstuetz'} <= set(r['jo']),'mit Joschys Geräten kommen Band- und Hängeübungen vor')
+        GJ=set(await pg.evaluate("WPOOL.filter(w=>w.nd).map(w=>w.k)"))
+        chk(GJ <= set(r['jo']),f'mit Joschys Geräten kommen alle Geräte-Übungen (Band, Kurzhantel, Rack, Bank) vor {sorted(GJ-set(r["jo"]))}')
         # 6) Animationen, Texte
         r=await pg.evaluate("""()=>{const bad=[],txt=[],blank=[];const c=document.createElement('canvas');c.style.cssText='width:200px;height:200px;position:fixed;left:0;top:0';document.body.appendChild(c);
           for(const w of WPOOL){if(!AN[w.an]){bad.push(w.k);continue}if(!(w.t&&w.b&&w.x&&w.n))txt.push(w.k);
@@ -103,6 +109,57 @@ async def main():
         r=await pg.evaluate("()=>{const miss=WPOOL.filter(w=>!JAI_IDS.has(w.j)).map(w=>w.k);const seq=WPOOL.filter(w=>!JAI_IDS.has(w.j)).map(w=>jaiWarmSeq({...w,anim:w.an}).length);const ok=WPOOL.filter(w=>JAI_IDS.has(w.j)).every(w=>jaiWarmSeq({...w,anim:w.an})[0]===w.j);return{miss,seq,ok}}")
         print('   ohne JAI-Clip:',r['miss'])
         chk(all(x==0 for x in r['seq']) and r['ok'],'JAI: vorhandene Clips werden genutzt, ohne Clip bleibt JAI still')
+        # 9) 3.14: Kategorie „Aufwärmen“
+        r=await pg.evaluate("""()=>{const W=WX_KEYS.map(k=>({k,...WX[k]}));const cnt={};for(const w of W)cnt[w.r]=(cnt[w.r]||0)+1;
+          const exN=new Set(Object.values(EX).map(e=>e.n.toLowerCase())),ypN=new Set(Object.values(YP).map(p=>p.n.toLowerCase())),wpN=new Set(WPOOL.filter(w=>!WX[w.k]).map(w=>w.n.toLowerCase()));
+          const dup=W.filter(w=>exN.has(w.n.toLowerCase())||ypN.has(w.n.toLowerCase())||wpN.has(w.n.toLowerCase())).map(w=>w.k);
+          const names=new Set(W.map(w=>w.n));const txt=W.filter(w=>!(w.n&&w.t&&w.b&&w.x&&w.dos&&w.z&&WX_REG.some(r=>r[0]===w.r)&&/^[ABC]+$/.test(w.d)&&[0,1,2].includes(w.pos))).map(w=>w.k);
+          const gearAll=[...new Set(W.flatMap(w=>(w.nd||[]).flat()))];const gearBad=gearAll.filter(g=>!['band','db','bench','rack','pullbar'].includes(g)||!JOSCHYGEAR.includes(g));
+          const S_=W.filter(w=>w.s);const zs=S_.map(w=>w.z).join(' | ');
+          const AREAS={Nacken:/Nacken/,Schultern:/Schulter/,Brust:/Brust(?!wirbel)/,Rücken:/Rücken|Brustwirbelsäule|Lat/,Hüftbeuger:/Hüftbeuger/,Gesäß:/Gesäß/,'Oberschenkel vorn':/Oberschenkel vorn/,'Oberschenkel hinten':/Beinrückseite/,Adduktoren:/Adduktoren/,Waden:/Wade/};
+          const areaMiss=Object.entries(AREAS).filter(([a,re])=>!S_.some(w=>re.test(w.z))).map(x=>x[0]);
+          const pool=WPOOL.filter(w=>WX[w.k]).length;const anim=W.filter(w=>!AN['w_'+w.k]||WPOOL.find(p=>p.k===w.k).an!=='w_'+w.k).map(w=>w.k);
+          const jump=W.filter(w=>/spring|sprung|hüpf/i.test(w.t)&&!/ohne Sprung|nicht springen/i.test(w.t)).map(w=>w.k);
+          return{n:W.length,cnt,nS:S_.length,dup,uniq:names.size===W.length,txt,gearAll,gearBad,areaMiss,pool,anim,jump}}""")
+        print('   Aufwärmen:',r['n'],'Übungen',r['cnt'],'davon Dehnen',r['nS'],'Geräte',r['gearAll'])
+        chk(48<=r['n']<=56 and all(r['cnt'].get(x,0)>=8 for x in ['push','pull','beine','rumpf']) and r['nS']>=12,f"ca. 50 neue Aufwärmübungen in 4 Bereichen (je >= 8), davon >= 12 Dehnungen {r['cnt']}")
+        chk(not r['dup'] and r['uniq'],f"klare Namen, keine Dopplung mit Kraft-, Yoga- oder bisherigen Aufwärmübungen {r['dup']}")
+        chk(not r['txt'] and not r['anim'] and r['pool']==r['n'] and not r['jump'],f"jede neue Übung: Anleitung, Atmung, Achtung, Dauer/Wdh., Bereich, eigene Animation, im Pool {r['txt']} {r['anim']} {r['jump']}")
+        chk(not r['gearBad'],f"Geräte nur Band, Kurzhantel, Bank, Rack/Stange und nur aus Joschys Einstellungen {r['gearBad']}")
+        chk(not r['areaMiss'],f"Dehnen deckt alle Bereiche ab (Nacken, Schultern, Brust, Rücken/BWS, Hüftbeuger, Gesäß, Oberschenkel vorn/hinten, Adduktoren, Waden) {r['areaMiss']}")
+        # Pool: neue Übungen = Hauptpool, je Einheit >= 1 Dehnübung zum Tag (<= 2), >= 2 für den Bereich des Tages; für mehrere Gerätesets
+        for g,name in [('[...JOSCHYGEAR]','Joschy'),('[]','ohne Geräte'),('["db","bench","band"]','Nur Kurzhanteln')]:
+            r=await pg.evaluate("""(g)=>{const keep=JSON.stringify(S.profile);S.profile.gear=g;const RC={A:'push',B:'pull',C:'beine'};let tot=0,nw=0;const bad=[];
+              for(const d of DAYS)for(let m=0;m<60;m++)for(const q of [false,true]){const l=warmList(q,true,d,m).slice(1);tot+=l.length;nw+=l.filter(w=>WX[w.k]).length;
+                const st=l.filter(w=>{const p=WPOOL.find(x=>x.k===w.k);return p.s&&p.d.includes(d)&&w.s});const core=l.filter(w=>{const p=WPOOL.find(x=>x.k===w.k);return p.c&&p.c.includes(d)});
+                if(st.length<1||st.length>2||core.length<2)bad.push(d+m+':'+l.map(w=>w.k).join(','))}
+              S.profile=JSON.parse(keep);return{share:nw/tot,bad}}""",await pg.evaluate(g))
+            chk(r['share']>=.75 and not r['bad'],f"{name}: neue Übungen sind der Hauptpool ({r['share']:.0%}), jede Einheit (auch Kurz) 1–2 Dehnübungen zum Tag und >= 2 für den Bereich des Tages {r['bad'][:2]}")
+        # Animationen: Ruck, Boden, Wand, Rand (Mann/Frau)
+        r=await pg.evaluate(r"""()=>{const R={hip:7,sh:6,head:8.5,knee:4,knee2:4,elbow:3,elbow2:3,toe:0,toe2:0,ankle:0,ankle2:0,hand:0,hand2:0};
+          const RF={handR:0,handL:0,ankR:0,ankL:0,kneeR:4,kneeL:4,elbR:3,elbL:3,hipR:7,hipL:7,head:8.5};
+          const pts=o=>{const m={};for(const q in o){const v=o[q];if(Array.isArray(v)&&v.length===2&&typeof v[0]==='number')m[q]=v}return m};const bad=[];let worst=0;
+          for(const k of WX_KEYS){const def=AN['w_'+k];const fl=floorOf(def)||0;const W=def.eq.find(e=>e.t==='wall');for(const g of['m','f']){const T=cycT(def);const bb=boundsOf(def,g);
+            let prev=null,pv=null,pa=null,jerk=0,pen=0,wall=0,out=0,side=0;
+            for(let t=0;t<T*2.2;t+=1/60){const o=animPose(def,t,g).o;const m=pts(o);if(W&&!side)side=m.head[0]<W.x-4?-1:1;
+              for(const q in m){const r=o.front?RF[q]:R[q];if(r==null)continue;pen=Math.max(pen,fl+r-m[q][1]);
+                if(W){const rr=Math.max(r,3.5);wall=Math.max(wall,side<0?m[q][0]+rr-(W.x-8):W.x-(m[q][0]-rr))}
+                out=Math.max(out,bb.x0-m[q][0],m[q][0]-bb.x1,bb.y0-m[q][1],m[q][1]-bb.y1)}
+              if(prev&&pv){const A={};for(const q in m){if(!prev[q]||!pv[q])continue;A[q]=[m[q][0]-2*prev[q][0]+pv[q][0],m[q][1]-2*prev[q][1]+pv[q][1]];if(pa&&pa[q])jerk=Math.max(jerk,Math.hypot(A[q][0]-pa[q][0],A[q][1]-pa[q][1]))}pa=A}pv=prev;prev=m}
+            worst=Math.max(worst,jerk);if(jerk>.5||pen>1||wall>.6||out>.5)bad.push([k,g,+jerk.toFixed(2),+pen.toFixed(1),+wall.toFixed(1),+out.toFixed(1)].join(' '))}}
+          return{bad,worst:+worst.toFixed(2)}}""")
+        chk(not r['bad'],f"Animationen der neuen Übungen: kein Ruck (max {r['worst']} <= 0,5), Hände/Füße nicht im Boden, nicht in der Wand, nichts außerhalb des Bildes {r['bad'][:4]}")
+        # Bibliothek: Reiter, Filter, Übungsblatt
+        await pg.evaluate("go('lib')");await pg.wait_for_timeout(200);await pg.click('[data-lm=warm]');await pg.wait_for_timeout(400)
+        n_all=await pg.locator('[data-wx]').count();h=await pg.inner_text('#v-lib')
+        await pg.click('[data-ws="1"]');await pg.wait_for_timeout(200);n_s=await pg.locator('[data-wx]').count();badge=await pg.locator('[data-wx] .wtag').count()
+        await pg.click('[data-ws="0"]');await pg.click('[data-wr=beine]');await pg.wait_for_timeout(200);n_b=await pg.locator('[data-wx]').count()
+        exp=await pg.evaluate("[WX_KEYS.length,WX_KEYS.filter(k=>WX[k].s).length,WX_KEYS.filter(k=>WX[k].r==='beine').length]")
+        await pg.click('[data-wr=""]');await pg.wait_for_timeout(200);await pg.click('[data-wx=weltbeste]');await pg.wait_for_timeout(500);sh=await pg.inner_text('#sheet');anim=await pg.evaluate("!!($('#wsc')&&$('#wsc')._def)")
+        await pg.screenshot(path=_os.environ.get('HOMEGYM_SHOTS','/tmp/homegym-shots').rstrip('/')+'_t40_lib.png')
+        await pg.evaluate("closeSheet()");await pg.click('[data-lm=kraft]');await pg.wait_for_timeout(200);nk=await pg.locator('[data-ex]').count()
+        chk(n_all==exp[0] and n_s==exp[1]==badge and n_b==exp[2] and 'aufwärmen' in h.lower() and 'dehnen' in h.lower() and anim and 'atmung:' in sh.lower() and 'achtung:' in sh.lower() and 'dehnen' in sh.lower() and nk>40,
+            f"Bibliothek: Reiter „Aufwärmen“ neben Kraft/Yoga, Filter Bereich und Art (Dehnen mit Abzeichen), Übungsblatt mit Animation, Atmung, Achtung ({n_all}/{n_s}/{n_b} {exp} Abzeichen {badge} Animation {anim} Kraft {nk})")
         # 7) Hauptübungen gegen 3.12, 59 min
         p2=await ctx.new_page();await p2.goto(UR);await p2.wait_for_timeout(400);await p2.evaluate(PROFILE);await p2.wait_for_timeout(700)
         cur=await pg.evaluate(DUMP);ref=await p2.evaluate(DUMP);await p2.close()

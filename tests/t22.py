@@ -134,6 +134,11 @@ async def main():
         await pg.screenshot(path=D+'/library.png')
         await pg.click('[data-ypose="figur4"]');await pg.wait_for_timeout(300);sh=await pg.text_content('#sheet');assert 'Taube im Liegen' in sh and 'einseitig' in sh and 'Atem:' in sh;await pg.click('#sheet [data-close]')
         await pg.click('[data-lm=kraft]');await pg.wait_for_timeout(200);assert await pg.locator('[data-ex]').count()>40
+        # 8a) 3.14: dritter Reiter „Aufwärmen“ (eigene Übungen, Filter Bereich/Art); Kraft und Yoga bleiben unverändert
+        seg=await pg.eval_on_selector_all('#libSeg [data-lm]','e=>e.map(x=>x.dataset.lm)');assert seg==['kraft','yoga','warm'],seg
+        await pg.click('[data-lm=warm]');await pg.wait_for_timeout(300);nw=await pg.evaluate("WX_KEYS.length");assert nw>=48 and await pg.locator('[data-wx]').count()==nw
+        await pg.click('[data-wr="pull"]');await pg.wait_for_timeout(200);ks=await pg.eval_on_selector_all('[data-wx]','e=>e.map(x=>x.dataset.wx)');assert ks and await pg.evaluate("ks=>ks.every(k=>WX[k].r==='pull')",ks),ks
+        await pg.click('[data-lm=yoga]');await pg.wait_for_timeout(200);assert await pg.locator('[data-ypose]').count()>0;await pg.click('[data-lm=kraft]');await pg.wait_for_timeout(200);assert await pg.locator('[data-ex]').count()>40
         # 8b) app closed during a run: continues paused at the same pose
         await pg.evaluate("()=>{yStart('quick');S.yrun.i=2;S.yrun.ph='hold';S.yrun.end=Date.now()+5000;save()}");await pg.reload();await pg.wait_for_timeout(600)
         q=await pg.evaluate("[S.yrun.paused,S.yrun.i,S.yrun.left===S.yrun.steps[2].sec]");assert q==[True,2,True],q
@@ -152,7 +157,7 @@ async def main():
         await pg.wait_for_timeout(500)
         y=await pg.evaluate("[Object.keys(S.yoga.done).sort(),S.yoga.log.length,S.yoga.start,yCur().week]");print('restored',y);assert y[0]==['1','2'] and y[1]==1 and y[2] and y[3]>=3
         # 10) version + footer
-        await pg.click('[data-tab=set]');await pg.wait_for_timeout(200);v=await pg.text_content('#verLine');assert 'Version 3.8' in v and '@ Joschy' in v
+        await pg.click('[data-tab=set]');await pg.wait_for_timeout(200);v=await pg.text_content('#verLine');assert 'Version 3.14' in v and '@ Joschy' in v
         print('errors',errs);assert not errs
         await b.close()
     srv.kill();print('ALL OK')
