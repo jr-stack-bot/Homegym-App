@@ -111,6 +111,12 @@ async def main():
         r=await pg.evaluate("()=>{const miss=WPOOL.filter(w=>!JAI_IDS.has(w.j)).map(w=>w.k);const seq=WPOOL.filter(w=>!JAI_IDS.has(w.j)).map(w=>jaiWarmSeq({...w,anim:w.an}).length);const ok=WPOOL.filter(w=>JAI_IDS.has(w.j)).every(w=>jaiWarmSeq({...w,anim:w.an})[0]===w.j);return{miss,seq,ok}}")
         print('   ohne JAI-Clip:',r['miss'])
         chk(all(x==0 for x in r['seq']) and r['ok'],'JAI: vorhandene Clips werden genutzt, ohne Clip bleibt JAI still')
+        # 3.14: alle Aufwärmübungen (neue und bisherige im Pool) haben einen Clip; Datei vorhanden; Start und „Als Nächstes“ werden angesagt
+        r2=await pg.evaluate("""async()=>{const ids=[...new Set(WPOOL.map(w=>w.j))];const bad=[];for(const id of ids){const x=await fetch('jai/'+id+'.mp3');const b=x.ok?(await x.arrayBuffer()).byteLength:0;if(b<3000)bad.push(id)}
+          const keep=announce;const log=[];announce=(t,q)=>log.push([t,q]);try{const ss={warm:warmList(false,true,'C',3),wi:1};for(const left of [30,10.4,9.9,9.5,5])warmNext(ss,left);ss.wi=ss.warm.length-1;warmNext(ss,9)}finally{announce=keep}
+          return{n:ids.length,bad,log,exp:warmList(false,true,'C',3)[2].j}}""")
+        chk(not r['miss'] and not r2['bad'] and r2['n']>=55,f"JAI: alle {r2['n']} Aufwärmübungen haben einen Clip (Datei vorhanden) {r['miss'][:5]} {r2['bad'][:5]}")
+        chk(len(r2['log'])==1 and r2['log'][0][1]==['u_als_naechstes',r2['exp']] and r2['log'][0][0].startswith('Als Nächstes: '),f"JAI: 10 s vor Ende einmal „Als Nächstes“ + nächste Aufwärmübung, nach der letzten nicht {r2['log']}")
         # 9) 3.14: Kategorie „Aufwärmen“
         r=await pg.evaluate("""()=>{const W=WX_KEYS.map(k=>({k,...WX[k]}));const cnt={};for(const w of W)cnt[w.r]=(cnt[w.r]||0)+1;
           const exN=new Set(Object.values(EX).map(e=>e.n.toLowerCase())),ypN=new Set(Object.values(YP).map(p=>p.n.toLowerCase())),wpN=new Set(WPOOL.filter(w=>!WX[w.k]).map(w=>w.n.toLowerCase()));

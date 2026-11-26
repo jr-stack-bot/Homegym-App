@@ -65,6 +65,9 @@ async def main():
         chk(not r['yMiss'],f"alle {r['yp']} Yoga-Haltungen haben einen Namens-Clip {r['yMiss'][:5]}")
         chk(r['al']==['ex_sideplank','ex_plank','ex_superman'],'Yoga-Doppel nutzen vorhandene Clips '+str(r['al']))
         chk(r['nx'] and not r['files'],f"{r['ids']} Clip-IDs, jede Datei existiert {r['files'][:5]}")
+        # 3.14: alle Aufwärmübungen (Kategorie „Aufwärmen“ und Pool) haben einen eigenen Namens-Clip, der beim Start der Übung gespielt wird
+        w=await pg.evaluate("()=>{const miss=WX_KEYS.filter(k=>!JAI_IDS.has('warm_'+k));const pool=WPOOL.filter(x=>!JAI_IDS.has(x.j)).map(x=>x.k);const seq=WPOOL.filter(x=>jaiWarmSeq({...x,anim:x.an})[0]!==x.j).map(x=>x.k);return{n:WX_KEYS.length,p:WPOOL.length,miss,pool,seq}}")
+        chk(not w['miss'] and not w['pool'] and not w['seq'],f"alle {w['n']} neuen Aufwärmübungen und alle {w['p']} Pool-Übungen haben einen eigenen Clip, der beim Start angesagt wird {w['miss'][:5]} {w['pool'][:5]} {w['seq'][:5]}")
         disk=set(f[:-4] for f in _os.listdir(_os.path.join(_OUTDIR,'jai')) if f.endswith('.mp3'))
         ids=set(await pg.evaluate("[...JAI_IDS]"));chk(ids<=disk,f"alle IDs als Datei in jai/ ({len(disk)} Dateien)")
         # ---------- 2a) Kraft (Plan A) ----------

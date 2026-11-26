@@ -2527,6 +2527,216 @@
     "text": "Superman.",
     "clip": "ex_superman"
    }
+  ],
+  "aufwaermen314": [
+   {
+    "id": "warm_armkreuz",
+    "text": "Arme kreuzen vor der Brust."
+   },
+   {
+    "id": "warm_ellbkreis",
+    "text": "Ellbogenkreisen."
+   },
+   {
+    "id": "warm_scapwand",
+    "text": "Schulterblatt-Liegestütz an der Wand."
+   },
+   {
+    "id": "warm_bwsvf",
+    "text": "Brustwirbelsäulen-Drehung im Vierfüßler."
+   },
+   {
+    "id": "warm_bwsbank",
+    "text": "Brustwirbelsäulen-Streckung an der Bank."
+   },
+   {
+    "id": "warm_halo",
+    "text": "Hejlo mit leichter Kurzhantel."
+   },
+   {
+    "id": "warm_pendel",
+    "text": "Armpendeln vorgebeugt."
+   },
+   {
+    "id": "warm_armschwung",
+    "text": "Arme vor und zurück schwingen."
+   },
+   {
+    "id": "warm_armwechsel",
+    "text": "Arme im Wechsel zur Decke strecken."
+   },
+   {
+    "id": "warm_brustwand",
+    "text": "Brustöffner an der Wand."
+   },
+   {
+    "id": "warm_armquer",
+    "text": "Arm quer zur Brust im Wechsel."
+   },
+   {
+    "id": "warm_nackenneig",
+    "text": "Nacken neigen im Wechsel."
+   },
+   {
+    "id": "warm_diagpull",
+    "text": "Diagonale Pull-Eparts mit Band."
+   },
+   {
+    "id": "warm_bandpulldown",
+    "text": "Bandzug von oben zur Brust."
+   },
+   {
+    "id": "warm_scaprow",
+    "text": "Schulterblatt-Rudern vorgebeugt."
+   },
+   {
+    "id": "warm_kinn",
+    "text": "Kinn einziehen an der Wand."
+   },
+   {
+    "id": "warm_handgelenk",
+    "text": "Handgelenk-Schaukel im Vierfüßler."
+   },
+   {
+    "id": "warm_ellbdruck",
+    "text": "Ellbogen-Druck in Rückenlage."
+   },
+   {
+    "id": "warm_latrack",
+    "text": "Latt-Schaukel am Räck."
+   },
+   {
+    "id": "warm_rueckenrund",
+    "text": "Rücken rund und lang im Stand."
+   },
+   {
+    "id": "warm_latseit",
+    "text": "Seitneigung mit Armzug im Wechsel."
+   },
+   {
+    "id": "warm_brustschwimm",
+    "text": "Brustschwimm-Arme im Stand."
+   },
+   {
+    "id": "warm_beinpendel",
+    "text": "Beinpendel vor und zurück."
+   },
+   {
+    "id": "warm_beinpendelseit",
+    "text": "Beinpendel seitlich."
+   },
+   {
+    "id": "warm_vfkreis",
+    "text": "Knie-Kreisen im Vierfüßler."
+   },
+   {
+    "id": "warm_schaukel",
+    "text": "Vierfüßler-Schaukel zum Fersensitz."
+   },
+   {
+    "id": "warm_ruecksknie",
+    "text": "Rückwärtsschritt mit Knieheben."
+   },
+   {
+    "id": "warm_squatstand",
+    "text": "Hocke zum Stand."
+   },
+   {
+    "id": "warm_fersepo",
+    "text": "Ferse zum Po im Wechsel."
+   },
+   {
+    "id": "warm_fusspumpe",
+    "text": "Fußgelenk-Pumpe auf der Bank."
+   },
+   {
+    "id": "warm_kniehueft",
+    "text": "Kniende Hüftbeuge."
+   },
+   {
+    "id": "warm_hamstringpendel",
+    "text": "Beinpendel in Rückenlage."
+   },
+   {
+    "id": "warm_scheibenwischer",
+    "text": "Scheibenwischer im Sitzen."
+   },
+   {
+    "id": "warm_wadenwand",
+    "text": "Wadenwippe an der Wand."
+   },
+   {
+    "id": "warm_schmetterling",
+    "text": "Schmetterling mit Knie-Wippen."
+   },
+   {
+    "id": "warm_kniegegen",
+    "text": "Knie zur Gegenschulter im Sitzen."
+   },
+   {
+    "id": "warm_hamsweep",
+    "text": "Fersenstand mit Hüftbeuge."
+   },
+   {
+    "id": "warm_hufttor",
+    "text": "Hüft-Tor öffnen und schließen."
+   },
+   {
+    "id": "warm_ausfallarme",
+    "text": "Ausfallschritt rückwärts Arme nach oben."
+   },
+   {
+    "id": "warm_seitkniebeuge",
+    "text": "Seitschritt mit Kniebeuge."
+   },
+   {
+    "id": "warm_raupe",
+    "text": "Raupe Inschwörm."
+   },
+   {
+    "id": "warm_rumpfdreh",
+    "text": "Rumpfdrehen im Stehen."
+   },
+   {
+    "id": "warm_kniehover",
+    "text": "Knie schweben im Vierfüßler."
+   },
+   {
+    "id": "warm_weltbeste",
+    "text": "Weltbeste Dehnung."
+   },
+   {
+    "id": "warm_ausfalldreh",
+    "text": "Ausfallschritt mit Rotation."
+   },
+   {
+    "id": "warm_ellbknie",
+    "text": "Ellbogen zum Gegenknie im Stand."
+   },
+   {
+    "id": "warm_diagstreck",
+    "text": "Diagonales Strecken im Stand."
+   },
+   {
+    "id": "warm_abrollen",
+    "text": "Abrollen und Aufrollen."
+   },
+   {
+    "id": "warm_zehenstreck",
+    "text": "Strecken auf die Zehenspitzen."
+   },
+   {
+    "id": "warm_beckenkipp",
+    "text": "Beckenkippen in Rückenlage."
+   },
+   {
+    "id": "warm_stepjack",
+    "text": "Stepp-Dschäcks ohne Sprung."
+   },
+   {
+    "id": "warm_kniewand",
+    "text": "Knie zur Wand."
+   }
   ]
  },
  "batches": {
@@ -4289,10 +4499,142 @@
    "label": "JAI_batch_17",
    "credits": 73.0,
    "raw": "raw/batch_17.mp3"
+  },
+  "batch_18": {
+   "chars": 973,
+   "order": [
+    "warm_armkreuz",
+    "warm_ellbkreis",
+    "warm_scapwand",
+    "warm_bwsvf",
+    "warm_bwsbank",
+    "warm_halo",
+    "warm_pendel",
+    "warm_armschwung",
+    "warm_armwechsel",
+    "warm_brustwand",
+    "warm_armquer",
+    "warm_nackenneig",
+    "warm_diagpull",
+    "warm_bandpulldown",
+    "warm_scaprow",
+    "warm_kinn",
+    "warm_handgelenk",
+    "warm_ellbdruck",
+    "warm_latrack",
+    "warm_rueckenrund",
+    "warm_latseit",
+    "warm_brustschwimm",
+    "warm_beinpendel",
+    "warm_beinpendelseit",
+    "warm_vfkreis",
+    "warm_schaukel",
+    "warm_ruecksknie",
+    "warm_squatstand",
+    "warm_fersepo"
+   ],
+   "audio_order": [
+    "warm_armkreuz",
+    "warm_ellbkreis",
+    "warm_scapwand",
+    "warm_bwsvf",
+    "warm_bwsbank",
+    "warm_halo",
+    "warm_pendel",
+    "warm_armschwung",
+    "warm_armwechsel",
+    "warm_brustwand",
+    "warm_armquer",
+    "warm_nackenneig",
+    "warm_diagpull",
+    "warm_bandpulldown",
+    "warm_scaprow",
+    "warm_kinn",
+    "warm_handgelenk",
+    "warm_ellbdruck",
+    "warm_latrack",
+    "warm_rueckenrund",
+    "warm_latseit",
+    "warm_brustschwimm",
+    "warm_beinpendel",
+    "warm_beinpendelseit",
+    "warm_vfkreis",
+    "warm_schaukel",
+    "warm_ruecksknie",
+    "warm_squatstand",
+    "warm_fersepo"
+   ],
+   "discard_first": true,
+   "discard_last": true,
+   "separator": "Eintrag + ' …' + Leerzeile",
+   "generated": true,
+   "label": "JAI_batch_18",
+   "credits": 486.5,
+   "raw": "raw/batch_18.mp3"
+  },
+  "batch_19": {
+   "chars": 721,
+   "order": [
+    "warm_fusspumpe",
+    "warm_kniehueft",
+    "warm_hamstringpendel",
+    "warm_scheibenwischer",
+    "warm_wadenwand",
+    "warm_schmetterling",
+    "warm_kniegegen",
+    "warm_hamsweep",
+    "warm_hufttor",
+    "warm_ausfallarme",
+    "warm_seitkniebeuge",
+    "warm_raupe",
+    "warm_rumpfdreh",
+    "warm_kniehover",
+    "warm_weltbeste",
+    "warm_ausfalldreh",
+    "warm_ellbknie",
+    "warm_diagstreck",
+    "warm_abrollen",
+    "warm_zehenstreck",
+    "warm_beckenkipp",
+    "warm_stepjack",
+    "warm_kniewand"
+   ],
+   "audio_order": [
+    "warm_fusspumpe",
+    "warm_kniehueft",
+    "warm_hamstringpendel",
+    "warm_scheibenwischer",
+    "warm_wadenwand",
+    "warm_schmetterling",
+    "warm_kniegegen",
+    "warm_hamsweep",
+    "warm_hufttor",
+    "warm_ausfallarme",
+    "warm_seitkniebeuge",
+    "warm_raupe",
+    "warm_rumpfdreh",
+    "warm_kniehover",
+    "warm_weltbeste",
+    "warm_ausfalldreh",
+    "warm_ellbknie",
+    "warm_diagstreck",
+    "warm_abrollen",
+    "warm_zehenstreck",
+    "warm_beckenkipp",
+    "warm_stepjack",
+    "warm_kniewand"
+   ],
+   "discard_first": true,
+   "discard_last": true,
+   "separator": "Eintrag + ' …' + Leerzeile",
+   "generated": true,
+   "label": "JAI_batch_19",
+   "credits": 360.5,
+   "raw": "raw/batch_19.mp3"
   }
  },
- "total_chars": 5042,
+ "total_chars": 6736,
  "note": "batch_03–07: jeder Eintrag 'Text …' getrennt durch Leerzeile; erste Zeile 'Systemstart. …', letzte 'Systemende. …' (verwerfen). batch_01/02 nur noch Referenz.",
  "total_chars_open": 5874,
- "credits_spent": 3961.0
+ "credits_spent": 4808.0
 }
